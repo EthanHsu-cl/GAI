@@ -1,6 +1,6 @@
 {
     "testbed": "http://210.244.31.18:7008/",
-    "output_directory": "/Users/ethanhsu/Desktop/GAI/Report",
+    "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
     "template_path": "templates/I2V templates.pptx",
     "comparison_template_path": "templates/I2V Comparison Template.pptx",
     "default_params": {
@@ -11,7 +11,7 @@
         "animation_mode": "move"
     },
     "output": {
-        "directory": "/Users/ethanhsu/Desktop/GAI/Report",
+        "directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
         "group_tasks_by": 0
     },
     "schedule": {

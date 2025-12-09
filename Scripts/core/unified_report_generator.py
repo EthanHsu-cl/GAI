@@ -1619,7 +1619,7 @@ class UnifiedReportGenerator:
             "enabled": True,
             "template_path": "templates/I2V templates.pptx",
             "comparison_template_path": "templates/I2V Comparison Template.pptx",
-            "output_directory": "/Users/ethanhsu/Desktop/GAI/Report",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
             "use_comparison": self.api_name in ["kling", "nano_banana", "runway", "wan"]
         }
     

@@ -1,7 +1,7 @@
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
 output:
-  directory: /Users/ethanhsu/Desktop/GAI/Report
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 3
 comment_output: Set group_tasks_by to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks
   into one combined report.

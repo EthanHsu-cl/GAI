@@ -1,7 +1,7 @@
 # Kling Video Effects Configuration
 # Applies premade video effects to images using the Kling API
 
-output_directory: /Users/ethanhsu/Desktop/GAI/Report
+output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 testbed: http://192.168.31.40:8000/kling/
 template_path: templates/I2V templates.pptx
 
@@ -9,7 +9,7 @@ template_path: templates/I2V templates.pptx
 duration: 5
 
 output:
-  directory: /Users/ethanhsu/Desktop/GAI/Report
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 3
 
 schedule:

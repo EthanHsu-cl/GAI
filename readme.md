@@ -183,7 +183,7 @@ model_version: v2.1
 generation_count: 1  # Global default, can override per task
 
 output:
-  directory: /Users/ethanhsu/Desktop/GAI/Report
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 3  # Combine N tasks into one report (0 = individual)
 
 tasks:

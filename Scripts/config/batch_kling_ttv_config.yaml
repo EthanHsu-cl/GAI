@@ -3,7 +3,7 @@
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
 # Report Output Directory 
-output_directory: /Users/ethanhsu/Desktop/GAI/Report
+output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 # Root folder where generated videos will be saved. Metadata folder will be created automatically.
 output_folder: ../Media Files/Kling TTV/1117 Test 2
 generation_count: 1

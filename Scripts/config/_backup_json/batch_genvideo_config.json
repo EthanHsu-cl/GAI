@@ -1,7 +1,7 @@
 {
     "template_path": "templates/I2V templates.pptx",
     "comparison_template_path": "templates/I2V Comparison Template.pptx",
-    "output_directory": "/Users/ethanhsu/Desktop/GAI/Report",
+    "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
     "comment_output_directory": "Optional: Global output directory for all generated images. Can be overridden per task. Default is current directory.",
     "testbed": "http://192.168.31.40:8000/genvideo/",
     "schedule": {
