@@ -10,114 +10,20 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCla4h2FmqdTrIfZJ8lrAHIAeqIazzJKvrJXCelnuRKVFs?e=iDtST7
-root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3adc8361ad1_0_0#slide=id.g3adc8361ad1_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCYf0KwvFNWT634Gtp2leYqAc9ZTdXMrE9XNn42pUOJwK4?e=PTD0w6
+root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3a60691420a_0_0#slide=id.g3a60691420a_0_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/1204 6 Styles/1204 對鏡畫口紅 2
+  - folder: ../Media Files/Nano Banana/1210 1 Style/1210 Strawberry Shot V3
     model: gemini-2.5-flash-image
     prompt: |
-      Prompt
-      Use the uploaded person as the only subject. Their face, hairstyle, makeup, skin tone, expression, and body proportions must remain exactly the same as in the uploaded photo. The original hair color must remain unchanged, and the flash must NOT lighten or recolor the hair.
-      The image must show ONLY the subject’s mirror reflection. No physical body outside the mirror may appear, and no second face, duplicate reflection, extra limbs, or impossible angles are allowed. The reflected pose must follow real human physics as a single continuous body.
-      The subject wears a sparkling red sequin slip dress with a low back and thin spaghetti straps. The sequins must catch the flash and produce bright star-like reflections.
-      A handwritten red lipstick message appears on the mirror reading “Cheers to a new year!” with a small red heart. The writing must sit precisely on the mirror surface, aligned to its perspective, and must not float, distort, or appear on the subject’s reflection.
-      The setting is a modern gray marble bathroom. Do not show the ceiling, overhead lights, or anything outside the intended frame. Lighting comes ONLY from a strong direct on-camera flash, producing harsh shadows, crisp edges, bright highlights, and high-contrast glossy skin, like a real party snapshot.
-      The reflection shows the subject in a natural, relaxed pose, turning the head gently toward the mirror as if glancing back over the shoulder. The gesture must be simple, elegant, and physically consistent, avoiding exaggerated bends or complex hand positions. The overall mood must feel bold, glamorous, confident, and captured at close distance with realistic flash photography.
-    reference_folder: ""
-    use_comparison_template: false
-    use_multi_image: false
-
-  - folder: ../Media Files/Nano Banana/1204 6 Styles/1204 對鏡畫口紅 3
-    model: gemini-2.5-flash-image
-    prompt: |
-      Use uploaded photographs of people as subjects. The person's face, features, expression, skin tone, hairstyle, and identifiable characteristics must perfectly match the input image, and the proportions must be accurate, without distortion or stylization. The final work must reproduce the atmosphere, lighting, and style of the provided reference image with high precision.
-
-      The image only shows the person's reflection in a mirror. Mirror Reflection: Generates an elegant vintage-style dressing table scene, with the person sitting in front of a large dressing table illuminated by warm-toned Hollywood-style spherical bulbs. The person smiles at the mirror or rests their cheek on the table.
-
-      An elegant black strapless evening gown with clearly visible metallic gold embroidery on the bodice, adorned with ornate gold patterns. The lower half is a shimmering gold ball gown. This is a luxurious haute couture evening gown. She wears a classic pearl necklace and matching pearl earrings, radiating a soft glow under the surrounding lights.
-
-      The ambient lighting in the room must be kept dim, ensuring that warm-toned bulbs are the primary light source. The mirror must be clean and reflective, clearly reflecting the image of the person with proper exposure and depth of field. (The person should not appear yellowish.)
-
-      The lighting must be directional, primarily from bulbs around the dressing table. Skin should have a soft glow, and shadows should be soft yet sharp enough to create a three-dimensional, cinematic atmosphere.
-
-      The dressing tablecloth should be made of high-quality black velvet. Various cosmetics must be placed on the dressing table, arranged naturally and symmetrically, including lipstick, makeup brushes, powder compacts, and perfume bottles. Each object must project realistic, subtle shadows and reflections under warm, direct light.
-
-      On the mirror, the words "Happy New Year, all the best!" are handwritten in bright red lipstick, with a natural angle and a slight curve to fit the mirror's perspective. The handwriting must show realistic lipstick strokes, with clearly visible texture, not floating or digitally added, and should adhere naturally to the mirror surface. Two to three small stars, also drawn with lipstick strokes, should be drawn next to the text. Text content must not obscure the lips or other important details of the subject's face.
-
-      The overall atmosphere should create a luxurious, retro dressing room ambiance, with bright, elegant, and captivating lighting, striking contrasts, and a sophisticated, high-fashion editorial quality, while maintaining a high degree of realism and refinement.
-    reference_folder: ""
-    use_comparison_template: false
-    use_multi_image: false
-
-  - folder: ../Media Files/Nano Banana/1204 6 Styles/1204 對鏡畫口紅 4
-    model: gemini-2.5-flash-image
-    prompt: |
-      Please use the person in the uploaded photo as your subject. The subject's face shape, features, makeup, hairstyle, skin tone, expression, and body proportions must be exactly the same as the person in the uploaded photo.
-
-      Take a vibrant New Year's snapshot in front of a mirror (similar to a celebratory flash). Only the person's reflection should be visible in the photo. The reflection should include: a bright on-camera flash, soft shadows behind the person, slightly warm indoor lighting, and a natural, relaxed atmosphere.
-
-      The subject should be seated in front of the mirror, wearing comfortable red clothing, such as a red sweater or cardigan. If the person in the uploaded photo is female, she should wear a white pleated skirt; if male, he should wear black leather pants.
-
-      Position should be natural: hands raised to the sides of the face, palms facing forward, in a cheerful and lively manner. Write "20" in red lipstick on the left palm and "26" on the right palm (only on the palms). The smile must be natural, lively, and full of New Year's joy. The reflection in the mirror must be realistic and accurate, consistent with the actual posture, and must not contain duplicate hands, superfluous limbs, uncoordinated expressions, or unnatural angles.
-
-      Only one mirror can be shown in the frame.
-
-      The following text must be written naturally on the mirror surface using red lipstick:
-
-      "Happy New Year 2026 :)"
-
-      Small hearts or doodles can be drawn around the mirror, the style of which should coordinate with the casual lipstick strokes.
-
-      The lighting must be bright and direct, such as using the flash of a mobile phone or point-and-shoot camera.
-
-      Shadows should be soft yet well-defined, creating a natural and festive atmosphere. Colors must be warm and bright, highlighting the red element.
-
-      The background should be a simple indoor environment, such as a bedroom or dressing room, using warm-toned lighting, but should not distract from the subject. The ceiling must not be visible in the shot; the lens should focus on the person, the mirror, and the text, and the person's movements should be natural and fluid.
-
-      The final product should create an atmosphere of joy, intimacy, and happiness—like a casual New Year's greeting photo shared on social media, with accurate reflections, clean lighting, and a genuine celebratory feel.
-    reference_folder: ""
-    use_comparison_template: false
-    use_multi_image: false
-
-  - folder: ../Media Files/Nano Banana/1204 6 Styles/1204 對鏡畫口紅 6
-    model: gemini-2.5-flash-image
-    prompt: |
-      Please use the uploaded person as the sole subject. The person's face, features, expression, skin tone, hairstyle, makeup, and body proportions must remain clearly identifiable and completely consistent across all photos. Create a series of four New Year's photos for 2026, capturing a coherent moment of late-night celebration. No other people, including reflections or backgrounds, should appear in the photos.
-
-      The visual style reflects the early 2000s CCD flash photography style, employing strong direct flash, bright facial highlights, sharp shadows, slight digital softening, vibrant and saturated colors, and high micro-contrast. The flash strongly illuminates the person, making them stand out in the darker environment, creating a relaxed yet glamorous New Year's Eve atmosphere.
-
-      The person wears a white backless halter top with a structured (not thin-strapped) cut at the shoulders, clearly revealing the shoulders and back, adorned with a cute red-toned illustration on the front. This is paired with a deep red fitted mini skirt. In all photos, the model wears a brown-based, black wool-blend faux fur coat. The makeup is exquisite and radiant, with the eye and lip makeup being particularly striking. The clothing, hairstyle, and makeup remain consistent across all photos.
-
-      The words "Happy New Year 2026" are written in lipstick on the mirror, alongside several hand-drawn hearts. The handwriting appears handwritten, playful and cute, slightly imperfect, with natural blurring, clearly visible despite the interplay of mirror reflection and flash lighting, without obscuring the face.
-
-      Two of the photos are flash selfies (but the poses are never repeated). The model faces the mirror, holding her phone in one hand, with the flash on, the mirror reflection clearly visible, and her face and upper body well-lit.
-
-      The remaining two photos flow seamlessly into the series (not selfies), maintaining the same clothing, lighting, atmosphere, and subject. These four photos appear to have been taken consecutively on the same New Year's Eve.
-
-      The photos are arranged into a simple four-panel collage, maintaining consistency in lighting, tone, style, and overall aesthetic. The final result is a collection of individualistic, stylish, intimate, and celebratory New Year's flash photography works for 2026, centered on self-expression and vibrant nightlife.
-    reference_folder: ""
-    use_comparison_template: false
-    use_multi_image: false
-
-  - folder: ../Media Files/Nano Banana/1204 6 Styles/1204 新年日出兩宮格 V1
-    model: gemini-2.5-flash-image
-    prompt: |
-      Use the uploaded person and keep their face, hairstyle, makeup, skin tone, expression, and body proportions exactly the same. Generate a two-photo layout stacked vertically, with both images showing the subject clearly facing the camera. The setting is a quiet winter morning by the seaside railing during sunrise, where the sky displays a deep gradient of orange, red, and soft blue tones above the dark coastline. The lighting must use strong direct on-camera flash, creating bright highlights on the subject’s face and clothing while the background remains darker, just like a real snapshot taken at dawn.
-      The subject is wearing a fitted black winter turtleneck that clearly outlines the silhouette while remaining soft and natural. The upper photo shows the subject standing sideways near the railing, gently turning back toward the camera while holding a smartphone in one hand as if capturing the sunrise. The pose must appear casual and candid, with the expression soft and natural. The lower photo shows the subject standing with their back facing the sunrise, one hand resting lightly on the railing as the subject turns their head toward the lens with a warm smile, maintaining a relaxed, non-posed feeling. Both images must preserve the realism of a handheld flash snapshot: crisp shadows, bright facial highlights, natural skin texture, clean contrast, and a slightly darkened early-morning atmosphere with the sunrise glowing behind.
-      The final result should feel natural, intimate, and spontaneous, delivering two cohesive sunrise flash photos of the same person in consistent styling and mood.
-    reference_folder: ""
-    use_comparison_template: false
-    use_multi_image: false
-
-  - folder: ../Media Files/Nano Banana/1204 6 Styles/1204 新年日出兩宮格 V3
-    model: gemini-2.5-flash-image
-    prompt: |
-      Use the uploaded person as the subject, keeping their face, hairstyle, makeup, expression, skin tone and body proportions exactly the same. Generate two vertically stacked sunrise portraits taken outdoors at a high-altitude coastal viewpoint. The atmosphere must strongly resemble a candid early-morning snapshot lit by a direct on-camera flash: the subject should appear brighter than the background, with sharp, crisp highlight edges on the face and clothing, while the scenery behind remains darker and slightly muted. The flash illumination must clearly separate the subject from the environment, preserving the natural glossy reflection on the skin without flattening the features.
-      The sunrise sky must match the dramatic atmospheric quality of a real sunrise with clouds present—layered cloud streaks, soft cloud banks, or subtle textured cloud formations catching warm orange, gold and pink light near the horizon, gradually blending into deep blue farther upward. The scene should feel like standing above a coastal city still in pre-dawn blue hour, with the lights from distant buildings faintly visible but never overpowering the sky. The transition of the sky’s colors must be rich, soft and distinctly cloud-lit, rather than a plain gradient.
-      The subject is wearing a fitted black turtleneck winter top paired with a loose, open-front light-beige or oatmeal-gray wool blazer. The blazer must look soft, oversized, and naturally draped, with relaxed shoulders and an organic silhouette that matches real fabric movement in outdoor wind. Its color must stay neutral and cool-toned, complementing the sunrise hues.
-      In the first image, the subject stands at the lookout railing holding up a phone toward the sunrise, turning back over the shoulder toward the camera with a natural, calm expression.
-      In the second image, the subject faces the railing with both hands gently resting on it, turning back to the camera with a soft smile. The sunrise remains behind them, illuminating the clouds with a warm glow while the flash keeps the subject sharp and bright in the foreground. Both compositions must clearly show the face, maintain realism, preserve all identity details from the uploaded photo, and fully achieve the contrast-rich look of a flash-lit sunrise portrait with vivid cloud formations and a dramatic horizon.
+      Use the uploaded person as the subject, ensuring their face, face shape, facial features, hairstyle, skin tone, makeup, expression, and body proportions are completely identical to the person in the input photo.
+      The clothing in the image must remain consistent: the person must wear a red knitted cardigan and a festive Santa hat. Underneath the cardigan is a thick white wool dress. The person's face, face shape, and facial features must be identical to those in the uploaded image.
+      The environment, pose, props, and set design must strictly adhere to the following description.
+      Above image: The entire scene must be shot from the front, with the person and table directly facing the camera, not from the side or three-quarters angle. The person is seated at a wooden table laden with gingerbread houses, desserts, candles, and trinkets. She raises her hands above her head, elbows bent, hands placed on either side of her cheeks in a playful pose, but without making a "V" sign. Each hand gently holds a small strawberry or berry. The person's expression is lively and expressive, with a hint of surprise, and her gaze is slightly upward or forward, conveying a cheerful and positive mood. The warm-toned lighting in the background creates a cozy indoor atmosphere, while the falling confetti adds to the soft and festive ambiance.
+      Bottom shot: A cinematic close-up, filmed at a perfect 90-degree vertical angle, precisely capturing her clear profile. The camera must remain at a right angle, revealing only one eye; the other eye, eyebrows, and cheeks must be completely hidden, with absolutely no three-quarters or partial frontal rotation. Her nose, lips, and chin must present a clear, flat profile. Her chin rests almost on the wooden table—almost lying down—her gaze level with the head of the wooden reindeer placed in front of her. She looks directly at the wooden reindeer, about 30 centimeters away, maintaining a natural distance. She rests her head and one arm on the wooden table, gently touching or stroking the wooden reindeer. A Santa hat must be clearly visible from this angle. On the table around her are half a grapefruit, cut fruit, a cherry, and a drink with a straw in the foreground. The image highlights her profile, her hands, and the wooden reindeer, presented with dreamy, high-contrast warm lighting.
+      Both images must maintain a consistent style, using warm, comfortable, soft color tones to create a vintage, handcrafted, sweet, and dreamy atmosphere, with a cinematic, soft tone. The overall color scheme must avoid excessive yellow or orange tones; whites should remain clean and natural, with a warm, balanced tone, rather than being overly yellow. Highlights should be brightened to enhance contrast between light and dark areas. Reds, oranges, and cream tones should be rich and vibrant, but maintain a warm balance. Her face and skin should appear fair, bright, and porcelain-like, clean, soft, and slightly luminous. Skin tones must avoid strong yellows or yellow-orange hues, maintaining a natural glow, and whites must always remain clean.
+      The overall color saturation of the scene must be reduced by approximately 50% compared to the original reference photograph to create a significantly softer, darker visual effect, while still meeting all other style and color requirements mentioned above. In addition, the saturation must be reduced by approximately 30% compared to the original reference photo to ensure a softer, more understated image without compromising the intended warm and dreamy artistic atmosphere. The final output must strictly avoid any yellow or overly yellowish orange tones. The two images must be seamlessly joined, without any black lines, borders, shadows, or visible gaps; the transition between the upper and lower parts must be perfectly smooth and integrated. The scene must depict a warm interior space furnished with various objects; minimalist or blank backgrounds are strictly prohibited.
     reference_folder: ""
     use_comparison_template: false
     use_multi_image: false

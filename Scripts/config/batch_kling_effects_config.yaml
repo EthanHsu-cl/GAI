@@ -16,10 +16,10 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: ../Media Files/Kling Effects/1208 3 Styles
+base_folder: ../Media Files/Kling Effects/1210 1 Style
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=46494616#gid=46494616
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAu3DoHyu43QLDlxFrd3BIIAVs3tpRX_-UFIfYIca9QhVE?e=SRJUai
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBpRrfWNE3HT4GuhpFNii6gAdDtq6k8baJSTM8ejLyb-nY?e=x7wzIh
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -27,14 +27,8 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # - Use 'custom_effect' to specify a custom effect name (has priority over 'effect')
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
-  - effect: 
-    custom_effect: 'scarlet_and_snow' 
-
   - effect:
     custom_effect: 'magic_cloak'
-
-  - effect: 
-    custom_effect: 'spark_in_the_snow'
 
 comments:
   base_folder: >

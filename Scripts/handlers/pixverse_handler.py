@@ -16,16 +16,21 @@ class PixverseHandler(BaseAPIHandler):
         default_settings = self.config.get("default_settings", {})
         
         return self.client.predict(
-            model=default_settings.get("model", "v4.5"),
+            model=default_settings.get("model", "v5.5"),
             duration=default_settings.get("duration", "5s"),
             motion_mode=default_settings.get("motion_mode", "normal"),
             quality=default_settings.get("quality", "720p"),
             style=default_settings.get("style", "none"),
-            effect=task_config.get("effect", "none") if not task_config.get("custom_effect_id") else None,
+            effect=task_config.get("effect", "none") if not task_config.get("custom_effect_id") else "none",
             custom_effect_id=task_config.get("custom_effect_id", ""),
             negative_prompt=task_config.get("negative_prompt", ""),
             prompt=task_config.get("prompt", ""),
+            use_url=False,
             image=handle_file(str(file_path)),
+            image_url="",
+            generate_audio_switch=default_settings.get("generate_audio", False),
+            generate_multi_clip_switch=default_settings.get("generate_multi_clip", False),
+            thinking_type=default_settings.get("thinking_type", "auto"),
             api_name=self.api_defs["api_name"]
         )
     
@@ -48,12 +53,7 @@ class PixverseHandler(BaseAPIHandler):
             if match:
                 video_id = match.group(1)
         
-        # Check for actual error
-        is_actual_error = error_message and not ("Success" in error_message or "VideoID:" in error_message)
-        if is_actual_error:
-            return False
-        
-        # Try to save video
+        # Try to save video first (prioritize video output over error checking)
         output_url = all_fields.get('output_url')
         output_video = result[1] if len(result) > 1 else None
         
@@ -71,7 +71,11 @@ class PixverseHandler(BaseAPIHandler):
                 shutil.copy2(local_path, output_path)
                 video_saved = True
         
+        # If video wasn't saved, check for actual error
         if not video_saved:
+            # Log the error message for debugging
+            if error_message:
+                self.logger.info(f"   ❌ API Error: {error_message}")
             return False
         
         # Save success metadata
@@ -80,7 +84,7 @@ class PixverseHandler(BaseAPIHandler):
         
         metadata = {
             'effect_name': effect,
-            'model': default_settings.get("model", "v4.5"),
+            'model': default_settings.get("model", "v5.5"),
             'video_id': video_id,
             'generated_video': output_video_name,
             'processing_time_seconds': round(processing_time, 1),
@@ -93,5 +97,7 @@ class PixverseHandler(BaseAPIHandler):
         
         self.processor.save_metadata(Path(metadata_folder), base_name, file_name, 
                                     metadata, task_config)
+        
+        return True
         
         return True

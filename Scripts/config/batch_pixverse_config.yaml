@@ -1,23 +1,33 @@
-base_folder: ../Media Files/Tests/1002 1 Style Pixverse Test
+base_folder: ../Media Files/Pixverse/1210 2 Styles
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 template_path: templates/I2V templates.pptx
 testbed: http://192.168.31.40:8000/video_effect/
 design_link: https://platform.pixverse.ai/effect-list
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/EhUjeHhffclAndc4tYR0PS0BWtrGDe1Q5yjUCzH3SEG0KQ?e=faSc5k
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB2n9_7SWuJTI_itrCnsU6SAeC7sG2d1CyWx5wyFVQJ60A?e=jLFPt2
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 0
 default_settings:
-  model: v4.5
+  model: v5.5
   duration: 5s
   motion_mode: normal
   quality: 720p
   style: none
+  generate_audio: false
+  generate_multi_clip: false
+  thinking_type: auto
+
 tasks:
-- effect: Tim Burton Haunting Doll
+- effect: 圣诞挂件小人
   prompt: ''
-  custom_effect_id: '360749956342336'
+  custom_effect_id: '374166107631104'
   negative_prompt: ''
+
+- effect: 猫咪圣诞礼盒
+  prompt: ''
+  custom_effect_id: '374222277323247'
+  negative_prompt: ''
+
 comments:
   base_folder: Root folder containing effect subfolders. Each effect folder should have 'Source', 'Generated_Video', and 'Metadata'
     subfolders.

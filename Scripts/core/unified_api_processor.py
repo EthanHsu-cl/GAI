@@ -146,6 +146,74 @@ class UnifiedAPIProcessor:
         except Exception:
             return None
 
+    def _resize_oversized_image(self, image_path, max_dimension=4000, max_attempts=3):
+        """
+        Resize images that exceed the maximum dimension limit.
+        Verifies resize succeeded and retries if needed.
+        
+        Args:
+            image_path: Path object to the image file
+            max_dimension: Maximum allowed dimension (width or height)
+            max_attempts: Maximum number of resize attempts
+            
+        Returns:
+            Path object to the resized file (or original if no resize needed)
+        """
+        for attempt in range(max_attempts):
+            try:
+                with Image.open(image_path) as img:
+                    w, h = img.size
+                    
+                    # Check if resize is needed
+                    if w <= max_dimension and h <= max_dimension:
+                        return image_path
+                    
+                    # Calculate new dimensions maintaining aspect ratio
+                    # Use slightly smaller target to ensure we're under the limit
+                    target_dim = max_dimension - 10 if attempt > 0 else max_dimension
+                    
+                    if w > h:
+                        new_w = target_dim
+                        new_h = int(h * (target_dim / w))
+                    else:
+                        new_h = target_dim
+                        new_w = int(w * (target_dim / h))
+                    
+                    # Resize using high-quality resampling
+                    resized_img = img.resize((new_w, new_h), Image.LANCZOS)
+                    
+                    # Convert to RGB if necessary (for JPG compatibility)
+                    if resized_img.mode in ('RGBA', 'P'):
+                        resized_img = resized_img.convert('RGB')
+                    
+                    # Save back to same path (overwrite)
+                    if image_path.suffix.lower() in ['.jpg', '.jpeg']:
+                        resized_img.save(image_path, 'JPEG', quality=95, optimize=True)
+                    elif image_path.suffix.lower() == '.png':
+                        resized_img.save(image_path, 'PNG', optimize=True)
+                    else:
+                        # Default to JPEG
+                        new_path = image_path.with_suffix('.jpg')
+                        resized_img.save(new_path, 'JPEG', quality=95, optimize=True)
+                        image_path.unlink()
+                        image_path = new_path
+                    
+                    self.logger.info(f" 📐 Resized {w}x{h} → {new_w}x{new_h}: {image_path.name}")
+                
+                # Verify the resize worked
+                with Image.open(image_path) as verify_img:
+                    vw, vh = verify_img.size
+                    if vw <= max_dimension and vh <= max_dimension:
+                        return image_path
+                    else:
+                        self.logger.warning(f" ⚠️ Resize verification failed ({vw}x{vh}), retrying...")
+                        
+            except Exception as e:
+                self.logger.warning(f" ⚠️ Could not resize {image_path.name} (attempt {attempt + 1}): {e}")
+        
+        # Return path after all attempts (may still be oversized if all attempts failed)
+        return image_path
+
     def _convert_image_to_jpg(self, image_path):
         """
         Convert unsupported image formats (AVIF, WEBP, etc.) to JPG.
@@ -219,13 +287,21 @@ class UnifiedAPIProcessor:
             # Get all image files
             files = [f for f in folder.iterdir() if f.is_file() and f.suffix.lower() in all_image_exts]
             
-            # Convert unsupported formats to JPG
-            converted_files = []
-            for file_path in files:
-                converted_path = self._convert_image_to_jpg(file_path)
-                converted_files.append(converted_path)
+            # Convert unsupported formats to JPG and resize oversized images
+            processed_files = []
+            max_dim = self.api_definitions.get('validation', {}).get('max_dimension')
             
-            files = converted_files
+            for file_path in files:
+                # First convert format if needed
+                converted_path = self._convert_image_to_jpg(file_path)
+                
+                # Then resize if max_dimension is defined and image exceeds it
+                if max_dim:
+                    converted_path = self._resize_oversized_image(converted_path, max_dim)
+                
+                processed_files.append(converted_path)
+            
+            files = processed_files
         else:
             # Video files - no conversion needed
             files = [f for f in folder.iterdir() if f.is_file() and f.suffix.lower() in file_types]
@@ -323,6 +399,11 @@ class UnifiedAPIProcessor:
                         min_dim = validation_rules.get('min_dimension', 128)
                         if w < min_dim or h < min_dim:
                             return False, f"Dims {w}x{h} too small"
+
+                        # Check max dimension if defined
+                        max_dim = validation_rules.get('max_dimension')
+                        if max_dim and (w > max_dim or h > max_dim):
+                            return False, f"Dims {w}x{h} exceed {max_dim}x{max_dim}"
 
                         # Check aspect ratio if defined
                         aspect_ratio_range = validation_rules.get('aspect_ratio')
