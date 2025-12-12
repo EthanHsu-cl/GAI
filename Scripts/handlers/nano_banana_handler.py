@@ -4,6 +4,7 @@ from gradio_client import handle_file
 import time
 import random
 from datetime import datetime
+from PIL import Image
 from .base_handler import BaseAPIHandler
 
 
@@ -21,6 +22,12 @@ class NanoBananaHandler(BaseAPIHandler):
         'gemini-3-pro-image-preview': 14
     }
     DEFAULT_MAX_IMAGES = 3
+    
+    # Valid aspect ratios supported by the API
+    VALID_ASPECT_RATIOS = [
+        '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'
+    ]
+    DEFAULT_ASPECT_RATIO = '1:1'
     
     def __init__(self, processor):
         """Initialize handler with multi-image support."""
@@ -217,6 +224,64 @@ class NanoBananaHandler(BaseAPIHandler):
         
         return selected[:max_additional]
     
+    def _get_aspect_ratio(self, file_path, task_config):
+        """Determine aspect ratio from config or auto-detect from source image.
+        
+        If aspect_ratio is specified in task_config, validates and uses it.
+        Otherwise, analyzes the source image dimensions and selects the
+        closest matching aspect ratio from VALID_ASPECT_RATIOS.
+        
+        Args:
+            file_path: Path to the source image file.
+            task_config: Task configuration dictionary.
+        
+        Returns:
+            str: Valid aspect ratio string (e.g., '16:9', '1:1').
+        """
+        # Check if aspect_ratio is specified in config
+        config_ratio = task_config.get('aspect_ratio', '')
+        if config_ratio:
+            if config_ratio in self.VALID_ASPECT_RATIOS:
+                return config_ratio
+            else:
+                self.logger.warning(
+                    f" ⚠️ Invalid aspect_ratio '{config_ratio}' in config. "
+                    f"Valid options: {self.VALID_ASPECT_RATIOS}. Auto-detecting..."
+                )
+        
+        # Auto-detect from source image
+        try:
+            with Image.open(file_path) as img:
+                width, height = img.size
+            
+            image_ratio = width / height
+            
+            # Calculate ratio values for all valid aspect ratios
+            best_ratio = self.DEFAULT_ASPECT_RATIO
+            best_diff = float('inf')
+            
+            for ratio_str in self.VALID_ASPECT_RATIOS:
+                w, h = map(int, ratio_str.split(':'))
+                ratio_value = w / h
+                diff = abs(image_ratio - ratio_value)
+                
+                if diff < best_diff:
+                    best_diff = diff
+                    best_ratio = ratio_str
+            
+            self.logger.debug(
+                f" 📐 Auto-detected aspect ratio: {best_ratio} "
+                f"(image: {width}x{height}, ratio: {image_ratio:.3f})"
+            )
+            return best_ratio
+            
+        except Exception as e:
+            self.logger.warning(
+                f" ⚠️ Failed to detect aspect ratio from {file_path.name}: {e}. "
+                f"Using default: {self.DEFAULT_ASPECT_RATIO}"
+            )
+            return self.DEFAULT_ASPECT_RATIO
+    
     def _make_api_call(self, file_path, task_config, attempt):
         """Make Nano Banana API call with multi-image support.
         
@@ -241,21 +306,26 @@ class NanoBananaHandler(BaseAPIHandler):
         # Get resolution from task config or use default
         resolution = task_config.get('resolution', '1K')
         
+        # Get aspect ratio from config or auto-detect from source image
+        aspect_ratio = self._get_aspect_ratio(file_path, task_config)
+        
         # Build images list: source image first, then additional images
         images_list = [handle_file(str(file_path))]
         for img_path in additional_imgs:
             if img_path:
                 images_list.append(handle_file(img_path))
         
-        # Log image count for debugging
+        # Log image count and aspect ratio for debugging
         max_images = self.MODEL_MAX_IMAGES.get(model, self.DEFAULT_MAX_IMAGES)
         self.logger.debug(f" 📷 Sending {len(images_list)} images (max {max_images} for {model})")
+        self.logger.debug(f" 📐 Using aspect ratio: {aspect_ratio}")
         
         return self.client.predict(
             prompt=task_config['prompt'],
             model=model,
             images=images_list,
             resolution=resolution,
+            aspect_ratio=aspect_ratio,
             api_name=self.api_defs['api_name']
         )
     

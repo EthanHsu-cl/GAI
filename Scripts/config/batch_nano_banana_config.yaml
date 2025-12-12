@@ -60,6 +60,7 @@ comments:
   template_usage: "use_comparison_template: true uses comparison_template_path (3 placeholders), false uses template_path (2 placeholders)"
   model: "Gemini model to use for generation. 'gemini-2.5-flash-image' (max 3 images, faster), 'gemini-3-pro-image-preview' (max 14 images, better quality). Must be specified per task; defaults to 'gemini-2.5-flash-image' if omitted. Root-level model is ignored."
   resolution: "Output resolution. Options: '1K' (default). Must be specified per task if non-default value is needed."
+  aspect_ratio: "Output aspect ratio. Valid options: '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'. If omitted, auto-detects the closest ratio from source image dimensions."
   use_multi_image: "Set to true to enable multi-image mode from Additional folder, false for single-image mode"
   output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report. Example: with 4 tasks and group_tasks_by=4, creates 1 report; with 8 tasks, creates 2 reports."
   multi_image_config:
