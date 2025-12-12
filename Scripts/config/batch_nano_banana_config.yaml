@@ -10,45 +10,25 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBIXFleU-3mQZYELTWqOo2TAS_JxENoIJCSfG5EI79pe_g?e=SS3hnF
-root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3a60691420a_0_0#slide=id.g3a60691420a_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBIUJvdO9wGRapBiWFU6kw1ARJ9n7JI1PjD7k4CsfNAOoY?e=p2DJPc
+root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3a60691420a_2_13#slide=id.g3a60691420a_2_13
 
 tasks:
-  - folder: ../Media Files/Nano Banana/1211 2 Styles/1211 對鏡畫口紅 2
+  - folder: ../Media Files/Nano Banana/1212 1 Style/1212 Pizza盒
     model: gemini-2.5-flash-image
     prompt: |
-      Please use the uploaded photo as the sole subject. The face shape, hairstyle, makeup, skin tone, expression, and body proportions of the person in the photo must be exactly the same as in the uploaded photo. Hair color must remain unchanged, and flash must not lighten or change the hair color.
-      The image must only show the mirror reflection of the person. No entities outside the mirror are allowed, nor are second faces, duplicate reflections, extra limbs, or unnatural angles permitted. The pose of the person in the mirror must conform to the laws of human physics and appear as a continuous whole. (The image is a lens, pointed at the mirror, and absolutely no figures or reflections other than the main person in the mirror are permitted.)
-      The person is wearing a sparkly red sequined halter dress with a backless design and thin straps. The sequins must be able to capture flash light, producing a bright, star-like reflection.
-      The mirror displays "Happy New Year!" written in red lipstick, next to a small red heart. The text must be precisely positioned on the mirror surface, aligned with the mirror's perspective, and must not float, distort, or appear in the person's reflected image.
-      The scene is a modern gray marble bathroom. Do not photograph the ceiling, overhead lights, or any objects outside the frame. The light comes solely from a powerful on-camera flash, creating strong shadows, sharp edges, bright highlights, and high-contrast, glowing skin, like a realistic party snapshot.
-      The reflection in the mirror reveals the subject's naturally relaxed posture, their head slightly turned towards the mirror as if glancing back. Movements must be simple, elegant, and fluid, avoiding exaggerated bends or complex gestures. The overall atmosphere must convey a bold, glamorous, and confident aura, captured through close-up, realistic flash photography.
-    reference_folder: ""
-    use_comparison_template: false
-    use_multi_image: false
+      Use the uploaded female subject as the only person in the image. Her real face, facial features, hairstyle, expression, makeup, skin texture, and identity must remain exactly the same as in the uploaded photo. Do not beautify, stylize, or alter her appearance in any way. No extra people may appear.
 
-  - folder: ../Media Files/Nano Banana/1211 2 Styles/1211 對鏡畫口紅 4
-    model: gemini-2.5-flash-image
-    prompt: |
-      Instructions
+      Create a warm, intimate indoor scene where the subject holds an open pizza box close to the camera. The pizza box should be positioned beside her face, clearly visible within the frame. The inside of the pizza box lid must have handwriting that reads “CHEERS TO NEW BEGINNINGS❤️
+      ,” written using lipstick so the strokes appear creamy, slightly smudged, and vivid, as if drawn directly onto cardboard with lipstick. Inside the box, place a pizza with a single small candle inserted on top, softly glowing and contributing to the warm celebratory mood.
 
-      Please use the uploaded photo as the sole subject. The face shape, hairstyle, makeup, skin tone, expression, and body proportions of the person in the photo must be exactly the same as the person in the uploaded photo. Hair color must remain unchanged; flash must not lighten or alter hair color.
+      The subject should wear a white spaghetti-strap top with a bright, vibrant red knit cardigan layered loosely over it. Her outfit must appear natural, textured, and correctly fitted, matching realistic fabric behavior and her body proportions.
 
-      The image must only show a mirror reflection of the person. No objects outside the mirror, second faces, duplicate reflections, extra limbs, or unnatural angles are allowed. The pose of the person in the mirror must conform to the laws of human physics and appear as a continuous whole. (The image is a lens pointing towards the mirror; absolutely no other person or reflection other than the person in the mirror is allowed.)
+      The lighting should feel as if the room itself is dark, with a single strong warm spotlight shining directly on the subject and the pizza box. This warm, focused light should illuminate her face and the pizza box intensely from the front, creating a dramatic contrast with the darker room. Because the light source is strong and frontal, the background must show a clean white wall with a noticeable soft shadow cast behind the subject. The lighting should maintain a cozy, intimate, slightly nostalgic atmosphere, with warm highlights on both her face and the open pizza box lid.
 
-      Based on the uploaded photo, create a vibrant New Year's snapshot (similar to a festive flash effect). The reflected image should include: a bright flash, soft shadows behind the person, and slightly warm-toned indoor lighting. The mirror image must be accurate and match the actual pose of the person. Absolutely no duplicate hand gestures, extra limbs and shadows, uncoordinated expressions, unnatural angles, or extra shadows are allowed.
+      The camera distance should be very close, focusing mainly on the subject’s face and the pizza box she is holding. Her pose should feel natural, friendly, and slightly playful, with a warm expression. The framing must clearly show her illuminated face, the lipstick-written message on the box lid, and the pizza with its candle.
 
-      The pose should be relaxed and natural: hands naturally raised, palms facing forward, facing the mirror, maintaining a fluid posture. Write "20" on your left palm and "26" on your right palm with red lipstick. Your smile must be natural, lively, and full of New Year's joy.
-
-      Write "Happy New Year 2026 :)" on a mirror with red lipstick, surrounded by small hearts or doodles. The style should coordinate with the casual lipstick strokes. Maintain the same angle as the mirror to avoid floating, distorting, or appearing in the subject's reflection.
-
-      The subject should be seated in front of the mirror, wearing a comfortable red sweater. If the subject is female, she should wear a white pleated skirt; if male, he should wear black leather pants.
-
-      The lighting must be bright and direct, such as using a flash. Shadows should be soft and clear, creating a natural and festive atmosphere. Colors must be warm and bright, highlighting the red element.
-
-      The background should be a simple indoor environment, such as a bedroom or dressing room, using warm-toned lighting, but not too harsh. The ceiling should not be visible in the frame; the camera should be focused on the subject and the mirror, and the subject's movements should be natural and fluid.
-
-      The final product should create a joyful, warm, and happy atmosphere—like a lighthearted New Year's greeting photo shared on social media, with accurate reflections, clean lighting, and a genuine sense of celebration.
+      The final image must look realistic, cohesive, and warmly lit, preserving the subject’s true identity while creating a charming New Year–themed photo in a cozy indoor setting with strong frontal warm lighting.
     reference_folder: ""
     use_comparison_template: false
     use_multi_image: false

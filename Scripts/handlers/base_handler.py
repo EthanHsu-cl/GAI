@@ -10,6 +10,28 @@ from datetime import datetime
 class BaseAPIHandler:
     """Base handler with ALL common logic. Subclasses override only what's different."""
     
+    # Connection error patterns that warrant extended retry with backoff
+    CONNECTION_ERROR_PATTERNS = [
+        'Connection refused',
+        'ConnectionRefusedError',
+        'ConnectionResetError',
+        'ConnectionError',
+        'Errno 61',   # Connection refused (macOS)
+        'Errno 111',  # Connection refused (Linux)
+        'Errno 10061',  # Connection refused (Windows)
+        'RemoteDisconnected',
+        'ConnectionAbortedError',
+        'BrokenPipeError',
+        'Server disconnected',
+        'Connection reset by peer',
+    ]
+    
+    # Connection retry configuration
+    CONNECTION_RETRY_MAX_DURATION = 240  # 4 minutes max wait
+    CONNECTION_RETRY_INITIAL_WAIT = 10   # Start with 10 seconds
+    CONNECTION_RETRY_MAX_WAIT = 60       # Cap at 60 seconds between retries
+    CONNECTION_RETRY_BACKOFF = 1.5       # Exponential backoff multiplier
+    
     def __init__(self, processor):
         self.processor = processor
         self.api_defs = processor.api_definitions
@@ -18,6 +40,76 @@ class BaseAPIHandler:
         self.logger = processor.logger
         self.api_name = processor.api_name
     
+    def _is_connection_error(self, error_str):
+        """Check if an error is a connection-related error."""
+        error_lower = error_str.lower()
+        return any(p.lower() in error_lower for p in self.CONNECTION_ERROR_PATTERNS)
+    
+    def _make_api_call_with_connection_retry(self, file_path, task_config, attempt):
+        """Wrap API call with connection error retry logic.
+        
+        Implements exponential backoff retry specifically for connection errors,
+        allowing the server up to CONNECTION_RETRY_MAX_DURATION seconds to recover.
+        
+        Args:
+            file_path: Path to the source file.
+            task_config: Task configuration dictionary.
+            attempt: Current attempt number from the outer retry loop.
+        
+        Returns:
+            API result if successful.
+        
+        Raises:
+            Exception: Re-raises the last exception if all retries fail.
+        """
+        total_wait_time = 0
+        current_wait = self.CONNECTION_RETRY_INITIAL_WAIT
+        connection_retry_count = 0
+        last_exception = None
+        
+        while total_wait_time < self.CONNECTION_RETRY_MAX_DURATION:
+            try:
+                return self._make_api_call(file_path, task_config, attempt)
+            except Exception as e:
+                error_str = str(e)
+                
+                # Only retry for connection errors
+                if not self._is_connection_error(error_str):
+                    raise e
+                
+                last_exception = e
+                connection_retry_count += 1
+                remaining_time = self.CONNECTION_RETRY_MAX_DURATION - total_wait_time
+                
+                # Don't wait if we've exceeded max duration
+                if remaining_time <= 0:
+                    break
+                
+                # Cap wait time to remaining duration
+                actual_wait = min(current_wait, remaining_time)
+                
+                self.logger.warning(
+                    f" ⚠️ Connection error (attempt {connection_retry_count}): {error_str}"
+                )
+                self.logger.info(
+                    f" ⏳ Waiting {actual_wait:.0f}s for server recovery "
+                    f"(total waited: {total_wait_time:.0f}s / {self.CONNECTION_RETRY_MAX_DURATION}s max)"
+                )
+                
+                time.sleep(actual_wait)
+                total_wait_time += actual_wait
+                
+                # Apply exponential backoff for next iteration
+                current_wait = min(current_wait * self.CONNECTION_RETRY_BACKOFF, 
+                                   self.CONNECTION_RETRY_MAX_WAIT)
+        
+        # All connection retries exhausted
+        self.logger.error(
+            f" ❌ Server unavailable after {total_wait_time:.0f}s "
+            f"({connection_retry_count} connection retries)"
+        )
+        raise last_exception
+    
     def process(self, file_path, task_config, output_folder, metadata_folder, attempt, max_retries):
         """Process a single file. Override _make_api_call() to customize."""
         base_name = Path(file_path).stem
@@ -25,8 +117,8 @@ class BaseAPIHandler:
         start_time = time.time()
         
         try:
-            # Make API-specific call (subclass implements this)
-            result = self._make_api_call(file_path, task_config, attempt)
+            # Make API-specific call with connection retry wrapper
+            result = self._make_api_call_with_connection_retry(file_path, task_config, attempt)
             
             # Parse and save result (subclass can override)
             success = self._handle_result(result, file_path, task_config, output_folder, 
