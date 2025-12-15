@@ -616,7 +616,7 @@ class UnifiedReportGenerator:
         # Check error field first (from handler)
         error_msg = pair.metadata.get('error', '')
         if error_msg:
-            return f"Error: {error_msg}"
+            return f"{error_msg}"
         
         # Try to get text_responses for detailed error message
         text_responses = pair.metadata.get('text_responses', [])
@@ -1629,8 +1629,13 @@ class UnifiedReportGenerator:
         m = re.match(r'(\d{4})\s*(.+)', folder_name)
         return m.group(1) if m else datetime.now().strftime("%m%d")
     
-    def get_cmp_filename(self, folder1: str, folder2: str, model: str = '', effect_names1=None, effect_names2=None) -> str:
-        """Generate comparison filename using API name and effect names"""
+    def get_cmp_filename(self, folder1: str, folder2: str, model: str = '', effect_names1=None, effect_names2=None) -> tuple:
+        """Generate comparison filename using API name and effect names.
+        
+        Returns:
+            tuple: (api_line, styles_line) where api_line contains date and model,
+                   and styles_line contains the effect names comparison.
+        """
         d = self._extract_date_from_folder(folder1)
         
         # Use model (API name) as the primary identifier
@@ -1638,14 +1643,24 @@ class UnifiedReportGenerator:
         effect_str1 = ', '.join(effect_names1) if effect_names1 else 'Test'
         effect_str2 = ', '.join(effect_names2) if effect_names2 else 'Reference'
         
-        parts = [f"[{d}]"]
+        # Build API line (date + model)
+        api_parts = [f"[{d}]"]
         if model:
-            parts.append(model)
-        parts.append(f"{effect_str1} vs {effect_str2}")
-        return ' '.join(parts)
+            api_parts.append(model)
+        api_line = ' '.join(api_parts)
+        
+        # Build styles line
+        styles_line = f"{effect_str1} vs {effect_str2}"
+        
+        return (api_line, styles_line)
 
     def get_filename(self, folder, model='', effect_names=None):
-        """Generate filename using API name and effect names"""
+        """Generate filename using API name and effect names.
+        
+        Returns:
+            tuple: (api_line, styles_line) where api_line contains date and model,
+                   and styles_line contains the effect/style names.
+        """
         # Handle grouped tasks
         if isinstance(folder, dict) and folder.get('_is_grouped'):
             return self._get_grouped_filename(folder, model, effect_names)
@@ -1660,16 +1675,22 @@ class UnifiedReportGenerator:
             # Effect names are the actual content description
             effect_str = ', '.join(effect_names) if effect_names else 'Test'
         
-        parts = [f"[{d}]"]
+        # Build API line (date + model)
+        api_parts = [f"[{d}]"]
         if model:
-            parts.append(model)
-        parts.append(effect_str)
-        return ' '.join(parts)
-    
-    def _get_grouped_filename(self, grouped_task: Dict, model: str = '', effect_names=None) -> str:
-        """Generate filename for grouped tasks
+            api_parts.append(model)
+        api_line = ' '.join(api_parts)
         
-        Handles both folder-based and base-folder APIs
+        return (api_line, effect_str)
+    
+    def _get_grouped_filename(self, grouped_task: Dict, model: str = '', effect_names=None) -> tuple:
+        """Generate filename for grouped tasks.
+        
+        Handles both folder-based and base-folder APIs.
+        
+        Returns:
+            tuple: (api_line, styles_line) where api_line contains date and model,
+                   and styles_line contains the effect/style names.
         """
         is_base_folder_api = grouped_task.get('_is_base_folder_api', False)
         group_num = grouped_task.get('_group_number', 1)
@@ -1692,12 +1713,13 @@ class UnifiedReportGenerator:
             # Build effect string - combine all unique effects
             effect_str = ', '.join(effect_names) if effect_names else 'Combined'
         
-        parts = [f"[{d}]"]
+        # Build API line (date + model)
+        api_parts = [f"[{d}]"]
         if model:
-            parts.append(model)
-        parts.append(f"{effect_str}")
+            api_parts.append(model)
+        api_line = ' '.join(api_parts)
         
-        return ' '.join(parts)
+        return (api_line, effect_str)
 
     
     def _scan_directory_once(self, folder: Path, image_exts=None, video_exts=None, metadata_exts=None):
@@ -2107,16 +2129,30 @@ class UnifiedReportGenerator:
 
         api_display = self._api_display_names.get(self.api_name, self.api_name.title())
 
-        # Generate title
+        # Generate title (now returns tuple of api_line, styles_line)
         if use_comparison and task.get('reference_folder'):
             ref_name = Path(task['reference_folder']).name
-            title = self.get_cmp_filename(folder_name, ref_name, api_display, effect_names1=effect_names)
+            api_line, styles_line = self.get_cmp_filename(folder_name, ref_name, api_display, effect_names1=effect_names)
         else:
-            title = self.get_filename(folder_name, api_display, effect_names=effect_names)
+            api_line, styles_line = self.get_filename(folder_name, api_display, effect_names=effect_names)
 
-        # Update title slide
+        # Update title slide with two-line formatting
         if ppt.slides and ppt.slides[0].shapes:
-            ppt.slides[0].shapes[0].text_frame.text = title
+            title_shape = ppt.slides[0].shapes[0]
+            tf = title_shape.text_frame
+            tf.clear()
+            
+            # First paragraph: API line (uses default/existing font size)
+            p1 = tf.paragraphs[0]
+            p1.text = api_line
+            p1.alignment = PP_ALIGN.CENTER
+            
+            # Second paragraph: Styles line with font size 36
+            p2 = tf.add_paragraph()
+            p2.alignment = PP_ALIGN.CENTER
+            run = p2.add_run()
+            run.text = styles_line
+            run.font.size = Pt(36)
 
         # Add links
         self.add_links(ppt, task)
@@ -2254,9 +2290,13 @@ class UnifiedReportGenerator:
             
             if use_comparison and task.get('reference_folder'):
                 ref_name = Path(task['reference_folder']).name
-                filename = self.get_cmp_filename(folder_name, ref_name, api_display, effect_names1=effect_names)
+                api_line, styles_line = self.get_cmp_filename(folder_name, ref_name, api_display, effect_names1=effect_names)
             else:
-                filename = self.get_filename(folder_name, api_display, effect_names=effect_names)
+                api_line, styles_line = self.get_filename(folder_name, api_display, effect_names=effect_names)
+            
+            # Combine for filename (join the two lines with a space)
+            filename = f"{api_line} {styles_line}"
+            
             # Get output directory
             output_dir = Path(self.config.get('output_directory',
                             self.config.get('output', {}).get('directory',

@@ -36,11 +36,12 @@ class NanoBananaHandler(BaseAPIHandler):
         self._used_combinations = set()
         self._source_file_indices = {}  # Track source file index for sequential matching
     
-    def _load_image_pools(self, task_config):
+    def _load_image_pools(self, task_config, max_additional=None):
         """Load and cache image pools from additional folders.
         
         Args:
             task_config: Task configuration dictionary containing multi_image_config.
+            max_additional: Maximum number of additional images to use.
         
         Returns:
             dict: Pool data with 'pools', 'mode', and 'allow_duplicates' keys,
@@ -48,8 +49,25 @@ class NanoBananaHandler(BaseAPIHandler):
         """
         multi_image_config = task_config.get('multi_image_config', {})
         
+        # Auto-detect Additional folder if use_multi_image is true but no explicit config
         if not multi_image_config or not multi_image_config.get('enabled', False):
-            return None
+            # Check for simple multi_image mode with auto-detected Additional folder
+            if task_config.get('use_multi_image', False):
+                task_folder = Path(task_config.get('folder', ''))
+                additional_folder = task_folder / 'Additional'
+                if additional_folder.exists():
+                    self.logger.info(f" 📂 Auto-detected Additional folder for multi-image mode")
+                    # Create implicit config for auto-detected folder
+                    multi_image_config = {
+                        'enabled': True,
+                        'mode': 'sequential',  # Default to sequential for predictable pairing
+                        'folders': [str(additional_folder)],
+                        'allow_duplicates': True
+                    }
+                else:
+                    return None
+            else:
+                return None
         
         mode = multi_image_config.get('mode', 'random_pairing')
         folders = multi_image_config.get('folders', [])
@@ -107,8 +125,26 @@ class NanoBananaHandler(BaseAPIHandler):
         # Reserve 1 slot for source image
         max_additional = max_images - 1
         
+        # Check for user-specified multi_image_count (limits additional images)
+        # multi_image_count specifies TOTAL images including source
+        # e.g., multi_image_count: 2 means 1 source + 1 additional
+        user_count = task_config.get('multi_image_count', 0)
+        if user_count > 0:
+            # Validate against model limit
+            if user_count > max_images:
+                self.logger.warning(
+                    f" ⚠️ multi_image_count ({user_count}) exceeds model limit ({max_images}). "
+                    f"Using model limit."
+                )
+                user_count = max_images
+            max_additional = user_count - 1  # -1 for source image
+        
         # Check if multi-image is explicitly disabled
         if not task_config.get('use_multi_image', True):
+            return []
+        
+        # If multi_image_count is 1 or less, no additional images needed
+        if user_count == 1:
             return []
         
         # Check for static additional images (legacy support)
@@ -120,10 +156,10 @@ class NanoBananaHandler(BaseAPIHandler):
                 img = additional_images.get(f'image{i}', '')
                 if img:
                     result.append(img)
-            return result
+            return result[:max_additional]
         
         # Check for multi-image configuration
-        pool_data = self._load_image_pools(task_config)
+        pool_data = self._load_image_pools(task_config, max_additional)
         if not pool_data or not pool_data['pools']:
             return []
         
@@ -131,13 +167,16 @@ class NanoBananaHandler(BaseAPIHandler):
         mode = pool_data['mode']
         allow_duplicates = pool_data['allow_duplicates']
         
+        # Limit pools to max_additional count
+        effective_max = max_additional if max_additional else len(pools)
+        
         if mode == 'random_pairing':
-            return self._random_pairing(pools, file_path, allow_duplicates, max_additional)
+            return self._random_pairing(pools, file_path, allow_duplicates, effective_max)
         elif mode == 'sequential':
-            return self._sequential_selection(pools, file_path, max_additional)
+            return self._sequential_selection(pools, file_path, effective_max)
         else:
             self.logger.warning(f" ⚠️ Unknown mode '{mode}', using random_pairing")
-            return self._random_pairing(pools, file_path, allow_duplicates, max_additional)
+            return self._random_pairing(pools, file_path, allow_duplicates, effective_max)
     
     def _random_pairing(self, pools, file_path, allow_duplicates, max_additional):
         """Randomly select one image from each pool, optionally avoiding duplicates.

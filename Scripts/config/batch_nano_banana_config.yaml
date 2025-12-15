@@ -4,34 +4,508 @@ testbed: http://192.168.31.40:8000/google_gemini_image/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3
+  group_tasks_by: 4
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBIUJvdO9wGRapBiWFU6kw1ARJ9n7JI1PjD7k4CsfNAOoY?e=p2DJPc
-root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3a60691420a_2_13#slide=id.g3a60691420a_2_13
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBvLkeRIg6uQK6zQzOrO1BMAZB4OAZ52Ho8CxlCZBMvBko?e=ueXgFS
+root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3afe2e44567_14_70#slide=id.g3afe2e44567_14_70
 
 tasks:
-  - folder: ../Media Files/Nano Banana/1212 1 Style/1212 Pizza盒
+  - folder: ../Media Files/Nano Banana/1215 4 Styles/1215 仙女棒兩宮格 Female
     model: gemini-2.5-flash-image
     prompt: |
-      Use the uploaded female subject as the only person in the image. Her real face, facial features, hairstyle, expression, makeup, skin texture, and identity must remain exactly the same as in the uploaded photo. Do not beautify, stylize, or alter her appearance in any way. No extra people may appear.
+      Use the uploaded person as the subject, keeping their face, facial features, makeup, hairstyle, skin tone, and body proportions exactly the same as in the uploaded image. Create a two-panel collage composed of two identical photos, each designed in a style similar to a warm and natural outdoor photo of New Year's fireworks.
 
-      Create a warm, intimate indoor scene where the subject holds an open pizza box close to the camera. The pizza box should be positioned beside her face, clearly visible within the frame. The inside of the pizza box lid must have handwriting that reads “CHEERS TO NEW BEGINNINGS❤️
-      ,” written using lipstick so the strokes appear creamy, slightly smudged, and vivid, as if drawn directly onto cardboard with lipstick. Inside the box, place a pizza with a single small candle inserted on top, softly glowing and contributing to the warm celebratory mood.
+      The setting is a dark open space near water and trees, illuminated mainly by handheld sparklers and soft ambient lights in the distance. The overall mood should feel warm, romantic, slightly cinematic, and lively, with gentle bokeh from faraway lamps and a subtle night haze.
 
-      The subject should wear a white spaghetti-strap top with a bright, vibrant red knit cardigan layered loosely over it. Her outfit must appear natural, textured, and correctly fitted, matching realistic fabric behavior and her body proportions.
+      Top : The subject must face the camera, holding a lit sparkler with one hand above the other, displaying a natural, relaxed, and happy expression.
 
-      The lighting should feel as if the room itself is dark, with a single strong warm spotlight shining directly on the subject and the pizza box. This warm, focused light should illuminate her face and the pizza box intensely from the front, creating a dramatic contrast with the darker room. Because the light source is strong and frontal, the background must show a clean white wall with a noticeable soft shadow cast behind the subject. The lighting should maintain a cozy, intimate, slightly nostalgic atmosphere, with warm highlights on both her face and the open pizza box lid.
+      Bottom: Close-up of the face, facing the camera with a relaxed and cheerful expression, the frame only reaching the shoulders, no more than a super close-up. turned to the side, holding the sparkler.
 
-      The camera distance should be very close, focusing mainly on the subject’s face and the pizza box she is holding. Her pose should feel natural, friendly, and slightly playful, with a warm expression. The framing must clearly show her illuminated face, the lipstick-written message on the box lid, and the pizza with its candle.
+      The angles of the other two photos can be varied—side view, over the shoulder, or a playful back view—but must maintain realism, conforming to realistic reflections, shadows, and human anatomy. All poses should appear relaxed and natural, as if capturing a joyful moment from a New Year's celebration.
 
-      The final image must look realistic, cohesive, and warmly lit, preserving the subject’s true identity while creating a charming New Year–themed photo in a cozy indoor setting with strong frontal warm lighting.
+      The subject must wear a fluffy light-colored faux-fur jacket layered over a simple black dress, with soft sparkler light reflecting on the fur and skin. Perhaps due to the movement, the fur coat naturally slipped down to her shoulders.
+
+      Due to natural movement, the jacket may sit slightly relaxed on the shoulders, enhancing a spontaneous, candid feel.The lighting should replicate real handheld sparkler illumination: bright, warm spark bursts near the hands, dynamic highlights on the fur, and soft falloff into the surrounding darkness. The night background should be detailed yet subdued, containing silhouettes of winter trees, faint reflections on water, and distant streetlights or building lights with natural bokeh. Snowflakes may be present in one or two frames, softly falling and catching the light for added festive atmosphere.
+
+      Each sparkler must emit bright, crisp, realistic sparks with slight motion blur, producing a celebratory New Year mood. Subtle sense of dynamic speed and blurThe entire collage must maintain a cohesive color tone—cool night ambient tones contrasted with warm sparkler glow. Ensure that no extra limbs, distorted hands, or impossible poses appear, and every frame should preserve the real identity and appearance of the uploaded person.
+
+      The final collage must look like two high-quality candid New Year celebration photos captured on a phone at night, full of warmth, joy, intimacy, and festive energy.
     reference_folder: ""
     use_comparison_template: false
     use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 4 Styles/1215 仙女棒兩宮格 Male
+    model: gemini-2.5-flash-image
+    prompt: |
+      Use the uploaded person as the subject, keeping their face, facial features, makeup, hairstyle, skin tone, and body proportions exactly the same as in the uploaded image. Create a two-panel collage composed of two identical photos, each designed in a style similar to a warm and natural outdoor photo of New Year's fireworks.
+
+      The setting is a dark open space near water and trees, illuminated mainly by handheld sparklers and soft ambient lights in the distance. The overall mood should feel warm, romantic, slightly cinematic, and lively, with gentle bokeh from faraway lamps and a subtle night haze.
+
+      Top : The subject must face the camera, holding a lit sparkler with one hand above the other, displaying a natural, relaxed, and happy expression.
+
+      Bottom: Close-up of the face, facing the camera with a relaxed and cheerful expression, the frame only reaching the shoulders, no more than a super close-up. turned to the side, holding the sparkler.
+
+      The angles of the other two photos can be varied—side view, over the shoulder, or a playful back view—but must maintain realism, conforming to realistic reflections, shadows, and human anatomy. All poses should appear relaxed and natural, as if capturing a joyful moment from a New Year's celebration.
+
+      The subject must wear a fluffy light-colored faux-fur jacket layered over a simple black dress, with soft sparkler light reflecting on the fur and skin. Perhaps due to the movement, the fur coat naturally slipped down to her shoulders.(If the user uploads a photo of a man, he must wear a cool, stylish light-colored suede jacket, naturally layered over a simple dark inner outfit. The suede texture should catch the warm sparkler light softly, with gentle highlights reflecting on the jacket and skin. Due to natural movement, the jacket may sit slightly relaxed on the shoulders, enhancing a spontaneous, candid feel.).The lighting should replicate real handheld sparkler illumination: bright, warm spark bursts near the hands, dynamic highlights on the fur, and soft falloff into the surrounding darkness. The night background should be detailed yet subdued, containing silhouettes of winter trees, faint reflections on water, and distant streetlights or building lights with natural bokeh. Snowflakes may be present in one or two frames, softly falling and catching the light for added festive atmosphere.
+
+      Each sparkler must emit bright, crisp, realistic sparks with slight motion blur, producing a celebratory New Year mood. Subtle sense of dynamic speed and blurThe entire collage must maintain a cohesive color tone—cool night ambient tones contrasted with warm sparkler glow. Ensure that no extra limbs, distorted hands, or impossible poses appear, and every frame should preserve the real identity and appearance of the uploaded person.
+
+      The final collage must look like two high-quality candid New Year celebration photos captured on a phone at night, full of warmth, joy, intimacy, and festive energy.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 4 Styles/1215 煙火 Female
+    model: gemini-2.5-flash-image
+    prompt: |
+      Use the uploaded person exactly as they are, keeping the same face, hair texture, makeup, expression style, body proportions, and natural aura. Generate a four-frame collage of equal size, each frame feeling like a real New Year’s Eve moment captured by a handheld camera with strong, direct on-camera flash. The images must not look posed or studio-like; they must feel spontaneous, imperfect, and full of movement, as if a friend captured them during a night celebration outdoors.
+
+      and the intense direct flash creates slight overexposure on the skin, glossy highlights on the shoulders and cheeks, and small blown-out reflections in the eyes. Hair must move naturally in the wind, slightly messy in a flattering way, never stiff or perfectly arranged. The subject’s expressions must shift subtly between frames—real smiles, small laughs, relaxed eye contact, or glancing to the side—never the controlled expression of a formal photoshoot. The skin glow should come from the flash, not from soft beauty lighting, and the background should remain dark, grainy, and filled with distant lights and silhouettes of people, giving a lively festival atmosphere.
+
+      Clothing
+
+      A white strapless dress and a loose black leather jacket casually draped over the shoulders. (If the user uploaded a male photo, the upper body is a white sweatshirt, and a loose black leather jacket the lower body is changed to ripped black jeans.)
+
+      In the upper-left frame, a Very close-up view of the subject with fireworks exploding behind them the composition captures a close candid moment, as if shot just as the subject turns toward the camera with a natural, wind-blown smile, fireworks blooming behind.
+
+      In the upper-right frame, show the subject from half-body distance, standing outdoors and facing the fireworks while turning their head back toward the camera with a bright, celebratory expression. The background should show an open nighttime space—such as a waterfront, beach, or riverside—with fireworks lighting the sky. The pose must look natural and festive.the subject stands at a slight angle with the jacket slipping casually off the shoulder, not intentionally posed, and the expression is soft but unguarded.
+
+      In the lower-left frame, the subject appears in a three-quarter-body shot on a lively nighttime street, captured in a candid celebratory moment. 
+
+      In the lower-right frame, the subject holds a sparkler in the most natural, real-life way—Shaky camera .arm relaxed, wrist loose, not lifted deliberately for the camera—while the flash and sparkler light mix to create uneven shadows and warm reflections, and the expression shows a candid moment rather than a performance for the lens.
+
+      The entire collage must feel like authentic nightlife snapshots: slightly imperfect, full of movement, flash-heavy, high-contrast, and emotionally alive, with no staged gestures, no symmetrical posing, and no beauty-shoot atmosphere—only the spontaneous charm of real New Year fireworks caught in fleeting moments.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 4 Styles/1215 煙火 Male
+    model: gemini-2.5-flash-image
+    prompt: |
+      Use the uploaded person exactly as they were, maintaining the same facial features, proportions, face shape, hair texture, makeup, expression, body proportions, and natural temperament.
+
+      Generate a four-frame collage of equal size, each frame feeling like a real New Year’s Eve moment captured by a handheld camera with strong, direct on-camera flash. The images must not look posed or studio-like; they must feel spontaneous, imperfect, and full of movement, as if a friend captured them during a night celebration outdoors.
+
+      and the intense direct flash creates slight overexposure on the skin, glossy highlights on the shoulders and cheeks, and small blown-out reflections in the eyes. Hair must move naturally in the wind, slightly messy in a flattering way, never stiff or perfectly arranged. The subject’s expressions must shift subtly between frames—real smiles, small laughs, relaxed eye contact, or glancing to the side—never the controlled expression of a formal photoshoot. The skin glow should come from the flash, not from soft beauty lighting, and the background should remain dark, grainy, and filled with distant lights and silhouettes of people, giving a lively festival atmosphere.
+
+      Clothing
+
+      The upper body must consist of a white sweatshirt and a loose black leather jacket, while the lower body must be fitted with ripped black jeans. Women's clothing is strictly prohibited.
+
+      In the upper-left frame, a Very close-up view of the subject with fireworks exploding behind them the composition captures a close candid moment, as if shot just as the subject turns toward the camera with a natural, wind-blown smile, fireworks blooming behind.
+
+      In the upper-right frame, show the subject from half-body distance, standing outdoors and facing the fireworks while turning their head back toward the camera with a bright, celebratory expression. The background should show an open nighttime space—such as a waterfront, beach, or riverside—with fireworks lighting the sky. The pose must look natural and festive. not intentionally posed, and the expression is soft but unguarded.
+
+      In the lower-left frame, the subject appears in a three-quarter-body shot on a lively nighttime street, captured in a candid celebratory moment. 
+
+      In the lower-right frame, the subject holds a sparkler in the most natural, real-life way—Shaky camera .arm relaxed, wrist loose, not lifted deliberately for the camera—while the flash and sparkler light mix to create uneven shadows and warm reflections, and the expression shows a candid moment rather than a performance for the lens.
+
+      The entire collage must feel like authentic nightlife snapshots: slightly imperfect, full of movement, flash-heavy, high-contrast, and emotionally alive, with no staged gestures, no symmetrical posing, and no beauty-shoot atmosphere—only the spontaneous charm of real New Year fireworks caught in fleeting moments.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 日系自然照片 女生送巧克力
+    model: gemini-2.5-flash-image
+    prompt: |
+      The subject should be a person, and their facial features, makeup, hairstyle, skin tone, and body proportions must be preserved to ensure consistency with the uploaded photo. The photo should be taken in a softly lit kitchen environment, employing the aesthetic style characteristic of Fujifilm—cool-toned sunlight, bright whites, soft, low-contrast shadows, clean highlights, and a subtle matte finish. The overall atmosphere should evoke a tranquil morning, with soft, transparent, and relaxing colors, similar to the style of Fujifilm Pro 400H or Fujifilm Reala film: pure whites, natural skin tones, soft cool tones in shadows, and dreamy halos around bright areas.
+
+      The kitchen island countertop uses white marble tiles to create a natural, warm, and inviting atmosphere, rather than an artificial one—open cabinet doors, mismatched plates, scattered cutlery, jars on the countertop, books and ingredients casually placed in the background, and a slightly messy island stained with chocolate. Melted chocolate stains, chocolate shavings, chocolate pieces, a spoon dipped in chocolate, a half-eaten chocolate bar, and an imperfect handmade chocolate cake—these elements intertwine to create a warm, everyday sense of chaos.
+
+      Her posture should be natural and relaxed, unrestrained, as if capturing a moment from her real life, rather than a deliberately posed half-body portrait. She might lean against a table, one hand supporting her cheek or chin, fingers casually holding a piece of chocolate, elegantly and enticingly licking it from her fingertips, or holding a piece of chocolate as if about to offer it to someone else; or perhaps, bathed in dreamy morning light, gazing tenderly at the camera, or gently pressing her palm or fingers to her cheek, creating a visual effect that makes her face appear more pitiful. Everything should appear natural and casual, with a touch of unrefined beauty.
+
+      The subject wears an off-the-shoulder white sheer knit top, layered over a tank top, creating a captivating, soft, and languid atmosphere.
+
+      The scene is serene and peaceful, with natural window light illuminating her face and highlighting the soft grain and subtle depth of field of the film. The overall image is warm and clean, both nostalgic and refreshing—like a genuine family photograph taken with Fujifilm, where sweetness, chocolate, and a languid sense of comfort intertwine to create a tranquil and cozy kitchen scene.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 日系自然照片女生送巧克力 俯角
+    model: gemini-2.5-flash-image
+    prompt: |
+      Using the uploaded photo of the person as the primary subject, preserve their facial features, makeup, hairstyle, skin tone, and body proportions to ensure complete consistency with the uploaded image.
+
+      Transform it into a cinematic close-up portrait inspired by lifestyle photography.
+
+      She lies on a soft, neutral-colored bed, without any blankets.
+
+      Her hair falls naturally in soft waves, with a few fresh cherries or strawberries (arranged casually, but only one type of fruit at a time) scattered effortlessly on her hair and pillow, creating a harmonious and natural effect.
+
+      She wears a white spaghetti strap dress—simple yet elegant—that gleams softly in the sunlight. The V-neck and thin straps accentuate her beautiful shoulders and collarbones.
+
+      Her posture exudes ease and comfort: she leans back, holding fruit near her nose, blinking only one eye, a warm, playful smile playing on her lips, or gazing captivatingly at the camera. One hand holds fruit (fresh cherries or strawberries, randomly chosen, but only one type at a time), placed below the foreground—the other hand holds fruit (fresh, large, white, visible due to her blurred face), also placed below the foreground—but without the same full-bodied, large size, visible due to the lighter blur of her face. All movements are natural and relaxed. (Three hands or illogical poses are strictly prohibited.) Unnecessary hand, foot, or body shadows are strictly prohibited, as are unreasonable third hands or any illogical body movements.
+
+      The lighting is soft and diffused, simulating natural window light from above at approximately a 45° angle. The color temperature is approximately 5200K, creating a clean, sunlit atmosphere, leaving soft highlights on her skin and hair. The overall tone should remain bright and fresh, with natural shadow transitions.
+
+      Use a medium-close-up composition (approximately from head to chest), with an equivalent focal length of 50-85mm and an aperture of f/1.8-f/2.2, emphasizing eye contact, hair texture, and the natural glow of the skin.
+
+      The final atmosphere should showcase the elegant temperament of a modern woman—fresh, romantic, and naturally radiant—like a magazine spread shot in the morning sunlight.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 日系自然照片女生送巧克力 三公格
+    model: gemini-2.5-flash-image
+    prompt: |
+      The narrative will be presented as a three-panel vertical collage (overall aspect ratio 3:4, individual panel aspect ratio 4:3).
+
+      The subject's face, hairstyle, and skin tone must be exactly the same as the uploaded photo; no modifications or stylization are allowed. The subject's face, features, skin tone, hairstyle, makeup, and body proportions must not be altered.
+
+      The scene will be processed into a soft-focus, cinematic close-up portrait, taken in natural morning light.
+
+      The subject is positioned around a wooden table, surrounded by fruit and various chocolates and chocolate-making ingredients (fruit randomly selected: cherries or strawberries—only one is required). Sunlight streams in from a nearby window, casting a warm, soft, honey-gold glow.
+
+      The subject's hair is tied in a slightly messy side ponytail at the nape of the neck, with a few stray strands falling on either side of the face (this step will not apply if the user has short hair). A small red bow must be pinned near the left temple, the end of the bow slightly upturned, shimmering subtly in the light.
+
+      In the three images (top, middle, and bottom), the figures are all in different poses. The figures are always wearing white off-the-shoulder tops, creating a romantic and pleasing atmosphere. (A type of fruit appears randomly in the image: cherry or strawberry – only one needs to be present):
+
+      Top: Close-up shot, chin gently resting on the table, gaze following the delicate fruit in the hand.
+
+      Middle: The figure lies on the table, fruit scattered in the background. The camera is tilted upwards, the figure looks directly at the camera, gently holding a piece of fruit.
+
+      Bottom: Close-up shot, body slightly leaning forward, chin resting on the table, looking directly at the camera, eyes conveying curiosity, dreaminess, and intimacy. Fruit is scattered on the table.
+
+      This composition captures a subtle atmosphere between tranquility and intimacy. The light is natural and soft, with a color temperature of approximately 4200-4600K, shining from a low angle of 30° on the left, casting soft shadows and glows on the cheeks and fruit. Soft highlights give the entire image a nostalgic film-like quality.
+
+      The background maintains a soft, blurred effect; the image is dominated by natural wood tones, white linen napkins, and scattered fruit, with touches of red adding a bright spot. The overall color scheme blends soft beige, warm ivory, cherry red, and amber gold, creating a gentle afternoon glow reminiscent of vintage Japanese magazine portrait photography.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 浪漫邱比特天使
+    model: gemini-2.5-flash-image
+    prompt: |
+      The subject should be the person in the uploaded photo, whose facial features, makeup, hairstyle, skin tone, and body proportions are completely identical to the uploaded photo.
+
+      In a soft pink-toned studio, create a dreamlike, angelic portrait. The lighting should be bright yet soft, with slightly overexposed highlights, surrounding the subject to create a hazy, ethereal halo, like a dreamlike cosplay photo.
+
+      The following two actions will occur randomly (one must appear, both must have a relaxed and natural feel, and must be a close-up or half-body shot):
+
+      Action 1 (must be a close-up or half-body shot):
+
+      She holds a delicate Cupid's bow in one hand, casually placed beside her lap. The bow is slender and white, adorned with delicate gold decorations, and the arrows match. Her posture is gentle and slightly shy: knees together, upper body relaxed, head slightly tilted, gaze softly at the camera.
+
+      Action Two (must be a close-up or half-body shot):
+
+      The subject leans forward, resting against a fallen white Roman column, her torso resting on the edge of the column's top, causing her shoulders, upper arms, and part of her chest to naturally sag.
+
+      One hand gently supports her chin, knuckles relaxed and naturally curved. The other hand holds a heart-shaped arrow shaft, completely relaxed, fingers straight, creating a soft perspective effect. The white oak shaft spans across her chest and shoulder. The shaft must be made of white oak, and the arrowhead must be a solid red heart shape. The arrow itself is also red. The model's head is slightly tilted, creating an elegant and soft three-quarter profile. Her gaze is calm and ethereal, looking directly at the camera.
+
+      Her clothing must be: a light pink, super-short, puffy, off-the-shoulder dress. The bodice is a shapewear corset with steel support, a softly curved heart-shaped neckline edged with delicate lace, and thin straps. The skirt is a layered, light, pleated ballet tutu, flaring out around the hips and reaching the upper thighs. Made of sheer tulle and organza, it appears soft and translucent. A small, cute necklace or ribbon adorns her neck, adding to her doll-like sweetness. She wears white over-the-knee knit stockings with ribbed cuffs and soft fan-shaped lace trim, revealing her bare feet. The overall look should be sweet, girlish, and slightly Lolita-esque, rather than a simple long dress.
+
+      Behind her are a pair of soft, layered white angel wings. A fluffy feathered angel halo adorns her head, forming a shimmering circle above and around her hair.
+
+      These two movements will create the following background:
+
+      Around her, three white doves must be fixed, flying at different distances and heights, wings outstretched. Some are close to the camera with slight motion blur, while others are in the distance, collectively outlining her figure. The background should be a clean, pastel gradient with no harsh edges, and the clouds at the base of the pillars should emit a soft glow.
+
+      The overall image must convey the effect of a high-end, dreamy angelic portrait: soft pink tones, bright white, and a dreamlike atmosphere.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 浪漫四格-白背景
+    model: gemini-2.5-flash-image
+    prompt: |
+      Uploaded photos should focus on the subject, ensuring their face, makeup, hairstyle, expression, and body proportions are identical to the original photo.
+
+      Inspired by Valentine's Day photo aesthetics, take a series of cute, bright, and adorable red-themed photos in a studio. Four frames are required.
+
+      The scene should utilize studio lighting blended with natural light to create a dreamy, misty effect and a lively, girlish atmosphere.
+
+      The background should be a clean white wall, complemented by white curtains, plush materials, and soft shadows as decorative props.
+
+      A large plush dog or cat (randomly selected) will appear in the frame, made of pure white and large in size, resembling a large plush toy.
+
+      Red balloons, round red decorations, and cute doodle elements (stars, hearts, circles) will surround the frame.
+
+      The subject should wear a red off-the-shoulder knit dress with crisscrossing straps at the chest, a skirt that falls 3 cm below the hips, and a 2 cm side slit. The overall look is cute and sexy, full of festive spirit.
+
+      Hair styled in playful double buns or other similar cute hairstyles, but the character's original face, expression, and features must be preserved.
+
+      Create several poses similar to the reference atmosphere:
+
+      • Sitting on the floor, holding balloons
+
+      • Leaning against a large plush toy
+
+      • Holding red balloons
+
+      • Cute close-up shots showcasing a girlish, playful expression
+
+      No text should appear in the images.
+
+      Overall atmosphere: Soft, sweet, warm, youthful, and dreamy, using a Valentine's Day-themed red color scheme.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 愛心領貼身洋裝
+    model: gemini-2.5-flash-image
+    prompt: |
+      Uploaded portraits should be centered on the subject, ensuring the face, makeup, hairstyle, and body proportions are identical to the original image.
+
+      Create four portraits with a luxurious red theme, inspired by high-end glamour photography. The overall atmosphere should evoke luxury, fantasy, and a touch of decadence, while maintaining a relaxed and languid feel. Under strong red lighting, her skin should appear cool-toned porcelain white, with cool-toned highlights on her face contrasting sharply with the warm, deep red surroundings.
+
+      In a scene shimmering with deep red light, she wears a red satin fitted dress with a sweetheart neckline and slit, paired with pearl necklaces of varying lengths (to create depth) and sparkling earrings. The scene is embellished with sequins, softly draped fabrics, gentle reflected light, and diffused bokeh. Her posture should be natural and relaxed, exuding sensuality—for example, leaning slightly forward with shoulders slightly hunched; resting her chin on her hand; casually holding a crystal heart pendant; leaning back in her chair; or lazily reaching for a glass. Her pose must never appear stiff. Everything should convey a fluid, soft, and slightly dreamlike quality.
+
+      The final four photographs should each highlight a different moment: a dreamlike close-up, with light and shadow playing across her face and neck (maintaining the cool-toned glow and cleanliness of her skin); one of her sitting relaxed, holding a heart-shaped crystal, radiating a casual yet playful elegance; a dimly lit dining scene, where she leans languidly against the table, her reflection in the wine glass and the table mirror creating a languidly luxurious atmosphere; and a portrait against a backdrop of shimmering red sequins, where she appears serene, sensual, natural, and radiant. The lighting must be rich and dramatic—the reflections scattered in the glass—while maintaining the cool-toned glow of her skin. Please do not add any text or watermarks. The final impression should be sophisticated, engaging, intimate, and slightly luxurious.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 復古色調-紅衣花冠
+    model: gemini-2.5-flash-image
+    prompt: |
+      Uploaded portraits should be centered on the subject, ensuring their face, makeup, hairstyle, and body proportions are identical to the original image.
+
+      Take a series of four vintage-style portraits (four frames per image). In a dimly lit, warm-toned room with green walls, place an old-fashioned upright piano (surrounded by candlesticks), an old-fashioned telephone, a Persian, Turkish, or European antique rug (laid on the floor), a vintage picture frame (hanging on the wall), vintage candlesticks, and a glass vase with white flowers. Take a series of soft, vintage-style indoor portraits. The lighting should create a soft, nostalgic atmosphere, similar to the soft-focus effect of a film camera—primarily light gray rather than bright or saturated light. Use CCD shooting mode to highlight the subject's cool-toned, pale skin (candlesticks unlit).
+
+      The poses in the four photos must be different, with two being close-ups. The subject's poses should be relaxed, natural, and elegant, avoiding any deliberate or stiff poses. You can casually lean against the piano; sit sideways on a vintage wooden chair with your legs hanging naturally; or casually bend your legs and lean against the piano—the overall posture should be relaxed, like a tired ballerina. Place a few red helium balloons above the piano, but not too jarring; the wood grain of the piano should be clear and delicate.
+
+      The person in the photo must wear a red off-the-shoulder knit top, an asymmetrical long-sleeved knit top made of soft, delicate knit fabric with a smooth, slightly matte finish. The neckline is asymmetrical: a slanted V-neck on the left and an off-the-shoulder design on the right, supported by thin straps. The overall silhouette is simple and smooth, with a clean, neat hem that sits above the hips without obvious ribbing.
+
+      The white bottoms must be a high-waisted white tulle mini skirt, decorated with pleats and decorative knots at the waist. The skirt is voluminous, inspired by ballet tutus, and made of multiple layers of tulle: a crisp, stiff outer layer and a soft, voluminous inner layer adding roundness and elasticity. The skirt hem falls approximately 15-20 centimeters below the hips, with a light and flowing edge. It's paired with matching ballet flats, the straps casually wrapped around the ankles.
+
+      A white floral crown adorns the head, simple and elegant, forming a soft semi-circle around the head, adding a touch of romance.
+
+      The overall look should create a tranquil, gentle, and slightly solitary atmosphere. The cool skin tone and soft details make the figure appear realistic and natural.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 藕粉牆+白紗裙
+    model: gemini-2.5-flash-image
+    prompt: |
+      Uploaded portrait photos should be centered on the subject, ensuring their face, makeup, hairstyle, and body proportions are completely identical to the original image.
+
+      Take a set of four vintage-style portrait photos, all in the same clothing (one must be a fixed close-up, from the shoulders up). The scene should be set in a vintage living room with a blush pink background, featuring an old-fashioned upright piano surrounded by candlesticks; an old-fashioned telephone; a Persian, Turkish, or European antique rug on the floor; vintage picture frames hanging on the wall; vintage candlesticks; and a glass vase with white flowers. Several white and red heart-shaped helium balloons should be attached nearby, and warm vintage lighting should be used. The overall tone should create a nostalgic, film-like quality, slightly soft, with soft highlights and delicate shadows, as if shot with an old-fashioned camera. The subject must wear a flowing white tulle dress paired with delicate white ballet shoes; the styling should be simple, without any additional hair accessories. Her pose should be natural and relaxed—she could sit casually on a vintage wooden chair, leaning slightly forward, curled up beside a piano bench, or stretch her legs out in a nonchalant, dreamlike pose. Each photograph should capture her authentic face and expression, creating a serene, dreamy, and slightly melancholic atmosphere through natural body language rather than stiff poses. No text should be included in the photographs.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 質感西裝四公格
+    model: gemini-2.5-flash-image
+    prompt: |
+      Using the uploaded person as the sole subject, retaining their facial features and hairstyle, only changing the clothing and scene, a four-panel fashion editorial is generated. The overall atmosphere utilizes cinematic studio lighting, with deep red and black as the main color scheme, creating strong contrasts, a sharp main light, rich shadows, a slight film grain effect, and a cool, porcelain-like skin texture.
+
+      The subject always wears a sharply tailored, loose-fitting black suit jacket (must remain open, with the jacket length fixed to 5 cm below the hips), a white shirt, and a deep red tie; if female, this is paired with black slim-fit suit shorts and black socks or ankle boots; if male, it is paired with a loose black overcoat (reaching mid-calf), suit trousers, and black leather shoes.
+
+      In the upper left corner of the frame, a close-up upper-body portrait of the subject facing the camera is taken, with the head slightly tilted at a 45-degree angle, holding a rose. Facial shadows are soft, and the background is pure red or deep red.
+
+      Top right corner: A half-body or bust portrait of the model, whose expression is cool and focused. The background is deep red, with white candles in the foreground (deep foreground). Side or backlighting illuminates the face, creating a strong contrast of light and shadow, with slight motion blur or double exposure for a hazy glow, creating a dreamlike atmosphere.
+
+      Bottom left corner: A full-body or three-quarter-length portrait of the model, dressed in the same suit, standing in a clean, bright gray-white studio. Specks of light and shadow play on the floor. The right foot rests on a French crystal chandelier, surrounded by scattered rose petals. The pose is relaxed yet powerful, with sharp, clear shadows.
+
+      Bottom right corner: A frontal half-body or three-quarter-length portrait of the model against a pure red or deep red background. The model holds a large bouquet of deep red roses in her right hand, stylishly positioned on her right arm, looking directly at the camera. A few white particles, like snowflakes, float in the air. The four photos maintain a consistent color tone and a fashionable, dramatic atmosphere.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 煞氣西裝情人-V1
+    model: gemini-2.5-flash-image
+    prompt: |
+      Uploaded photos of people should be the main subject, ensuring their face, makeup, hairstyle, expression, and body proportions are completely identical to the original image.
+
+      Create a bold and avant-garde fashion editorial, shot outdoors on a clear, azure day. The subject is surrounded by a lush rose garden. The foreground should be irregularly filled with vibrant red roses, with slightly blurred large rose petals covering the lower edge of the subject's body closer to the camera, creating the illusion of being in a rose field rather than just a row of roses. More roses extend into the midground behind the subject, forming layers of red against the blue sky.
+
+      The overall style should be predominantly black, creating a clean and modern atmosphere: the subject must be a half-body portrait, occupying the entire frame; female subjects should be shot at thigh height, and male subjects at waist height. The model wears a black suit, including a loose-fitting padded-shoulder blazer, a black top, a high-waisted black pleated mini skirt, and black leather gloves. If the model in the photo is male, the lower half should be replaced with black trousers.
+
+      The pose must be relaxed yet powerful, not stiff. One shoulder should be slightly closer to the camera. One gloved hand should rest naturally on the hip, side of the body, or in a pocket, while the other gloved hand should be naturally raised towards the mouth, gently holding a bright red rose close to the lips without obscuring them or the face, or naturally close to the chest. The flower stem should be slightly tilted upwards, creating a playful yet dangerous atmosphere. Avoid hands on hips and avoid the symmetrical poses common in "formal portraits." The pose should appear casual, confident, and slightly rebellious, as if capturing a fleeting moment.
+
+      The words "Soulmate" or "Love" must appear in white capital letters behind the model, not in front, horizontally, and centered behind the model's head. The letters must have a subtle motion blur effect to create a cinematic dynamism while remaining clearly legible. The letter size should be the same as the width of the image, then taper inwards by 3 cm on each side. The sky should be a pure, deep blue with a wisp of cloud near the top.
+
+      The lighting should be bright sunlight with high contrast, casting subtle shadows to outline the face and clothing while maintaining the vibrant saturation of the rose. The overall image should have a high-fashion, cinematic poster style: strong low-angle perspective, a deep blue sky, a bright red rose in the foreground, and a confident figure with a rose or lollipop in their mouth, showcasing a cool and sophisticated fashion attitude.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 電梯情人送花-半身&冷色調
+    model: gemini-2.5-flash-image
+    prompt: |
+      Uploaded photos should primarily feature a person, ensuring the subject's face shape, makeup, hairstyle, and body proportions are identical to the original image.
+
+      Take a cinematic half-body portrait in an open elevator. The style should strongly mimic the aesthetics of vintage CCD digital cameras: soft grain, cool-toned dim lighting, slight color noise, low contrast, subtle highlights, and refined vintage chromatic aberration.
+
+      Clothing: High-quality white casual business attire – a loose-fitting blazer, flowing fabric, soft colors, and delicate pleats. The style should be understated and elegant. If the user uploads a female photo, the lower half must show a short blazer skirt (long skirts are prohibited); if the user uploads a male photo, loose-fitting trousers are required.
+
+      The subject should hold a large bouquet of deep red roses, the bouquet almost covering the chest and extending outwards, with clearly visible and naturally intertwined stems. The pose must be relaxed and confident, not stiff. One shoulder should be slightly closer to the camera. One hand should be naturally placed on the hip or side of the body (if it's a woman's photo) or in a pocket (if it's a man's photo, it must be in a pocket), creating a relaxed and stylish atmosphere. Avoid symmetrical poses common in "formal portraits." The pose should appear casual, languid, and slightly rebellious, as if capturing a fleeting moment.
+
+      Shooting angle: Close-up, from chest to head, frontal view, centered composition.
+
+      Background: Cool-toned reflective metallic elevator wall.
+
+      Lighting: Soft overhead lighting with a cinematic decay effect at the edges.
+
+      Atmosphere: Calm, magazine-style, retro-chic advertising atmosphere.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 復古風格送情書
+    model: gemini-2.5-flash-image
+    prompt: |
+      Please use the uploaded person as the sole subject, completely preserving their facial features, hairstyle, skin tone, expression, and overall image, ensuring complete consistency with the uploaded photo.
+
+      Create a two-panel print, with a style rich in 1980s American retro romantic photography aesthetics. Both prints must maintain the same color tone and emotional undertone. The final effect should evoke the texture of an old-fashioned color film photograph or a retro romantic movie poster, rather than modern digital imagery, retaining film grain, soft blur, subtle halos, low contrast, and an overall pinkish hue to create a strong, nostalgic, and slightly fervent romantic atmosphere.
+
+      Above:
+
+      A portrait-style close-up, focusing on the face and upper body. The subject stands in a sunny suburb, next to a pale pink mailbox. The body is slightly turned to one side, the head turned towards the camera, and the eyes look tenderly at the lens. The subject holds a pearly pink love letter envelope, either to their chest or near the mailbox opening, as if hesitating whether to mail it. The expression is calm, restrained yet romantic, with a hint of longing. The light is like warm afternoon sunlight, with soft highlights and gentle shadows. The background is slightly blurred, creating a vintage, film-like texture.
+
+      Bottom Panel:
+
+      Still shot in a similar suburban outdoor scene to maintain visual continuity. The focus is more on the same person's face, holding the same pearly pink envelope. If the uploaded photo is of a woman: the envelope is close to her face, partially obscuring her mouth. The person looks directly at the camera, their eyes shy, gentle, and slightly bashful, as if making an unspoken confession. If the uploaded photo is of a man: the envelope partially covers his mouth; he should not be biting the envelope. The overall lighting remains soft and warm, matching the afternoon outdoor light and the nostalgic pink hue.
+
+      Clothing (Pink-toned 1980s American Retro Style):
+
+      Woman: A retro off-the-shoulder pink dress with a straight neckline, short puff sleeves, and an A-line skirt, soft and full of nostalgia.
+
+      Men's: Light pink long-sleeved shirt, slightly loose yet crisp, simple yet with a retro feel.
+
+      All fabrics should have a matte, soft finish suitable for film photography; they should never be glossy or overly modern.
+
+      The overall image should be emotional rather than ultra-realistic, possessing a film-like quality, slight imperfections, and a nostalgic romanticism—like a forgotten love letter frozen on a romantic 1980s American poster.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 愛心聚焦-1 白色禮服
+    model: gemini-2.5-flash-image
+    prompt: |
+      Use the uploaded photograph of the person as the primary subject, maintaining consistency in their identity, facial features, hairstyle, and expression.
+
+      Place the person within a fixed, clearly defined heart-shaped opening made of red velvet, its proportions and softness matching the reference photograph. The heart shape must remain stable and intact—rounded at the top, gently curving at the sides, naturally tapering downwards to a subtle point—and must not be stretched, deformed, widened, or altered in shape by the person's movements. The velvet should converge towards the heart-shaped opening, forming full, substantial folds, but always maintaining a clearly discernible heart outline.
+
+      The person should interact naturally with the heart-shaped frame, without pulling or altering the shape of the velvet. The person's hands should rest lightly and naturally on the edge of the velvet, gracefully passing through the heart-shaped opening, or touching the heart from above or below, or extending one hand out of the heart while touching the upper edge of the heart with the other, but the fabric must maintain its tension and shape. The pose should be elegant, intimate, and entirely natural, avoiding any illogical postures. It should possess a cinematic quality reminiscent of haute couture, as if the subject is slowly emerging from a heart-shaped veil, rather than being pulled or distorted.
+
+      The clothing should be haute couture pieces, such as off-the-shoulder designs, asymmetrical lines, or cleverly cinched waists, ensuring the overall look is bold, modern, and sophisticated, rather than casual or bridal. Fabrics should have a luxurious feel—such as silk satin, crisp crepe, or embroidered haute couture—while using modern silhouettes to accentuate the neckline, shoulders, or waist. If men wear suits, they must be ivory white and absolutely not off-the-shoulder. The color scheme should remain refined and elegant: ivory white contrasting visually with deep red velvet. (The subject must absolutely not have any yellow undertones.)
+
+      The lighting should maintain a cinematic quality, using soft highlights to outline the face and body while allowing the velvet to drape naturally in deep shadows. The overall atmosphere must echo the dramatic feel of the reference image—rich reds, the lustrous texture of velvet, and strong contrasts.
+
+      Create a heart-shaped border in bright red velvet, encircling the main subject. The velvet texture must be more pronounced—closer to the bright red stage curtains of a theater. The color should include reds and burgundys, with a subtle burgundy undertone that gradually deepens in the shadows.
+
+      Ensure the reflected light of the velvet showcases its soft, high-gloss texture: bright, focused highlights in the raised folds, and deep, almost black shadows in the recesses. Avoid using flat or monochromatic red surfaces; the fabric must have a high-contrast sheen, reflecting a bright ruby ​​red within the deep velvet shadow gradient.
+
+      The heart pattern should remain clear and complete, while the surrounding fabric should have heavy, three-dimensional folds extending downwards to the base of the heart. Lighting should accentuate the luxurious texture of the velvet—use warm, directional highlights to capture the fabric's sheen while avoiding brightening the overall red tone.
+
+      The final image should be a striking yet well-controlled heart-shaped velvet frame, symmetrical and harmonious, with the subject placed within it in a natural and expressive manner. The velvet should have a luxurious, three-dimensional texture, with folds flowing smoothly towards the heart-shaped opening, but never collapsing or deforming. The composition should resemble a haute couture portrait centered on the iconic heart silhouette.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 愛心聚焦-2 紅色緊身衣
+    model: gemini-2.5-flash-image
+    prompt: |
+      Uploaded portrait photos should be centered on the subject, ensuring their face, makeup, hairstyle, and body proportions are completely consistent with the original image.
+
+      Place the subject against a deep red background and use soft, diffused spotlight lighting to naturally create heart-shaped shadows or highlights behind the subject. There should only be one heart-shaped shadow; the shadow should be natural and soft, with smooth edges and a natural decay of light, avoiding harsh or artificial contours. The lighting should have a cinematic quality, with warm red tones naturally transitioning to deep burgundy shadows at the edges. (The face must retain its original skin tone.)
+
+      The overall color scheme should be dominated by rich reds and dark tones, creating a melancholic and intimate atmosphere. The lighting should subtly outline the subject's face and body contours, with soft highlights illuminating the skin and deep shadows surrounding the edges, enhancing the depth and atmosphere of the image.
+
+      The subject should appear relaxed and natural, projecting a high-fashion magazine editorial style—arms can be raised or naturally hanging down, fingers light and graceful, poses subtly varied, capturing a genuine moment rather than a posed studio photo. The subject's expression should be natural, emotional, and conform to the aesthetic concepts of fashion photography.
+
+      If the subject is female, she must wear a red sheer fitted top over a red strapless camisole. She should wear a high-waisted red leather mini skirt, the hemline ending just 1 cm below her hips, harmonizing with the light and background while highlighting her figure.
+
+      If the subject is male, he should wear a black fitted top under a black blazer and trousers, contrasting with the warm red environment while maintaining a sharp and stylish image.
+
+      The final photograph should convey a modern feel, atmosphere, and emotional expression. Heart-shaped light and shadow patterns should be used as soft, symbolic embellishments, not as harsh graphic elements.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 愛心聚焦-3 淡粉白西裝
+    model: gemini-2.5-flash-image
+    prompt: |
+      Use the uploaded person as the subject, ensuring their face, features, hairstyle, skin tone, makeup, and body proportions match those of the person in the input photo.
+
+      Place the person in front of a deep red studio background, projecting a large heart-shaped light behind them, as close as possible to the reference image. The heart shape must be clear and clean, with smooth, even edges: softly diffused and slightly feathered, but not blurry, noisy, or fuzzy. The heart shape should be clear and symmetrical, with a bright white center, a soft transition to a gentle pink at the edges, and only a slight hint of cool blue at the bottom, without obvious color banding or glaring blurring.
+
+      If the person is a woman: dress her in an elegant pure white mini dress, showcasing a sophisticated haute couture silhouette.
+
+      The dress features a simple, flowing straight neckline with soft lines, adorned with pearl-beaded shoulder straps, each strap composed of a row of large, round pearls approximately 0.8-1 cm in diameter. The fitted bodice uses princess lines or three-dimensional darts to outline a smooth and graceful upper body. The waistline is slightly higher than the natural waistline, optimizing body proportions and elongating the legs.
+
+      The skirt is a high-waisted, flared mini skirt composed of multiple deep pleats. Made of heavy satin or micardo silk, the skirt has a crisp texture and maintains its tulip-like silhouette even when seated. The skirt length reaches the upper thigh, ending approximately 15-20 cm above the knee when standing. The fabric has a soft, delicate satin sheen, gently reflecting light rather than glaring it. The entire dress is pure white, without any prints or embroidery, highlighting the clean lines and luxurious texture of the fabric. It has a modern, haute couture feel.
+
+      For men: Pair it with a crisp white shirt, layered under a light pink or off-white fitted blazer, and finished with black fitted trousers and simple dark leather shoes. The overall look must be clean, sharp, and semi-formal, like something out of a modern fashion editorial—rather than a sweater, vest, or casual knitwear. Clothing colors should be neutral and elegant.
+
+      Have the subject stand in a relaxed and natural pose, slightly tilted to the side rather than facing the camera directly. For men: one hand can be in their pocket, the other gently holding a rose in front of them, the fingers moving softly and naturally. The expression should be calm and romantic. For women: they can hold a rose in one hand, looking at the camera with lively eyes, echoing the dreamy atmosphere of the scene.
+
+      Use soft but directional main lighting to illuminate the face, slightly brightening one side and placing the other in soft shadow, thus enhancing depth of field without appearing harsh. The final photo should present a clean, sharp, cinematic portrait effect with soft heart-shaped lighting, paired with suitable clothing such as a white shirt, light-colored blazer, and black trousers, and a natural pose befitting a magazine-quality Valentine's Day themed photoshoot.
+    reference_folder: ""
+    use_comparison_template: false
+    use_multi_image: false
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 熱門雙人拍貼-雪洞
+    model: gemini-3-pro-image-preview
+    resolution: 1K
+    aspect_ratio: 3:4
+    prompt: |
+      Please use two people as the sole subjects in your uploaded photo, ensuring their true identities are fully preserved. Their faces, features, bone structure, hairstyles, skin tones, and expressions must remain unchanged. The system must not modify their body proportions, makeup, jawline, nose, or eyes, nor beautify, age, stylize, smooth, or add any other people.
+
+      Place the people in an outdoor snow scene, composing the shot through a heart-shaped opening naturally formed by the snow. The heart-shaped opening should have a natural and realistic effect; the snow texture should be irregular and soft, with natural thickness and slightly transparent edges to capture light. Avoid harsh outlines or perfect symmetry; the snow should have a hand-carved texture, looking realistic and blending into the authentic winter scene.
+
+      Use very close-up shots of the people's proportions, filling their faces with the heart-shaped opening. Their heads must occupy approximately 45% to 55% of the height of the heart-shaped opening, appearing very close to the camera. Their faces shouldn't appear too small or too far away; they must be large, prominent, and positioned in the upper-middle area of ​​the heart-shaped opening to create a selfie-like intimacy.
+
+      In the uploaded photo of the two of them, they must wear black coats, perhaps paired with black scarves and gloves, posing in a relaxed and natural manner, as if taking a selfie or capturing a fleeting moment. The subjects can lean slightly forward, smile naturally, or make small, interactive gestures, such as making a "V" sign or grabbing a handful of snow, ensuring the movements are natural and fluid, not deliberately posed.
+
+      Use soft natural light to illuminate the scene—whether it's the warm hues of sunrise or the cool, bright light of the sky—casting soft shadows on the snow to create a clean and crisp winter atmosphere. The background should show an open snowfield, with soft colors for the horizon and sky. The light should fall softly on the snow, creating delicate highlights and natural reflections.
+
+      The final image should present a bright, natural, and romantic atmosphere—a realistic winter portrait framed by a heart-shaped snow scene. Natural light, natural expressions, and a lifelike snowscape work together to create a unique visual effect, making the two subjects appear tall and their faces clear.
+    reference_folder: ""
+    use_comparison_template: true
+    use_multi_image: true
+    multi_image_count: 2
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 熱門雙人拍貼-洗衣機拍貼
+    model: gemini-3-pro-image-preview
+    resolution: 1K
+    aspect_ratio: 3:4
+    prompt: |
+      Use the two uploaded people as the only subjects. Their real faces, facial features, identities, expressions, hairstyles, outfits, and proportions must remain exactly the same as in the uploaded photos. No beautification, no stylization, and no extra people.
+
+      Create a realistic Korean-style photo-booth scene captured from inside a large washing machine drum. The camera is placed inside the drum, pointing outward through the fully open door. The drum must form a bright, metallic circular frame with natural reflections, realistic shadows, and correct depth. The circular edge of the washing machine door should emit a soft, bright light ring that illuminates the subjects’ faces, similar to an internal ring-light built into the drum.
+
+      At least one subject must lean halfway into the washing machine—upper body entering the drum naturally, such as resting their torso inside or leaning forward deeply. Their hands may rest on the glowing washing-machine frame, or reach partially into the drum as part of the pose. Their positions must feel physically grounded and integrated with the washer structure. The subject leaning in should be illuminated by a strong, soft, internal photo-booth light inside the drum, making their face appear brighter.
+
+      Both subjects should appear slightly larger in frame and stand close to the washing machine opening, filling the view while keeping their proportions and height differences accurate and realistic. Their interaction should feel playful and spontaneous, matching Korean purikura vibes—soft smiles, cute gestures, light teasing expressions, or peace signs.
+
+      Add real, wearable Valentine’s-themed head accessories (such as heart headbands or fabric bunny ears). These must fit naturally to their heads with accurate shadows and lighting, not stickers or floating graphics.
+
+      The background should resemble a clean, pastel-toned Korean laundry room or photo-booth set with tiles and minimal décor. Lighting must be bright, soft, and even, with a gentle pastel tint. The entire image must be cohesive and realistic, with no compositing artifacts, no layering issues, and no style changes to the subjects’ faces or clothing.
+
+      The composition should focus mainly on the subjects, with only a minimal portion of the drum interior visible as a framing element.
+    reference_folder: ""
+    use_comparison_template: true
+    use_multi_image: true
+    multi_image_count: 2
+
+  - folder: ../Media Files/Nano Banana/1215 18 Styles/1215 電梯仰頭自拍 拍貼色調
+    model: gemini-3-pro-image-preview
+    resolution: 1K
+    aspect_ratio: 3:4
+    prompt: |
+      Use the two uploaded people as the only subjects. Their faces, facial features, identities, hairstyles, expressions, and clothing must remain exactly the same as in the uploaded photos. Do not beautify, stylize, or alter their appearance, and do not add any extra people.
+
+      Create a playful four-frame photo-booth collage styled like CCTV cameras inside an elevator. Each frame should look like it was captured by a corner-mounted security camera positioned high in the upper corner of a shiny metal elevator, creating a downward diagonal view. The overall viewpoint must feel like a real corner CCTV camera looking down toward the subjects rather than a centered ceiling camera.
+
+      The two subjects must appear together in all four frames, wearing exactly the same clothes as shown in the uploaded photos. Their body proportions and heights must stay realistic and consistent in every frame. The entire collage should feel unified and shot in the same physical elevator environment.
+
+      The visual style should present a high-angle overhead CCTV perspective within a 2×2 four-frame collage. Each frame should include subtle labels such as “CAMERA 1,” “CAMERA 2,” “CAMERA 3,” and “CAMERA 4,” along with a small red “REC” icon. A light fisheye distortion should be visible to mimic elevator surveillance lenses. The elevator interior must feature metallic walls and accurate reflections that remain consistent across all four images, but the lighting and overall atmosphere should feel soft, bright, clean, and pastel-tinted—similar to a Korean-style photo booth—while still maintaining the CCTV framing and angle.
+
+      The subjects’ poses and interactions should feel playful and casual, such as making peace signs, leaning into each other, hugging, making cute expressions, or pointing toward the camera. The mood should remain fun and natural, similar to a Korean-style photo booth but presented as CCTV footage. Identity preservation is critical—faces must remain exactly the same as in the uploaded photos, with no stylization, no added accessories unless already present in the images, and no changes to makeup, lighting on the face, or skin texture. No beauty filters or face-editing effects should be applied.
+
+      The final output should be a realistic four-frame elevator CCTV-style collage featuring the two uploaded subjects from a corner-mounted surveillance angle, showing playful poses, consistent clothing, accurate proportions, and perfectly preserved facial identity.
+    reference_folder: ""
+    use_comparison_template: true
+    use_multi_image: true
+    multi_image_count: 2
 
 # Comments and documentation
 comments:
