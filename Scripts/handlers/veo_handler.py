@@ -138,7 +138,27 @@ class VeoHandler(BaseAPIHandler):
         
         # Generate multiple videos if needed
         successful = 0
+        skipped = 0
         for gen_num in range(1, generation_count + 1):
+            # Check if this generation was already processed
+            safe_style = "".join(c if c.isalnum() or c in (' ', '-', '_') else '_' for c in style_name)
+            safe_style = safe_style.strip().replace(' ', '_')
+            base_name = f"{safe_style}-{gen_num}"
+            metadata_file = metadata_folder / f"{base_name}_metadata.json"
+            
+            if metadata_file.exists():
+                try:
+                    import json
+                    with open(metadata_file, 'r') as f:
+                        meta = json.load(f)
+                    if meta.get('success', False):
+                        self.logger.info(f" ⏭️ Generation {gen_num}/{generation_count}: {style_name}-{gen_num} (already processed)")
+                        skipped += 1
+                        successful += 1
+                        continue
+                except (json.JSONDecodeError, IOError):
+                    pass
+            
             self.logger.info(f" 🎬 Generation {gen_num}/{generation_count}: {style_name}-{gen_num}")
             
             # Add generation number to task config
@@ -156,7 +176,7 @@ class VeoHandler(BaseAPIHandler):
             if gen_num < generation_count:
                 time.sleep(self.api_defs.get('rate_limit', 5))
         
-        self.logger.info(f"✓ Task {task_num}: {successful}/{generation_count} successful")
+        self.logger.info(f"✓ Task {task_num}: {successful}/{generation_count} successful ({skipped} skipped)")
     
     def process(self, file_path, task_config, output_folder, metadata_folder, attempt, max_retries):
         """

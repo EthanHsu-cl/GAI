@@ -22,6 +22,7 @@ class RunwayHandler(BaseAPIHandler):
         requires_reference = task.get('requires_reference', False)
         
         successful = 0
+        skipped = 0
         if requires_reference:
             reference_images = task.get('reference_images', [])
             pairing_strategy = task.get('pairing_strategy', 'one_to_one')
@@ -30,6 +31,13 @@ class RunwayHandler(BaseAPIHandler):
                 total = len(video_files) * len(reference_images)
                 for i, (video_file, ref_image) in enumerate(
                     [(v, r) for v in video_files for r in reference_images], 1):
+                    
+                    # Check if already processed
+                    if self._is_file_processed(video_file, metadata_folder):
+                        self.logger.info(f" ⏭️ {i}/{total}: {video_file.name} (already processed)")
+                        skipped += 1
+                        successful += 1
+                        continue
                     
                     self.logger.info(f"{i}/{total}: {video_file.name} + {ref_image.name}")
                     task_config = task.copy()
@@ -43,6 +51,13 @@ class RunwayHandler(BaseAPIHandler):
             else:  # one_to_one
                 pairs = list(zip(video_files, reference_images))
                 for i, (video_file, ref_image) in enumerate(pairs, 1):
+                    # Check if already processed
+                    if self._is_file_processed(video_file, metadata_folder):
+                        self.logger.info(f" ⏭️ {i}/{len(pairs)}: {video_file.name} (already processed)")
+                        skipped += 1
+                        successful += 1
+                        continue
+                    
                     self.logger.info(f"{i}/{len(pairs)}: {video_file.name} + {ref_image.name}")
                     task_config = task.copy()
                     task_config['reference_image'] = str(ref_image)
@@ -55,6 +70,13 @@ class RunwayHandler(BaseAPIHandler):
         else:
             # Text-to-video without reference
             for i, video_file in enumerate(video_files, 1):
+                # Check if already processed
+                if self._is_file_processed(video_file, metadata_folder):
+                    self.logger.info(f" ⏭️ {i}/{len(video_files)}: {video_file.name} (already processed)")
+                    skipped += 1
+                    successful += 1
+                    continue
+                
                 self.logger.info(f"{i}/{len(video_files)}: {video_file.name} (text-to-video)")
                 
                 if self.processor.process_file(str(video_file), task, output_folder, metadata_folder):
@@ -63,7 +85,7 @@ class RunwayHandler(BaseAPIHandler):
                 if i < len(video_files):
                     time.sleep(self.api_defs.get('rate_limit', 3))
         
-        self.logger.info(f"Task {task_num}: {successful} successful")
+        self.logger.info(f"Task {task_num}: {successful} successful ({skipped} skipped)")
     
     def _make_api_call(self, file_path, task_config, attempt):
         """Make Runway API call."""

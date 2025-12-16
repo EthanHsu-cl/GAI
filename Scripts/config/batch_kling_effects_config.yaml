@@ -16,10 +16,10 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: ../Media Files/Kling Effects/1210 1 Style
+base_folder: ../Media Files/Kling Effects/1215 3 Styles
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=46494616#gid=46494616
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBpRrfWNE3HT4GuhpFNii6gAdDtq6k8baJSTM8ejLyb-nY?e=x7wzIh
+source_video_link: 
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,7 +28,13 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'magic_cloak'
+    custom_effect: 'my_santa_pic'
+
+  - effect:
+    custom_effect: 'glamour_photo_shoot'
+
+  - effect:
+    custom_effect: 'box_of_joy'
 
 comments:
   base_folder: >

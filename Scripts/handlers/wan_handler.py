@@ -47,11 +47,33 @@ class WanHandler(BaseAPIHandler):
         )
         
         successful = 0
+        skipped = 0
         combination_num = 0
         
         for video_file in video_files:
             for image_file in image_files:
                 combination_num += 1
+                
+                # Check if this combination was already processed
+                # Use a combined key for image+video pairs
+                combo_base = f"{image_file.stem}_{video_file.stem}"
+                combo_metadata = metadata_folder / f"{combo_base}_metadata.json"
+                if combo_metadata.exists():
+                    try:
+                        import json
+                        with open(combo_metadata, 'r') as f:
+                            meta = json.load(f)
+                        if meta.get('success', False):
+                            self.logger.info(
+                                f" ⏭️ {combination_num}/{total_combinations}: "
+                                f"{image_file.name} + {video_file.name} (already processed)"
+                            )
+                            skipped += 1
+                            successful += 1
+                            continue
+                    except (json.JSONDecodeError, IOError):
+                        pass
+                
                 self.logger.info(
                     f" 🎬 {combination_num}/{total_combinations}: "
                     f"{image_file.name} + {video_file.name}"
@@ -71,7 +93,7 @@ class WanHandler(BaseAPIHandler):
                 if combination_num < total_combinations:
                     time.sleep(self.api_defs.get('rate_limit', 3))
         
-        self.logger.info(f"✓ Task {task_num}: {successful}/{total_combinations} successful")
+        self.logger.info(f"✓ Task {task_num}: {successful}/{total_combinations} successful ({skipped} skipped)")
     
     def _make_api_call(self, file_path, task_config, attempt):
         """

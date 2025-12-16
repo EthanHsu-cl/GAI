@@ -17,10 +17,19 @@ class ViduReferenceHandler(BaseAPIHandler):
         metadata_dir = Path(task['metadata_dir'])
         
         successful = 0
+        skipped = 0
         total_sets = len(task['image_sets'])
         
         for i, image_set in enumerate(task['image_sets'], 1):
             source_image = image_set['source_image']
+            
+            # Check if file was already successfully processed
+            if self._is_file_processed(source_image, metadata_dir):
+                self.logger.info(f" ⏭️ {i}/{total_sets}: {source_image.name} (already processed)")
+                skipped += 1
+                successful += 1
+                continue
+            
             self.logger.info(f" 🖼️ {i}/{total_sets}: {source_image.name} + {image_set['reference_count']} refs")
             
             # Create task config with reference images
@@ -34,7 +43,7 @@ class ViduReferenceHandler(BaseAPIHandler):
             if i < total_sets:
                 time.sleep(self.api_defs.get('rate_limit', 3))
         
-        self.logger.info(f"✓ Task {task_num}: {successful}/{total_sets} successful")
+        self.logger.info(f"✓ Task {task_num}: {successful}/{total_sets} successful ({skipped} skipped)")
     
     def _make_api_call(self, file_path, task_config, attempt):
         """Make Vidu Reference API call."""

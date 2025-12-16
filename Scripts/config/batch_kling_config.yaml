@@ -13,8 +13,8 @@ schedule:
 group_tasks_by: 4
 
 tasks:
-- mode: std
-  folder: ../Media Files/Kling 2.5/1212 Red Dress v17
+- mode: pro
+  folder: ../Media Files/Kling 2.5/1215 Red Dress v17
   prompt: |
     The heroine appears standing still. She suddenly makes a spin to her right (clockwise) as her entire original outfit transforms perfectly,  the transformation fully completes before her spin finishes, and a swirl of magical red rose petals and glowing golden dust trails naturally around her movement. She never repositions or adjusts her body after the spin, ending instantly in her final pose without any additional turning. She performs exactly one uninterrupted clockwise spin only, ending directly in her final pose. She becomes dressed in a fitted crimson red silk evening gown with ultra-thin spaghetti straps, fully backless, revealing the elegant line of her spine and shoulders. Her hair falls smoothly down her back as she holds a massive bouquet of deep red roses cradled with both arms, the bouquet correctly cradled to her torso. Her head and gaze naturally following the arc of her motion. As her body turns, her eyes remain softly focused toward the camera, so that when she settles into her final pose—torso turned three-quarters away, left shoulder and back facing outward—her face is already angled back in a confident, sultry gaze, seamlessly integrated into the flow of her movement.She lands perfectly into her final pose with zero corrective movement. There is no separate head turn; the final look is achieved fluidly within the spin. The camera holds a clean medium shot, capturing her upper body.When the flurry of petals and golden light settles,the sequence ends with her holding this elegant, powerful pose in complete stillness.The scene is lit with dramatic, high-contrast, but natural and realistic lighting. Shadows and highlights transition smoothly, with no harsh edges or artificial effects, high-contrast chiaroscuro lighting, set against a pure black background.
   negative_prompt: |

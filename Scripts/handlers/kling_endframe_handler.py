@@ -69,9 +69,17 @@ class KlingEndframeHandler(BaseAPIHandler):
         
         # Process each pair
         successful = 0
+        skipped = 0
         total_generations = len(image_pairs) * generation_count
         
         for pair_idx, (start_image, end_image) in enumerate(image_pairs, 1):
+            # Check if pair was already successfully processed
+            if self._is_file_processed(start_image, metadata_folder):
+                self.logger.info(f" ⏭️ Pair {pair_idx}/{len(image_pairs)}: {start_image.name} (already processed)")
+                skipped += generation_count
+                successful += generation_count
+                continue
+            
             self.logger.info(f" 🖼️  Pair {pair_idx}/{len(image_pairs)}: {start_image.name} → {end_image.name}")
             
             # Generate multiple times if specified
@@ -97,7 +105,7 @@ class KlingEndframeHandler(BaseAPIHandler):
             if generation_count > 1:
                 self.logger.info(f"   ✓ Pair {pair_idx}: {pair_successful}/{generation_count} generations successful")
         
-        self.logger.info(f"✓ Task {task_num}: {successful}/{total_generations} total generations successful")
+        self.logger.info(f"✓ Task {task_num}: {successful}/{total_generations} total generations successful ({skipped} skipped)")
     
     def _group_image_pairs(self, all_images):
         """
