@@ -4,7 +4,7 @@ from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Union
 from concurrent.futures import ThreadPoolExecutor
-from PIL import Image
+from PIL import Image, ImageOps
 from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.util import Cm, Inches, Pt
@@ -302,11 +302,15 @@ class UnifiedReportGenerator:
         """Create a single slide for any API using configuration"""
         # Adjust media types for nano_banana based on whether multi-image mode is active
         if self.api_name == 'nano_banana':
-            if pair.additional_source_paths:
-                # Multi-image mode: use the 3-media layout from config
+            # Check if random_source_selection mode (composite will be created)
+            is_random_source = pair.metadata.get('random_source_selection', False)
+            
+            if pair.additional_source_paths and not is_random_source:
+                # Standard multi-image mode (Source + Additional): use the 3-media layout
                 slide_config = slide_config.copy()
                 slide_config['media_types'] = slide_config.get('media_types_3', ['source', 'additional_source', 'generated'])
                 slide_config['positions'] = slide_config.get('positions_3', self.LAYOUT_3_MEDIA['positions'])
+            # For random_source_selection: use default 2-media layout (composite on left)
             # else: use default 2-media layout from config (already set)
         
         # Create slide
@@ -391,7 +395,21 @@ class UnifiedReportGenerator:
         self.add_metadata_universal(slide, pair, slide_config, use_comparison)
     
     def get_media_path_and_type(self, pair, media_type):
-        """Get media path and determine if it's video"""
+        """Get media path and determine if it's video.
+        
+        For nano_banana with random_source_selection (multiple sources in additional_source_paths),
+        creates a composite grid image for the 'source' media type.
+        """
+        # For nano_banana random source selection: create composite from all source images
+        if (media_type == 'source' and 
+            self.api_name == 'nano_banana' and 
+            pair.metadata.get('random_source_selection') and 
+            pair.additional_source_paths):
+            # Create composite from all source images used
+            composite_path = self._create_source_composite(pair.additional_source_paths)
+            if composite_path:
+                return Path(composite_path), False
+        
         path_map = {
             'source': pair.source_path,
             'source_video': pair.source_video_path,
@@ -458,7 +476,10 @@ class UnifiedReportGenerator:
     # ================== UNIFIED MEDIA SYSTEM ==================
     
     def ensure_supported_img_format(self, img_path):
-        """Convert any unsupported image format to PNG for PowerPoint compatibility"""
+        """Convert any unsupported image format to PNG for PowerPoint compatibility.
+        
+        Also applies EXIF orientation to fix rotated images from cameras/phones.
+        """
         p = Path(img_path)
         
         # PowerPoint natively supports: jpg, jpeg, png, bmp, gif, tiff, tif
@@ -469,13 +490,33 @@ class UnifiedReportGenerator:
         # Some files like .jpg might actually be MPO format
         try:
             with Image.open(p) as im:
+                # Check if EXIF orientation needs to be applied
+                has_exif_orientation = False
+                try:
+                    exif = im.getexif()
+                    # Orientation tag is 274
+                    if exif and exif.get(274, 1) != 1:
+                        has_exif_orientation = True
+                except Exception:
+                    pass
+                
                 # Check actual image format - MPO and other exotic formats need conversion
                 actual_format = im.format
                 if actual_format in ('MPO', 'WEBP', 'SVG', 'HEIC', 'HEIF', 'AVIF'):
                     needs_conversion = True
                     logger.info(f"Detected {actual_format} format in {p.name}, will convert")
                 
+                # Also convert if EXIF orientation needs to be applied
+                if has_exif_orientation:
+                    needs_conversion = True
+                
                 if needs_conversion:
+                    # Apply EXIF orientation to fix rotated images
+                    try:
+                        im = ImageOps.exif_transpose(im)
+                    except Exception:
+                        pass  # If EXIF transpose fails, continue with original
+                    
                     # Convert to RGB mode (removes alpha for formats that don't support it well)
                     # Use RGBA for formats that might have transparency
                     mode = 'RGBA' if im.mode in ('RGBA', 'LA', 'P') else 'RGB'
@@ -487,7 +528,7 @@ class UnifiedReportGenerator:
                     logger.info(f"Converted {actual_format or p.suffix} to PNG: {p.name}")
                     return tmp.name
                 else:
-                    # Format is supported, return as-is
+                    # Format is supported and no orientation fix needed, return as-is
                     return str(img_path)
                     
         except Exception as e:
@@ -498,6 +539,117 @@ class UnifiedReportGenerator:
             return str(img_path)
         
         return str(img_path)
+    
+    def _create_source_composite(self, image_paths: List[Path], cell_size: int = 400) -> Optional[str]:
+        """Create a composite grid image from multiple source images.
+        
+        Creates an N×N grid where each cell maintains the source image's aspect ratio
+        with letterboxing/pillarboxing using a light gray background.
+        
+        Args:
+            image_paths: List of paths to source images.
+            cell_size: Size of each grid cell in pixels (cells are square).
+        
+        Returns:
+            str: Path to temporary composite image file, or None on failure.
+        """
+        if not image_paths:
+            return None
+        
+        if len(image_paths) == 1:
+            # Single image - no composite needed
+            return str(image_paths[0])
+        
+        # Determine grid dimensions
+        count = len(image_paths)
+        if count <= 2:
+            cols, rows = 2, 1
+        elif count <= 4:
+            cols, rows = 2, 2
+        elif count <= 6:
+            cols, rows = 3, 2
+        elif count <= 9:
+            cols, rows = 3, 3
+        elif count <= 12:
+            cols, rows = 4, 3
+        else:
+            cols, rows = 4, 4  # Max 16 images
+        
+        # Light gray background color
+        bg_color = (240, 240, 240)
+        
+        # Create composite canvas
+        composite_width = cols * cell_size
+        composite_height = rows * cell_size
+        composite = Image.new('RGB', (composite_width, composite_height), bg_color)
+        
+        try:
+            for idx, img_path in enumerate(image_paths[:cols * rows]):
+                col = idx % cols
+                row = idx // cols
+                
+                # Calculate cell position
+                cell_x = col * cell_size
+                cell_y = row * cell_size
+                
+                try:
+                    with Image.open(img_path) as img:
+                        # Apply EXIF orientation to fix rotated images
+                        try:
+                            img = ImageOps.exif_transpose(img)
+                        except Exception:
+                            pass  # If EXIF transpose fails, continue with original
+                        
+                        # Convert to RGB if needed
+                        if img.mode in ('RGBA', 'LA', 'P'):
+                            # Create background for transparent images
+                            bg = Image.new('RGB', img.size, bg_color)
+                            if img.mode == 'P':
+                                img = img.convert('RGBA')
+                            bg.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
+                            img = bg
+                        elif img.mode != 'RGB':
+                            img = img.convert('RGB')
+                        
+                        # Calculate scaled size maintaining aspect ratio
+                        img_width, img_height = img.size
+                        img_ratio = img_width / img_height
+                        
+                        if img_ratio > 1:
+                            # Landscape: fit width, letterbox height
+                            new_width = cell_size
+                            new_height = int(cell_size / img_ratio)
+                        else:
+                            # Portrait or square: fit height, pillarbox width
+                            new_height = cell_size
+                            new_width = int(cell_size * img_ratio)
+                        
+                        # Resize image
+                        img_resized = img.resize((new_width, new_height), Image.LANCZOS)
+                        
+                        # Calculate position to center in cell
+                        paste_x = cell_x + (cell_size - new_width) // 2
+                        paste_y = cell_y + (cell_size - new_height) // 2
+                        
+                        composite.paste(img_resized, (paste_x, paste_y))
+                        
+                except Exception as e:
+                    logger.warning(f"Failed to add image to composite: {img_path.name}: {e}")
+                    # Draw placeholder for failed image
+                    continue
+            
+            # Save composite to temp file
+            tmp = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
+            composite.save(tmp.name, 'PNG', quality=95)
+            tmp.close()
+            self._tempfiles_to_cleanup.append(tmp.name)
+            
+            logger.debug(f"Created composite image: {cols}x{rows} grid with {len(image_paths)} images")
+            return tmp.name
+            
+        except Exception as e:
+            logger.error(f"Failed to create composite image: {e}")
+            return None
     
     def _convert_unsupported_formats_batch(self, image_paths):
         """Convert multiple unsupported image formats in parallel for major performance gain"""
@@ -817,7 +969,19 @@ class UnifiedReportGenerator:
         if not folders['source'].exists():
             return pairs
         
-        # OPTIMIZED: Single-pass directory scanning
+        # Get metadata with single scan and batch load first (needed to detect mode)
+        _, _, metadata_files = self._scan_directory_once(folders['metadata'])
+        metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
+        
+        # Check if this is nano_banana iteration mode (random_source_selection)
+        # In this mode, we iterate over metadata/generated files, not source files
+        is_iteration_mode = (self.api_name == 'nano_banana' and 
+                            any(md.get('random_source_selection') for md in metadata_cache.values()))
+        
+        if is_iteration_mode:
+            return self._create_nano_iteration_pairs(folder, folders, metadata_cache, task)
+        
+        # OPTIMIZED: Single-pass directory scanning (standard mode)
         src_imgs, _, _ = self._scan_directory_once(folders['source'])
         
         # For kling_endframe, filter to only A images (start frames)
@@ -933,12 +1097,23 @@ class UnifiedReportGenerator:
                 # Standard single generation or nano_banana
                 md = metadata_cache.get(b, {})
                 
-                if self.api_name == 'nano_banana' and md.get('additional_images_used'):
-                    additional_folder = folder / 'Additional'
-                    for img_name in md.get('additional_images_used', []):
-                        img_path = additional_folder / img_name
-                        if img_path.exists():
-                            additional_source_paths.append(img_path)
+                # For Nano Banana: resolve source images from metadata
+                if self.api_name == 'nano_banana':
+                    source_folder = folder / 'Source'
+                    
+                    # Check for random_source_selection mode (all_images_used in metadata)
+                    if md.get('all_images_used'):
+                        for img_name in md.get('all_images_used', []):
+                            img_path = source_folder / img_name
+                            if img_path.exists():
+                                additional_source_paths.append(img_path)
+                    # Fallback to additional_images_used (standard multi-image mode)
+                    elif md.get('additional_images_used'):
+                        additional_folder = folder / 'Additional'
+                        for img_name in md.get('additional_images_used', []):
+                            img_path = additional_folder / img_name
+                            if img_path.exists():
+                                additional_source_paths.append(img_path)
 
                 pair = MediaPair(
                     source_file=src[b].name,
@@ -953,6 +1128,96 @@ class UnifiedReportGenerator:
                     effect_name=effect_name
                 )
                 pairs.append(pair)
+        
+        return pairs
+    
+    def _create_nano_iteration_pairs(self, folder: Path, folders: Dict, 
+                                     metadata_cache: Dict, task: Dict) -> List[MediaPair]:
+        """Create media pairs for nano_banana iteration mode (random_source_selection).
+        
+        In iteration mode, we iterate over metadata files (which have iteration-based names
+        like iter000_sourcename) and use the all_images_used field to find source images.
+        
+        Args:
+            folder: Task folder path.
+            folders: Dict with 'source', 'generated', 'metadata' paths.
+            metadata_cache: Pre-loaded metadata dict.
+            task: Task configuration.
+        
+        Returns:
+            List of MediaPair objects.
+        """
+        pairs = []
+        source_folder = folders['source']
+        generated_folder = folders['generated']
+        
+        # Get all generated images
+        gen_imgs, _, _ = self._scan_directory_once(generated_folder)
+        
+        # Build a map of iteration base_name -> generated files
+        # e.g., "iter000_0V8A5820" -> [iter000_0V8A5820_image_5.png]
+        gen_by_iteration = {}
+        for key, f in gen_imgs.items():
+            if 'image' in f.name:
+                # Extract iteration base name: "iter000_0V8A5820_image_5.png" -> "iter000_0V8A5820"
+                basename = f.name.split('image')[0].rstrip('_')
+                gen_by_iteration.setdefault(self.normalize_key(basename), []).append(f)
+        
+        # Determine effect_name from folder
+        effect_name = self.config.get('effect') or self.config.get('effect_name')
+        if not effect_name:
+            m = re.match(r'^(\d{4})\s*(.+)', folder.name)
+            effect_name = m.group(2) if m else folder.name
+        
+        # Iterate over metadata entries (each represents one iteration)
+        for md_key, md in sorted(metadata_cache.items()):
+            if not md.get('random_source_selection'):
+                continue
+            
+            # Get the iteration base_name from metadata
+            iteration_base = md.get('_base_name', '')
+            if not iteration_base:
+                # Try to extract from md_key (metadata file key)
+                iteration_base = md_key
+            
+            normalized_key = self.normalize_key(iteration_base)
+            gen_paths = gen_by_iteration.get(normalized_key, [])
+            
+            # Get all source images used for this iteration
+            additional_source_paths = []
+            all_images_used = md.get('all_images_used', [])
+            for img_name in all_images_used:
+                img_path = source_folder / img_name
+                if img_path.exists():
+                    additional_source_paths.append(img_path)
+            
+            # Use the first source image as the "primary" source for the pair
+            primary_source = additional_source_paths[0] if additional_source_paths else None
+            if not primary_source:
+                # Try to find source from source_image field
+                source_image = md.get('source_image', '')
+                if source_image:
+                    primary_source = source_folder / source_image
+                    if not primary_source.exists():
+                        primary_source = None
+            
+            if not primary_source:
+                logger.warning(f"No source images found for iteration {iteration_base}")
+                continue
+            
+            pair = MediaPair(
+                source_file=primary_source.name,
+                source_path=primary_source,
+                api_type=self.api_name,
+                generated_paths=gen_paths,
+                reference_paths=[],
+                additional_source_paths=additional_source_paths,
+                metadata=md,
+                failed=not gen_paths or not md.get('success', False),
+                ref_failed=False,
+                effect_name=effect_name
+            )
+            pairs.append(pair)
         
         return pairs
     

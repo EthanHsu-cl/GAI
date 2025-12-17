@@ -216,7 +216,10 @@ class UnifiedAPIProcessor:
 
     def _convert_image_to_jpg(self, image_path):
         """
-        Convert unsupported image formats (AVIF, WEBP, etc.) to JPG.
+        Convert unsupported image formats to JPG.
+        
+        Detects format by actual image data, not just extension. This catches
+        MPO files that have .jpg extension but are actually multi-picture format.
         
         Args:
             image_path: Path object to the image file
@@ -226,12 +229,23 @@ class UnifiedAPIProcessor:
         """
         try:
             with Image.open(image_path) as img:
-                # Check if format needs conversion
-                unsupported_formats = {'AVIF', 'WEBP', 'HEIC', 'HEIF', 'BMP', 'TIFF'}
+                # Check actual image format (not just extension)
+                # MPO files often have .jpg extension but need conversion
+                unsupported_formats = {'AVIF', 'WEBP', 'HEIC', 'HEIF', 'BMP', 'TIFF', 'MPO', 'SVG'}
+                unsupported_extensions = {'.avif', '.webp', '.heic', '.heif', '.bmp', '.tiff', '.tif', '.svg'}
                 
-                if img.format in unsupported_formats or image_path.suffix.lower() in {'.avif', '.webp', '.heic', '.heif', '.bmp', '.tiff', '.tif'}:
-                    # Create new filename with .jpg extension
-                    new_path = image_path.with_suffix('.jpg')
+                needs_conversion = (
+                    img.format in unsupported_formats or 
+                    image_path.suffix.lower() in unsupported_extensions
+                )
+                
+                if needs_conversion:
+                    # For files already named .jpg/.jpeg, save in place (overwrite)
+                    # For other extensions, create new .jpg file
+                    if image_path.suffix.lower() in {'.jpg', '.jpeg'}:
+                        new_path = image_path  # Overwrite in place
+                    else:
+                        new_path = image_path.with_suffix('.jpg')
                     
                     # Convert to RGB mode (required for JPG)
                     rgb_img = img.convert('RGB')
@@ -241,8 +255,9 @@ class UnifiedAPIProcessor:
                     
                     self.logger.info(f" 🔄 Converted {img.format or image_path.suffix} → JPG: {image_path.name}")
                     
-                    # Remove original file
-                    image_path.unlink()
+                    # Remove original file only if it's a different path
+                    if new_path != image_path and image_path.exists():
+                        image_path.unlink()
                     
                     return new_path
                 

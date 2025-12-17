@@ -1,84 +1,250 @@
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
-testbed: http://192.168.31.40:8000/google_gemini_image/
+testbed: http://192.168.31.40:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 4
+  group_tasks_by: 3
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
 root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgC1W0a1zufDQqgZ9-ZHhbM6AZMUbXmvcWr9CVRbs62UZxM?e=2ladmH
-root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3b08d8cc8a3_0_163#slide=id.g3b08d8cc8a3_0_163
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3acf3415dc0_0_6#slide=id.g3acf3415dc0_0_6
 
 tasks:
-  - folder: ../Media Files/Nano Banana/1216 3 Styles/1216 熱門雙人拍貼-雪洞
+  - folder: ../Media Files/Nano Banana/1217 3 Styles/1217 My word of the year
     model: gemini-3-pro-image-preview
-    resolution: 1K
+    resolution: "1K"
     aspect_ratio: "3:4"
     prompt: |
-      Please use two people as the sole subjects in your uploaded photo, ensuring their true identities are fully preserved. Their faces, features, bone structure, hairstyles, skin tones, and expressions must remain unchanged. The system must not modify their body proportions, makeup, jawline, nose, or eyes, nor beautify, age, stylize, smooth, or add any other people.
+      Use the uploaded person photo. Do NOT change the person’s face, identity, or appearance.
 
-      Place the people in an outdoor snow scene, composing the shot through a heart-shaped opening naturally formed by the snow. The heart-shaped opening should have a natural and realistic effect; the snow texture should be irregular and soft, with natural thickness and slightly transparent edges to capture light. Avoid harsh outlines or perfect symmetry; the snow should have a hand-carved texture, looking realistic and blending into the authentic winter scene.
+      Create a photorealistic Japanese “Kanji of the Year” ceremony scene at a temple terrace. Natural lighting.
 
-      Use very close-up shots of the people's proportions, filling their faces with the heart-shaped opening. Their heads must occupy approximately 45% to 55% of the height of the heart-shaped opening, appearing very close to the camera. Their faces shouldn't appear too small or too far away; they must be large, prominent, and positioned in the upper-middle area of ​​the heart-shaped opening to create a selfie-like intimacy.
+      Composition:
+      - The person faces FORWARD toward the camera (not side view), holding a large calligraphy brush with ink on their hands, as if they just finished writing.
+      - On the right side, place a large vertical white calligraphy paper with ONE random Kanji.
 
-      In the uploaded photo of the two of them, they must wear black coats, perhaps paired with black scarves and gloves, posing in a relaxed and natural manner, as if taking a selfie or capturing a fleeting moment. The subjects can lean slightly forward, smile naturally, or make small, interactive gestures, such as making a "V" sign or grabbing a handful of snow, ensuring the movements are natural and fluid, not deliberately posed.
+      Calligraphy requirements:
+      - Extremely expressive bold ink strokes.
+      - Strong brush texture, flying white streaks, heavy ink pooling, natural brush pressure changes.
+      - Feel like dynamic Japanese sumi-e calligraphy, very powerful and artistic.
 
-      Use soft natural light to illuminate the scene—whether it's the warm hues of sunrise or the cool, bright light of the sky—casting soft shadows on the snow to create a clean and crisp winter atmosphere. The background should show an open snowfield, with soft colors for the horizon and sky. The light should fall softly on the snow, creating delicate highlights and natural reflections.
-
-      The final image should present a bright, natural, and romantic atmosphere—a realistic winter portrait framed by a heart-shaped snow scene. Natural light, natural expressions, and a lifelike snowscape work together to create a unique visual effect, making the two subjects appear tall and their faces clear.
+      Integrate the person naturally, with realistic shadow and depth. Maintain facial accuracy.
     reference_folder: ""
-    use_comparison_template: true
-    use_multi_image: true
-    multi_image_count: 2
+    use_comparison_template: false
+    use_random_source_selection: false
 
-  - folder: ../Media Files/Nano Banana/1216 3 Styles/1216 熱門雙人拍貼-洗衣機拍貼
+  - folder: ../Media Files/Nano Banana/1217 3 Styles/1217 Breaking News CNN
     model: gemini-3-pro-image-preview
-    resolution: 1K
+    resolution: "1K"
     aspect_ratio: "3:4"
     prompt: |
-      Use the two uploaded people as the only subjects. Their real faces, facial features, identities, expressions, hairstyles, outfits, and proportions must remain exactly the same as in the uploaded photos. No beautification, no stylization, and no extra people.
+      A perfectly front-facing shot of a modern flat-screen TV mounted on a living room wall.
+      The TV must be shown straight-on with no tilt or perspective distortion.
+      A warm, cozy living room surrounds the TV, with natural lighting, plants, wood textures, and simple interior decor.
 
-      Create a realistic Korean-style photo-booth scene captured from inside a large washing machine drum. The camera is placed inside the drum, pointing outward through the fully open door. The drum must form a bright, metallic circular frame with natural reflections, realistic shadows, and correct depth. The circular edge of the washing machine door should emit a soft, bright light ring that illuminates the subjects’ faces, similar to an internal ring-light built into the drum.
+      INSIDE THE TV SCREEN:
+      Display a full BREAKING NEWS broadcast labeled clearly as “NEWS” (NOT NHK).
+      All channel logos, corner bugs, headlines, or watermarks that would normally show NHK
+      must instead display the text “NEWS” only.
 
-      At least one subject must lean halfway into the washing machine—upper body entering the drum naturally, such as resting their torso inside or leaning forward deeply. Their hands may rest on the glowing washing-machine frame, or reach partially into the drum as part of the pose. Their positions must feel physically grounded and integrated with the washer structure. The subject leaning in should be illuminated by a strong, soft, internal photo-booth light inside the drum, making their face appear brighter.
+      Do not blur, mirror, or smear the edges of the uploaded photo.
+      Instead, use natural content-aware extension so the background is organically continued
+      and seamlessly blended across the full screen.
 
-      Both subjects should appear slightly larger in frame and stand close to the washing machine opening, filling the view while keeping their proportions and height differences accurate and realistic. Their interaction should feel playful and spontaneous, matching Korean purikura vibes—soft smiles, cute gestures, light teasing expressions, or peace signs.
+      NEWS SCREEN REQUIREMENTS:
+      - Red BREAKING NEWS banner
+      - White headline bar with bold black text
+      - Channel identifier text must read “NEWS” (no NHK text anywhere)
+      - Auto-generate a humorous fictional headline that directly relates to elements detected
+        in the uploaded photo
+        (for example: if holding flowers → headline about securing last bouquet;
+        if holding bubble tea → headline about bubble tea success;
+        if smiling outdoors → headline about joyful lifestyle moment)
+      - Optional scrolling ticker with light-hearted updates
 
-      Add real, wearable Valentine’s-themed head accessories (such as heart headbands or fabric bunny ears). These must fit naturally to their heads with accurate shadows and lighting, not stickers or floating graphics.
+      Ensure the TV screen glow, contrast, reflections, and edges look realistic.
 
-      The background should resemble a clean, pastel-toned Korean laundry room or photo-booth set with tiles and minimal décor. Lighting must be bright, soft, and even, with a gentle pastel tint. The entire image must be cohesive and realistic, with no compositing artifacts, no layering issues, and no style changes to the subjects’ faces or clothing.
+      The entire output should include the TV and the living room background,
+      not only the photo itself.
 
-      The composition should focus mainly on the subjects, with only a minimal portion of the drum interior visible as a framing element.
+      High resolution, realistic lighting, natural content-aware fill.
+      3:4 ratio.
     reference_folder: ""
-    use_comparison_template: true
-    use_multi_image: true
-    multi_image_count: 2
+    use_comparison_template: false
+    use_random_source_selection: false
 
-  - folder: ../Media Files/Nano Banana/1216 3 Styles/1216 電梯仰頭自拍 拍貼色調
+  - folder: ../Media Files/Nano Banana/1217 3 Styles/1217 Breaking News NHK
     model: gemini-3-pro-image-preview
-    resolution: 1K
+    resolution: "1K"
     aspect_ratio: "3:4"
     prompt: |
-      Use the two uploaded people as the only subjects. Their faces, facial features, identities, hairstyles, expressions, and clothing must remain exactly the same as in the uploaded photos. Do not beautify, stylize, or alter their appearance, and do not add any extra people.
+      A perfectly front-facing shot of a modern flat-screen TV mounted on a living room wall.
+      The TV must be shown straight-on with no tilt or perspective distortion.
+      A warm, cozy living room surrounds the TV, with natural lighting, plants, wood textures,
+      and simple interior decor.
 
-      Create a playful four-frame photo-booth collage styled like CCTV cameras inside an elevator. Each frame should look like it was captured by a corner-mounted security camera positioned high in the upper corner of a shiny metal elevator, creating a downward diagonal view. The overall viewpoint must feel like a real corner CCTV camera looking down toward the subjects rather than a centered ceiling camera.
+      INSIDE THE TV SCREEN:
+      Display a Japanese public-broadcast–style news program (NHK-style in tone and layout),
+      featuring the uploaded person.
 
-      The two subjects must appear together in all four frames, wearing exactly the same clothes as shown in the uploaded photos. Their body proportions and heights must stay realistic and consistent in every frame. The entire collage should feel unified and shot in the same physical elevator environment.
+      Do not blur, mirror, smear, or soften the edges of the uploaded photo.
+      Use natural content-aware background extension so the image fills the entire TV screen
+      as one continuous, realistic scene.
 
-      The visual style should present a high-angle overhead CCTV perspective within a 2×2 four-frame collage. Each frame should include subtle labels such as “CAMERA 1,” “CAMERA 2,” “CAMERA 3,” and “CAMERA 4,” along with a small red “REC” icon. A light fisheye distortion should be visible to mimic elevator surveillance lenses. The elevator interior must feature metallic walls and accurate reflections that remain consistent across all four images, but the lighting and overall atmosphere should feel soft, bright, clean, and pastel-tinted—similar to a Korean-style photo booth—while still maintaining the CCTV framing and angle.
+      NEWS SCREEN REQUIREMENTS (NHK-STYLE, BUT NO NHK TEXT):
+      - Clean, minimal lower-third headline bar in blue and white
+      - Calm, neutral Japanese news typography
+      - Channel identifier text must read “NEWS” only
+      - A concise, factual Japanese headline that directly relates to elements detected
+        in the uploaded photo
+        (e.g. flowers → 「花束を手に入れる様子を取材」)
 
-      The subjects’ poses and interactions should feel playful and casual, such as making peace signs, leaning into each other, hugging, making cute expressions, or pointing toward the camera. The mood should remain fun and natural, similar to a Korean-style photo booth but presented as CCTV footage. Identity preservation is critical—faces must remain exactly the same as in the uploaded photos, with no stylization, no added accessories unless already present in the images, and no changes to makeup, lighting on the face, or skin texture. No beauty filters or face-editing effects should be applied.
+      ADD SUBTLE PUBLIC-BROADCAST INFORMATION ELEMENTS:
+      - Top-left or top-right small channel logo reading “NEWS” (NOT NHK)
+      - A digital clock in the corner (e.g. 7:12)
+      - A small location tag such as 「東京・渋谷」 based on scene context
+      - A compact weather indicator in one corner (e.g. ☀ 22°C or ☁ 18°C)
+      - Optional small LIVE indicator if appropriate
+      - Optional thin secondary subtitle line under the main headline for added context
 
-      The final output should be a realistic four-frame elevator CCTV-style collage featuring the two uploaded subjects from a corner-mounted surveillance angle, showing playful poses, consistent clothing, accurate proportions, and perfectly preserved facial identity.
+      DESIGN CONSTRAINTS:
+      - All on-screen elements must be subtle, restrained, and secondary
+      - No bold red banners
+      - No American-style breaking news graphics
+      - No flashy animations or heavy overlays
+      - Maintain a calm, documentary-style Japanese public news tone
+
+      Ensure realistic TV screen glow, proper contrast, soft reflections,
+      and accurate brightness.
+
+      The final image must include the full TV frame and the living room environment,
+      not only the photo itself.
+
+      High resolution, natural lighting, seamless content-aware fill.
+      3:4 ratio.
     reference_folder: ""
-    use_comparison_template: true
-    use_multi_image: true
-    multi_image_count: 2
+    use_comparison_template: false
+    use_random_source_selection: false
 
+  - folder: ../Media Files/Nano Banana/1217 3 Styles/1217 Another Life
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      A 3:4 cinematic multi-panel composition divided into four equal frames, each representing a different alternate-life universe of the same woman based on the uploaded photo.
+
+      The style must reference the visual tone of the Japanese drama “Rebooting Life（重啟人生）”:  
+      quiet realism, soft natural lighting, pastel color palette, subtle emotional depth, documentary-like framing, and gentle film grain.
+
+      Use the uploaded woman as the protagonist.  
+      Do not change her facial identity, ethnicity, hairstyle length, or core appearance.  
+      Maintain photorealistic Japanese TV-drama aesthetics: simple makeup, natural expression, realistic skin texture.
+
+      Generate **four distinct life paths** for her.  
+      Each panel should present a clearly different universe with significantly contrasting life choices, environments, and roles.  
+      Gemini may freely decide the careers, lifestyles, or major life directions, as long as the four universes are meaningfully different from one another.
+
+      For each of the four panels:
+      - Keep her facial identity consistent.  
+      - Place her in a unique alternate life with strong visual storytelling.  
+      - Ensure the scenarios feel grounded, human, and realistic—no fantasy or sci-fi.
+      - Use natural, soft, cinematic Japanese-drama lighting.
+      - Include everyday textures, quiet emotional moments, and subtle slice-of-life composition.
+
+      All four panels must share:
+      - A cohesive color palette
+      - Naturalistic lighting
+      - Consistent cinematic realism
+      - Japanese drama–inspired framing
+
+      High resolution.  
+      Photorealistic, understated, emotional, and gently cinematic.  
+      Aspect ratio: 3:4.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+
+  - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Collage V1
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "9:16"
+    prompt: |
+      Create a 9:16 realistic scrapbook-style postcard collage using a vertical-stack composition centered on the canvas. The background should be a clean single-color surface with subtle paper texture, gentle grain, tiny fibers, and faint notebook-style horizontal lines, without any scenery or objects—just a calm, matte paper-page feel. At the top of the collage, place a postcard paper layer with subtle fibers, ensuring it never overlaps the polaroid. Below it, include the user’s uploaded "original photo" styled as a soft-shadowed polaroid with a minimal frame or lightly taped edges. Avoid generated new photo instead original photo. Avoid any modifications to the photos. Together, the postcard and polaroid should occupy more than half of the canvas, remaining vertically centered and perfectly aligned. On the postcard, write one short poetic wish inspired by the emotion of the uploaded image: a future-focused sentence of no more than twelve words, grammatically correct, with no spelling errors, no repeated words, and avoiding openings like “Next year,” “May,” or “I hope.” The handwriting must appear messy, cozy, imperfect, and human, not clean or font-like, but don't use cursive. Add three to four small real-object elements related to the photo, each around five percent of the canvas, designed to look like actual physical materials—paper, metal, plastic, fabric, or glass. Avoid including any objects or text related to the year. These items must appear to be placed or taped naturally on the top layer, with soft realistic shadows, no white sticker outlines, and slight imperfections allowed. Include a realistic postage stamp with perforated edges among these objects. Ensure all components sit naturally with soft, non-glowing shadows, avoiding floating effects. The final image should feel like a clean, minimal, modern editorial collage photographed as a flat-lay, with neutral warm or soft lighting and a gentle analog film-inspired mood. Don't make the visual space too crowded. Please leave more blank space.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Collage V2
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "9:16"
+    prompt: |
+      Create an elegant 9:16 collage page using a ring–binder notebook as the fixed background. Keep the notebook background unchanged and place the user’s uploaded photos exactly as they are, with no edits, alterations or distortion of any kind, ensuring the original proportions remain intact. Arrange the photos in a clean, balanced layout that feels modern, minimal and aesthetically refined, using soft warm lighting and gentle neutral tones that feel cozy without turning yellow, maintaining a clear and fresh atmosphere. Use a mix of subtle typography, combining simple printed text with a few light handwritten-style accents, without introducing any dates or year numbers. Add small graphic details such as neat labels, minimal tape pieces or understated design elements that complement the photos without overpowering them. Maintain a high-quality, contemporary and quietly sophisticated mood, allowing the user’s photos to remain the main focus while the surrounding text and layout gently enhance the visual tone.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Collage V3
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "9:16"
+    prompt: |
+      Create a 9:16 image in a clean iOS-inspired style, featuring a floating file-browser window placed very close to the canvas edges with only a thin border of the background visible. The background should be a soft, scenic image related to the general theme of the user’s photos, such as nature, city, beach, or any environment that visually fits the content. The window must include clear UI elements—the top bar, the three window control buttons, and a folder title automatically generated based on the overall subject of the user-uploaded photos. Inside the window, arrange the photos in a loose, random, non-grid layout, keeping each image unchanged with sharp corners, no cropping, no distortion, and adding a subtle drop shadow to every photo for depth. Add a simple filename below each image using short text derived from the content of each photo. Maintain a modern, minimal iOS aesthetic that keeps the user’s photos as the central focus while ensuring the UI elements and scenic background feel cohesive and clean.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Future Storyboard
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "9:16"
+    prompt: |
+      Create a strictly 9:16 vertical image with a consistent light warm-beige paper background, soft natural lighting, and subtle clean paper texture. Place the user’s uploaded photo in the upper left as a complete, intact Polaroid—slightly tilted, taped to the page, and kept exactly as is in full color with no distortion or cropping. In the center, vertically stack three comic-style panels outlined by a single thin black line, positioned with generous margins and vertically centered. The comic panels must be entirely black-and-white only, using pencil or ink texture with absolutely no color. Turn the uploaded photo into one of these black-and-white illustrated panels while keeping its composition recognizable, and use the remaining panels to show future-oriented moments that grow naturally from the mood or content of the original photo. Add handwritten storytelling notes placed randomly to the left or right of each panel in casual handwriting. Include one small, high-quality colored artistic sticker with hand-drawn texture, placed naturally on the page without covering the Polaroid or the comic panels.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 1
+    num_iterations: 100
+
+  - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 My Keychain
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "9:16"
+    prompt: |
+      A clean, strictly top-down product layout captured from a perfectly perpendicular overhead viewpoint, with no tilt, no angle, and no perspective distortion. The background resembles a tablecloth rendered in a softly tinted, low-saturation color that harmonizes with the subject’s palette while remaining visually subtle and never overpowering the keychain set. The upper left corner includes the words “Annual Selection” in cursive script, with “Annual Selection Photo” placed below it. The tablecloth surface features gentle small-scale patterns such as checks, florals, or linear motifs to add texture without drawing attention away from the foreground. Every uploaded image is processed to extract multiple distinct objects, with the main extracted character always converted into the primary acrylic keychain charm; the character must appear as a full or partial body and never as a head-only crop. All visuals must remain in realistic photographic style with authentic material textures and absolutely no illustration or drawn effects. The keychain cluster must include a translucent, colored acrylic star-shaped charm—similar to a hollow star frame—where the tint adapts harmoniously to the overall color palette. Additional extracted elements may be transformed into various accessory charms featuring realistic three-dimensional materials, such as glossy plastic, satin-like surfaces, or soft plush textures as an optional variation. These charms are arranged densely around the keychain rings and decorative cord to form a rich clustered set. The cord features a cute multi-strand woven design with playful knots, subtle striped threads, and polished metal or resin end caps for a handcrafted premium look. No extra decorative objects or clipped images appear in the layout—only the keychain set rests on the softly colored patterned background. The overall presentation is realistic, crisp, high-quality, and cohesive, with clean edges and soft shadows enhancing the photo-based product display.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 2
+    num_iterations: 100
+
+  - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 跨格互動
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "4:5"
+    prompt: |
+      Create a split-frame composition with two separate photos arranged in a top-and-bottom layout, divided by a clear, sharp horizontal seam. Each subject is focused on the upper body and may break out of their own frame naturally, allowing parts of the body to extend beyond the border without background blending. The two subjects should engage in natural, expressive physical interaction across the seam, with gestures or movements that clearly connect them while still keeping the frames distinct. The seam remains visible and unblended, and only the subjects’ actions may cross it. Maintain consistent lighting and photographic style so the images feel connected while remaining two separate frames
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
 
 # Comments and documentation
 comments:
@@ -92,25 +258,25 @@ comments:
   output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report. Example: with 4 tasks and group_tasks_by=4, creates 1 report; with 8 tasks, creates 2 reports."
   
   random_source_selection:
-    description: "Mode for selecting unique, non-overlapping image subsets from Source folder"
-    use_random_source_selection: "Set to true to enable unique partition mode"
+    description: "Mode for selecting N images from Source folder per API call (images can be reused)"
+    use_random_source_selection: "Set to true to enable random source selection mode"
     min_images: "Minimum images per API call (default: 1)"
     max_images: "Maximum images per API call (default: model max, e.g., 3 for flash, 14 for pro)"
-    num_iterations: "Number of API calls to make (optional: auto-calculated if omitted)"
+    num_iterations: "Number of API calls to make. Defaults to number of source files if omitted."
     notes: |
       - All images in 'Source' folder - no 'Additional' folder needed
-      - UNIQUE PARTITIONS: Each image is used exactly once across all API calls
-      - Image counts spread evenly: iteration 0 → min_images, last → max_images
-      - DETERMINISTIC: same folder + same config = same partitions every time
+      - num_iterations controls API call count (defaults to source file count)
+      - Image counts spread from min to max across iterations
+      - Images CAN be reused across iterations (not unique partitions)
+      - DETERMINISTIC: same folder = same selections every run
       - Great for regression testing: update source images, re-run, compare results
-      - If not enough images for all iterations, num_iterations is auto-reduced
       - Use gemini-3-pro-image-preview model for up to 14 images per call
     example: |
-      # 30 source images, 10 API calls, each uses unique 1-5 images
+      # 10 source images, 50 iterations = 50 API calls, each picks 1-5 images
       use_random_source_selection: true
       min_images: 1
       max_images: 5
-      num_iterations: 10  # Uses 30 images total (1+1+2+2+3+3+4+4+5+5)
+      num_iterations: 50  # Optional: defaults to number of source files
       model: gemini-3-pro-image-preview
   
   multi_image_config:

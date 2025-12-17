@@ -48,7 +48,7 @@ def test_case(client, prompt, description):
 
 def test_nano_banana_api():
     """Test the Nano Banana API with various cases."""
-    client = Client("http://192.168.31.40:8000/google_gemini_image/")
+    client = Client("http://192.168.31.40:8000/image_generation/")
     
     # Test Case 1: Blocked content
     test_case(client, "naked person", "Blocked/Moderated Content")

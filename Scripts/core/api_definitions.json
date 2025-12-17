@@ -276,7 +276,7 @@
         ]
     },
     "nano_banana": {
-        "endpoint": "http://192.168.31.40:8000/google_gemini_image/",
+        "endpoint": "http://192.168.31.40:8000/image_generation/",
         "api_name": "/nano_banana",
         "file_types": [
             ".jpg",

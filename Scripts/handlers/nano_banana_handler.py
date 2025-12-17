@@ -43,7 +43,6 @@ class NanoBananaHandler(BaseAPIHandler):
         self._source_file_indices = {}  # Track source file index for sequential matching
         self._random_source_selections = {}  # Track random source selections for reproducibility
         self._source_image_cache = {}  # Cache source images per task
-        self._iteration_partitions = {}  # Pre-computed partitions for each task
     
     def _load_image_pools(self, task_config, max_additional=None):
         """Load and cache image pools from additional folders.
@@ -297,79 +296,30 @@ class NanoBananaHandler(BaseAPIHandler):
         return self._source_image_cache[task_key]
     
     def _get_random_source_selection(self, task_config, iteration_index):
-        """Select a unique, non-overlapping subset of images for an API call.
+        """Deterministically select N images from Source folder for an API call.
         
-        Pre-partitions all source images into unique groups (computed once per task).
-        Each iteration gets its own dedicated subset - no image reuse across iterations.
+        Uses a "spread" approach for reproducibility:
+        - Image count spreads from min_images to max_images based on iteration index
+        - Image selection spreads across ALL available source images
+        - Same folder + same config = same selection every time
+        - Images CAN be reused across iterations when num_iterations > source count
         
-        Partition strategy:
-        - Image counts spread evenly from min_images to max_images
-        - Images assigned sequentially to each partition (no overlap)
-        - Deterministic: same folder + same config = same partitions every run
+        If num_iterations is specified:
+        - Uses that many API calls
+        - Spreads image selection across all source images evenly
         
-        Example with 30 source images, num_iterations=10, min=1, max=5:
-            Iteration 0: images [0]           (1 image)
-            Iteration 1: images [1]           (1 image)  
-            Iteration 2: images [2, 3]        (2 images)
-            Iteration 3: images [4, 5]        (2 images)
-            ...
-            Iteration 9: images [25-29]       (5 images)
+        If num_iterations is NOT specified:
+        - Defaults to number of source files
         
         Args:
             task_config: Task configuration dictionary containing:
                 - min_images: Minimum images per call (default: 1)
                 - max_images: Maximum images per call (default: model max)
-                - num_iterations: Number of API calls to make
+                - num_iterations: Optional number of API calls to make
             iteration_index: 0-based iteration index.
         
         Returns:
-            list: List of unique image Path objects for this iteration.
-        """
-        task_key = str(task_config.get('folder', ''))
-        
-        # Check if partitions already computed for this task
-        if task_key not in self._iteration_partitions:
-            self._compute_partitions(task_config)
-        
-        partitions = self._iteration_partitions.get(task_key, [])
-        
-        if iteration_index >= len(partitions):
-            self.logger.error(
-                f" ❌ Iteration {iteration_index} exceeds partition count ({len(partitions)})"
-            )
-            return []
-        
-        selected = partitions[iteration_index]
-        
-        # Initialize tracking for this task if needed
-        if task_key not in self._random_source_selections:
-            self._random_source_selections[task_key] = []
-        
-        # Record selection
-        selection_record = {
-            'iteration_index': iteration_index,
-            'num_images': len(selected),
-            'selected_files': [img.name for img in selected],
-            'selection_mode': 'unique_partition',
-            'timestamp': datetime.now().isoformat()
-        }
-        self._random_source_selections[task_key].append(selection_record)
-        
-        self.logger.info(
-            f" 📊 Iteration {iteration_index}/{len(partitions)-1}: {len(selected)} unique images"
-        )
-        self.logger.debug(f" 📋 Selected: {[img.name for img in selected]}")
-        
-        return selected
-    
-    def _compute_partitions(self, task_config):
-        """Pre-compute unique, non-overlapping image partitions for all iterations.
-        
-        Distributes source images across num_iterations groups with sizes
-        spreading from min_images to max_images. Each image is used exactly once.
-        
-        Args:
-            task_config: Task configuration with min_images, max_images, num_iterations.
+            list: List of selected image Path objects.
         """
         task_key = str(task_config.get('folder', ''))
         
@@ -387,176 +337,223 @@ class NanoBananaHandler(BaseAPIHandler):
         
         # Get all source images (sorted deterministically)
         source_images = self._get_source_images_for_task(task_config)
-        total_images = len(source_images)
+        total_available = len(source_images)
         
-        if total_images == 0:
-            self.logger.error(f" ❌ No source images found for partitioning")
-            self._iteration_partitions[task_key] = []
-            return
+        if not source_images:
+            self.logger.error(f" ❌ No source images found for selection")
+            return []
         
-        # Get num_iterations from config, or calculate based on available images
+        # Clamp max to available images
+        max_images = min(max_images, total_available)
+        min_images = min(min_images, max_images)
+        
+        # Get num_iterations: use config value if specified, otherwise default to source count
         num_iterations = task_config.get('num_iterations', 0)
-        
         if num_iterations <= 0:
-            # Auto-calculate: how many iterations can we do with unique images?
-            # Use average of min and max as typical partition size
-            avg_size = (min_images + max_images) / 2
-            num_iterations = max(1, int(total_images / avg_size))
-            self.logger.info(
-                f" 🔢 Auto-calculated num_iterations={num_iterations} "
-                f"(from {total_images} images, avg {avg_size:.1f} per call)"
-            )
+            num_iterations = total_available
         
-        # Calculate partition sizes (spread from min to max)
-        partition_sizes = []
-        for i in range(num_iterations):
-            if num_iterations == 1:
-                size = min_images
-            else:
-                # Linear interpolation from min to max
-                ratio = i / (num_iterations - 1)
-                size = int(min_images + ratio * (max_images - min_images))
-            partition_sizes.append(size)
+        # Calculate how many images to select for this iteration (spread evenly)
+        # iteration 0 → min_images, iteration (num_iterations-1) → max_images
+        if num_iterations <= 1 or min_images == max_images:
+            num_images = min_images
+        else:
+            # Linear interpolation across the range
+            spread_range = max_images - min_images
+            num_images = min_images + (iteration_index * spread_range) // (num_iterations - 1)
+            # Clamp to valid range
+            num_images = max(min_images, min(num_images, max_images))
         
-        # Check if we have enough images
-        total_needed = sum(partition_sizes)
-        if total_needed > total_images:
-            self.logger.warning(
-                f" ⚠️ Not enough images: need {total_needed}, have {total_images}. "
-                f"Reducing num_iterations..."
-            )
-            # Recalculate with fewer iterations
-            while total_needed > total_images and num_iterations > 1:
-                num_iterations -= 1
-                partition_sizes = []
-                for i in range(num_iterations):
-                    if num_iterations == 1:
-                        size = min_images
-                    else:
-                        ratio = i / (num_iterations - 1)
-                        size = int(min_images + ratio * (max_images - min_images))
-                    partition_sizes.append(size)
-                total_needed = sum(partition_sizes)
+        # Deterministic image selection - spread across ALL source images
+        # Calculate step size to evenly spread across the full source pool
+        if num_images >= total_available:
+            # Use all images
+            selected = source_images[:]
+        else:
+            # Calculate starting offset that spreads evenly across source pool
+            # This ensures we use all available source images across all iterations
+            step = total_available / num_iterations  # Fractional step for even spread
+            start_offset = int(iteration_index * step) % total_available
             
-            self.logger.info(f" 📉 Adjusted to {num_iterations} iterations (using {total_needed} images)")
+            # Select images with wrapping
+            selected = []
+            for i in range(num_images):
+                idx = (start_offset + i) % total_available
+                selected.append(source_images[idx])
         
-        # Build partitions
-        partitions = []
-        image_index = 0
+        # Sort selected images for consistent API input ordering
+        selected = sorted(selected, key=lambda x: x.name.lower())
         
-        for size in partition_sizes:
-            if image_index >= total_images:
-                break
-            
-            # Take 'size' images starting at image_index
-            end_index = min(image_index + size, total_images)
-            partition = source_images[image_index:end_index]
-            partitions.append(partition)
-            image_index = end_index
+        # Initialize tracking for this task if needed
+        if task_key not in self._random_source_selections:
+            self._random_source_selections[task_key] = []
         
-        self._iteration_partitions[task_key] = partitions
+        # Record selection for reproducibility
+        selection_record = {
+            'iteration_index': iteration_index,
+            'num_iterations': num_iterations,
+            'num_images': num_images,
+            'selected_files': [img.name for img in selected],
+            'min_images': min_images,
+            'max_images': max_images,
+            'selection_mode': 'deterministic_spread',
+            'timestamp': datetime.now().isoformat()
+        }
+        self._random_source_selections[task_key].append(selection_record)
         
-        # Log partition summary
         self.logger.info(
-            f" 📦 Created {len(partitions)} partitions from {total_images} images:"
+            f" 📊 Iteration {iteration_index}/{num_iterations-1}: selecting {num_images} images "
+            f"(spread range: {min_images}-{max_images}, pool: {total_available})"
         )
-        for i, p in enumerate(partitions[:5]):  # Show first 5
-            self.logger.info(f"    Iteration {i}: {len(p)} images → {[img.name for img in p]}")
-        if len(partitions) > 5:
-            self.logger.info(f"    ... and {len(partitions) - 5} more partitions")
-    
-    def get_iteration_count(self, task_config):
-        """Get the number of iterations (API calls) for a task.
+        self.logger.debug(f" 📋 Selected: {[img.name for img in selected]}")
         
-        Call this to determine how many times to call process() for this task
-        when using random source selection mode.
+        return selected
+    
+    def get_random_selection_log(self, task_config):
+        """Get the log of all random selections made for a task.
+        
+        Useful for reproducing results or debugging.
         
         Args:
             task_config: Task configuration dictionary.
         
         Returns:
-            int: Number of iterations, or 0 if not using random source selection.
+            list: List of selection records with call_index, files, and timestamps.
         """
-        if not task_config.get('use_random_source_selection', False):
-            return 0
-        
         task_key = str(task_config.get('folder', ''))
-        
-        # Compute partitions if not already done
-        if task_key not in self._iteration_partitions:
-            self._compute_partitions(task_config)
-        
-        return len(self._iteration_partitions.get(task_key, []))
+        return self._random_source_selections.get(task_key, [])
     
-    def process_random_source_task(self, task, task_num, total_tasks, output_folder, metadata_folder):
-        """Process a task using random source selection mode.
+    def process_task(self, task, task_num, total_tasks):
+        """Process task - handles both standard and random source selection modes.
         
-        Instead of iterating over each source file, this method:
-        1. Pre-partitions all source images into unique groups
-        2. Makes one API call per partition with its unique image set
-        3. Each image is used exactly once across all API calls
+        If use_random_source_selection is enabled:
+        - Uses iteration-based processing with deterministic spread
+        - num_iterations defaults to number of source files if not specified
+        
+        Otherwise uses standard file-by-file processing.
         
         Args:
             task: Task configuration dictionary.
             task_num: Current task number (for logging).
             total_tasks: Total number of tasks (for logging).
+        """
+        folder = Path(task.get('folder', ''))
+        output_folder = folder / "Generated_Output"
+        metadata_folder = folder / "Metadata"
+        
+        use_random_source = task.get('use_random_source_selection', False)
+        
+        if use_random_source:
+            # Random source selection mode - always use iteration-based processing
+            # Default num_iterations to number of source files if not specified
+            source_images = self._get_source_images_for_task(task)
+            num_iterations = task.get('num_iterations') or len(source_images)
+            
+            if num_iterations <= 0:
+                self.logger.warning(f" ⚠️ No source images found, skipping task")
+                return
+            
+            # Update task with resolved num_iterations
+            task_with_iterations = task.copy()
+            task_with_iterations['num_iterations'] = num_iterations
+            
+            self._process_iterations(task_with_iterations, task_num, total_tasks, 
+                                    output_folder, metadata_folder)
+        else:
+            # Use standard file-by-file processing from base class
+            super().process_task(task, task_num, total_tasks)
+    
+    def process(self, file_path, task_config, output_folder, metadata_folder, attempt, max_retries):
+        """Process a single file with iteration-based naming support.
+        
+        Overrides base class to support custom base_name from iteration mode.
+        
+        Args:
+            file_path: Path to the source file.
+            task_config: Task configuration dictionary.
             output_folder: Path to output folder.
             metadata_folder: Path to metadata folder.
+            attempt: Current attempt number.
+            max_retries: Maximum number of retries.
         
         Returns:
-            int: Number of successful API calls.
+            bool: True if processing succeeded, False otherwise.
+        """
+        # Use custom base_name if provided (from iteration mode)
+        base_name = task_config.get('_base_name') or Path(file_path).stem
+        file_name = Path(file_path).name
+        start_time = time.time()
+        
+        try:
+            # Make API-specific call with connection retry wrapper
+            result = self._make_api_call_with_connection_retry(file_path, task_config, attempt)
+            
+            # Parse and save result
+            success = self._handle_result(result, file_path, task_config, output_folder,
+                                         metadata_folder, base_name, file_name, start_time, attempt)
+            
+            if not success and attempt < max_retries - 1:
+                time.sleep(5)
+                return False
+            
+            return success
+            
+        except Exception as e:
+            self.logger.error(f" ❌ Error processing {base_name}: {e}")
+            raise
+    
+    def _process_iterations(self, task, task_num, total_tasks, output_folder, metadata_folder):
+        """Process task using iteration-based loop (for num_iterations mode).
+        
+        Args:
+            task: Task configuration dictionary.
+            task_num: Current task number.
+            total_tasks: Total number of tasks.
+            output_folder: Path to output folder.
+            metadata_folder: Path to metadata folder.
         """
         task_name = Path(task.get('folder', '')).name
-        self.logger.info(f"📁 Task {task_num}/{total_tasks}: {task_name} (Random Source Selection)")
+        num_iterations = task.get('num_iterations', 1)
+        source_images = self._get_source_images_for_task(task)
         
-        # Get iteration count (also triggers partition computation)
-        num_iterations = self.get_iteration_count(task)
-        
-        if num_iterations == 0:
-            self.logger.warning(" ⚠️ No iterations computed - check source folder")
-            return 0
-        
-        task_key = str(task.get('folder', ''))
-        partitions = self._iteration_partitions.get(task_key, [])
+        self.logger.info(
+            f"📁 Task {task_num}/{total_tasks}: {task_name} "
+            f"({num_iterations} iterations, {len(source_images)} source images)"
+        )
         
         successful = 0
         skipped = 0
         max_retries = self.api_defs.get('max_retries', 3)
         
-        for iteration_idx, partition in enumerate(partitions):
-            # Create a unique identifier for this iteration (for metadata naming)
-            # Use first image in partition as the "anchor" for naming
-            anchor_file = partition[0] if partition else None
+        for iteration_idx in range(num_iterations):
+            # Use first source image as anchor for metadata naming
+            anchor_file = source_images[iteration_idx % len(source_images)] if source_images else None
             
             if not anchor_file:
-                self.logger.warning(f" ⚠️ Empty partition at iteration {iteration_idx}")
+                self.logger.warning(f" ⚠️ No source images for iteration {iteration_idx}")
                 continue
             
-            # Check if this iteration was already processed
+            # Create unique identifier for this iteration
             base_name = f"iter{iteration_idx:03d}_{anchor_file.stem}"
+            
+            # Check if already processed
             if self._is_iteration_processed(base_name, metadata_folder):
-                self.logger.info(
-                    f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (already processed)"
-                )
+                self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (already processed)")
                 skipped += 1
                 successful += 1
                 continue
             
-            self.logger.info(
-                f" 🎲 {iteration_idx+1}/{num_iterations}: {len(partition)} images "
-                f"[{', '.join(img.name for img in partition[:3])}{'...' if len(partition) > 3 else ''}]"
-            )
+            self.logger.info(f" 🎲 {iteration_idx+1}/{num_iterations}: Processing iteration {iteration_idx}")
             
-            # Inject iteration_index into task config for _make_api_call
+            # Inject iteration_index and base_name into task config
             task_with_iteration = task.copy()
             task_with_iteration['_iteration_index'] = iteration_idx
-            task_with_iteration['_partition'] = partition
+            task_with_iteration['_base_name'] = base_name
             
             # Process with retries
             for attempt in range(max_retries):
                 try:
                     success = self.process(
-                        anchor_file,  # Use anchor file for compatibility
+                        anchor_file,
                         task_with_iteration,
                         output_folder,
                         metadata_folder,
@@ -573,26 +570,16 @@ class NanoBananaHandler(BaseAPIHandler):
                     else:
                         self.logger.error(f" ❌ All {max_retries} attempts failed: {e}")
             
-            # Rate limit between iterations
+            # Rate limit
             if iteration_idx < num_iterations - 1:
                 time.sleep(self.api_defs.get('rate_limit', 3))
         
         self.logger.info(
-            f"✓ Task {task_num}: {successful}/{num_iterations} successful "
-            f"({skipped} skipped)"
+            f"✓ Task {task_num}: {successful}/{num_iterations} successful ({skipped} skipped)"
         )
-        return successful
     
     def _is_iteration_processed(self, base_name, metadata_folder):
-        """Check if an iteration has already been successfully processed.
-        
-        Args:
-            base_name: Base name for the iteration (e.g., "iter000_image1").
-            metadata_folder: Path to metadata folder.
-        
-        Returns:
-            bool: True if iteration has successful metadata.
-        """
+        """Check if an iteration has already been successfully processed."""
         import json
         metadata_file = Path(metadata_folder) / f"{base_name}_metadata.json"
         
@@ -604,48 +591,6 @@ class NanoBananaHandler(BaseAPIHandler):
             except (json.JSONDecodeError, IOError):
                 return False
         return False
-    
-    def process_task(self, task, task_num, total_tasks):
-        """Process task - dispatches to appropriate method based on mode.
-        
-        If use_random_source_selection is enabled, uses partition-based processing.
-        Otherwise, uses the standard file-by-file processing from base class.
-        
-        Args:
-            task: Task configuration dictionary.
-            task_num: Current task number (for logging).
-            total_tasks: Total number of tasks (for logging).
-        """
-        folder = Path(task.get('folder', ''))
-        
-        # Set up folder paths
-        source_folder = folder / "Source"
-        output_folder = folder / "Generated_Output"
-        metadata_folder = folder / "Metadata"
-        
-        # Check if using random source selection mode
-        if task.get('use_random_source_selection', False):
-            # Use partition-based processing
-            self.process_random_source_task(
-                task, task_num, total_tasks, output_folder, metadata_folder
-            )
-        else:
-            # Use standard file-by-file processing from base class
-            super().process_task(task, task_num, total_tasks)
-    
-    def get_random_selection_log(self, task_config):
-        """Get the log of all random selections made for a task.
-        
-        Useful for reproducing results or debugging.
-        
-        Args:
-            task_config: Task configuration dictionary.
-        
-        Returns:
-            list: List of selection records with call_index, files, and timestamps.
-        """
-        task_key = str(task_config.get('folder', ''))
-        return self._random_source_selections.get(task_key, [])
     
     def _get_aspect_ratio(self, file_path, task_config):
         """Determine aspect ratio from config or auto-detect from source image.
@@ -738,17 +683,12 @@ class NanoBananaHandler(BaseAPIHandler):
         use_random_source = task_config.get('use_random_source_selection', False)
         
         if use_random_source:
-            # Random source selection mode: use pre-computed partition
-            # Check for injected partition from process_random_source_task
-            partition = task_config.get('_partition')
-            iteration_index = task_config.get('_iteration_index', 0)
+            # Random source selection mode: select N images from Source folder
+            # Use injected _iteration_index if available, otherwise find from file position
+            iteration_index = task_config.get('_iteration_index')
             
-            if partition:
-                # Use the injected partition directly
-                selected_images = partition
-            else:
-                # Fallback: compute partition based on file_path index
-                # (for backwards compatibility if called without process_random_source_task)
+            if iteration_index is None:
+                # Fallback: find iteration index from file position
                 source_images = self._get_source_images_for_task(task_config)
                 try:
                     iteration_index = next(
@@ -757,7 +697,8 @@ class NanoBananaHandler(BaseAPIHandler):
                     )
                 except StopIteration:
                     iteration_index = 0
-                selected_images = self._get_random_source_selection(task_config, iteration_index)
+            
+            selected_images = self._get_random_source_selection(task_config, iteration_index)
             
             if not selected_images:
                 self.logger.error(" ❌ No images selected for API call")
@@ -768,7 +709,11 @@ class NanoBananaHandler(BaseAPIHandler):
             self._current_additional_images[str(file_path)] = []  # No "additional" in this mode
             
             # Build images list from random selection
+            # Use handle_file for each image to properly upload to Gradio API
             images_list = [handle_file(str(img)) for img in selected_images]
+            
+            # Log the number of images being sent
+            self.logger.info(f" 📷 Sending {len(images_list)} images to API: {[img.name for img in selected_images]}")
             
             # Use first selected image for aspect ratio detection
             aspect_ratio = str(self._get_aspect_ratio(selected_images[0], task_config))
@@ -794,8 +739,15 @@ class NanoBananaHandler(BaseAPIHandler):
         self.logger.debug(f" 📷 Sending {len(images_list)} images (max {max_images} for {model})")
         self.logger.debug(f" 📐 Using aspect ratio: {aspect_ratio}")
         
+        # Build the final prompt
+        # If multiple images and random source selection, prepend a note about image count
+        prompt = task_config['prompt']
+        # if use_random_source and len(images_list) > 1:
+        #     image_count_note = f"[You are provided with {len(images_list)} photos. Make sure to use ALL {len(images_list)} photos in your output.]\n\n"
+        #     prompt = image_count_note + prompt
+        
         return self.client.predict(
-            prompt=task_config['prompt'],
+            prompt=prompt,
             model=model,
             images=images_list,
             resolution=resolution,
@@ -828,12 +780,6 @@ class NanoBananaHandler(BaseAPIHandler):
         
         # Check if using random source selection mode
         use_random_source = task_config.get('use_random_source_selection', False)
-        iteration_index = task_config.get('_iteration_index')
-        
-        # Override base_name for iteration mode
-        if use_random_source and iteration_index is not None:
-            base_name = f"iter{iteration_index:03d}_{Path(file_path).stem}"
-            file_name = f"iteration_{iteration_index}"
         
         # Get images info for metadata
         additional_imgs = getattr(self, '_current_additional_images', {}).get(str(file_path), [])

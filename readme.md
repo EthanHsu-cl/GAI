@@ -227,7 +227,7 @@ tasks:
 ### **Nano Banana Configuration** (`config/batch_nano_banana_config.yaml`)
 
 ```yaml
-testbed: http://192.168.31.40:8000/google_gemini_image/
+testbed: http://192.168.31.40:8000/image_generation/
 tasks:
   - folder: /path/to/TaskName1
     prompt: "Generate variations"
