@@ -448,10 +448,32 @@ class UnifiedReportGenerator:
         """Sort pairs based on API type
         
         For combination APIs (Wan, Runway): Group by video/reference, then sort by source filename
+        For nano_banana with random_source_selection: Sort by number of source images used (min to max)
         For other APIs: Sort by source filename only
         """
         if not pairs:
             return pairs
+        
+        # Check if this is nano_banana iteration mode (random_source_selection)
+        if self.api_name == 'nano_banana':
+            # Check if any pair has random_source_selection metadata
+            has_random_selection = any(
+                p.metadata.get('random_source_selection') for p in pairs
+            )
+            if has_random_selection:
+                # Sort by number of source images used (min to max),
+                # then by iteration index for stable ordering within same count
+                def get_sort_key(pair):
+                    # Primary: number of all_images_used
+                    all_images = pair.metadata.get('all_images_used', [])
+                    num_images = len(all_images) if all_images else len(pair.additional_source_paths)
+                    
+                    # Secondary: iteration index for stable ordering
+                    iteration_idx = pair.metadata.get('_iteration_index', 0)
+                    
+                    return (num_images, iteration_idx)
+                
+                return sorted(pairs, key=get_sort_key)
         
         if self.api_name in ['wan', 'runway']:
             # Combination APIs: Group by source video, then sort within groups by source file

@@ -4,19 +4,19 @@ testbed: http://192.168.31.40:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3
+  group_tasks_by: 2
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgC1W0a1zufDQqgZ9-ZHhbM6AZMUbXmvcWr9CVRbs62UZxM?e=2ladmH
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBvw0zGpbfASLwDgycOe-aeAYoylIJHAQDdy0n-WTLTwpA?e=fga92w
 root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3acf3415dc0_0_6#slide=id.g3acf3415dc0_0_6
 
 tasks:
   - folder: ../Media Files/Nano Banana/1217 3 Styles/1217 My word of the year
     model: gemini-3-pro-image-preview
-    resolution: "1K"
+    resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
       Use the uploaded person photo. Do NOT change the person’s face, identity, or appearance.
@@ -39,7 +39,7 @@ tasks:
 
   - folder: ../Media Files/Nano Banana/1217 3 Styles/1217 Breaking News CNN
     model: gemini-3-pro-image-preview
-    resolution: "1K"
+    resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
       A perfectly front-facing shot of a modern flat-screen TV mounted on a living room wall.
@@ -79,7 +79,7 @@ tasks:
 
   - folder: ../Media Files/Nano Banana/1217 3 Styles/1217 Breaking News NHK
     model: gemini-3-pro-image-preview
-    resolution: "1K"
+    resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
       A perfectly front-facing shot of a modern flat-screen TV mounted on a living room wall.
@@ -132,7 +132,7 @@ tasks:
 
   - folder: ../Media Files/Nano Banana/1217 3 Styles/1217 Another Life
     model: gemini-3-pro-image-preview
-    resolution: "1K"
+    resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
       A 3:4 cinematic multi-panel composition divided into four equal frames, each representing a different alternate-life universe of the same woman based on the uploaded photo.
@@ -168,12 +168,64 @@ tasks:
     use_comparison_template: false
     use_random_source_selection: false
 
+  # - folder: ../Media Files/Nano Banana/1217 煙火 四公格-鬆弛感UP
+  #   model: gemini-2.5-flash-image
+  #   resolution: 
+  #   aspect_ratio: 
+  #   prompt: |
+  #     Use the uploaded person exactly as they were, maintaining the same facial features, proportions, face shape, hair texture, makeup, expression, body proportions, and natural temperament.
+
+  #     Generate a four-frame collage of equal size, each frame feeling like a real New Year’s Eve moment captured by a handheld camera with strong, direct on-camera flash. The images must not look posed or studio-like; they must feel spontaneous, imperfect, and full of movement, as if a friend captured them during a night celebration outdoors.
+
+  #     and the intense direct flash creates slight overexposure on the skin, glossy highlights on the shoulders and cheeks, and small blown-out reflections in the eyes. The subject’s expressions must shift subtly between frames—real smiles, small laughs, relaxed eye contact, or glancing to the side—never the controlled expression of a formal photoshoot. The skin glow should come from the flash, not from soft beauty lighting, and the background should remain dark, grainy, and filled with distant lights and silhouettes of people, giving a lively festival atmosphere.
+
+  #     Clothing
+
+  #     The upper body must consist of a white sweatshirt and a loose black leather jacket, while the lower body must be fitted with ripped black jeans. Women's clothing is strictly prohibited.
+
+  #     In the upper-left frame, a Very close-up view of the subject with fireworks exploding behind them the composition captures a close candid moment, as if shot just as the subject turns toward the camera with a natural,  smile, fireworks blooming behind.
+
+  #     In the upper-right frame, show the subject from half-body distance, standing outdoors and facing the fireworks while turning their head back toward the camera with a bright, celebratory expression. The background should show an open nighttime space—such as a waterfront, beach, or riverside—with fireworks lighting the sky. The pose must look natural and festive. not intentionally posed, and the expression is soft but unguarded.
+
+  #     In the lower-left frame, the subject appears in a three-quarter-body shot on a lively nighttime street, captured in a candid celebratory moment. 
+
+  #     In the lower-right frame, the subject holds a sparkler in the most natural, real-life way—Shaky camera .arm relaxed, wrist loose, not lifted deliberately for the camera—while the flash and sparkler light mix to create uneven shadows and warm reflections, and the expression shows a candid moment rather than a performance for the lens.
+
+  #     The entire collage must feel like authentic nightlife snapshots: slightly imperfect, full of movement, flash-heavy, high-contrast, and emotionally alive, with no staged gestures, no symmetrical posing, and no beauty-shoot atmosphere—only the spontaneous charm of real New Year fireworks caught in fleeting moments.
+
+  #   reference_folder: ""
+  #   use_comparison_template: false
+  #   use_random_source_selection: false
+
+  # - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Future Storyboard
+  #   model: gemini-3-pro-image-preview
+  #   resolution: "1K"
+  #   aspect_ratio: "9:16"
+  #   prompt: |
+  #     Create a strictly 9:16 vertical image with a consistent light warm-beige paper background, soft natural lighting, and subtle clean paper texture. Place the user’s uploaded photo in the upper left as a complete, intact Polaroid—slightly tilted, taped to the page, and kept exactly as is in full color with no distortion or cropping. In the center, vertically stack three comic-style panels outlined by a single thin black line, positioned with generous margins and vertically centered. The comic panels must be entirely black-and-white only, using pencil or ink texture with absolutely no color. Turn the uploaded photo into one of these black-and-white illustrated panels while keeping its composition recognizable, and use the remaining panels to show future-oriented moments that grow naturally from the mood or content of the original photo. Add handwritten storytelling notes placed randomly to the left or right of each panel in casual handwriting. Include one small, high-quality colored artistic sticker with hand-drawn texture, placed naturally on the page without covering the Polaroid or the comic panels.
+  #   reference_folder: ""
+  #   use_comparison_template: false
+  #   use_random_source_selection: true
+  #   min_images: 1
+  #   max_images: 1
+  #   num_iterations: 50
+
   - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Collage V1
     model: gemini-3-pro-image-preview
     resolution: "1K"
     aspect_ratio: "9:16"
     prompt: |
-      Create a 9:16 realistic scrapbook-style postcard collage using a vertical-stack composition centered on the canvas. The background should be a clean single-color surface with subtle paper texture, gentle grain, tiny fibers, and faint notebook-style horizontal lines, without any scenery or objects—just a calm, matte paper-page feel. At the top of the collage, place a postcard paper layer with subtle fibers, ensuring it never overlaps the polaroid. Below it, include the user’s uploaded "original photo" styled as a soft-shadowed polaroid with a minimal frame or lightly taped edges. Avoid generated new photo instead original photo. Avoid any modifications to the photos. Together, the postcard and polaroid should occupy more than half of the canvas, remaining vertically centered and perfectly aligned. On the postcard, write one short poetic wish inspired by the emotion of the uploaded image: a future-focused sentence of no more than twelve words, grammatically correct, with no spelling errors, no repeated words, and avoiding openings like “Next year,” “May,” or “I hope.” The handwriting must appear messy, cozy, imperfect, and human, not clean or font-like, but don't use cursive. Add three to four small real-object elements related to the photo, each around five percent of the canvas, designed to look like actual physical materials—paper, metal, plastic, fabric, or glass. Avoid including any objects or text related to the year. These items must appear to be placed or taped naturally on the top layer, with soft realistic shadows, no white sticker outlines, and slight imperfections allowed. Include a realistic postage stamp with perforated edges among these objects. Ensure all components sit naturally with soft, non-glowing shadows, avoiding floating effects. The final image should feel like a clean, minimal, modern editorial collage photographed as a flat-lay, with neutral warm or soft lighting and a gentle analog film-inspired mood. Don't make the visual space too crowded. Please leave more blank space.
+      Generate a 9:16 vertical layout in a cold, minimal, high-fashion editorial style. The entire scene must remain strictly on a flat surface with no depth, no perspective, and no floating elements. Use a smooth, solid gray background viewed from a straight-down, top-view angle.
+
+      Place a large white sheet of paper at the center of the composition. On this sheet, print three elements as a single centered text block:
+      “2025” + a title inspired by the theme of the user-uploaded photos + a short documentary-style line that feels minimal and poetic.
+      The typography should be small, elegant, understated, and positioned precisely in the visual center of the sheet.
+
+      Around the central sheet, place Polaroid-style photographs. The number of Polaroids must match the number of images uploaded by the user. Each Polaroid must display one user-uploaded photo exactly as provided, without altering its content except for natural cropping to fit the frame. The photo inside each Polaroid should appear naturally centered. The Polaroids should be noticeably larger than typical instant-film proportions, giving them more visual weight in the layout.
+
+      Arrange the Polaroids in an intentionally asymmetrical, organic layout on the flat surface. They may be slightly rotated or offset, but they must remain fully grounded with no elevation. Use soft, diffused, low-contrast shadows directly beneath the Polaroids and the central sheet to reinforce the flat tabletop placement.
+
+      Maintain a cold, minimal, quiet fashion aesthetic throughout. Do not include props, hands, decorative elements, environmental cues, or anything beyond the sheet, Polaroids, and flat gray surface.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
@@ -206,19 +258,6 @@ tasks:
     min_images: 1
     max_images: 5
     num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Future Storyboard
-    model: gemini-3-pro-image-preview
-    resolution: "1K"
-    aspect_ratio: "9:16"
-    prompt: |
-      Create a strictly 9:16 vertical image with a consistent light warm-beige paper background, soft natural lighting, and subtle clean paper texture. Place the user’s uploaded photo in the upper left as a complete, intact Polaroid—slightly tilted, taped to the page, and kept exactly as is in full color with no distortion or cropping. In the center, vertically stack three comic-style panels outlined by a single thin black line, positioned with generous margins and vertically centered. The comic panels must be entirely black-and-white only, using pencil or ink texture with absolutely no color. Turn the uploaded photo into one of these black-and-white illustrated panels while keeping its composition recognizable, and use the remaining panels to show future-oriented moments that grow naturally from the mood or content of the original photo. Add handwritten storytelling notes placed randomly to the left or right of each panel in casual handwriting. Include one small, high-quality colored artistic sticker with hand-drawn texture, placed naturally on the page without covering the Polaroid or the comic panels.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 1
-    num_iterations: 100
 
   - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 My Keychain
     model: gemini-3-pro-image-preview

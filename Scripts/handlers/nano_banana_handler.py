@@ -352,16 +352,22 @@ class NanoBananaHandler(BaseAPIHandler):
         if num_iterations <= 0:
             num_iterations = total_available
         
-        # Calculate how many images to select for this iteration (spread evenly)
-        # iteration 0 → min_images, iteration (num_iterations-1) → max_images
-        if num_iterations <= 1 or min_images == max_images:
+        # Calculate how many images to select for this iteration (evenly distributed)
+        # With 50 iterations and min=1, max=5: exactly 10 iterations each for 1,2,3,4,5 images
+        if num_iterations <= 1:
+            # Single iteration: use max_images to provide most variety
+            num_images = max_images
+        elif min_images == max_images:
             num_images = min_images
         else:
-            # Linear interpolation across the range
-            spread_range = max_images - min_images
-            num_images = min_images + (iteration_index * spread_range) // (num_iterations - 1)
-            # Clamp to valid range
-            num_images = max(min_images, min(num_images, max_images))
+            # Even bucket distribution: divide iterations into equal-sized buckets
+            # Each bucket gets the same image count
+            num_counts = max_images - min_images + 1  # e.g., 5 for range 1-5
+            # Which bucket does this iteration fall into?
+            bucket = (iteration_index * num_counts) // num_iterations
+            # Clamp bucket to valid range (handles edge case where iteration_index == num_iterations-1)
+            bucket = min(bucket, num_counts - 1)
+            num_images = min_images + bucket
         
         # Deterministic image selection - spread across ALL source images
         # Calculate step size to evenly spread across the full source pool
@@ -395,14 +401,19 @@ class NanoBananaHandler(BaseAPIHandler):
             'selected_files': [img.name for img in selected],
             'min_images': min_images,
             'max_images': max_images,
-            'selection_mode': 'deterministic_spread',
+            'selection_mode': 'even_bucket_distribution',
             'timestamp': datetime.now().isoformat()
         }
         self._random_source_selections[task_key].append(selection_record)
         
+        # Calculate iterations per bucket for logging
+        num_counts = max_images - min_images + 1
+        iters_per_bucket = num_iterations // num_counts
+        current_bucket = (iteration_index * num_counts) // num_iterations
+        
         self.logger.info(
-            f" 📊 Iteration {iteration_index}/{num_iterations-1}: selecting {num_images} images "
-            f"(spread range: {min_images}-{max_images}, pool: {total_available})"
+            f" 📊 Iteration {iteration_index + 1}/{num_iterations}: {num_images} images "
+            f"(bucket {current_bucket + 1}/{num_counts}, ~{iters_per_bucket} iters each)"
         )
         self.logger.debug(f" 📋 Selected: {[img.name for img in selected]}")
         
@@ -514,10 +525,14 @@ class NanoBananaHandler(BaseAPIHandler):
         task_name = Path(task.get('folder', '')).name
         num_iterations = task.get('num_iterations', 1)
         source_images = self._get_source_images_for_task(task)
+        min_images = task.get('min_images', self.DEFAULT_MIN_IMAGES)
+        max_images = task.get('max_images', self.MODEL_MAX_IMAGES.get(
+            task.get('model', 'gemini-2.5-flash-image'), self.DEFAULT_MAX_IMAGES))
         
         self.logger.info(
             f"📁 Task {task_num}/{total_tasks}: {task_name} "
-            f"({num_iterations} iterations, {len(source_images)} source images)"
+            f"({num_iterations} iterations, {len(source_images)} source images, "
+            f"images per call: {min_images}-{max_images})"
         )
         
         successful = 0
@@ -738,13 +753,7 @@ class NanoBananaHandler(BaseAPIHandler):
         max_images = self.MODEL_MAX_IMAGES.get(model, self.DEFAULT_MAX_IMAGES)
         self.logger.debug(f" 📷 Sending {len(images_list)} images (max {max_images} for {model})")
         self.logger.debug(f" 📐 Using aspect ratio: {aspect_ratio}")
-        
-        # Build the final prompt
-        # If multiple images and random source selection, prepend a note about image count
         prompt = task_config['prompt']
-        # if use_random_source and len(images_list) > 1:
-        #     image_count_note = f"[You are provided with {len(images_list)} photos. Make sure to use ALL {len(images_list)} photos in your output.]\n\n"
-        #     prompt = image_count_note + prompt
         
         return self.client.predict(
             prompt=prompt,

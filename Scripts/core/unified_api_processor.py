@@ -220,6 +220,7 @@ class UnifiedAPIProcessor:
         
         Detects format by actual image data, not just extension. This catches
         MPO files that have .jpg extension but are actually multi-picture format.
+        Preserves EXIF orientation by applying it before saving.
         
         Args:
             image_path: Path object to the image file
@@ -246,6 +247,13 @@ class UnifiedAPIProcessor:
                         new_path = image_path  # Overwrite in place
                     else:
                         new_path = image_path.with_suffix('.jpg')
+                    
+                    # Apply EXIF orientation to preserve correct image orientation
+                    try:
+                        from PIL import ImageOps
+                        img = ImageOps.exif_transpose(img)
+                    except Exception:
+                        pass  # If EXIF transpose fails, continue with original orientation
                     
                     # Convert to RGB mode (required for JPG)
                     rgb_img = img.convert('RGB')
