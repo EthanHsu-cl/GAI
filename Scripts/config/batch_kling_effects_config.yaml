@@ -10,16 +10,16 @@ duration: 5
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3
+  group_tasks_by: 2
 
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: ../Media Files/Kling Effects/1215 3 Styles
+base_folder: ../Media Files/Kling Effects/1218 4 Styles
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=46494616#gid=46494616
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgATugDQeRmQRrqjHDMW5ve_Ab-TjdDWqcx7cLh9mery1l4?e=h5olw1
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBJ3wSU_HdfTKIsAJTSBUd6AZl7s77rZh5M_s82CXU94mc?e=YrSB4E
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,13 +28,16 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'my_santa_pic'
+    custom_effect: 'countdown_teleport'
 
   - effect:
-    custom_effect: 'glamour_photo_shoot'
+    custom_effect: 'firework_2026'
 
   - effect:
-    custom_effect: 'box_of_joy'
+    custom_effect: 'first_toast_of_the_year'
+
+  - effect: 
+    custom_effect: 'cheers_2026'
 
 comments:
   base_folder: >

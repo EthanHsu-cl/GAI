@@ -4,13 +4,13 @@ testbed: http://192.168.31.40:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 2
+  group_tasks_by: 3
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBvw0zGpbfASLwDgycOe-aeAYoylIJHAQDdy0n-WTLTwpA?e=fga92w
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgD-y9ZnLw-oRbFDNEXoBM_7AYg2inmHGzVwQzQHkebOYCM?e=SDUZWl
 root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3acf3415dc0_0_6#slide=id.g3acf3415dc0_0_6
 
 tasks:
@@ -168,47 +168,47 @@ tasks:
     use_comparison_template: false
     use_random_source_selection: false
 
-  # - folder: ../Media Files/Nano Banana/1217 煙火 四公格-鬆弛感UP
-  #   model: gemini-2.5-flash-image
-  #   resolution: 
-  #   aspect_ratio: 
-  #   prompt: |
-  #     Use the uploaded person exactly as they were, maintaining the same facial features, proportions, face shape, hair texture, makeup, expression, body proportions, and natural temperament.
+  - folder: ../Media Files/Nano Banana/1217 煙火 四公格-鬆弛感UP
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
+    prompt: |
+      Use the uploaded person exactly as they were, maintaining the same facial features, proportions, face shape, hair texture, makeup, expression, body proportions, and natural temperament.
 
-  #     Generate a four-frame collage of equal size, each frame feeling like a real New Year’s Eve moment captured by a handheld camera with strong, direct on-camera flash. The images must not look posed or studio-like; they must feel spontaneous, imperfect, and full of movement, as if a friend captured them during a night celebration outdoors.
+      Generate a four-frame collage of equal size, each frame feeling like a real New Year’s Eve moment captured by a handheld camera with strong, direct on-camera flash. The images must not look posed or studio-like; they must feel spontaneous, imperfect, and full of movement, as if a friend captured them during a night celebration outdoors.
 
-  #     and the intense direct flash creates slight overexposure on the skin, glossy highlights on the shoulders and cheeks, and small blown-out reflections in the eyes. The subject’s expressions must shift subtly between frames—real smiles, small laughs, relaxed eye contact, or glancing to the side—never the controlled expression of a formal photoshoot. The skin glow should come from the flash, not from soft beauty lighting, and the background should remain dark, grainy, and filled with distant lights and silhouettes of people, giving a lively festival atmosphere.
+      and the intense direct flash creates slight overexposure on the skin, glossy highlights on the shoulders and cheeks, and small blown-out reflections in the eyes. The subject’s expressions must shift subtly between frames—real smiles, small laughs, relaxed eye contact, or glancing to the side—never the controlled expression of a formal photoshoot. The skin glow should come from the flash, not from soft beauty lighting, and the background should remain dark, grainy, and filled with distant lights and silhouettes of people, giving a lively festival atmosphere.
 
-  #     Clothing
+      Clothing
 
-  #     The upper body must consist of a white sweatshirt and a loose black leather jacket, while the lower body must be fitted with ripped black jeans. Women's clothing is strictly prohibited.
+      The upper body must consist of a white sweatshirt and a loose black leather jacket, while the lower body must be fitted with ripped black jeans. Women's clothing is strictly prohibited.
 
-  #     In the upper-left frame, a Very close-up view of the subject with fireworks exploding behind them the composition captures a close candid moment, as if shot just as the subject turns toward the camera with a natural,  smile, fireworks blooming behind.
+      In the upper-left frame, a Very close-up view of the subject with fireworks exploding behind them the composition captures a close candid moment, as if shot just as the subject turns toward the camera with a natural,  smile, fireworks blooming behind.
 
-  #     In the upper-right frame, show the subject from half-body distance, standing outdoors and facing the fireworks while turning their head back toward the camera with a bright, celebratory expression. The background should show an open nighttime space—such as a waterfront, beach, or riverside—with fireworks lighting the sky. The pose must look natural and festive. not intentionally posed, and the expression is soft but unguarded.
+      In the upper-right frame, show the subject from half-body distance, standing outdoors and facing the fireworks while turning their head back toward the camera with a bright, celebratory expression. The background should show an open nighttime space—such as a waterfront, beach, or riverside—with fireworks lighting the sky. The pose must look natural and festive. not intentionally posed, and the expression is soft but unguarded.
 
-  #     In the lower-left frame, the subject appears in a three-quarter-body shot on a lively nighttime street, captured in a candid celebratory moment. 
+      In the lower-left frame, the subject appears in a three-quarter-body shot on a lively nighttime street, captured in a candid celebratory moment. 
 
-  #     In the lower-right frame, the subject holds a sparkler in the most natural, real-life way—Shaky camera .arm relaxed, wrist loose, not lifted deliberately for the camera—while the flash and sparkler light mix to create uneven shadows and warm reflections, and the expression shows a candid moment rather than a performance for the lens.
+      In the lower-right frame, the subject holds a sparkler in the most natural, real-life way—Shaky camera .arm relaxed, wrist loose, not lifted deliberately for the camera—while the flash and sparkler light mix to create uneven shadows and warm reflections, and the expression shows a candid moment rather than a performance for the lens.
 
-  #     The entire collage must feel like authentic nightlife snapshots: slightly imperfect, full of movement, flash-heavy, high-contrast, and emotionally alive, with no staged gestures, no symmetrical posing, and no beauty-shoot atmosphere—only the spontaneous charm of real New Year fireworks caught in fleeting moments.
+      The entire collage must feel like authentic nightlife snapshots: slightly imperfect, full of movement, flash-heavy, high-contrast, and emotionally alive, with no staged gestures, no symmetrical posing, and no beauty-shoot atmosphere—only the spontaneous charm of real New Year fireworks caught in fleeting moments.
 
-  #   reference_folder: ""
-  #   use_comparison_template: false
-  #   use_random_source_selection: false
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
 
-  # - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Future Storyboard
-  #   model: gemini-3-pro-image-preview
-  #   resolution: "1K"
-  #   aspect_ratio: "9:16"
-  #   prompt: |
-  #     Create a strictly 9:16 vertical image with a consistent light warm-beige paper background, soft natural lighting, and subtle clean paper texture. Place the user’s uploaded photo in the upper left as a complete, intact Polaroid—slightly tilted, taped to the page, and kept exactly as is in full color with no distortion or cropping. In the center, vertically stack three comic-style panels outlined by a single thin black line, positioned with generous margins and vertically centered. The comic panels must be entirely black-and-white only, using pencil or ink texture with absolutely no color. Turn the uploaded photo into one of these black-and-white illustrated panels while keeping its composition recognizable, and use the remaining panels to show future-oriented moments that grow naturally from the mood or content of the original photo. Add handwritten storytelling notes placed randomly to the left or right of each panel in casual handwriting. Include one small, high-quality colored artistic sticker with hand-drawn texture, placed naturally on the page without covering the Polaroid or the comic panels.
-  #   reference_folder: ""
-  #   use_comparison_template: false
-  #   use_random_source_selection: true
-  #   min_images: 1
-  #   max_images: 1
-  #   num_iterations: 50
+  - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Future Storyboard
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "9:16"
+    prompt: |
+      Create a strictly 9:16 vertical image with a consistent light warm-beige paper background, soft natural lighting, and subtle clean paper texture. Place the user’s uploaded photo in the upper left as a complete, intact Polaroid—slightly tilted, taped to the page, and kept exactly as is in full color with no distortion or cropping. In the center, vertically stack three comic-style panels outlined by a single thin black line, positioned with generous margins and vertically centered. The comic panels must be entirely black-and-white only, using pencil or ink texture with absolutely no color. Turn the uploaded photo into one of these black-and-white illustrated panels while keeping its composition recognizable, and use the remaining panels to show future-oriented moments that grow naturally from the mood or content of the original photo. Add handwritten storytelling notes placed randomly to the left or right of each panel in casual handwriting. Include one small, high-quality colored artistic sticker with hand-drawn texture, placed naturally on the page without covering the Polaroid or the comic panels.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 1
+    num_iterations: 50
 
   - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 Collage V1
     model: gemini-3-pro-image-preview
@@ -270,7 +270,7 @@ tasks:
     use_random_source_selection: true
     min_images: 1
     max_images: 2
-    num_iterations: 100
+    num_iterations: 50
 
   - folder: ../Media Files/Nano Banana/1216 6 Styles/1216 跨格互動
     model: gemini-3-pro-image-preview
