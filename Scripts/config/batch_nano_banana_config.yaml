@@ -10,32 +10,147 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgD-y9ZnLw-oRbFDNEXoBM_7AYg2inmHGzVwQzQHkebOYCM?e=SDUZWl
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3acf3415dc0_0_6#slide=id.g3acf3415dc0_0_6
+root_source_video_link: 
+root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3b08d8cc8a3_0_163#slide=id.g3b08d8cc8a3_0_163
 
 tasks:
-  - folder: ../Media Files/Nano Banana/1219 2 Styles/1219 Collage V2
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
+  - folder: ../Media Files/Nano Banana/1222 5 Styles/1222 日系自然照片 女生送巧克力-俯角
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
     prompt: |
-      Create an elegant 9:16 collage page using a ring–binder notebook as the fixed background. Keep the notebook background unchanged and place the user’s uploaded photos exactly as they are, with no edits, alterations or distortion of any kind, ensuring the original proportions remain intact. Arrange the photos in a clean, balanced layout that feels modern, minimal and aesthetically refined, using soft warm lighting and gentle neutral tones that feel cozy without turning yellow, maintaining a clear and fresh atmosphere. Use a mix of subtle typography, combining simple printed text with a few light handwritten-style accents, without introducing any dates or year numbers. Add small graphic details such as neat labels, minimal tape pieces or understated design elements that complement the photos without overpowering them. Maintain a high-quality, contemporary and quietly sophisticated mood, allowing the user’s photos to remain the main focus while the surrounding text and layout gently enhance the visual tone.
+      Using the uploaded photo of the person as the primary subject, preserve their facial features, makeup, hairstyle, skin tone, and body proportions to ensure complete consistency with the uploaded image.
+
+      Transform it into a cinematic close-up portrait inspired by lifestyle photography.
+
+      She lies on a soft, neutral-colored bed, without any blankets.
+
+      Her hair falls naturally in soft waves, with a few fresh cherries or strawberries (arranged randomly, but only one type of fruit at a time) casually scattered in her hair and on the pillow, seemingly effortless yet harmoniously natural. (Three hands or illogical poses are strictly prohibited.)
+
+      She wears a white spaghetti strap dress—simple yet elegant—that gleams softly in the sunlight. The V-neck and thin straps accentuate her beautiful shoulders and collarbones.
+
+      Her posture exudes ease and comfort: she leans back, holding fruit near her nose, blinking only one eye, a warm, playful smile playing on her lips, or gazing captivatingly at the camera; her other hand holds fruit (only fresh cherries or strawberries, randomly selected, but only one type at a time), placed below the foreground—while her other hand holds fruit (fresh, large, highlighted by her blurred face), also placed below the foreground—but without the same vibrancy or size, highlighted by the lighter blur of her face. All her movements are natural and relaxed.
+
+      The lighting is soft and diffused, simulating natural window light from above at approximately a 45° angle. The color temperature is approximately 5200K, creating a clean, sunlit atmosphere, leaving soft highlights on her skin and hair. The overall tone should remain bright and fresh, with natural shadow transitions.
+
+      Use a medium-close-up composition (approximately from head to chest), with an equivalent focal length of 50-85mm and an aperture of f/1.8-f/2.2, emphasizing eye contact, hair texture, and the natural glow of the skin.
+
+      The final atmosphere should showcase the elegant temperament of a modern woman—fresh, romantic, and naturally radiant—like a magazine spread shot in the morning sunlight.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: true
+    use_random_source_selection: false
     min_images: 1
     max_images: 5
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/1219 2 Styles/1219 Collage V3
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
+  - folder: ../Media Files/Nano Banana/1222 5 Styles/1222 日系自然照片 女生送巧克力-兩公格
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
     prompt: |
-      Create a 9:16 image in a clean iOS-inspired style, featuring a floating file-browser window placed very close to the canvas edges with only a thin border of the background visible. The background should be a soft, scenic image related to the general theme of the user’s photos, such as nature, city, beach, or any environment that visually fits the content. The window must include clear UI elements—the top bar, the three window control buttons, and a folder title automatically generated based on the overall subject of the user-uploaded photos. Inside the window, arrange the photos in a loose, random, non-grid layout, keeping each image unchanged with sharp corners, no cropping, no distortion, and adding a subtle drop shadow to every photo for depth. Add a simple filename below each image using short text derived from the content of each photo. Maintain a modern, minimal iOS aesthetic that keeps the user’s photos as the central focus while ensuring the UI elements and scenic background feel cohesive and clean.
+      The artwork will be presented as a diptych vertical collage (overall aspect ratio 3:4, single panel aspect ratio 4:3).
+
+      The subject's face shape, hairstyle, and skin tone must be exactly the same as the uploaded photograph; no modifications or stylization are allowed. The subject's face shape, features, skin tone, hairstyle, makeup, and body proportions must not be altered.
+
+      The scene will be processed into a soft-focus, cinematic close-up portrait, taken in natural morning light.
+
+      The subject is positioned around a wooden table, surrounded by fruit, various chocolates, and chocolate-making ingredients (the fruit will be randomly selected: cherries or strawberries—only one type of fruit can appear in the frame at a time). Sunlight streams in from a nearby window, casting a warm, soft, honey-gold glow.
+
+      The model's hair is tied in a slightly messy side ponytail at the nape of her neck, with a few stray strands falling on either side of her face (this step is unnecessary if the model has short hair). A small red bow is pinned near her left temple, the end of which is slightly upturned and sparkles in the light.
+
+      The poses and actions of the figures in the top and bottom images must be 95% different. Both must wear white off-the-shoulder tops to create a romantic and warm atmosphere. (One type of fruit will appear randomly in the image: cherry or strawberry – only one is needed):
+
+      Top Image: The model sits at a table, gently holding a fruit. Her gaze is alluring as she looks at the camera. Fruit is scattered in the background.
+
+      Bottom Image: Close-up shot. The model leans slightly forward, her chin resting on the table, looking directly at the camera with a curious, dreamy, and intimate expression. Fruit is scattered on the table.
+
+      A third hand or any uncoordinated human movements, hands, or limbs are prohibited in the image; they must conform to human anatomy. This composition captures the subtle atmosphere between tranquility and intimacy. Natural, soft lighting, with a color temperature of approximately 4200-4600K, illuminates from a low angle of 30° on the left, casting soft shadows and halos on the cheeks and fruit. Soft highlights give the entire image a nostalgic film-like quality.
+
+      The background should be softly blurred; the image should primarily feature natural wood tones, white linen napkins, and scattered fruit, with touches of red adding a bright accent. The overall color scheme blends soft beige, warm ivory, cherry red, and amber gold, creating a gentle afternoon glow reminiscent of vintage Japanese magazine portrait photography.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: true
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1222 5 Styles/1222 浪漫邱比特天使
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
+    prompt: |
+      The subject should be the person in the uploaded photo, whose facial features, makeup, hairstyle, skin tone, and body proportions are completely identical to the uploaded photo.
+
+      In a soft pink-toned studio, create a dreamlike, angelic portrait. The lighting should be bright yet soft, with slightly overexposed highlights, surrounding the subject to create a hazy, ethereal halo, like a dreamlike cosplay photo.
+
+      The following two actions will occur randomly (one must appear, both must have a relaxed and natural feel, and must be a close-up or half-body shot):
+
+      Action 1 (must be a close-up or half-body shot):
+
+      She holds a delicate Cupid's bow in one hand, casually placed beside her lap. The bow is slender and white, adorned with delicate gold decorations, and the arrows match. Her posture is gentle and slightly shy: knees together, upper body relaxed, head slightly tilted, gaze softly at the camera.
+
+      Action Two (must be a close-up or half-body shot):
+
+      The subject leans forward, resting against a fallen white Roman column, her torso resting on the edge of the column's top, causing her shoulders, upper arms, and part of her chest to naturally sag.
+
+      One hand gently supports her chin, knuckles relaxed and naturally curved. The other hand holds a heart-shaped arrow shaft, completely relaxed, fingers straight, creating a soft perspective effect. The white oak shaft spans across her chest and shoulder. The shaft must be made of white oak, and the arrowhead must be a solid red heart shape. The arrow itself is also red. The model's head is slightly tilted, creating an elegant and soft three-quarter profile. Her gaze is calm and ethereal, looking directly at the camera.
+
+      Her clothing must be: a light pink, super-short, puffy, off-the-shoulder dress. The bodice is a shapewear corset with steel support, a softly curved heart-shaped neckline edged with delicate lace, and thin straps. The skirt is a layered, light, pleated ballet tutu, flaring out around the hips and reaching the upper thighs. Made of sheer tulle and organza, it appears soft and translucent. A small, cute necklace or ribbon adorns her neck, adding to her doll-like sweetness. She wears white over-the-knee knit stockings with ribbed cuffs and soft fan-shaped lace trim, revealing her bare feet. The overall look should be sweet, girlish, and slightly Lolita-esque, rather than a simple long dress.
+
+      Behind her are a pair of soft, layered white angel wings. A fluffy feathered angel halo adorns her head, forming a shimmering circle above and around her hair.
+
+      These two movements will create the following background:
+
+      Around her, three white doves must be fixed, flying at different distances and heights, wings outstretched. Some are close to the camera with slight motion blur, while others are in the distance, collectively outlining her figure. The background should be a clean, pastel gradient with no harsh edges, and the clouds at the base of the pillars should emit a soft glow.
+
+      The overall image must convey the effect of a high-end, dreamy angelic portrait: soft pink tones, bright white, and a dreamlike atmosphere.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1222 5 Styles/1222 藕粉牆+白紗裙
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
+    prompt: |
+      Uploaded portrait photos should be centered on the subject, ensuring their face, makeup, hairstyle, and body proportions are completely identical to the original image.
+
+      Take a set of four vintage-style portrait photos, all in the same clothing (The two photos in the upper left and lower right corners must be close-ups of different poses, with the shooting range being from the shoulders up.)
+
+      Models must wear flowing white spaghetti strap off-the-shoulder tulle dresses paired with delicate white ballet flats; the styling should be simple, without any additional hair accessories.
+
+      The scene should be set in a vintage living room with a blush pink background, featuring an old-fashioned upright piano surrounded by candlesticks; an old-fashioned telephone; a Persian, Turkish, or European antique rug on the floor; vintage picture frames hanging on the wall; vintage candlesticks; and a glass vase with white flowers. Several white and red heart-shaped helium balloons should be attached nearby, and warm vintage lighting should be used. The overall tone should create a nostalgic, film-like quality, slightly soft, with soft highlights and delicate shadows, as if shot with an old-fashioned camera.
+
+      Her pose should be natural and relaxed—she could sit casually on a vintage wooden chair, leaning slightly forward, curled up beside a piano bench, or stretch her legs out in a nonchalant, dreamlike pose. Each photograph should capture her authentic face and expression, creating a serene, dreamy, and slightly melancholic atmosphere through natural body language rather than stiff poses. No text should be included in the photographs.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1222 5 Styles/1222 質感西裝四公格
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
+    prompt: |
+      Using the uploaded person as the sole subject, retaining their facial features and hairstyle, only changing the clothing and scene, a four-panel fashion editorial is generated. The overall atmosphere utilizes cinematic studio lighting, with deep red and black as the main color scheme, creating strong contrasts, a sharp main light, rich shadows, a slight film grain effect, and a cool, porcelain-like skin texture.
+
+      The subject always wears a sharply tailored, loose-fitting black suit jacket (must remain open, with the jacket length fixed to 5 cm below the hips), a white shirt, and a deep red tie; if female, this is paired with black slim-fit suit shorts and black socks or ankle boots; if male, it is paired with a loose black overcoat (reaching mid-calf), suit trousers, and black leather shoes.
+
+      In the upper left corner of the frame, a close-up upper-body portrait of the subject facing the camera is taken, with the head slightly tilted at a 45-degree angle, holding a rose. Facial shadows are soft, and the background is pure red or deep red.
+
+      Top right corner: A half-body or bust portrait of the model, whose expression is cool and focused. The background is deep red, with white candles in the foreground (deep foreground). Side or backlighting illuminates the face, creating a strong contrast of light and shadow, with slight motion blur or double exposure for a hazy glow, creating a dreamlike atmosphere.
+
+      Bottom left corner: A full-body or three-quarter-length portrait of the model, dressed in the same suit, standing in a clean, bright gray-white studio. Specks of light and shadow play on the floor. The right foot rests on a French crystal chandelier, surrounded by scattered rose petals. The pose is relaxed yet powerful, with sharp, clear shadows.
+
+      Bottom right corner: A frontal half-body or three-quarter-length portrait of the model against a pure red or deep red background. The model holds a large bouquet of deep red roses in her right hand, stylishly positioned on her right arm, looking directly at the camera. A few white particles, like snowflakes, float in the air. The four photos maintain a consistent color tone and a fashionable, dramatic atmosphere.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
     min_images: 1
     max_images: 5
     num_iterations: 50
