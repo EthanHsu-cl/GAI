@@ -14,31 +14,51 @@ root_source_video_link:
 root_design_link: 
 
 tasks:
-  - folder: ../Media Files/Nano Banana/1218 My word of the year
+  - folder: '/Users/ethanhsu/Library/CloudStorage/OneDrive-CyberLinkCorp/Kling Vidu/Nano Banana/1223 My word of the year Batch'
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
-      Use the uploaded person photo. Do NOT change the person’s face, identity, or appearance.
+      Use the uploaded person photo.
+      Do NOT change the person’s face, identity, gender presentation, or appearance.
 
-      Create a photorealistic Japanese “Kanji of the Year” ceremony scene at a temple terrace. Natural lighting.
+      Create a photorealistic Japanese “Kanji of the Year” ceremony scene at a temple terrace.
+      Natural lighting, calm and respectful atmosphere.
 
       Composition:
-      - The person faces FORWARD toward the camera (not side view), holding a large calligraphy brush with ink on their hands, as if they just finished writing.
-      - On the right side, place a large vertical white calligraphy paper with ONE random Kanji.
+
+      - The person faces FORWARD toward the camera (not side view).
+      - The person is holding a large calligraphy brush with ink on their hands, as if they have just finished writing.
+      - On the right side of the scene, place a large vertical white calligraphy paper with ONE Kanji written in bold ink.
+
+      Kanji selection requirement:
+
+      - Generate ONLY ONE single Kanji character. Do NOT generate compound words or multi-character phrases.
+      - The Kanji must not have a clearly negative, harmful, or disturbing meaning (e.g., death, illness, ugliness, misfortune).
+      - The Kanji may represent a noun, verb, or adjective.
+      - The meaning does NOT need to be explicitly inspirational or moralizing.
+      - Neutral, descriptive, poetic, aesthetic, or life-related meanings are allowed.
+      - Avoid Kanji associated with war, conflict, violence, destruction, suffering, illness, or social controversy.
 
       Calligraphy requirements:
-      - Extremely expressive bold ink strokes.
-      - Strong brush texture, flying white streaks, heavy ink pooling, natural brush pressure changes.
-      - Feel like dynamic Japanese sumi-e calligraphy, very powerful and artistic.
 
-      Integrate the person naturally, with realistic shadow and depth. Maintain facial accuracy.
+      - Extremely expressive, bold ink strokes.
+      - Strong brush texture with visible flying white streaks.
+      - Heavy ink pooling and natural brush pressure variation.
+      - The style should feel like powerful, dynamic Japanese sumi-e calligraphy, artistic and emotionally resonant.
+
+      Integrate the person naturally into the environment with realistic shadows and depth.
+      Maintain high facial accuracy and photorealistic detail.
+
+      High resolution.
+      Photorealistic, respectful, ceremonial, and emotionally uplifting.
+      Aspect ratio: natural photographic composition.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
     min_images: 1
     max_images: 1
-    num_iterations: 400
+    num_iterations: 100
 
 # Comments and documentation
 comments:

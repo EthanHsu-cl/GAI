@@ -1,0 +1,203 @@
+# Veo Image-to-Video (ITV) Batch Configuration
+# Each style folder should contain a 'Source' subfolder with source images
+# Generated videos will be placed in 'Generated_Video' subfolder
+# Metadata will be placed in 'Metadata' subfolder
+
+template_path: templates/I2V templates.pptx
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  # Group N tasks into one combined report. Set to 0 or omit for individual reports.
+  # Example: with 5 tasks and group_tasks_by=5, creates 1 report with all 5 styles.
+  # The report filename and title will include all style names.
+  group_tasks_by: 5
+
+# Global generation count - how many videos to generate per source image
+# Can be overridden per task
+generation_count: 5
+
+# Root folder containing all style subfolders
+root_folder: ../Media Files/Veo_ITV
+
+schedule:
+  start_time: ''
+
+root_source_video_link:
+root_design_link: https://docs.google.com/presentation/d/1kF8imHlU9i6uJtCOL8JWkxWVgKbW7mdq1JaquM7HfwY/edit?slide=id.g3aad1030c6f_20_3#slide=id.g3aad1030c6f_20_3
+
+# Example task structure:
+# Each task represents a style folder under the root_folder
+# The folder should contain a 'Source' subfolder with the source images
+tasks:
+  - style_name: Style 11_Statue Selfie
+    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 11_Statue Selfie
+    generation_count: 5
+    prompt: |
+      Cinematic bright-daylight wide shot showing the full-body view of Rodin’s The Thinker in his iconic pose, now featuring a sculpted bronze toga that is part of the statue’s form—draped over one shoulder and carved seamlessly into the figure, with no phone anywhere in the frame. The camera begins a smooth push-in toward a medium close-up. As the camera approaches, the statue makes a small, natural motion with his right hand, and we now see he is holding a vivid bright solid orange iPhone 17 Pro Max, which had not been visible in any earlier part of the shot. He shifts into a cheerful playful presence, subtly moves his mouth and says “Selfie time!” while lifting the phone to take a selfie, then gives a friendly wave with his left hand; smooth weighted bronze motion with realistic sculpted-fabric detail in the toga, upbeat humorous atmosphere, respectful and non-romantic tone.
+    negative_prompt: ''
+    model_id: veo-3.1-generate-001
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Style 13_Pet chat
+    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 13_Pet chat
+    generation_count: 5
+    prompt: |
+      Keep both animals realistic and species-pure; no hybrid/mixed features.
+
+      SHOT 1 (two-shot, both visible): Hold on both animals on the branch. Only the corgi speaks in a relaxed male voice: “Humans love dogs more than cats!” Natural mouth movement, no barking. Cat stays still.
+
+      SHOT 2 (hard jump cut, two-shot):
+      Both animals remain visible. Camera holds the two-shot.
+      Performance focus shifts to the cat.
+      The cat speaks in an annoyed female voice: “You’re so noisy…”
+      Exactly two mouth openings. Corgi remains still.
+    negative_prompt: ''
+    model_id: veo-3.1-generate-001
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: default
+
+  - style_name: Style 12_Penguin Talks
+    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 12_Penguin Talks
+    generation_count: 5
+    prompt: |
+      Stylized stop-motion clay, 12fps. Medium two-shot, clean white background. Two teal-blue clay penguins stay consistent (round eyes, two eyebrows each, minimal natural beak lip-sync; no distortion; grounded stop-motion, no over-cute SFX energy).
+
+      0–1s (intro): Both face camera, subtle stop-motion wobble.
+      Penguin A lip-syncs: “Are we stuck like this forever?”
+
+      1–2s (response): A mildly worried; B calm/tilted.
+      Penguin B lip-syncs: “At least we’re cute.”
+
+      2–3s (belly): A touches belly; slight clay compress/rebound + brief blink.
+      Penguin A lip-syncs: “And soft. Someone could squish us.”
+
+      3–4s (concern): B slight lean back + subtle surprise.
+      Penguin B lip-syncs: “…please don’t give them ideas!”
+
+      4–6s (turn & glance): Both gradually turn to face each other, soften brows, gentle wobble; one soft synchronized blink at end.
+
+      Rules: Keep dialogue exactly as written. Eye shape stays round; pupils can shift slightly. Two eyebrows always visible. Minimal beak open/close synced to speech.
+    negative_prompt: ''
+    model_id: veo-3.1-generate-001
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: default
+
+  - style_name: Style 16_Crystalline Flowers
+    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 16_Crystalline Flowers
+    generation_count: 5
+    prompt: |
+      Cinematic wide shot from behind of a hyper-realistic female adventurer with intricate blonde braids, a realistic fur cloak and boots, standing on a vast snowy plain. She gently touches a giant quartz crystal facet, leaving clear footprints in the pristine white snow. The landscape is filled with colossal “crystal pom-pom trees”—each with a thick trunk of clear quartz points and a dense spherical crown of prismatic crystal blades. All crystals are hard-edged, faceted, translucent, with physically-based refraction, vivid rainbow caustics, and sharp, consistent geometry throughout. No plant-like or organic shapes. The snow is bright white, shimmering with prismatic reflections and long rainbow trails. The sky shows a deep twilight gradient from blue to purple, with hints of pink and gold. Magical iridescent glow suffuses the scene. Ultra-detailed fur, hair, and cinematic digital film quality.
+    negative_prompt: ''
+    model_id: veo-3.1-generate-001
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: default
+
+  - style_name: Style 15_Old Sailor
+    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 15_Old Sailor
+    generation_count: 5
+    prompt: |
+      A cinematic medium shot of an old sailor standing on the deck of a wooden ship in a raging storm. He has a thick grey beard, wearing a dark navy wool peacoat, cream cable-knit sweater, and blue knitted beanie. His right hand is at his side, his left arm extended, finger pointing toward the horizon. His mouth is open mid-sentence, jaw tense, as if shouting above the wind, conveying urgency and intensity. His face is clean, realistic, and sharply defined, with natural skin tones under his beard and only fine droplets of rain on his skin.
+      Rain and salty spray cling to his coat and beard, showing the harsh weather, while his facial skin is touched only by the finest droplets. The background is a churning, stormy grey sea with whitecaps beneath a dark overcast sky. Dramatic, moody lighting. Photorealistic, 4K.
+    negative_prompt: ''
+    model_id: veo-3.1-generate-001
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: default
+
+# To add more styles, copy the task block above and modify:
+# - style_name: Name of the style (used in logging)
+# - folder: Path to the style folder containing Source subfolder
+# - prompt: The prompt for video generation
+# - Other parameters as needed
+
+comments:
+  folder_structure: |
+    Expected folder structure:
+    root_folder/
+    ├── Style 11_Statue Selfie/
+    │   ├── Source/
+    │   │   ├── image1.jpg
+    │   │   └── image2.png
+    │   ├── Generated_Video/  (created automatically)
+    │   │   ├── image1_1.mp4
+    │   │   ├── image1_2.mp4
+    │   │   └── image2_1.mp4
+    │   └── Metadata/  (created automatically)
+    │       ├── image1_1_metadata.json
+    │       ├── image1_2_metadata.json
+    │       └── image2_1_metadata.json
+    └── Style 12_Another Style/
+        ├── Source/
+        └── ...
+
+  output_naming: |
+    Generated videos are named: {source_image_name}_{generation_number}.mp4
+    Example: If source is 'selfie.jpg' with generation_count=2:
+      - selfie_1.mp4
+      - selfie_2.mp4
+
+  generation_count: |
+    Global default number of videos to generate per source image.
+    Can be overridden per task. Default is 1.
+
+  group_tasks_by: |
+    Controls how tasks are grouped into PowerPoint reports:
+    - Set to 0 (or omit) to create individual reports per task
+    - Set to N (e.g., 5) to group N tasks into one combined report
+    Example: with 5 tasks and group_tasks_by=5, creates 1 report containing all 5 styles
+    The report filename and title will include all style names from the grouped tasks.
+
+  schedule: |
+    Time format: HH:MM (24-hour format). Leave empty to start immediately.
+
+  model_id: |
+    Options:
+      - veo-2.0-generate-001
+      - veo-3.0-generate-001
+      - veo-3.0-fast-generate-001
+      - veo-3.0-generate-preview
+      - veo-3.0-fast-generate-preview
+      - veo-3.1-generate-preview
+      - veo-3.1-fast-generate-preview
+      - veo-3.1-generate-001 (default)
+      - veo-3.1-fast-generate-001
+
+  duration_seconds: Video duration in seconds (numeric value, default 8)
+  aspect_ratio: "Options: '16:9', '16:9'"
+  resolution: "Options: '1080p', '1080p'"
+  compression_quality: "Options: 'optimized', 'lossless' (Veo 3+ only)"
+  seed: Random seed for reproducibility. Use 0 for random generation.
+  output_storage_uri: "Optional: Cloud storage URI for output"
+  enhance_prompt: Whether to enhance the prompt automatically (true/false)
+  generate_audio: Whether to generate audio for the video (true/false)
+  person_generation: "Options: 'default', 'allow_adult', 'dont_allow', 'allow_all'"

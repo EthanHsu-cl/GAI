@@ -24,6 +24,7 @@ API_MAPPING = {
     'pixverse': 'pixverse',
     'wan': 'wan',
     'veo': 'veo',
+    'veoitv': 'veo_itv',
 }
 
 # Config file mapping
@@ -39,7 +40,8 @@ CONFIG_MAPPING = {
     'genvideo': 'config/batch_genvideo_config.yaml',
     'pixverse': 'config/batch_pixverse_config.yaml',
     'wan': 'config/batch_wan_config.yaml',
-    'veo': 'config/batch_veo_config.yaml'
+    'veo': 'config/batch_veo_config.yaml',
+    'veo_itv': 'config/batch_veo_itv_config.yaml'
 }
 
 def show_usage():
@@ -59,6 +61,7 @@ def show_usage():
     print("  pixverse - Pixverse Effects processing")
     print("  wan - Wan 2.2 image-video animation processing")
     print("  veo - Google Veo text-to-video processing")
+    print("  veoitv - Google Veo image-to-video processing")
     print("  all - Run all platforms")
     print()
     print("ACTIONS:")

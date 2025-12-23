@@ -156,7 +156,8 @@ class UnifiedReportGenerator:
             'genvideo': 'GenVideo',
             'pixverse': 'Pixverse',
             'wan': 'Wan 2.2',
-            'veo': 'Veo'
+            'veo': 'Veo',
+            'veo_itv': 'Veo ITV'
         }
         
         # Load configurations
@@ -264,6 +265,13 @@ class UnifiedReportGenerator:
                 'metadata_fields': ['style_name', 'generation_number', 'model_id', 'duration_seconds', 'aspect_ratio', 'resolution', 'processing_time_seconds', 'success'],
                 'use_section_dividers': False,
                 'group_by': None
+            },
+            'veo_itv': {
+                **base_config,
+                'media_types': ['source', 'generated'],
+                **self.LAYOUT_2_MEDIA,
+                'title_format': 'Generation {index}: {source_file}',
+                'metadata_fields': ['source_image', 'generation_number', 'model_id', 'duration_seconds', 'aspect_ratio', 'resolution', 'processing_time_seconds', 'success'],
             },
             'kling_ttv': {
                 **base_config,
@@ -930,7 +938,7 @@ class UnifiedReportGenerator:
     
     def process_batch(self, task: Dict) -> List[MediaPair]:
         """Universal batch processing for all API types"""
-        if self.api_name in ["vidu_effects", "vidu_reference", "pixverse", "kling_effects"]:
+        if self.api_name in ["vidu_effects", "vidu_reference", "pixverse", "kling_effects", "veo_itv"]:
             return self.process_base_folder_structure(task)
         elif self.api_name == "genvideo":
             return self.process_genvideo_batch(task)
@@ -1417,19 +1425,24 @@ class UnifiedReportGenerator:
         return pairs
     
     def process_base_folder_structure(self, task: Dict) -> List[MediaPair]:
-        """Process base folder structure for vidu/pixverse APIs
+        """Process base folder structure for vidu/pixverse/veo_itv APIs
         
         Args:
-            task: If provided with 'effect' key, process only that single effect.
+            task: If provided with 'effect' or 'folder' key, process only that single task.
                   Otherwise, process all tasks from config.
         """
-        base_folder = Path(self.config.get('base_folder', ''))
-        if not base_folder.exists():
-            logger.warning(f"Base folder not found: {base_folder}")
-            return []
-        
-        logger.info(f"Processing {self.api_name} base folder: {base_folder}")
-        pairs = []
+        # veo_itv uses task-level folders, not base_folder
+        if self.api_name == "veo_itv":
+            logger.info(f"Processing {self.api_name} task folders")
+            pairs = []
+        else:
+            base_folder = Path(self.config.get('base_folder', ''))
+            if not base_folder.exists():
+                logger.warning(f"Base folder not found: {base_folder}")
+                return []
+            
+            logger.info(f"Processing {self.api_name} base folder: {base_folder}")
+            pairs = []
         
         if self.api_name == "vidu_effects":
             # Process each effect folder
@@ -1670,6 +1683,103 @@ class UnifiedReportGenerator:
                         failed=not vid or not metadata.get('success', False)
                     )
                     pairs.append(pair)
+        
+        elif self.api_name == "veo_itv":
+            # Process veo_itv - each task has its own folder with Source subfolder
+            # Support single-task filtering for grouped processing
+            tasks_to_process = [task] if task.get('folder') else self.config.get('tasks', [])
+            
+            for task_config in tasks_to_process:
+                folder_path = Path(task_config.get('folder', ''))
+                style_name = task_config.get('style_name', folder_path.name if folder_path else 'Unknown')
+                if not folder_path or not folder_path.exists():
+                    logger.warning(f"Folder not found: {folder_path}")
+                    continue
+                
+                folders = {
+                    'src': folder_path / 'Source',
+                    'vid': folder_path / 'Generated_Video',
+                    'meta': folder_path / 'Metadata'
+                }
+                
+                if not folders['src'].exists():
+                    logger.warning(f"Source folder not found: {folders['src']}")
+                    continue
+                
+                logger.info(f"Processing Veo ITV style: {style_name}")
+                
+                # OPTIMIZED: Single-pass directory scanning
+                images, _, _ = self._scan_directory_once(folders['src'])
+                
+                _, raw_videos, _ = self._scan_directory_once(folders['vid'])
+                # Build video lookup: source_name -> {gen_num: video_path}
+                videos_by_source = {}
+                for f in raw_videos.values():
+                    # Video naming: {source_name}_{gen_num}.mp4
+                    stem = f.stem
+                    if '_' in stem:
+                        parts = stem.rsplit('_', 1)
+                        source_key = self.normalize_key(parts[0])
+                        try:
+                            gen_num = int(parts[1])
+                            if source_key not in videos_by_source:
+                                videos_by_source[source_key] = {}
+                            videos_by_source[source_key][gen_num] = f
+                        except ValueError:
+                            # Not a numbered video, use full stem as key
+                            key = self.normalize_key(stem)
+                            if key not in videos_by_source:
+                                videos_by_source[key] = {}
+                            videos_by_source[key][1] = f
+                
+                _, _, metadata_files = self._scan_directory_once(folders['meta'])
+                
+                # Batch load metadata - keyed by full filename (source_name_gen_num)
+                metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
+                
+                logger.info(f"Images: {len(images)}, Videos: {len(raw_videos)}, Meta: {len(metadata_files)}")
+                
+                # Pre-compute aspect ratios
+                all_media = list(images.values()) + list(raw_videos.values())
+                if all_media:
+                    self._compute_aspect_ratios_batch(all_media, are_videos={p: True for p in raw_videos.values()})
+                
+                # Create pairs for each source image and its generated videos
+                for key, img in images.items():
+                    source_videos = videos_by_source.get(key, {})
+                    
+                    if source_videos:
+                        # Create a pair for each generated video
+                        for gen_num, vid in sorted(source_videos.items()):
+                            meta_key = f"{key}_{gen_num}"
+                            metadata = metadata_cache.get(meta_key, {})
+                            
+                            pair = MediaPair(
+                                source_file=img.name,
+                                source_path=img,
+                                api_type=self.api_name,
+                                generated_paths=[vid],
+                                reference_paths=[],
+                                effect_name=style_name,
+                                category="ITV",
+                                metadata=metadata,
+                                failed=not metadata.get('success', False)
+                            )
+                            pairs.append(pair)
+                    else:
+                        # No videos generated yet
+                        pair = MediaPair(
+                            source_file=img.name,
+                            source_path=img,
+                            api_type=self.api_name,
+                            generated_paths=[],
+                            reference_paths=[],
+                            effect_name=style_name,
+                            category="ITV",
+                            metadata={},
+                            failed=True
+                        )
+                        pairs.append(pair)
         
         return pairs
     
@@ -1955,7 +2065,8 @@ class UnifiedReportGenerator:
         d = self._extract_date_from_folder(folder)
         
         # Use model (API name) as the primary identifier
-        # For text-to-video APIs, show count instead of listing all names
+        # For text-to-video APIs (without source images), show count instead of listing all names
+        # Note: veo_itv is image-to-video so it should show all style names
         if self.api_name in ['veo', 'kling_ttv'] and effect_names:
             effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
         else:
@@ -2612,7 +2723,7 @@ class UnifiedReportGenerator:
             tasks = self.config.get('tasks', [])
             
             # Determine processing mode
-            if self.api_name in ["vidu_effects", "vidu_reference", "pixverse", "kling_effects"]:
+            if self.api_name in ["vidu_effects", "vidu_reference", "pixverse", "kling_effects", "veo_itv"]:
                 # Base folder structure APIs
                 if group_tasks_by and group_tasks_by > 1 and tasks:
                     # Base-folder APIs with grouping - process tasks individually
@@ -2809,7 +2920,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'veo']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'veo', 'veo_itv']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -2818,7 +2929,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'veo'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'veo', 'veo_itv'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

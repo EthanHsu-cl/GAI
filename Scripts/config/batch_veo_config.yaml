@@ -48,6 +48,9 @@ tasks:
   generate_audio: true
   person_generation: allow_all
   output_folder: ../Media Files/Veo/1113 Test 1/Generated_Video
+
+
+
 comments:
   output_directory: 'Optional: Global output directory for all generated PPTX files. Default is current directory.'
   generation_count: Global default number of videos to generate per task. Default is 1. Can be overridden per task.

@@ -31,9 +31,9 @@ class NanoBananaHandler(BaseAPIHandler):
     
     # Valid aspect ratios supported by the API
     VALID_ASPECT_RATIOS = [
-        '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'
+        'auto', '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'
     ]
-    DEFAULT_ASPECT_RATIO = '1:1'
+    DEFAULT_ASPECT_RATIO = 'auto'
     
     def __init__(self, processor):
         """Initialize handler with multi-image support."""
@@ -608,18 +608,17 @@ class NanoBananaHandler(BaseAPIHandler):
         return False
     
     def _get_aspect_ratio(self, file_path, task_config):
-        """Determine aspect ratio from config or auto-detect from source image.
+        """Determine aspect ratio from config or use 'auto' as default.
         
         If aspect_ratio is specified in task_config, validates and uses it.
-        Otherwise, analyzes the source image dimensions and selects the
-        closest matching aspect ratio from VALID_ASPECT_RATIOS.
+        Otherwise, returns 'auto' to let the API determine the best ratio.
         
         Args:
             file_path: Path to the source image file.
             task_config: Task configuration dictionary.
         
         Returns:
-            str: Valid aspect ratio string (e.g., '16:9', '1:1').
+            str: Valid aspect ratio string (e.g., '16:9', '1:1', 'auto').
         """
         # Check if aspect_ratio is specified in config (ensure it's a string)
         config_ratio = str(task_config.get('aspect_ratio', '')) if task_config.get('aspect_ratio') else ''
@@ -629,41 +628,11 @@ class NanoBananaHandler(BaseAPIHandler):
             else:
                 self.logger.warning(
                     f" ⚠️ Invalid aspect_ratio '{config_ratio}' in config. "
-                    f"Valid options: {self.VALID_ASPECT_RATIOS}. Auto-detecting..."
+                    f"Valid options: {self.VALID_ASPECT_RATIOS}. Using default: {self.DEFAULT_ASPECT_RATIO}"
                 )
         
-        # Auto-detect from source image
-        try:
-            with Image.open(file_path) as img:
-                width, height = img.size
-            
-            image_ratio = width / height
-            
-            # Calculate ratio values for all valid aspect ratios
-            best_ratio = self.DEFAULT_ASPECT_RATIO
-            best_diff = float('inf')
-            
-            for ratio_str in self.VALID_ASPECT_RATIOS:
-                w, h = map(int, ratio_str.split(':'))
-                ratio_value = w / h
-                diff = abs(image_ratio - ratio_value)
-                
-                if diff < best_diff:
-                    best_diff = diff
-                    best_ratio = ratio_str
-            
-            self.logger.debug(
-                f" 📐 Auto-detected aspect ratio: {best_ratio} "
-                f"(image: {width}x{height}, ratio: {image_ratio:.3f})"
-            )
-            return best_ratio
-            
-        except Exception as e:
-            self.logger.warning(
-                f" ⚠️ Failed to detect aspect ratio from {file_path.name}: {e}. "
-                f"Using default: {self.DEFAULT_ASPECT_RATIO}"
-            )
-            return self.DEFAULT_ASPECT_RATIO
+        # Return default 'auto' to let API determine best ratio
+        return self.DEFAULT_ASPECT_RATIO
     
     def _make_api_call(self, file_path, task_config, attempt):
         """Make Nano Banana API call with multi-image support.

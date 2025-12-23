@@ -505,6 +505,8 @@ class UnifiedAPIProcessor:
             return self._validate_wan_structure()
         elif self.api_name == "veo":
             return self._validate_veo_structure()
+        elif self.api_name == "veo_itv":
+            return self._validate_veo_itv_structure()
         else:
             raise ValueError(f"Validation failed for unknown API: {self.api_name}")
 
@@ -528,11 +530,11 @@ class UnifiedAPIProcessor:
         
         for i, task in enumerate(self.config.get('tasks', []), 1):
             folder = Path(task['folder'])
-            source_folder = folder / "Source"
             
-            if not source_folder.exists():
-                self.logger.warning(f"⚠️ Task {i}: Source folder not found: {source_folder}")
-                continue
+            # Auto-create task folder and Source subfolder if they don't exist
+            folder.mkdir(parents=True, exist_ok=True)
+            source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
             
             # Get all image files
             image_files = self._get_files_by_type(source_folder, 'image')
@@ -684,11 +686,11 @@ class UnifiedAPIProcessor:
         
         for i, task in enumerate(self.config.get('tasks', []), 1):
             folder = Path(task['folder'])
-            source_folder = folder / "Source"
             
-            if not source_folder.exists():
-                self.logger.warning(f"Missing source {source_folder}")
-                continue
+            # Auto-create task folder and Source subfolder if they don't exist
+            folder.mkdir(parents=True, exist_ok=True)
+            source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
             
             # Check if reference is required
             use_comparison_template = task.get('use_comparison_template', False)
@@ -771,28 +773,24 @@ class UnifiedAPIProcessor:
         
         for i, task in enumerate(self.config.get('tasks', []), 1):
             folder = Path(task['folder'])
+            
+            # Auto-create task folder and Source subfolders if they don't exist
+            folder.mkdir(parents=True, exist_ok=True)
             source_image_folder = folder / "Source Image"
             source_video_folder = folder / "Source Video"
-            
-            # Check both folders exist
-            if not source_image_folder.exists():
-                self.logger.warning(f"❌ Task {i}: Missing Source Image folder: {source_image_folder}")
-                continue
-            
-            if not source_video_folder.exists():
-                self.logger.warning(f"❌ Task {i}: Missing Source Video folder: {source_video_folder}")
-                continue
+            source_image_folder.mkdir(exist_ok=True)
+            source_video_folder.mkdir(exist_ok=True)
             
             # Get image files
             image_files = self._get_files_by_type(source_image_folder, 'image')
             if not image_files:
-                self.logger.warning(f"❌ Task {i}: Empty Source Image folder: {source_image_folder}")
+                self.logger.warning(f"❌ Task {i}: No images found in {source_image_folder}")
                 continue
             
             # Get video files
             video_files = self._get_files_by_type(source_video_folder, 'video')
             if not video_files:
-                self.logger.warning(f"❌ Task {i}: Empty Source Video folder: {source_video_folder}")
+                self.logger.warning(f"❌ Task {i}: No videos found in {source_video_folder}")
                 continue
             
             # Validate images
@@ -889,6 +887,95 @@ class UnifiedAPIProcessor:
         
         return valid_tasks
 
+    def _validate_veo_itv_structure(self):
+        """
+        Validate Veo ITV (image-to-video) structure.
+        
+        Each task should have:
+        1. A folder with a Source subfolder containing images
+        2. A prompt for generation
+        3. Optional: generation_count for multiple videos per image
+        """
+        valid_tasks = []
+        invalid_images = []
+        
+        for i, task in enumerate(self.config.get('tasks', []), 1):
+            # Validate required fields
+            if not task.get('prompt'):
+                self.logger.warning(f"⚠️ Task {i}: Missing prompt")
+                continue
+            
+            folder = Path(task.get('folder', ''))
+            if not folder or str(folder) == '':
+                self.logger.warning(f"⚠️ Task {i}: Missing folder path")
+                continue
+            
+            # Auto-create task folder and Source subfolder if they don't exist
+            folder.mkdir(parents=True, exist_ok=True)
+            source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
+            
+            # Get and validate images
+            image_files = self._get_files_by_type(source_folder, 'image')
+            
+            if not image_files:
+                self.logger.warning(f"⚠️ Task {i}: No images found in {source_folder}")
+                continue
+            
+            # Validate images
+            valid_count = 0
+            for img_file in image_files:
+                is_valid, reason = self.validate_file(img_file)
+                if not is_valid:
+                    invalid_images.append({
+                        'folder': folder.name,
+                        'filename': img_file.name,
+                        'reason': reason
+                    })
+                else:
+                    valid_count += 1
+            
+            if valid_count == 0:
+                self.logger.warning(f"⚠️ Task {i}: No valid images in {source_folder}")
+                continue
+            
+            # Create output directories
+            output_folder = folder / "Generated_Video"
+            metadata_folder = folder / "Metadata"
+            output_folder.mkdir(parents=True, exist_ok=True)
+            metadata_folder.mkdir(parents=True, exist_ok=True)
+            
+            # Get generation count
+            task_count = task.get('generation_count')
+            global_count = self.config.get('generation_count', 1)
+            generation_count = task_count if task_count is not None else global_count
+            
+            # Add enhanced task info
+            enhanced_task = task.copy()
+            enhanced_task.update({
+                'folder': str(folder),
+                'folder_name': folder.name,
+                'style_name': task.get('style_name', folder.name),
+                'source_dir': str(source_folder),
+                'generated_dir': str(output_folder),
+                'metadata_dir': str(metadata_folder),
+                'generation_count': generation_count,
+                'task_num': i
+            })
+            
+            valid_tasks.append(enhanced_task)
+            total_expected = valid_count * generation_count
+            self.logger.info(f"✓ Task {i}: {valid_count} images × {generation_count} generations = {total_expected} videos")
+        
+        if invalid_images:
+            self.write_invalid_report(invalid_images, "veo_itv")
+            self.logger.warning(f"⚠️ {len(invalid_images)} invalid images found (see report)")
+        
+        if not valid_tasks:
+            raise Exception("No valid Veo ITV tasks found")
+        
+        return valid_tasks
+
     def _validate_kling_ttv_structure(self):
         """
         Validate Kling TTV (text-to-video) structure.
@@ -954,11 +1041,11 @@ class UnifiedAPIProcessor:
                 return None, []
             
             task_folder = base_folder / folder_name
+            
+            # Auto-create task folder and Source subfolder if they don't exist
+            task_folder.mkdir(parents=True, exist_ok=True)
             source_dir = task_folder / "Source"
-
-            if not source_dir.exists():
-                self.logger.warning(f"⚠️ Source folder not found: {source_dir}")
-                return None, []
+            source_dir.mkdir(exist_ok=True)
 
             # Get and validate images
             image_files = self._get_files_by_type(source_dir, 'image')
@@ -1030,10 +1117,11 @@ class UnifiedAPIProcessor:
         def process_task(task):
             effect_name = task.get('effect', '')
             task_folder = base_folder / effect_name
+            
+            # Auto-create task folder and Source subfolder if they don't exist
+            task_folder.mkdir(parents=True, exist_ok=True)
             source_dir = task_folder / "Source"
-
-            if not source_dir.exists():
-                return None, []
+            source_dir.mkdir(exist_ok=True)
 
             # Get and validate images
             image_files = self._get_files_by_type(source_dir, 'image')
@@ -1101,6 +1189,15 @@ class UnifiedAPIProcessor:
         configured_tasks = {t['effect']: t for t in self.config.get('tasks', [])}
         valid_tasks = []
         errors = []
+
+        # First, auto-create folders for configured tasks
+        for task in self.config.get('tasks', []):
+            effect_name = task.get('effect', '')
+            if effect_name:
+                task_folder = base_folder / effect_name
+                task_folder.mkdir(parents=True, exist_ok=True)
+                (task_folder / 'Source').mkdir(exist_ok=True)
+                (task_folder / 'Reference').mkdir(exist_ok=True)
 
         for folder in base_folder.iterdir():
             if not (folder.is_dir() and not folder.name.startswith(('.', '_')) and

@@ -37,6 +37,7 @@ python core/runall.py all auto        # All APIs at once
 | `runway` | Runway Gen4 | Video processing with face swap and effects |
 | `wan` | Wan 2.2 | Image + video cross-matching with motion animation |
 | `veo` | Google Veo | Text-to-video generation with AI models |
+| `veoitv` | Google Veo ITV | Image-to-video generation with AI models |
 | `all` | All Platforms | Process all APIs sequentially or in parallel |
 
 ## Video Download Command Example
@@ -63,7 +64,8 @@ GAI/                                    # Project root
     │   ├── batch_vidu_effects_config.yaml # Vidu Effects configuration
     │   ├── batch_vidu_reference_config.yaml # Vidu Reference configuration
     │   ├── batch_wan_config.yaml          # Wan 2.2 configuration
-    │   └── batch_veo_config.yaml          # Google Veo configuration
+    │   ├── batch_veo_config.yaml          # Google Veo configuration
+    │   └── batch_veo_itv_config.yaml      # Google Veo ITV configuration
     ├── core/                          # Core automation framework
     │   ├── api_definitions.json      # API specifications
     │   ├── runall.py                 # Main execution script
@@ -345,6 +347,33 @@ tasks:
 **Models:** `veo-2.0-generate-001`, `veo-3.0-generate-001`, `veo-3.0-fast-generate-001`, `veo-3.1-generate-preview`
 **Options:** Ratio (`16:9`/`9:16`), Resolution (`720p`/`1080p`), `enhance_prompt`, `generate_audio`
 
+### **Veo ITV Configuration** (`config/batch_veo_itv_config.yaml`)
+
+Image-to-video generation with source images.
+
+```yaml
+root_folder: ../Media Files/Veo_ITV
+generation_count: 2  # Videos per source image
+
+tasks:
+  - style_name: Style 11_Statue Selfie
+    folder: ../Media Files/Veo_ITV/Style 11_Statue Selfie
+    prompt: "The statue comes to life in a cinematic motion."
+    model_id: veo-3.1-generate-001
+    duration_seconds: 8
+```
+
+**Folder Structure:**
+```bash
+root_folder/
+├── Style 11_Statue Selfie/
+│   ├── Source/           # Input images
+│   ├── Generated_Video/  # {image_name}_{n}.mp4
+│   └── Metadata/
+```
+
+**Output Naming:** `{source_image_name}_{generation_number}.mp4` (e.g., `selfie_1.mp4`, `selfie_2.mp4`)
+
 ## 📊 Report Generation
 
 PowerPoint reports auto-generated with title slides, side-by-side comparisons, metadata tracking, and hyperlinks.
@@ -371,6 +400,7 @@ brew install ffmpeg  # macOS (required for video processing)
 | Nano Banana | 32MB | 100px | JPG, PNG, WebP |
 | GenVideo/Vidu | 50MB | 128px | JPG, PNG |
 | Runway | 500MB | 320px | JPG, PNG + MP4, MOV |
+| Veo ITV | 30MB | 300px | JPG, PNG, WebP |
 
 ## 🎯 API Features Summary
 
@@ -388,6 +418,7 @@ brew install ffmpeg  # macOS (required for video processing)
 | Runway | V2V | one_to_one/all_combinations pairing |
 | Wan 2.2 | I+V | Auto-cropping, video×image cross-match |
 | Veo | T2V | Veo 2.0-3.1, audio generation |
+| Veo ITV | I2V | Image-to-video, multi-generation per image |
 
 **All APIs use deterministic file sorting for reproducible results.**
 
@@ -399,6 +430,7 @@ brew install ffmpeg  # macOS (required for video processing)
 | Kling Effects | `{filename}_{effect}_effect.mp4` |
 | Kling Endframe | `{filename}_generated_{n}.mp4` |
 | Kling TTV/Veo | `{style}-{n}_generated.mp4` |
+| Veo ITV | `{source_image}_{n}.mp4` |
 | Pixverse/Vidu | `{filename}_{effect}_effect.mp4` |
 | Runway | `{filename}_ref_{ref}_runway_generated.mp4` |
 | Wan 2.2 | `{video}_{image}_{mode}.mp4` |
@@ -417,7 +449,7 @@ Auto-discovery handler system in `handlers/` directory:
 - **`BaseAPIHandler`** - Common processing logic (validation, metadata, retries)
 - **API Handlers** - Override `_make_api_call()` and `_handle_result()` only
 
-**12 handlers:** `KlingHandler`, `KlingEffectsHandler`, `KlingEndframeHandler`, `KlingTTVHandler`, `PixverseHandler`, `GenvideoHandler`, `NanoBananaHandler`, `ViduEffectsHandler`, `ViduReferenceHandler`, `RunwayHandler`, `WanHandler`, `VeoHandler`
+**13 handlers:** `KlingHandler`, `KlingEffectsHandler`, `KlingEndframeHandler`, `KlingTTVHandler`, `PixverseHandler`, `GenvideoHandler`, `NanoBananaHandler`, `ViduEffectsHandler`, `ViduReferenceHandler`, `RunwayHandler`, `WanHandler`, `VeoHandler`, `VeoItvHandler`
 
 ### **Core Components**
 

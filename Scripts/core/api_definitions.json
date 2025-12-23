@@ -775,6 +775,93 @@
             "allow_all"
         ]
     },
+    "veo_itv": {
+        "endpoint": "http://192.168.31.40:8000/google_veo/",
+        "api_name": "/image_to_video",
+        "file_types": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".bmp",
+            ".webp"
+        ],
+        "validation": {
+            "max_size_mb": 30,
+            "min_dimension": 300
+        },
+        "folders": {
+            "input": "Source",
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 5,
+        "task_delay": 10,
+        "max_retries": 3,
+        "config_structure": "base_folder",
+        "structure_type": "base_folder",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": true
+        },
+        "task_fields": [
+            "prompt",
+            "negative_prompt",
+            "model_id",
+            "duration_seconds",
+            "aspect_ratio",
+            "resolution",
+            "compression_quality",
+            "seed",
+            "enhance_prompt",
+            "generate_audio",
+            "person_generation",
+            "generation_count"
+        ],
+        "api_params": {
+            "model_id": "veo-3.1-generate-001",
+            "duration_seconds": 8,
+            "aspect_ratio": "16:9",
+            "resolution": "1080p",
+            "compression_quality": "optimized",
+            "seed": 0,
+            "negative_prompt": "",
+            "output_storage_uri": "",
+            "enhance_prompt": true,
+            "generate_audio": false,
+            "person_generation": "allow_all"
+        },
+        "model_options": [
+            "veo-2.0-generate-001",
+            "veo-3.0-generate-001",
+            "veo-3.0-fast-generate-001",
+            "veo-3.0-generate-preview",
+            "veo-3.0-fast-generate-preview",
+            "veo-3.1-generate-preview",
+            "veo-3.1-fast-generate-preview",
+            "veo-3.1-generate-001",
+            "veo-3.1-fast-generate-001"
+        ],
+        "aspect_ratio_options": [
+            "16:9",
+            "9:16"
+        ],
+        "resolution_options": [
+            "720p",
+            "1080p"
+        ],
+        "compression_options": [
+            "optimized",
+            "lossless"
+        ],
+        "person_generation_options": [
+            "default",
+            "allow_adult",
+            "dont_allow",
+            "allow_all"
+        ]
+    },
     "kling_ttv": {
         "endpoint": "http://192.168.31.40:8000/kling/",
         "api_name": "/TextToVideo",
