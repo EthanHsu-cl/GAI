@@ -14,105 +14,240 @@ root_source_video_link:
 root_design_link: 
 
 tasks:
-  # - folder: ../Media Files/Nano Banana/1222 2 Styles/1222 My word of the year
-  #   model: gemini-3-pro-image-preview
-  #   resolution: "2K"
-  #   aspect_ratio: "3:4"
-  #   prompt: |
-  #     Use the uploaded person photo.
-  #     Do NOT change the person’s face, identity, gender presentation, or appearance.
-      
-  #     Create a photorealistic Japanese “Kanji of the Year” ceremony scene at a temple terrace.
-  #     Natural lighting, calm and respectful atmosphere.
-      
-  #     Composition:
-      
-  #     - The person faces FORWARD toward the camera (not side view).
-  #     - The person is holding a large calligraphy brush with ink on their hands, as if they have just finished writing.
-  #     - On the right side of the scene, place a large vertical white calligraphy paper with ONE Kanji written in bold ink.
-      
-  #     Kanji selection requirement:
-      
-  #     - The Kanji must convey a clearly positive, uplifting, or auspicious meaning.
-  #     - It should represent themes such as hope, growth, harmony, renewal, gratitude, peace, prosperity, or inner strength and resilience.
-  #     - Any sense of “strength” must be expressed as inner strength, perseverance, or resilience, not related to conflict, competition, struggle, or battle.
-  #     - Do NOT generate Kanji related to war, conflict, battle, violence, destruction, suffering, anxiety, or social controversy.
-      
-  #     Calligraphy requirements:
-      
-  #     - Extremely expressive, bold ink strokes.
-  #     - Strong brush texture with visible flying white streaks.
-  #     - Heavy ink pooling and natural brush pressure variation.
-  #     - The style should feel like powerful, dynamic Japanese sumi-e calligraphy, artistic and emotionally resonant.
-      
-  #     Integrate the person naturally into the environment with realistic shadows and depth.
-  #     Maintain high facial accuracy and photorealistic detail.
-      
-  #     High resolution.
-  #     Photorealistic, respectful, ceremonial, and emotionally uplifting.
-  #     Aspect ratio: natural photographic composition.
-  #   reference_folder: ""
-  #   use_comparison_template: false
-  #   use_random_source_selection: false
-  #   min_images: 1
-  #   max_images: 5
-  #   num_iterations: 50
-
-  # - folder: ../Media Files/Nano Banana/1222 2 Styles/1222 Another Life
-  #   model: gemini-3-pro-image-preview
-  #   resolution: "2K"
-  #   aspect_ratio: "3:4"
-  #   prompt: |
-  #     A 3:4 cinematic multi-panel composition divided into four equal frames, each representing a different alternate-life universe of the same person based on the uploaded photo.
-      
-  #     The style must reference the visual tone of the Japanese drama “Rebooting Life（重啟人生）”:
-  #     quiet realism, soft natural lighting, pastel color palette, subtle emotional depth, documentary-like framing, and gentle film grain.
-      
-  #     Use the uploaded person (user) as the protagonist.
-  #     Do not change the user’s facial identity, ethnicity, hairstyle length, or core appearance.
-  #     Maintain photorealistic Japanese TV-drama aesthetics: simple makeup, natural expression, realistic skin texture.
-      
-  #     Generate **four distinct life paths** for the user.
-  #     Each panel should present a clearly different universe with significantly contrasting life choices, environments, and roles.
-  #     Gemini may freely decide the careers, lifestyles, or major life directions, as long as the four universes are meaningfully different from one another.
-      
-  #     For each of the four panels:
-      
-  #     - Keep the user’s facial identity consistent.
-  #     - Place the user in a unique alternate life with strong visual storytelling.
-  #     - Ensure the scenarios feel grounded, human, and realistic — no fantasy or sci-fi.
-  #     - Use natural, soft, cinematic Japanese-drama lighting.
-  #     - Include everyday textures, quiet emotional moments, and subtle slice-of-life composition.
-      
-  #     All four panels must share:
-      
-  #     - A cohesive color palette
-  #     - Naturalistic lighting
-  #     - Consistent cinematic realism
-  #     - Japanese drama–inspired framing
-      
-  #     High resolution.
-  #     Photorealistic, understated, emotional, and gently cinematic.
-  #     Aspect ratio: 3:4.
-  #   reference_folder: ""
-  #   use_comparison_template: false
-  #   use_random_source_selection: false
-  #   min_images: 1
-  #   max_images: 5
-  #   num_iterations: 50
-  
-  - folder: ../Media Files/Nano Banana/1222 Omikuji
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 La La Land
     model: gemini-3-pro-image-preview
     resolution: "1K"
-    aspect_ratio: "9:16"
+    aspect_ratio: "3:4"
     prompt: |
-      Use the uploaded photo as the base image and preserve the original person exactly as they appear, including their face, body, clothing, identity, and background. The person is fully visible from head to toe within the frame, and the original environment remains completely unchanged. Modify only the pose so that the person naturally extends one arm toward the camera, holding a Japanese shrine omikuji fortune paper in their own hand. The fortune paper must be physically held by the subject themselves, with clear contact between the subject’s fingers and the paper. The gesture should feel relaxed and effortless, as if the person is gently offering or showing the fortune to the viewer rather than intentionally posing. The arm extension and hand position should look anatomically natural and consistent with the subject’s original posture. The omikuji fortune paper is intentionally large in scale, approximately the same visual size as the person’s body. It appears very close to the camera, creating a strong yet believable sense of depth through perspective rather than distortion. Despite its large size, the scale relationship between the person and the paper feels realistic, balanced, and physically plausible, not exaggerated, cartoonish, or surreal. The paper must integrate seamlessly with the subject’s hand, with correct perspective, shadows, and lighting, avoiding any pasted-on, floating, or artificial appearance. Maintain realistic lighting, texture, and photographic consistency throughout the image. The fortune paper should match the scene’s light direction, color temperature, and softness so that it blends naturally into the photo without breaking realism. The subject’s facial expression, facial features, and identity must remain completely unchanged, with their face fully visible at all times. The background should stay intact and unobstructed, with no alterations to the environment. The final result should feel like a real photograph captured in a single moment, not a composite or edited image. The content of the omikuji fortune paper is written entirely in Japanese and follows a traditional shrine-style layout with vertically oriented text throughout the paper. A traditional Japanese omikuji fortune slip illustration in a tall, narrow vertical format. The top section features a small centered header displaying a short fortune title such as “Great Blessing,” “Middle Blessing,” “Small Blessing,” “Blessing,” or “Future Blessing,” framed with simple ornamental borders. The middle area contains one clearly defined short passage, consisting of a single concise sentence of approximately twenty characters, arranged vertically as a unified block of text. The passage conveys a gentle, reassuring, and quietly optimistic mood, without any segmentation, symbols, explanations, or analytical structure. The bottom section includes a small decorative illustration using classic Japanese symbolic imagery, rendered in simple black line art. The entire fortune slip is enclosed within a thin rectangular border with subtle decorative corners. The illustration style emphasizes clean black linework, fine and consistent strokes, minimal color usage, and a traditional print-like, understated aesthetic, avoiding modern graphic elements, heavy shading, or playful illustration styles. The overall feeling remains modest, reserved, and softly encouraging.
+      Use the two uploaded people as the only subjects. Their exact identities must be preserved with absolute accuracy. The generated faces must match the uploaded subjects 1:1, and the system is strictly forbidden from generating or resembling any actors from the film La La Land, including Ryan Gosling or Emma Stone. It must never replace the uploaded subjects with celebrity faces or merge their facial structure with those actors. Their faces, facial features, bone structure, hairstyles, expressions, and overall identities must remain unchanged exactly as in the uploaded photos. Do not modify their proportions, makeup style, hair color, jawline, or eyes, and do not apply smoothing, stylization, beautification, aging effects, or add any additional people.
+
+      The clothing must follow the film’s aesthetic faithfully. Any male subject must wear Sebastian’s outfit — a white dress shirt with sleeves rolled up, the top button left unbuttoned, the black slim necktie loosened casually around the collar, black suit trousers, black socks, and black-and-white spectator shoes. If both uploaded people are male, they must both wear Sebastian’s full outfit. Any female subject must wear Mia’s outfit — a yellow square-neck short-sleeve dress with a soft, flowing skirt, and matching black-and-white spectator shoes.
+
+      Create a realistic La La Land–style movie poster in which the two subjects sit on a simple wooden bench with a small distance between them. Their bodies face forward with hands resting naturally on their legs, while their heads turn gently toward each other as if sharing a quiet, cinematic moment together. They must not look at the camera. The camera framing must be pulled back significantly farther than before so that the two subjects occupy only about one-third of the full image composition. This wider framing must emphasize the cinematic environment, creating more atmospheric negative space while keeping the perspective level and eye-level for a natural, grounded feeling.
+
+      Beside the female subject, place a soft, flexible red handbag with noticeably softer material, resting flat on the bench surface. On the ground near her feet, include a pair of blue peep-toe high heels with thin heels and delicate ankle straps, positioned as if casually knocked over and lying on their side.
+
+      The background must depict an elevated overlook of Los Angeles at dusk, with warm pink-orange sunset tones gradually transitioning into deep twilight blue. The city lights should glow atmospherically below, creating a dreamy but realistic dusk ambiance. The lighting and palette must reflect La La Land’s signature aesthetic — a smooth gradient sky, elegant warm-to-cool color transitions, soft edges, and gentle film-like contrast, forming an overall romantic and cinematic mood.
+
+      At the top left of the poster, include the title “LA LA LOVE” in the authentic movie font, using tall geometric serif lettering with thin, elegant, art-deco inspired shapes, generous spacing, and clean white coloring. Directly beneath it, left-aligned, add “LOVE HAPPENS BETWEEN DREAMS.” in small, thin, uppercase sans-serif text with subtle spacing. The typography must blend naturally with the composition and must not obstruct the subjects.
+
+      The final poster must appear cinematic, modern, romantic, and visually consistent with an authentic La La Land promotional image. No parody elements, no cartoonish styling, no added people, no incorrect environmental details, and absolutely no substitution of the uploaded subjects with the original film actors. Only the two uploaded subjects in the correct outfits, sitting on the bench overlooking the Los Angeles dusk skyline, captured in a refined, film-accurate aesthetic.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 鐵達尼號
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the two uploaded people as the only subjects, preserving their real identities exactly as in the uploaded photos. Their faces, facial features, bone structure, hairstyles, skin tone, and expressions must remain unchanged. The system must not modify their proportions, makeup style, jawline, nose, or eyes, and must not apply beautification, aging, stylization, smoothing, or add any additional people.
+
+      Clothing follows a strict identity rule:
+      If the uploaded pair is one male and one female, the male must wear Jack’s outfit—an off-white collarless shirt with a black vintage suit jacket in early-1900s Titanic style—and the female must wear Rose’s outfit—a white lace corset-style top with a black outer shawl and a vintage floral silk scarf draped loosely over both forearms, hanging freely and flowing outward just like in the original Titanic movie poster (the scarf must NOT be tied around the neck).
+      If both uploaded people are male, they must both wear Jack’s outfit.
+      If both uploaded people are female, they must both wear Rose’s outfit with the same forearm-draped, flowing silk scarf placement, never around the neck.
+
+      Pose assignment rule:
+      If the pair is one male and one female, the female wearing Rose’s outfit must stand in front and be embraced from behind by the male wearing Jack’s outfit.
+      If the uploaded people are the same gender, the front/back positions must be assigned randomly, but still follow the same intimate Titanic-style embrace.
+
+      Create a realistic Titanic-style movie poster that recreates the emotional intimacy of the original 1997 promotional imagery. The subject standing behind wraps their arms gently around the waist of the subject in front. Both lean slightly toward each other with soft, intimate body language and gaze deeply into each other’s eyes rather than looking at the camera. Their faces must feel close, romantic, and emotionally connected, echoing the iconic Titanic embrace.
+
+      Recreate the cinematic atmosphere of the Titanic ship deck with soft golden-hour light on their faces, a faint halo-like backlight behind their heads, and blurred hints of ship railings and heavy ropes in the background. No modern elements or additional people may appear. The overall color styling must match the warm vintage Titanic film aesthetic with golden-brown highlights, gentle film-like contrast, subtle haze, soft glow, fine grain, and deep, romantic tones without harsh saturation.
+
+      At the bottom center of the poster, include the title “TITANIC” in a large serif typeface with a metallic gold-white gradient and wide letter spacing. Above the title, include the director credit “JAMES CAMERON” in the same elegant serif style. The title must visually integrate into the composition with thin decorative horizontal lines above and below the word “TITANIC,” matching the authentic movie poster layout.
+
+      The final poster must feel emotional, cinematic, warm, elegant, and consistent with a high-budget Titanic romance poster, maintaining perfect identity preservation of the two uploaded subjects, with no distortions, incorrect limbs, or extra reflections or figures.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 First Love
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the two uploaded people as the only subjects. Their faces, facial features, bone structure, hairstyles, expressions, and overall identities must remain perfectly identical to the uploaded photos. The system must not alter their facial proportions, makeup style, jawline, nose shape, or eye shape. No face smoothing, beautification, aging, or stylization is allowed. No additional people may appear.
+
+      Clothing Assignment Rule (IF condition — very important)
+      If the two uploaded people are one male and one female: Male must wear the black puffer jacket. Female must wear the blue puffer jacket and white pants
+
+      If the uploaded people are the same gender:
+      Assign jacket colors randomly, but one must wear black and the other must wear blue.
+      Whoever wears the blue puffer jacket must also wear white pants.
+
+      Create a realistic winter romance poster featuring the two subjects in a snowy landscape. The composition must match the emotional feel of a Japanese drama poster:
+
+      One subject wears a black puffer jacket, standing in the foreground, smiling naturally.
+
+      The other subject wears a blue puffer jacket and white pants, joyfully riding on the back of the first subject with arms wrapped around their shoulders.
+      Both must look joyful, warm, and natural, expressing a gentle sense of first love.
+
+      The background features a wide snowy field with frost-covered trees, softly blurred. Large white snowflakes fall throughout the image, with soft bokeh-like snowfall effects. The overall color palette must be cold, bright, pastel blue, with a soft cinematic Japanese-drama tone—clean, airy, and emotional.
+
+      Precise Title Typography (very important): At the top of the poster, include the title in the exact style: "True Love". Thin serif font. Slight letter spacing. Subtle texture. Dark gray-blue color. Soft, low-contrast appearance. Positioned centered near the top, evenly spaced, NOT bold
+
+      "初遇". Placed directly underneath "True Love". Font size must be noticeably smaller. Letter spacing must be slightly wider for an airy, elegant look. Subtle serif texture, dark gray-blue tone. Must NOT appear handwritten or stylized
+
+      The typography must visually integrate into the poster as professionally typeset Japanese-romance key art—not cartoonish, not decorative, and not floating awkwardly.
+
+      The final poster must feel emotional, cinematic, soft, snowy, and consistent with a high-quality Japanese romance drama. No parody. No unrealistic posing. No strong stylization filters.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 花束般的戀愛
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the two uploaded people as the only subjects. Their real identities must remain perfectly accurate to the uploaded photos. Do not alter their faces, facial features, bone structure, skin tone, expressions, makeup style, hairstyle, or proportions. Do not beautify, stylize, smooth, age, or replace them with any other person. No additional people may appear.
+
+      Create a movie poster inspired by the Japanese film “We Made a Beautiful Bouquet,” capturing an intimate, warm, extremely close-up moment between the two subjects. The framing must be very close to their faces, focusing on their eyes and expressions.
+
+      Clothing assignment (very important):
+      • Any male subject must wear a white inner shirt with a soft blue knitted cardigan on top, matching the gentle, casual tone of the reference film.
+      • Any female subject must wear an orange-pink knitted sweater, and she must hold a bouquet of flowers in her arms.
+      • The female subject must also hold a piece of bread in her hand, feeding it gently to the other subject.
+
+      Scene direction:
+      Create a warm, romantic, natural-feeling moment between the two subjects. The female subject looks at the other person with a soft, happy expression full of affection. The feeding gesture must look natural, delicate, and intimate. The other subject leans slightly toward her, receiving the bread gently. Their faces must be close, with soft sunlight illuminating their skin.
+
+      Lighting & atmosphere:
+      Use bright, soft Japanese-style daylight with a dreamy emotional tone. The edges of the frame should feel slightly hazy with strong depth-of-field separation: sharp focus on their eyes and faces, smooth transitions upward and outward. The bouquet should appear airy and bright, blending beautifully with the soft lighting.
+      Apply a Japanese-style cool, blue-leaning color palette throughout the scene—a gentle cold-tone film look, clean, soft, slightly desaturated, and emotionally subtle—while maintaining the original cinematic softness.
+
+      Typography (critical):
+      At the bottom of the poster, transition into a subtle, reduced-height white area with gentle, minimal wave-like edges—not too tall, not too dramatic, just enough to host the title cleanly.
+
+      Inside this white section, place the main title:
+
+      花束みたいな恋をした
+
+      The title must use a typeface matching the original film poster—an elegant, delicate, lightly handwritten-style serif font with soft curves. The characters 「花束」 and 「恋」 must appear slightly larger than 「みたいな」 and 「をした」, following the hierarchy of the original design.
+      The entire title must be rendered in a deep brown color.
+
+      Directly beneath the title, add two thin, hand-drawn-style decorative straight lines of equal thickness, also in deep brown.
+
+      Styling notes:
+      The poster must look like an authentic romantic Japanese film poster—emotional, tender, soft daylight, cinematic, and close-up on love and expression. No parody, no harsh contrast, no heavy filters. Keep it gentle, natural, and film-like, with the newly applied cool-toned Japanese blue palette.
+
+      The final image must preserve perfect facial identity, intimate emotion, soft lighting, soft bokeh, correct clothing, correct bouquet + bread interaction, and a clean, readable Japanese title in the gently waved white area with uniform title color and the two intersecting hand-drawn decorative lines at the far right.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 女生送巧克力
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
+    prompt: |
+      The subject should be a person, and their facial features, makeup,race, hairstyle, skin tone, and body proportions must be preserved to ensure consistency with the uploaded photo. The photo should be taken in a softly lit kitchen environment, employing the aesthetic style characteristic of Fujifilm—cool-toned sunlight, bright whites, soft, low-contrast shadows, clean highlights, and a subtle matte finish. The overall atmosphere should evoke a tranquil morning, with soft, transparent, and relaxing colors, similar to the style of Fujifilm Pro 400H or Fujifilm Reala film: pure whites, natural skin tones, soft cool tones in shadows, and dreamy halos around bright areas.
+
+      The kitchen island countertop uses white marble tiles to create a natural, warm, and inviting atmosphere, rather than an artificial one—open cabinet doors, mismatched plates, scattered cutlery, jars on the countertop, books and ingredients casually placed in the background, and a slightly messy island stained with chocolate. Melted chocolate stains, chocolate shavings, chocolate pieces, a spoon dipped in chocolate, a half-eaten chocolate bar, and an imperfect handmade chocolate cake—these elements intertwine to create a warm, everyday sense of chaos.
+
+      Her posture should be natural and relaxed, unrestrained, as if capturing a moment from her real life, rather than a deliberately posed half-body portrait. She might lean against a table, one hand supporting her cheek or chin, fingers casually holding a piece of chocolate, elegantly and enticingly licking it from her fingertips, or holding a piece of chocolate as if about to offer it to someone else; or perhaps, bathed in dreamy morning light, gazing tenderly at the camera, or gently pressing her palm or fingers to her cheek, creating a visual effect that makes her face appear more pitiful. Everything should appear natural and casual, with a touch of unrefined beauty.
+
+      The woman in the photo is wearing an off-the-shoulder white chiffon knit top with a tank top underneath, and skinny jeans (but her lower body is not visible because of the table in front of her), creating a charming, soft, and languid atmosphere.
+
+      The scene is serene and peaceful, with natural window light illuminating her face and highlighting the soft grain and subtle depth of field of the film. The overall image is warm and clean, both nostalgic and refreshing—like a genuine family photograph taken with Fujifilm, where sweetness, chocolate, and a languid sense of comfort intertwine to create a tranquil and cozy kitchen scene.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
     min_images: 1
     max_images: 5
     num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 愛心聚焦-1 白色禮服 Male
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
+    prompt: |
+      Use the uploaded photograph of the person as the primary subject, maintaining consistency in their identity, facial features, hairstyle, and expression.
+
+      Place the person within a fixed, clearly defined heart-shaped opening made of red velvet, its proportions . 
+
+      A heart-shaped hole is cut into the full-page image, and the character stands inside the heart-shaped hole.
+
+      The heart shape must remain stable and intact—and must not be stretched, deformed, widened, or altered in shape by the person's movements. The velvet should converge towards the heart-shaped opening, forming full, substantial folds, but always maintaining a clearly discernible heart outline.
+
+      The person should interact naturally with the heart-shaped frame, without pulling or altering the shape of the velvet. The person's hands should rest lightly and naturally on the edge of the velvet or touching the heart from above or below, or extending one hand out of the heart while touching the upper edge of the heart with the other, but the fabric must maintain its tension and shape. The pose should be Handsome and bold and entirely natural, avoiding any illogical postures. It should possess a cinematic quality reminiscent of haute couture, as if the subject is slowly emerging from a heart-shaped veil, rather than being pulled or distorted.Apart from the characters' hands, any unreasonable third hands or limbs are prohibited.
+
+      The clothing should be haute couture pieces,  asymmetrical lines, modern, and sophisticated, rather than casual or bridal. Fabrics should have a luxurious feel—such as silk satin, crisp crepe, or embroidered haute couture—  wear suits, they must be ivory white and absolutely not off-the-shoulder. The color scheme should remain refined and elegant: ivory white contrasting visually with deep red velvet. (The subject must absolutely not have any yellow undertones.)
+
+      The lighting should maintain a cinematic quality, using soft highlights to outline the face and body while allowing the velvet to drape naturally in deep shadows. The overall atmosphere must echo the dramatic feel of the reference image—rich reds, the lustrous texture of velvet, and strong contrasts.
+
+      Create a heart-shaped border in bright red velvet, encircling the main subject. The velvet texture must be more pronounced—closer to the bright red stage curtains of a theater. The color should include reds and burgundys, with a subtle burgundy undertone that gradually deepens in the shadows.
+
+      Ensure the reflected light of the velvet showcases its soft, high-gloss texture: bright, focused highlights in the raised folds, and deep, almost black shadows in the recesses. Avoid using flat or monochromatic red surfaces; the fabric must have a high-contrast sheen, reflecting a bright ruby ​​red within the deep velvet shadow gradient.
+
+      The heart pattern should remain clear and complete, while the surrounding fabric should have heavy, three-dimensional folds extending downwards to the base of the heart. Lighting should accentuate the luxurious texture of the velvet—use warm, directional highlights to capture the fabric's sheen while avoiding brightening the overall red tone.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 愛心聚焦-2 紅色緊身衣 Female
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
+    prompt: |
+      Uploaded portrait photos should be centered on the subject, ensuring their face, color,  makeup, hairstyle, and body proportions are completely consistent with the original image.
+
+      Place the subject against a deep red background and use soft, diffused spotlight lighting to naturally create heart-shaped shadows or highlights behind the subject. There should only be one heart-shaped shadow; the shadow should be natural and soft, with smooth edges and a natural decay of light, avoiding harsh or artificial contours. The lighting should have a cinematic quality, with warm red tones naturally transitioning to deep burgundy shadows at the edges. (The face must retain its original skin tone.)
+
+      The overall color scheme should be dominated by rich reds and dark tones, creating a melancholic and intimate atmosphere. The lighting should subtly outline the subject's face and body contours, with soft highlights illuminating the skin and deep shadows surrounding the edges, enhancing the depth and atmosphere of the image.
+
+      The subject should appear relaxed and natural, projecting a high-fashion magazine editorial style—arms can be raised or naturally hanging down, fingers light and graceful, poses subtly varied, capturing a genuine moment rather than a posed studio photo. The subject's expression should be natural, emotional, and conform to the aesthetic concepts of fashion photography.
+
+      If the subject is female, she must wear a red sheer fitted top over a red strapless camisole. She should wear a high-waisted red leather mini skirt, the hemline ending just 1 cm below her hips, harmonizing with the light and background while highlighting her figure.
+
+      The final photograph should convey a modern feel, atmosphere, and emotional expression. Heart-shaped light and shadow patterns should be used as soft, symbolic embellishments, not as harsh graphic elements.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 愛心聚焦-2 紅色緊身衣 Male
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: 
+    prompt: |
+      Uploaded portrait photos should be centered on the subject, ensuring their face, makeup, hairstyle, and body proportions are completely consistent with the original image.
+
+      Place the subject against a deep red background and use soft, diffused spotlight lighting to naturally create heart-shaped shadows or highlights behind the subject. There should only be one heart-shaped shadow; the shadow should be natural and soft, with smooth edges and a natural decay of light, avoiding harsh or artificial contours. The lighting should have a cinematic quality, with warm red tones naturally transitioning to deep burgundy shadows at the edges. (The face must retain its original skin tone.)
+
+      The overall color scheme should be dominated by rich reds and dark tones, creating a melancholic and intimate atmosphere. The lighting should subtly outline the subject's face and body contours, with soft highlights illuminating the skin and deep shadows surrounding the edges, enhancing the depth and atmosphere of the image.
+
+      The subject should appear relaxed and natural, projecting a high-fashion magazine editorial style—arms can be raised or naturally hanging down, fingers light and graceful, poses subtly varied, capturing a genuine moment rather than a posed studio photo. The subject's expression should be natural, emotional, and conform to the aesthetic concepts of fashion photography.
+
+      he should wear a black fitted top under a black blazer and trousers, contrasting with the warm red environment while maintaining a sharp and stylish image.
+
+      The final photograph should convey a modern feel, atmosphere, and emotional expression. Heart-shaped light and shadow patterns should be used as soft, symbolic embellishments, not as harsh graphic elements.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
 
 # Comments and documentation
 comments:
