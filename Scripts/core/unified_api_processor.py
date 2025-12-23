@@ -443,7 +443,11 @@ class UnifiedAPIProcessor:
     def _validate_task_folder_structure(self, task, invalid_list):
         """Base validation template for task-folder structure (kling, nano, genvideo)."""
         folder = Path(task['folder'])
+        
+        # Auto-create task folder and Source subfolder if they don't exist
+        folder.mkdir(parents=True, exist_ok=True)
         source_folder = folder / "Source"
+        source_folder.mkdir(exist_ok=True)
         
         if not source_folder.exists():
             self.logger.warning(f"❌ Missing source: {source_folder}")
@@ -616,7 +620,11 @@ class UnifiedAPIProcessor:
 
         def process_task(task):
             folder = Path(task['folder'])
+            
+            # Auto-create task folder and Source subfolder if they don't exist
+            folder.mkdir(parents=True, exist_ok=True)
             source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
 
             if not source_folder.exists():
                 return None, []

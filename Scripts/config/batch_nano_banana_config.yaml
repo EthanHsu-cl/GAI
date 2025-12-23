@@ -11,89 +11,102 @@ schedule:
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
 root_source_video_link: 
-root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3b08d8cc8a3_0_163#slide=id.g3b08d8cc8a3_0_163
+root_design_link: 
 
 tasks:
-  - folder: ../Media Files/Nano Banana/1222 2 Styles/1222 My word of the year
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Use the uploaded person photo.
-      Do NOT change the person’s face, identity, gender presentation, or appearance.
+  # - folder: ../Media Files/Nano Banana/1222 2 Styles/1222 My word of the year
+  #   model: gemini-3-pro-image-preview
+  #   resolution: "2K"
+  #   aspect_ratio: "3:4"
+  #   prompt: |
+  #     Use the uploaded person photo.
+  #     Do NOT change the person’s face, identity, gender presentation, or appearance.
       
-      Create a photorealistic Japanese “Kanji of the Year” ceremony scene at a temple terrace.
-      Natural lighting, calm and respectful atmosphere.
+  #     Create a photorealistic Japanese “Kanji of the Year” ceremony scene at a temple terrace.
+  #     Natural lighting, calm and respectful atmosphere.
       
-      Composition:
+  #     Composition:
       
-      - The person faces FORWARD toward the camera (not side view).
-      - The person is holding a large calligraphy brush with ink on their hands, as if they have just finished writing.
-      - On the right side of the scene, place a large vertical white calligraphy paper with ONE Kanji written in bold ink.
+  #     - The person faces FORWARD toward the camera (not side view).
+  #     - The person is holding a large calligraphy brush with ink on their hands, as if they have just finished writing.
+  #     - On the right side of the scene, place a large vertical white calligraphy paper with ONE Kanji written in bold ink.
       
-      Kanji selection requirement:
+  #     Kanji selection requirement:
       
-      - The Kanji must convey a clearly positive, uplifting, or auspicious meaning.
-      - It should represent themes such as hope, growth, harmony, renewal, gratitude, peace, prosperity, or inner strength and resilience.
-      - Any sense of “strength” must be expressed as inner strength, perseverance, or resilience, not related to conflict, competition, struggle, or battle.
-      - Do NOT generate Kanji related to war, conflict, battle, violence, destruction, suffering, anxiety, or social controversy.
+  #     - The Kanji must convey a clearly positive, uplifting, or auspicious meaning.
+  #     - It should represent themes such as hope, growth, harmony, renewal, gratitude, peace, prosperity, or inner strength and resilience.
+  #     - Any sense of “strength” must be expressed as inner strength, perseverance, or resilience, not related to conflict, competition, struggle, or battle.
+  #     - Do NOT generate Kanji related to war, conflict, battle, violence, destruction, suffering, anxiety, or social controversy.
       
-      Calligraphy requirements:
+  #     Calligraphy requirements:
       
-      - Extremely expressive, bold ink strokes.
-      - Strong brush texture with visible flying white streaks.
-      - Heavy ink pooling and natural brush pressure variation.
-      - The style should feel like powerful, dynamic Japanese sumi-e calligraphy, artistic and emotionally resonant.
+  #     - Extremely expressive, bold ink strokes.
+  #     - Strong brush texture with visible flying white streaks.
+  #     - Heavy ink pooling and natural brush pressure variation.
+  #     - The style should feel like powerful, dynamic Japanese sumi-e calligraphy, artistic and emotionally resonant.
       
-      Integrate the person naturally into the environment with realistic shadows and depth.
-      Maintain high facial accuracy and photorealistic detail.
+  #     Integrate the person naturally into the environment with realistic shadows and depth.
+  #     Maintain high facial accuracy and photorealistic detail.
       
-      High resolution.
-      Photorealistic, respectful, ceremonial, and emotionally uplifting.
-      Aspect ratio: natural photographic composition.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 1
-    max_images: 5
-    num_iterations: 50
+  #     High resolution.
+  #     Photorealistic, respectful, ceremonial, and emotionally uplifting.
+  #     Aspect ratio: natural photographic composition.
+  #   reference_folder: ""
+  #   use_comparison_template: false
+  #   use_random_source_selection: false
+  #   min_images: 1
+  #   max_images: 5
+  #   num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/1222 2 Styles/1222 Another Life
+  # - folder: ../Media Files/Nano Banana/1222 2 Styles/1222 Another Life
+  #   model: gemini-3-pro-image-preview
+  #   resolution: "2K"
+  #   aspect_ratio: "3:4"
+  #   prompt: |
+  #     A 3:4 cinematic multi-panel composition divided into four equal frames, each representing a different alternate-life universe of the same person based on the uploaded photo.
+      
+  #     The style must reference the visual tone of the Japanese drama “Rebooting Life（重啟人生）”:
+  #     quiet realism, soft natural lighting, pastel color palette, subtle emotional depth, documentary-like framing, and gentle film grain.
+      
+  #     Use the uploaded person (user) as the protagonist.
+  #     Do not change the user’s facial identity, ethnicity, hairstyle length, or core appearance.
+  #     Maintain photorealistic Japanese TV-drama aesthetics: simple makeup, natural expression, realistic skin texture.
+      
+  #     Generate **four distinct life paths** for the user.
+  #     Each panel should present a clearly different universe with significantly contrasting life choices, environments, and roles.
+  #     Gemini may freely decide the careers, lifestyles, or major life directions, as long as the four universes are meaningfully different from one another.
+      
+  #     For each of the four panels:
+      
+  #     - Keep the user’s facial identity consistent.
+  #     - Place the user in a unique alternate life with strong visual storytelling.
+  #     - Ensure the scenarios feel grounded, human, and realistic — no fantasy or sci-fi.
+  #     - Use natural, soft, cinematic Japanese-drama lighting.
+  #     - Include everyday textures, quiet emotional moments, and subtle slice-of-life composition.
+      
+  #     All four panels must share:
+      
+  #     - A cohesive color palette
+  #     - Naturalistic lighting
+  #     - Consistent cinematic realism
+  #     - Japanese drama–inspired framing
+      
+  #     High resolution.
+  #     Photorealistic, understated, emotional, and gently cinematic.
+  #     Aspect ratio: 3:4.
+  #   reference_folder: ""
+  #   use_comparison_template: false
+  #   use_random_source_selection: false
+  #   min_images: 1
+  #   max_images: 5
+  #   num_iterations: 50
+  
+  - folder: ../Media Files/Nano Banana/1222 Omikuji
     model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
+    resolution: "1K"
+    aspect_ratio: "9:16"
     prompt: |
-      A 3:4 cinematic multi-panel composition divided into four equal frames, each representing a different alternate-life universe of the same person based on the uploaded photo.
-      
-      The style must reference the visual tone of the Japanese drama “Rebooting Life（重啟人生）”:
-      quiet realism, soft natural lighting, pastel color palette, subtle emotional depth, documentary-like framing, and gentle film grain.
-      
-      Use the uploaded person (user) as the protagonist.
-      Do not change the user’s facial identity, ethnicity, hairstyle length, or core appearance.
-      Maintain photorealistic Japanese TV-drama aesthetics: simple makeup, natural expression, realistic skin texture.
-      
-      Generate **four distinct life paths** for the user.
-      Each panel should present a clearly different universe with significantly contrasting life choices, environments, and roles.
-      Gemini may freely decide the careers, lifestyles, or major life directions, as long as the four universes are meaningfully different from one another.
-      
-      For each of the four panels:
-      
-      - Keep the user’s facial identity consistent.
-      - Place the user in a unique alternate life with strong visual storytelling.
-      - Ensure the scenarios feel grounded, human, and realistic — no fantasy or sci-fi.
-      - Use natural, soft, cinematic Japanese-drama lighting.
-      - Include everyday textures, quiet emotional moments, and subtle slice-of-life composition.
-      
-      All four panels must share:
-      
-      - A cohesive color palette
-      - Naturalistic lighting
-      - Consistent cinematic realism
-      - Japanese drama–inspired framing
-      
-      High resolution.
-      Photorealistic, understated, emotional, and gently cinematic.
-      Aspect ratio: 3:4.
+      Use the uploaded photo as the base image and preserve the original person exactly as they appear, including their face, body, clothing, identity, and background. The person is fully visible from head to toe within the frame, and the original environment remains completely unchanged. Modify only the pose so that the person naturally extends one arm toward the camera, holding a Japanese shrine omikuji fortune paper in their own hand. The fortune paper must be physically held by the subject themselves, with clear contact between the subject’s fingers and the paper. The gesture should feel relaxed and effortless, as if the person is gently offering or showing the fortune to the viewer rather than intentionally posing. The arm extension and hand position should look anatomically natural and consistent with the subject’s original posture. The omikuji fortune paper is intentionally large in scale, approximately the same visual size as the person’s body. It appears very close to the camera, creating a strong yet believable sense of depth through perspective rather than distortion. Despite its large size, the scale relationship between the person and the paper feels realistic, balanced, and physically plausible, not exaggerated, cartoonish, or surreal. The paper must integrate seamlessly with the subject’s hand, with correct perspective, shadows, and lighting, avoiding any pasted-on, floating, or artificial appearance. Maintain realistic lighting, texture, and photographic consistency throughout the image. The fortune paper should match the scene’s light direction, color temperature, and softness so that it blends naturally into the photo without breaking realism. The subject’s facial expression, facial features, and identity must remain completely unchanged, with their face fully visible at all times. The background should stay intact and unobstructed, with no alterations to the environment. The final result should feel like a real photograph captured in a single moment, not a composite or edited image. The content of the omikuji fortune paper is written entirely in Japanese and follows a traditional shrine-style layout with vertically oriented text throughout the paper. A traditional Japanese omikuji fortune slip illustration in a tall, narrow vertical format. The top section features a small centered header displaying a short fortune title such as “Great Blessing,” “Middle Blessing,” “Small Blessing,” “Blessing,” or “Future Blessing,” framed with simple ornamental borders. The middle area contains one clearly defined short passage, consisting of a single concise sentence of approximately twenty characters, arranged vertically as a unified block of text. The passage conveys a gentle, reassuring, and quietly optimistic mood, without any segmentation, symbols, explanations, or analytical structure. The bottom section includes a small decorative illustration using classic Japanese symbolic imagery, rendered in simple black line art. The entire fortune slip is enclosed within a thin rectangular border with subtle decorative corners. The illustration style emphasizes clean black linework, fine and consistent strokes, minimal color usage, and a traditional print-like, understated aesthetic, avoiding modern graphic elements, heavy shading, or playful illustration styles. The overall feeling remains modest, reserved, and softly encouraging.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
