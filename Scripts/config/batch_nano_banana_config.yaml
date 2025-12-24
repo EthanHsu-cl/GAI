@@ -10,56 +10,83 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: 
-root_design_link: https://docs.google.com/presentation/d/11ZeLZR-AVTWPmzaGF5LolHc52CoVsw5dRfIOm7-5FDw/edit?slide=id.g3b342e79e1b_0_0#slide=id.g3b342e79e1b_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBl4S-dmRhAQqbrvmH-mymEAeiOG59ilEMXN_fmEmy5eaY?e=mtm7Cp
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3b3080cb0e2_0_21#slide=id.g3b3080cb0e2_0_21
 
 tasks:
-  - folder: ../Media Files/Nano Banana/1223 My word of the year
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 鐵達尼號
     model: gemini-3-pro-image-preview
-    resolution: "2K"
+    resolution: "1K"
     aspect_ratio: "3:4"
     prompt: |
-      Use the uploaded person photo.
-      Do NOT change the person’s face, identity, gender presentation, or appearance.
+      Use the two uploaded people as the only subjects, preserving their real identities exactly as in the uploaded photos. Their faces, facial features, bone structure, hairstyles, skin tone, and expressions must remain unchanged. The system must not modify their proportions, makeup style, jawline, nose, or eyes, and must not apply beautification, aging, stylization, smoothing, or add any additional people.
 
-      Create a photorealistic Japanese “Kanji of the Year” ceremony scene at a temple terrace.
-      Natural lighting, calm and respectful atmosphere.
+      Clothing follows a strict identity rule:
+      If the uploaded pair is one male and one female, the male must wear Jack’s outfit—an off-white collarless shirt with a black vintage suit jacket in early-1900s Titanic style—and the female must wear Rose’s outfit—a white lace corset-style top with a black outer shawl and a vintage floral silk scarf draped loosely over both forearms, hanging freely and flowing outward just like in the original Titanic movie poster (the scarf must NOT be tied around the neck).
+      If both uploaded people are male, they must both wear Jack’s outfit.
+      If both uploaded people are female, they must both wear Rose’s outfit with the same forearm-draped, flowing silk scarf placement, never around the neck.
 
-      Composition:
+      Pose assignment rule:
+      If the pair is one male and one female, the female wearing Rose’s outfit must stand in front and be embraced from behind by the male wearing Jack’s outfit.
+      If the uploaded people are the same gender, the front/back positions must be assigned randomly, but still follow the same intimate Titanic-style embrace.
 
-      - The person faces FORWARD toward the camera (not side view).
-      - The person is holding a large calligraphy brush with ink on their hands, as if they have just finished writing.
-      - On the right side of the scene, place a large vertical white calligraphy paper with ONE Kanji written in bold ink.
+      Create a realistic Titanic-style movie poster that recreates the emotional intimacy of the original 1997 promotional imagery. The subject standing behind wraps their arms gently around the waist of the subject in front. Both lean slightly toward each other with soft, intimate body language and gaze deeply into each other’s eyes rather than looking at the camera. Their faces must feel close, romantic, and emotionally connected, echoing the iconic Titanic embrace.
 
-      Kanji selection requirement:
+      Recreate the cinematic atmosphere of the Titanic ship deck with soft golden-hour light on their faces, a faint halo-like backlight behind their heads, and blurred hints of ship railings and heavy ropes in the background. No modern elements or additional people may appear. The overall color styling must match the warm vintage Titanic film aesthetic with golden-brown highlights, gentle film-like contrast, subtle haze, soft glow, fine grain, and deep, romantic tones without harsh saturation.
 
-      - Generate ONLY ONE single Kanji character. Do NOT generate compound words or multi-character phrases.
-      - The Kanji must not have a clearly negative, harmful, or disturbing meaning (e.g., death, illness, ugliness, misfortune).
-      - The Kanji may represent a noun, verb, or adjective.
-      - The meaning does NOT need to be explicitly inspirational or moralizing.
-      - Neutral, descriptive, poetic, aesthetic, or life-related meanings are allowed.
-      - Avoid Kanji associated with war, conflict, violence, destruction, suffering, illness, or social controversy.
+      At the bottom center of the poster, include the title “ETERNIA” in a large serif typeface with a metallic gold-white gradient and wide letter spacing. Above the title,  include the director credit “A LOVE BEYOND TIME” in the same elegant serif style. The title must visually integrate into the composition with thin decorative horizontal lines above and below the word “ETERNIA,” matching the authentic movie poster layout.
 
-      Calligraphy requirements:
-
-      - Extremely expressive, bold ink strokes.
-      - Strong brush texture with visible flying white streaks.
-      - Heavy ink pooling and natural brush pressure variation.
-      - The style should feel like powerful, dynamic Japanese sumi-e calligraphy, artistic and emotionally resonant.
-
-      Integrate the person naturally into the environment with realistic shadows and depth.
-      Maintain high facial accuracy and photorealistic detail.
-
-      High resolution.
-      Photorealistic, respectful, ceremonial, and emotionally uplifting.
-      Aspect ratio: natural photographic composition.
+      The final poster must feel emotional, cinematic, warm, elegant, and consistent with a high-budget Titanic romance poster, maintaining perfect identity preservation of the two uploaded subjects, with no distortions, incorrect limbs, or extra reflections or figures.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: false
+    use_random_source_selection: true
     min_images: 2
     max_images: 2
     num_iterations: 50
 
+  - folder: ../Media Files/Nano Banana/1223 8 Styles/1223 花束般的戀愛
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the two uploaded people as the only subjects. Their real identities must remain perfectly accurate to the uploaded photos. Do not alter their faces, facial features, bone structure, skin tone, expressions, makeup style, hairstyle, or proportions. Do not beautify, stylize, smooth, age, or replace them with any other person. No additional people may appear.
+
+      Create a movie poster inspired by the Japanese film “We Made a Beautiful Bouquet,” capturing an intimate, warm, extremely close-up moment between the two subjects. The framing must be very close to their faces, focusing on their eyes and expressions.
+
+      Clothing assignment (very important):
+      • Any male subject must wear a white inner shirt with a soft blue knitted cardigan on top, matching the gentle, casual tone of the reference film.
+      • Any female subject must wear an orange-pink knitted sweater, and she must hold a bouquet of flowers in her arms.
+      • The female subject must also hold a piece of bread in her hand, feeding it gently to the other subject.
+
+      Scene direction:
+      Create a warm, romantic, natural-feeling moment between the two subjects. The female subject looks at the other person with a soft, happy expression full of affection. The feeding gesture must look natural, delicate, and intimate. The other subject leans slightly toward her, receiving the bread gently. Their faces must be close, with soft sunlight illuminating their skin.
+
+      Lighting & atmosphere:
+      Use bright, soft Japanese-style daylight with a dreamy emotional tone. The edges of the frame should feel slightly hazy with strong depth-of-field separation: sharp focus on their eyes and faces, smooth transitions upward and outward. The bouquet should appear airy and bright, blending beautifully with the soft lighting.
+      Apply a Japanese-style cool, blue-leaning color palette throughout the scene—a gentle cold-tone film look, clean, soft, slightly desaturated, and emotionally subtle—while maintaining the original cinematic softness.
+
+      Typography (critical):
+      At the bottom of the poster, transition into a subtle, reduced-height white area with gentle, minimal wave-like edges—not too tall, not too dramatic, just enough to host the title cleanly.
+
+      Inside this white section, place the main title:
+
+      恋をしている日々
+
+      The title must use a typeface matching the original film poster—an elegant, delicate, lightly handwritten-style serif font with soft curves. The characters 「恋」 and 「日」 must appear slightly larger than 「をしている」 and 「々」, following the hierarchy of the original design.
+      The entire title must be rendered in a deep brown color.
+
+      Directly beneath the title, add two thin, hand-drawn-style decorative straight lines of equal thickness, also in deep brown.
+
+      Styling notes:
+      The poster must look like an authentic romantic Japanese film poster—emotional, tender, soft daylight, cinematic, and close-up on love and expression. No parody, no harsh contrast, no heavy filters. Keep it gentle, natural, and film-like, with the newly applied cool-toned Japanese blue palette.
+
+      The final image must preserve perfect facial identity, intimate emotion, soft lighting, soft bokeh, correct clothing, correct bouquet + bread interaction, and a clean, readable Japanese title in the gently waved white area with uniform title color and the two intersecting hand-drawn decorative lines at the far right.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
 
 # Comments and documentation
 comments:

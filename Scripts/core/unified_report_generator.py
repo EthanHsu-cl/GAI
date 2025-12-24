@@ -310,16 +310,20 @@ class UnifiedReportGenerator:
         """Create a single slide for any API using configuration"""
         # Adjust media types for nano_banana based on whether multi-image mode is active
         if self.api_name == 'nano_banana':
-            # Check if random_source_selection mode (composite will be created)
-            is_random_source = pair.metadata.get('random_source_selection', False)
-            
-            if pair.additional_source_paths and not is_random_source:
-                # Standard multi-image mode (Source + Additional): use the 3-media layout
-                slide_config = slide_config.copy()
-                slide_config['media_types'] = slide_config.get('media_types_3', ['source', 'additional_source', 'generated'])
-                slide_config['positions'] = slide_config.get('positions_3', self.LAYOUT_3_MEDIA['positions'])
-            # For random_source_selection: use default 2-media layout (composite on left)
-            # else: use default 2-media layout from config (already set)
+            if pair.additional_source_paths:
+                # Check if any additional source is a video
+                has_video_source = any(
+                    p.suffix.lower() in self.VIDEO_EXTS 
+                    for p in pair.additional_source_paths if p
+                )
+                
+                if has_video_source:
+                    # 1 image + 1 video: use 3-media layout (source, video, generated)
+                    slide_config = slide_config.copy()
+                    slide_config['media_types'] = slide_config.get('media_types_3', ['source', 'additional_source', 'generated'])
+                    slide_config['positions'] = slide_config.get('positions_3', self.LAYOUT_3_MEDIA['positions'])
+                # else: All images (2+ images) - use default 2-media layout with composite
+                # The composite will be created in get_media_path_and_type()
         
         # Create slide
         if template_loaded and len(ppt.slides) >= 4:
@@ -405,18 +409,32 @@ class UnifiedReportGenerator:
     def get_media_path_and_type(self, pair, media_type):
         """Get media path and determine if it's video.
         
-        For nano_banana with random_source_selection (multiple sources in additional_source_paths),
-        creates a composite grid image for the 'source' media type.
+        For nano_banana with multiple source images (either random_source_selection or
+        standard multi-image mode), creates a composite grid image for the 'source' media type
+        when all additional sources are images.
         """
-        # For nano_banana random source selection: create composite from all source images
+        # For nano_banana multi-image: create composite from all source images
+        # This applies to both random_source_selection and standard multi-image mode
         if (media_type == 'source' and 
             self.api_name == 'nano_banana' and 
-            pair.metadata.get('random_source_selection') and 
             pair.additional_source_paths):
-            # Create composite from all source images used
-            composite_path = self._create_source_composite(pair.additional_source_paths)
-            if composite_path:
-                return Path(composite_path), False
+            # Check if all additional sources are images (not videos)
+            all_images = all(
+                p.suffix.lower() not in self.VIDEO_EXTS 
+                for p in pair.additional_source_paths if p
+            )
+            if all_images:
+                # Determine which images to include in composite
+                if pair.metadata.get('random_source_selection'):
+                    # random_source_selection: additional_source_paths already contains all images
+                    all_sources = list(pair.additional_source_paths)
+                else:
+                    # Standard multi-image: combine source_path with additional_source_paths
+                    all_sources = [pair.source_path] + list(pair.additional_source_paths)
+                
+                composite_path = self._create_source_composite(all_sources)
+                if composite_path:
+                    return Path(composite_path), False
         
         path_map = {
             'source': pair.source_path,

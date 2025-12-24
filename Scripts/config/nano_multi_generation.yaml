@@ -14,7 +14,7 @@ root_source_video_link:
 root_design_link: 
 
 tasks:
-  - folder: '/Users/ethanhsu/Library/CloudStorage/OneDrive-CyberLinkCorp/Kling Vidu/Nano Banana/1223 My word of the year Batch'
+  - folder: '/Users/ethanhsu/Library/CloudStorage/OneDrive-CyberLinkCorp/Kling Vidu/Nano Banana/1224 My word batch'
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
@@ -58,7 +58,7 @@ tasks:
     use_random_source_selection: true
     min_images: 1
     max_images: 1
-    num_iterations: 100
+    num_iterations: 400
 
 # Comments and documentation
 comments:

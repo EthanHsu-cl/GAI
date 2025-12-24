@@ -14,7 +14,7 @@ output:
 
 # Global generation count - how many videos to generate per source image
 # Can be overridden per task
-generation_count: 5
+generation_count: 10
 
 # Root folder containing all style subfolders
 root_folder: ../Media Files/Veo_ITV
@@ -22,7 +22,7 @@ root_folder: ../Media Files/Veo_ITV
 schedule:
   start_time: ''
 
-root_source_video_link:
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBNB0-d20AqTbGxgEdEuhUFAUwzHpdO_m8vv0_yb_fjAJw?e=bABlN4
 root_design_link: https://docs.google.com/presentation/d/1kF8imHlU9i6uJtCOL8JWkxWVgKbW7mdq1JaquM7HfwY/edit?slide=id.g3aad1030c6f_20_3#slide=id.g3aad1030c6f_20_3
 
 # Example task structure:
@@ -31,7 +31,7 @@ root_design_link: https://docs.google.com/presentation/d/1kF8imHlU9i6uJtCOL8JWkx
 tasks:
   - style_name: Style 11_Statue Selfie
     folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 11_Statue Selfie
-    generation_count: 5
+    generation_count: 10
     prompt: |
       Cinematic bright-daylight wide shot showing the full-body view of Rodin’s The Thinker in his iconic pose, now featuring a sculpted bronze toga that is part of the statue’s form—draped over one shoulder and carved seamlessly into the figure, with no phone anywhere in the frame. The camera begins a smooth push-in toward a medium close-up. As the camera approaches, the statue makes a small, natural motion with his right hand, and we now see he is holding a vivid bright solid orange iPhone 17 Pro Max, which had not been visible in any earlier part of the shot. He shifts into a cheerful playful presence, subtly moves his mouth and says “Selfie time!” while lifting the phone to take a selfie, then gives a friendly wave with his left hand; smooth weighted bronze motion with realistic sculpted-fabric detail in the toga, upbeat humorous atmosphere, respectful and non-romantic tone.
     negative_prompt: ''
@@ -47,7 +47,7 @@ tasks:
 
   - style_name: Style 13_Pet chat
     folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 13_Pet chat
-    generation_count: 5
+    generation_count: 10
     prompt: |
       Keep both animals realistic and species-pure; no hybrid/mixed features.
 
@@ -71,7 +71,7 @@ tasks:
 
   - style_name: Style 12_Penguin Talks
     folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 12_Penguin Talks
-    generation_count: 5
+    generation_count: 10
     prompt: |
       Stylized stop-motion clay, 12fps. Medium two-shot, clean white background. Two teal-blue clay penguins stay consistent (round eyes, two eyebrows each, minimal natural beak lip-sync; no distortion; grounded stop-motion, no over-cute SFX energy).
 
@@ -103,7 +103,7 @@ tasks:
 
   - style_name: Style 16_Crystalline Flowers
     folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 16_Crystalline Flowers
-    generation_count: 5
+    generation_count: 10
     prompt: |
       Cinematic wide shot from behind of a hyper-realistic female adventurer with intricate blonde braids, a realistic fur cloak and boots, standing on a vast snowy plain. She gently touches a giant quartz crystal facet, leaving clear footprints in the pristine white snow. The landscape is filled with colossal “crystal pom-pom trees”—each with a thick trunk of clear quartz points and a dense spherical crown of prismatic crystal blades. All crystals are hard-edged, faceted, translucent, with physically-based refraction, vivid rainbow caustics, and sharp, consistent geometry throughout. No plant-like or organic shapes. The snow is bright white, shimmering with prismatic reflections and long rainbow trails. The sky shows a deep twilight gradient from blue to purple, with hints of pink and gold. Magical iridescent glow suffuses the scene. Ultra-detailed fur, hair, and cinematic digital film quality.
     negative_prompt: ''
@@ -119,7 +119,7 @@ tasks:
 
   - style_name: Style 15_Old Sailor
     folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 15_Old Sailor
-    generation_count: 5
+    generation_count: 10
     prompt: |
       A cinematic medium shot of an old sailor standing on the deck of a wooden ship in a raging storm. He has a thick grey beard, wearing a dark navy wool peacoat, cream cable-knit sweater, and blue knitted beanie. His right hand is at his side, his left arm extended, finger pointing toward the horizon. His mouth is open mid-sentence, jaw tense, as if shouting above the wind, conveying urgency and intensity. His face is clean, realistic, and sharply defined, with natural skin tones under his beard and only fine droplets of rain on his skin.
       Rain and salty spray cling to his coat and beard, showing the harsh weather, while his facial skin is touched only by the finest droplets. The background is a churning, stormy grey sea with whitecaps beneath a dark overcast sky. Dramatic, moody lighting. Photorealistic, 4K.
