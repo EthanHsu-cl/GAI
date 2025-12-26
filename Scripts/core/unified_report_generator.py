@@ -2083,9 +2083,8 @@ class UnifiedReportGenerator:
         d = self._extract_date_from_folder(folder)
         
         # Use model (API name) as the primary identifier
-        # For text-to-video APIs (without source images), show count instead of listing all names
-        # Note: veo_itv is image-to-video so it should show all style names
-        if self.api_name in ['veo', 'kling_ttv'] and effect_names:
+        # For APIs with many styles, show count instead of listing all names to avoid long filenames
+        if self.api_name in ['veo', 'kling_ttv', 'veo_itv'] and effect_names:
             effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
         else:
             # Effect names are the actual content description
@@ -2118,7 +2117,11 @@ class UnifiedReportGenerator:
             
             # Use effect names from the grouped task
             effect_list = grouped_task.get('_effect_names', [])
-            effect_str = ', '.join(effect_list) if effect_list else 'Combined Effects'
+            # For APIs with many styles, show count instead of listing all names
+            if self.api_name in ['veo', 'kling_ttv', 'veo_itv'] and effect_list:
+                effect_str = f"{len(effect_list)} {'Style' if len(effect_list) == 1 else 'Styles'}"
+            else:
+                effect_str = ', '.join(effect_list) if effect_list else 'Combined Effects'
         else:
             # Folder-based API (nano_banana, kling, etc.) - use folder names
             folder_names = grouped_task.get('_folder_names', [])
@@ -2127,7 +2130,11 @@ class UnifiedReportGenerator:
             d = self._extract_date_from_folder(folder_names[0]) if folder_names else datetime.now().strftime("%m%d")
             
             # Build effect string - combine all unique effects
-            effect_str = ', '.join(effect_names) if effect_names else 'Combined'
+            # For APIs with many styles, show count instead of listing all names
+            if self.api_name in ['veo', 'kling_ttv', 'veo_itv'] and effect_names:
+                effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
+            else:
+                effect_str = ', '.join(effect_names) if effect_names else 'Combined'
         
         # Build API line (date + model)
         api_parts = [f"[{d}]"]

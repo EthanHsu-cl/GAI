@@ -10,11 +10,11 @@ output:
   # Group N tasks into one combined report. Set to 0 or omit for individual reports.
   # Example: with 5 tasks and group_tasks_by=5, creates 1 report with all 5 styles.
   # The report filename and title will include all style names.
-  group_tasks_by: 5
+  group_tasks_by: 
 
 # Global generation count - how many videos to generate per source image
 # Can be overridden per task
-generation_count: 10
+generation_count: 1
 
 # Root folder containing all style subfolders
 root_folder: ../Media Files/Veo_ITV
@@ -29,13 +29,12 @@ root_design_link: https://docs.google.com/presentation/d/1kF8imHlU9i6uJtCOL8JWkx
 # Each task represents a style folder under the root_folder
 # The folder should contain a 'Source' subfolder with the source images
 tasks:
-  - style_name: Style 11_Statue Selfie
-    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 11_Statue Selfie
-    generation_count: 10
+  - style_name: Dog_Run_To_Owner
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/01_DogRun/
     prompt: |
-      Cinematic bright-daylight wide shot showing the full-body view of Rodin’s The Thinker in his iconic pose, now featuring a sculpted bronze toga that is part of the statue’s form—draped over one shoulder and carved seamlessly into the figure, with no phone anywhere in the frame. The camera begins a smooth push-in toward a medium close-up. As the camera approaches, the statue makes a small, natural motion with his right hand, and we now see he is holding a vivid bright solid orange iPhone 17 Pro Max, which had not been visible in any earlier part of the shot. He shifts into a cheerful playful presence, subtly moves his mouth and says “Selfie time!” while lifting the phone to take a selfie, then gives a friendly wave with his left hand; smooth weighted bronze motion with realistic sculpted-fabric detail in the toga, upbeat humorous atmosphere, respectful and non-romantic tone.
+      A dog is happily running toward its owner with excitement
     negative_prompt: ''
-    model_id: veo-3.1-generate-001
+    model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
     aspect_ratio: '16:9'
     resolution: 1080p
@@ -45,21 +44,12 @@ tasks:
     generate_audio: true
     person_generation: allow_all
 
-  - style_name: Style 13_Pet chat
-    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 13_Pet chat
-    generation_count: 10
+  - style_name: Capybara_Onsen_Closeup
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/02_CapyOnsen/
     prompt: |
-      Keep both animals realistic and species-pure; no hybrid/mixed features.
-
-      SHOT 1 (two-shot, both visible): Hold on both animals on the branch. Only the corgi speaks in a relaxed male voice: “Humans love dogs more than cats!” Natural mouth movement, no barking. Cat stays still.
-
-      SHOT 2 (hard jump cut, two-shot):
-      Both animals remain visible. Camera holds the two-shot.
-      Performance focus shifts to the cat.
-      The cat speaks in an annoyed female voice: “You’re so noisy…”
-      Exactly two mouth openings. Corgi remains still.
+      A close up capybara bathe in a white smoky hot spring, looking around, smoke on the water surface, foggy, blurred mountain background in Japan, bright environment
     negative_prompt: ''
-    model_id: veo-3.1-generate-001
+    model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
     aspect_ratio: '16:9'
     resolution: 1080p
@@ -67,31 +57,29 @@ tasks:
     seed:
     enhance_prompt: true
     generate_audio: true
-    person_generation: default
+    person_generation: allow_all
 
-  - style_name: Style 12_Penguin Talks
-    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 12_Penguin Talks
-    generation_count: 10
+  - style_name: Cherry_Soda_Condensation
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/03_CherrySoda/
     prompt: |
-      Stylized stop-motion clay, 12fps. Medium two-shot, clean white background. Two teal-blue clay penguins stay consistent (round eyes, two eyebrows each, minimal natural beak lip-sync; no distortion; grounded stop-motion, no over-cute SFX energy).
-
-      0–1s (intro): Both face camera, subtle stop-motion wobble.
-      Penguin A lip-syncs: “Are we stuck like this forever?”
-
-      1–2s (response): A mildly worried; B calm/tilted.
-      Penguin B lip-syncs: “At least we’re cute.”
-
-      2–3s (belly): A touches belly; slight clay compress/rebound + brief blink.
-      Penguin A lip-syncs: “And soft. Someone could squish us.”
-
-      3–4s (concern): B slight lean back + subtle surprise.
-      Penguin B lip-syncs: “…please don’t give them ideas!”
-
-      4–6s (turn & glance): Both gradually turn to face each other, soften brows, gentle wobble; one soft synchronized blink at end.
-
-      Rules: Keep dialogue exactly as written. Eye shape stays round; pupils can shift slightly. Two eyebrows always visible. Minimal beak open/close synced to speech.
+      A chilled glass bottle of cherry soda with condsation, surrounded by fresh, juicy cherries. The background is a blend of soft pink and red gradients, Splashes of soda fizz and bubbles are dynamically captured around the bottle
     negative_prompt: ''
-    model_id: veo-3.1-generate-001
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '9:16'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Coral_Reef_Camera_Move
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/04_CoralReef/
+    prompt: |
+      A thriving coral reef ecosystem in pristine condition, colorful corals in rich detail, tropical fish swimming in harmony, sunlight streaming through clear blue ocean water, Camera Movement
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
     aspect_ratio: '16:9'
     resolution: 1080p
@@ -99,15 +87,14 @@ tasks:
     seed:
     enhance_prompt: true
     generate_audio: true
-    person_generation: default
+    person_generation: allow_all
 
-  - style_name: Style 16_Crystalline Flowers
-    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 16_Crystalline Flowers
-    generation_count: 10
+  - style_name: Fresh_Salad_Camera_Move
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/05_Salad/
     prompt: |
-      Cinematic wide shot from behind of a hyper-realistic female adventurer with intricate blonde braids, a realistic fur cloak and boots, standing on a vast snowy plain. She gently touches a giant quartz crystal facet, leaving clear footprints in the pristine white snow. The landscape is filled with colossal “crystal pom-pom trees”—each with a thick trunk of clear quartz points and a dense spherical crown of prismatic crystal blades. All crystals are hard-edged, faceted, translucent, with physically-based refraction, vivid rainbow caustics, and sharp, consistent geometry throughout. No plant-like or organic shapes. The snow is bright white, shimmering with prismatic reflections and long rainbow trails. The sky shows a deep twilight gradient from blue to purple, with hints of pink and gold. Magical iridescent glow suffuses the scene. Ultra-detailed fur, hair, and cinematic digital film quality.
+      Fresh salad in a bowl, with vibrant greens and vegetables, camera movement
     negative_prompt: ''
-    model_id: veo-3.1-generate-001
+    model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
     aspect_ratio: '16:9'
     resolution: 1080p
@@ -115,16 +102,14 @@ tasks:
     seed:
     enhance_prompt: true
     generate_audio: true
-    person_generation: default
+    person_generation: allow_all
 
-  - style_name: Style 15_Old Sailor
-    folder: ../Media Files/Veo_ITV/1223 5 Styles/Style 15_Old Sailor
-    generation_count: 10
+  - style_name: Polar_Bear_Beer_Cheers
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/06_PolarBeer/
     prompt: |
-      A cinematic medium shot of an old sailor standing on the deck of a wooden ship in a raging storm. He has a thick grey beard, wearing a dark navy wool peacoat, cream cable-knit sweater, and blue knitted beanie. His right hand is at his side, his left arm extended, finger pointing toward the horizon. His mouth is open mid-sentence, jaw tense, as if shouting above the wind, conveying urgency and intensity. His face is clean, realistic, and sharply defined, with natural skin tones under his beard and only fine droplets of rain on his skin.
-      Rain and salty spray cling to his coat and beard, showing the harsh weather, while his facial skin is touched only by the finest droplets. The background is a churning, stormy grey sea with whitecaps beneath a dark overcast sky. Dramatic, moody lighting. Photorealistic, 4K.
+      A close-up of a polar bear holding a bottle of beer and shaking it, cheering with the viewer
     negative_prompt: ''
-    model_id: veo-3.1-generate-001
+    model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
     aspect_ratio: '16:9'
     resolution: 1080p
@@ -132,7 +117,144 @@ tasks:
     seed:
     enhance_prompt: true
     generate_audio: true
-    person_generation: default
+    person_generation: allow_all
+
+  - style_name: Diamond_Ring_Rotation
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/07_Ring/
+    prompt: |
+      Diamond ring placed on a velvet cloth, creating dazzling reflections, with the camera slowly rotating around it under a spotlight
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Pancakes_Syrup_Drizzle
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/08_Pancakes/
+    prompt: |
+      A stack of fluffy Japanese pancakes topped with whipped cream and strawberries is being drizzled with golden syrup from a pitcher, set on a wooden plate
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Skincare_Floating_Platform
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/09_Skincare/
+    prompt: |
+      Skincare products displayed on a floating circular stone platform. The background features soft lighting, fluffy white clouds, large circular abstract shapes, and tropical leaves as accents. The entire scene reflects on a calm water surface with subtle ripples
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Tropical_Beach_Waves
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/10_Beach/
+    prompt: |
+      Crystal clear turquoise sea waves gently washing over soft white sand on a sunny tropical beach, fine texture of sand, calm and serene atmosphere, Camera Movement
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Forest_River_Camera_Move
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/11_Forest/
+    prompt: |
+      A photo of serene forest with crystal-clear river flowing through, surrounded by lush green trees and wildflowers, under a bright blue sky, an eco-friendly atmosphere, vibrant colors, clean and fresh environment, Camera Movement
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Steam_Cloud_Pan
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/12_Steam/
+    prompt: |
+      The steam gently rising from cup like fluffy white clouds , natural motion, continuously flowing without interruption. The camera smoothly moves in a slow cinematic pan
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '9:16'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Desert_Door_To_Oasis
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/13_Door/
+    prompt: |
+      A glowing door stands alone in the middle of a desert under a star-filled night sky. When the door opens from one side, it reveals a lush green oasis with palm trees, shimmering water, and bright sunlight, contrasting with the surrounding dark desert, Camera Movement
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '9:16'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Grilled_Steak_Smoke
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/14_Steak/
+    prompt: |
+      A juicy perfectly grilled steak on a wire grid, causing a smoky
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '16:9'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+  - style_name: Whiskey_Condensation_Fire
+    folder: ../Media Files/Veo_ITV/1226 15 Styles/15_Whiskey/
+    prompt: |
+      A bottle of premium whiskey stands with tiny water droplets covering its surface, showcasing a condensation effect, emanating from blazing fires. The backlight accentuates the bottle's silhouette and transparent texture.camera movement
+    negative_prompt: ''
+    model_id: veo-3.1-fast-generate-preview
+    duration_seconds: 6
+    aspect_ratio: '9:16'
+    resolution: 1080p
+    compression_quality: optimized
+    seed:
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
+
+
 
 # To add more styles, copy the task block above and modify:
 # - style_name: Name of the style (used in logging)
