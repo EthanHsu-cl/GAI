@@ -805,6 +805,13 @@ class NanoBananaHandler(BaseAPIHandler):
                             all_error_messages.append(unknown_msg)
                             self.logger.warning(f" ⚠️ {unknown_msg}")
         
+        # If response_data is empty or no content parts found
+        if not response_data or (isinstance(response_data, list) and len(response_data) == 0):
+            is_failed = True
+            if not failure_reason:
+                failure_reason = "No content parts in response"
+                all_error_messages.append(failure_reason)
+        
         # Determine failure status and reason
         if text_responses_list and not has_images_in_response:
             is_failed = True
@@ -818,7 +825,13 @@ class NanoBananaHandler(BaseAPIHandler):
         
         # Early return for explicit failures
         if error_msg or is_failed:
-            self.logger.info(f" ❌ API Error: {failure_reason}")
+            # Log the failure with text responses if available
+            if text_responses_list:
+                self.logger.info(f" ❌ API Error: {failure_reason}")
+                self.logger.info(f" 📝 Text response: {text_responses_list[0][:200]}")  # Show first 200 chars
+            else:
+                self.logger.info(f" ❌ API Error: {failure_reason}")
+            
             metadata = {
                 'response_id': response_id, 
                 'error': failure_reason, 
@@ -851,23 +864,39 @@ class NanoBananaHandler(BaseAPIHandler):
         # If no images were saved but we got here, treat as failure
         if not has_images:
             error_reason = "No images generated"
-            if text_responses:
-                # Extract text content for error message
+            # Check if we have text responses captured earlier
+            if text_responses_list:
+                # Use text from earlier parsing (more reliable)
+                error_reason = f"{text_responses_list[0]}"
+                if not any(error_reason.lower().startswith(prefix) for prefix in ['error', 'failed', 'blocked', 'invalid']):
+                    error_reason = f"Error: {error_reason}"
+            elif text_responses:
+                # Fallback: extract text content from processor's parsed responses
                 text_contents = [tr.get('content', '') for tr in text_responses if isinstance(tr, dict)]
                 if text_contents:
-                    error_reason = f"Error: {text_contents[0]}"
+                    error_reason = text_contents[0]
+                    if not any(error_reason.lower().startswith(prefix) for prefix in ['error', 'failed', 'blocked', 'invalid']):
+                        error_reason = f"Error: {error_reason}"
             
             self.logger.info(f" ❌ {error_reason}")
+            if text_responses_list and len(text_responses_list[0]) > 100:
+                # Log longer text responses
+                self.logger.info(f" 📝 Full text response: {text_responses_list[0]}")
+            
             metadata = {
                 'response_id': response_id,
                 'error': error_reason,
-                'text_responses': text_responses,
                 'success': False,
                 'attempts': attempt + 1,
                 'processing_time_seconds': round(processing_time, 1),
                 'processing_timestamp': datetime.now().isoformat(),
                 'api_name': self.api_name
             }
+            # Include text responses for debugging - use the more reliable source
+            if text_responses_list:
+                metadata['text_responses'] = text_responses_list
+            elif text_responses:
+                metadata['text_responses'] = text_responses
             if use_random_source and all_imgs_info:
                 metadata['all_images_used'] = all_imgs_info
                 metadata['random_source_selection'] = True

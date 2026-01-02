@@ -505,7 +505,11 @@ class VeoReportGenerator:
                     style_names.append(pair.style_name)
                     seen.add(pair.style_name)
             
-            style_str = ', '.join(style_names) if style_names else 'Test'
+            # Use count format to avoid long filenames
+            if style_names:
+                style_str = f"{len(style_names)} {'Style' if len(style_names) == 1 else 'Styles'}"
+            else:
+                style_str = 'Test'
             filename = f"[{date_str}] Google Veo {style_str}"
             
             # Get output directory

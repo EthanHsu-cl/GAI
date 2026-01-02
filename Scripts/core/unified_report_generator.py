@@ -1879,9 +1879,9 @@ class UnifiedReportGenerator:
             output_folder = root_folder / 'Generated_Video'
             metadata_folder = root_folder / 'Metadata'
         else:  # veo
-            root_folder = Path(task.get('output_folder', ''))
-            output_folder = root_folder / 'Generated_Video'
-            metadata_folder = root_folder / 'Metadata'
+            # For veo, output_folder in config already points to Generated_Video directory
+            output_folder = Path(task.get('output_folder', ''))
+            metadata_folder = output_folder.parent / 'Metadata'
         
         pairs = []
         
@@ -2089,6 +2089,8 @@ class UnifiedReportGenerator:
         else:
             # Effect names are the actual content description
             effect_str = ', '.join(effect_names) if effect_names else 'Test'
+            if len(effect_str) > 20:
+                effect_str = effect_str[:47] + '...'
         
         # Build API line (date + model)
         api_parts = [f"[{d}]"]

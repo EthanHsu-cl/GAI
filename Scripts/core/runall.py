@@ -185,18 +185,8 @@ def run_report_generator(api_name, config_file=None):
     try:
         logger.info(f"📊 Generating report: {api_name.replace('_', ' ').title()}")
 
-        # Text-to-video APIs use unified report generator
-        if api_name == 'veo':
-            import importlib.util
-            spec = importlib.util.spec_from_file_location(
-                "generate_veo_report",
-                Path(__file__).parent.parent / 'reports' / 'generate_veo_report.py'
-            )
-            veo_module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(veo_module)
-            generator = veo_module.VeoReportGenerator(config_file)
-        else:
-            generator = create_report_generator(api_name, config_file)
+        # All APIs now use unified report generator
+        generator = create_report_generator(api_name, config_file)
         
         success = generator.run()
 

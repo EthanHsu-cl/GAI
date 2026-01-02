@@ -254,8 +254,6 @@ tasks:
     generate_audio: true
     person_generation: allow_all
 
-
-
 # To add more styles, copy the task block above and modify:
 # - style_name: Name of the style (used in logging)
 # - folder: Path to the style folder containing Source subfolder

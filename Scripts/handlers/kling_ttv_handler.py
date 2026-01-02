@@ -32,6 +32,7 @@ class KlingTTVHandler(BaseAPIHandler):
             ratio=task_config.get('ratio', self.api_defs.get('api_params', {}).get('ratio', '9:16')),
             cfg=task_config.get('cfg', self.api_defs.get('api_params', {}).get('cfg', 0.5)),
             neg_prompt=task_config.get('neg_prompt', self.api_defs.get('api_params', {}).get('neg_prompt', '')),
+            sound_enabled=task_config.get('sound_enabled', self.api_defs.get('api_params', {}).get('sound_enabled', False)),
             api_name=self.api_defs['api_name']
         )
     
