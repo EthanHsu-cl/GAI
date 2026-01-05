@@ -4,7 +4,7 @@ testbed: http://192.168.31.40:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 4
+  group_tasks_by: 3
 
 schedule:
   start_time: ""
