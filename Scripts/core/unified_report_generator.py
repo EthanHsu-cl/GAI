@@ -2589,8 +2589,9 @@ class UnifiedReportGenerator:
 
         slide = ppt.slides[0]
 
-        # Find or create info box
-        info_box = next((s for s in slide.shapes if hasattr(s,'text_frame') and s.text_frame.text and 
+        # Find or create info box (skip the title shape which is shapes[0])
+        # Only search shapes[1:] to avoid accidentally selecting the title shape
+        info_box = next((s for s in list(slide.shapes)[1:] if hasattr(s,'text_frame') and s.text_frame.text and 
                         any(k in s.text_frame.text.lower() for k in ['design','testbed','source'])), None)
 
         if not info_box:
