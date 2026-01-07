@@ -4,39 +4,44 @@ testbed: http://192.168.31.40:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3
+  group_tasks_by: 2
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCtdan97pVMTb_Bjho4E-T0AUVgUKIMbL5IoXLcNuCHfuo?e=yZSi83
-root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3b450084689_2_128#slide=id.g3b450084689_2_128
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAMIui1OXTXRZ09YqmFEme_ASWgO94LFgIr5eBVx4fgE5w?e=c7KQyD
+root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3b27ffe973d_0_464#slide=id.g3b27ffe973d_0_464
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0105 2 Styles/0105 日系自然照片 女生送巧克力-俯角
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 麻將賭徒 四宮格 - 紅色風衣
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
     prompt: |
-      Using the uploaded photo of the person as the primary subject, preserve their facial features, makeup, hairstyle, skin tone, and body proportions, must ensuring complete consistency .
-      Facial bone structure and proportions must be consistent with the user's uploaded photos from any angle. with the uploaded image.
+      Create a perfectly balanced four-panel grid image with equal-sized panels, clearly and cleanly divided, inspired by an exaggerated Hong Kong casino night aesthetic.
 
-      Transform it into a cinematic close-up portrait inspired by lifestyle photography.
+      Use the uploaded photo of the person as the sole subject. Do not alter identity, facial features, skin texture, hairstyle, or expression. Only change clothing and styling as described.
 
-      She lies on a soft, neutral-colored sofa, without any blankets.
+      All four panels must share a consistent environment: a upscale mahjong table in the foreground and deep green velvet curtains as the background. Each panel must include visible mahjong tiles, and the subject must actively interact with them in every frame. Avoid pure portrait shots; mahjong interaction is mandatory in all panels.Every image must show a person's face; there will never be a moment without a face.White borders are prohibited on the four grids.
 
-      Her hair falls naturally,However, changing hairstyles is prohibited and a few fresh cherries or strawberries (arranged randomly, but only one type of fruit at a time) are casually scattered around her, seemingly effortless and harmoniously natural. Three hands or illogical poses are strictly prohibited.
+      Outfit:
+      A red trench coat with an open front, a well-fitting cut, and the hem must be fixed above the hips. The jacket must stop above the widest part of the hips and must never cover the lower hips or upper thighs. The fabric is smooth with a soft matte finish, lightly structured shoulders, narrow peak lapels, and a refined double-breasted front.A matching red belt, about 3 centimeters wide, cinches her waist, accentuating her beautiful hourglass figure.
 
-      She wears a white spaghetti strap dress—simple yet elegant—that gleams softly in the sunlight. The V-neck and thin straps accentuate her beautiful shoulders and collarbones.
+      Underneath, she wears a red high-waisted mini dress with thin spaghetti straps and a sweetheart neckline. The skirt is a true mini length, visibly exposing the upper thighs, with the hemline clearly positioned high on the leg and never extending beyond the jacket hem. The skirt must read as a short cocktail mini dress, not a midi or knee-length silhouette, and must remain fully visible in seated and standing poses.
 
-      Her pose is relaxed and natural: she leans back, holding fruit near her nose, blinking only one eye, a warm, playful smile on her lips, or gazing captivatingly at the camera; or one hand holds fruit (fresh cherries or strawberries, randomly selected, but only one type at a time), the other resting naturally—all her movements are relaxed and natural.
+      Footwear consists of black pointed-toe platform boots with slim stiletto heels (7–8 cm). The boots fit closely around the ankle with matte leather texture and sharp, elegant lines, reinforcing a bold casino-night aesthetic.
 
-      The lighting is soft and diffused, simulating natural window light shining from above at approximately a 45° angle. The color temperature is approximately 5200K, creating a clean, bright, sunny atmosphere, leaving soft highlights on her skin and hair. The overall tone should remain bright and fresh, with natural shadow transitions.
+      Four-panel composition rules:
+      Top-left: Medium or three-quarter shot beside the mahjong table, confident posture, hands touching or arranging tiles.
 
-      Use a medium-close-up composition (approximately from head to chest), with an equivalent focal length of 50-85mm and an aperture of f/1.8-f/2.2, emphasizing eye contact, hair texture, and the natural glow of her skin.
+      Top-right: Tight facial close-up with one hand holding mahjong tiles near the face, strong eye contact.
 
-      The final atmosphere should showcase the elegant temperament of a modern woman—fresh, romantic, and naturally radiant—like a magazine spread shot in the morning light.
+      Bottom-left: Close-up emphasizing hands and face, holding or displaying mahjong tiles playfully or provocatively.Mahjong tiles will always be either the "Fa" or "Zhong" tiles.
+
+      Bottom-right: Medium shot leaning or sitting at the table, relaxed but powerful pose, tiles clearly visible in the foreground.
+
+      Lighting is dramatic and cinematic with warm highlights, deep shadows, and reflective surfaces. The overall mood is bold, glamorous, and unapologetically Hong Kong—like a high-end casino fashion campaign.If you're holding mahjong tiles, you must hold them properly; you absolutely cannot hold them like you would playing cards. Mahjong tiles are not paper.The mahjong tiles must be laid out correctly; a jumbled or mirrored arrangement is strictly prohibited.The background is set outside dark green velvet curtains, and no lighting fixtures are allowed.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
@@ -44,37 +49,435 @@ tasks:
     max_images: 2
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0105 2 Styles/0105 浪漫邱比特天使
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 麻將賭徒 四宮格 - 紅色套裝
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Create a perfectly balanced four-panel grid image with equal-sized panels, clearly and cleanly divided, inspired by an exaggerated Hong Kong casino night aesthetic.
+
+      Use the uploaded photo of the person as the sole subject. Do not alter identity, facial features, skin texture, hairstyle, or expression. Only change clothing and styling as described.
+
+      All four panels must share a consistent environment: a upscale mahjong table in the foreground and deep green velvet curtains as the background. Each panel must include visible mahjong tiles, and the subject must actively interact with them in every frame. Avoid pure portrait shots; mahjong interaction is mandatory in all panels.Every image must show a person's face; there will never be a moment without a face.White borders are prohibited on the four grids.
+
+      Outfit:
+      Dressed in a refined, high-fashion red tailored suit. The upper garment is an oversized red suit jacket with a slightly androgynous, couture-inspired silhouette reminiscent of late 20th-century high fashion. The shoulders are softly structured with light padding, creating a clean, straight shoulder line without exaggeration. 
+
+      The coat has a single-breasted two-button design that must be kept buttoned up, positioned slightly low to create a deep and sharp V-shaped opening at the chest.
+
+      The lapels are wide notched lapels with crisp, straight edges that must remain symmetrical and undistorted. The jacket length extends past the hips to the upper thigh area, emphasizing an elongated vertical proportion. The fabric is a high-density wool or wool-blend suiting material, approximately 260–300 gsm, with a matte finish. The red tone is a saturated, fashion-forward true red, not leaning toward orange, with stable, even coloration and minimal sheen.
+
+      The deep V neckline reveals bare skin, styled intentionally as part of the fashion look. A delicate metal necklace is worn as the only accessory, featuring a fine chain that rests between the collarbones and the center of the chest. The metal tone is subtle, silver or white gold, adding refinement without drawing attention away from the suit.
+
+      The trousers are matching red tailored pants made from the exact same fabric and color as the jacket, ensuring perfect tonal continuity. The pants are high-waisted with a straight, wide-leg cut that falls cleanly from the hips. The silhouette is relaxed yet elegant, with no tapering at the hem. The length is intentionally long, allowing the fabric to softly stack and drape over the tops of the shoes, creating fluid folds and a luxurious runway-style proportion.
+
+      Footwear consists of clean white low-top leather sneakers. The design is minimal and contemporary, with a rounded toe and no visible logos. The leather upper has a smooth matte finish, paired with a medium-thickness white rubber sole. 
+
+      Four-panel composition rules（Close-up shots must never be repeated.）：
+      Top-left: Medium or three-quarter shot beside the mahjong table, confident posture, hands touching or arranging tiles. 
+
+      Top-right: Tight facial close-up with one hand holding mahjong tiles near the face, strong eye contact.
+
+      Bottom left corner: Close-up shot emphasizing hands and face, showing the mahjong tiles being held towards the camera in a playful or provocative manner. The mahjong tiles are always either the "Fa" or "Zhong" tiles.
+
+      Bottom-right: Medium shot leaning or sitting at the table, relaxed but powerful pose, tiles clearly visible in the foreground.
+
+      Lighting is dramatic and cinematic with warm highlights, deep shadows, and reflective surfaces. The overall mood is bold, glamorous, and unapologetically Hong Kong—like a high-end casino fashion campaign.If you're holding mahjong tiles, you must hold them properly; you absolutely cannot hold them like you would playing cards. Mahjong tiles are not paper.The mahjong tiles must be laid out correctly; a jumbled or mirrored arrangement is strictly prohibited.The background should be dark green velvet curtains; crystal chandeliers or any other light fixtures are prohibited.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 舞龍舞獅 單圖
+    model: gemini-2.5-flash-image
+    resolution:
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the uploaded person as the only human subject. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions exactly as in the uploaded photo. Do NOT beautify, stylize, or alter identity. No extra people.
+
+      Create a slightly wider, editorial-style portrait featuring an intimate interaction between the subject and a traditional Chinese lion dance. Pull the camera back just enough so the entire lion head is fully visible.
+
+      Lion requirements:
+      - The lion head faces directly forward toward the camera in a clear frontal orientation with symmetrical features (no profile or angled view).
+      - The lion head must be positioned immediately beside the subject’s face, close to the cheek or side of the head, creating a strong sense of proximity and interaction at face level. The lion head should appear large and positioned very close to the subject, creating a strong visual dialogue between the subject and the lion.  
+      - A lion dance body (fabric tail) is attached behind the head and extends backward into the frame as continuous flowing fabric with realistic texture, folds, and implied movement; it must remain secondary and never obscure the subject or lion head.
+
+      Subject:
+      - At least one of the subject’s hands must be in direct physical contact with the lion head. The hand should clearly touch the lion head surface (such as fur, fabric, or structural elements), making the interaction unmistakably tactile rather than implied or posed at a distance.
+      - The subject looks directly into the camera with a firm, confident, determined gaze (not playful or smiling), like a stylized New Year editorial photoshoot.
+
+      Background:
+      - Clean solid-red color backdrop that harmonizes with red.
+      - Centered rich red velvet curtains parted from the middle and pulled symmetrically to left/right, fixed in place; show luxurious velvet folds/texture. No other patterns or environmental elements.
+
+      Wardrobe:
+      - Both genders wear traditional lion dance pants with decorative detailing starting from the waistband and continuing downward (not only from knees/lower legs).
+      - Female: red sequined strapless tube top; lion dance pants with a black base, featuring red and gold decorative patterns and embellishments.
+      - Male: black fitted sleeveless mock-neck tank top (slim-cut silhouette with a subtle high neckline); lion dance pants with a red base, featuring gold decorative patterns and embellishments.
+      - Clothing must be realistic, well-fitted, with no added accessories or outfit redesign.
+
+      Color & materials:
+      - Lion head overall palette dominated by gold, with red and white accents from the lion head. Lion head looks handcrafted with authentic fabric, fur, embroidery, and painted patterns (not cartoonish/plastic).
+
+      Atmosphere:
+      - Light, controlled smoke/mist only in the lower frame up to about waist level; gently diffused, ceremonial, never obscuring the face, lion head, or curtains; not foggy or overwhelming.
+
+      Lighting:
+      - Clean, bright, slightly dramatic studio lighting highlighting facial features and textures (lion head, pants, lion body fabric, velvet curtains). Avoid cinematic blur, fantasy effects, or exaggerated stylization.
+
+      Final image:
+      - Realistic, cohesive, professionally photographed, correct proportions/lighting, no artifacts, identity fully preserved.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 舞龍舞獅 單圖-中文
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the uploaded person as the only human subject. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, and body proportions exactly as in the uploaded photo. Do NOT beautify, stylize, or alter identity. No extra people.
+
+      Create a slightly wider, editorial-style portrait featuring an intimate interaction between the subject and a traditional Chinese lion dance. Pull the camera back just enough so the entire lion head is fully visible.
+
+      Lion requirements: The lion head faces directly forward toward the camera in a clear frontal orientation with symmetrical features (no profile or angled view). The lion head must be positioned immediately beside the subject’s face, close to the cheek or side of the head, creating a strong sense of proximity and interaction at face level. The lion head should appear large and positioned very close to the subject, creating a strong visual dialogue between the subject and the lion. A lion dance body (fabric tail) is attached behind the head and extends backward into the frame as continuous flowing fabric with realistic texture, folds, and implied movement; it must remain secondary and never obscure the subject or lion head.
+
+      Subject: At least one of the subject’s hands must be in direct physical contact with the lion head. The hand should clearly touch the lion head surface (such as fur, fabric, or structural elements), making the interaction unmistakably tactile rather than implied or posed at a distance. The subject looks directly into the camera with a firm, confident, determined gaze (not playful or smiling), like a stylized New Year editorial photoshoot.
+
+      Background: Clean solid-red color backdrop that harmonizes with red. Centered rich red velvet curtains parted from the middle and pulled symmetrically to left/right, fixed in place; show luxurious velvet folds/texture. No other patterns or environmental elements.
+
+      Wardrobe: Both genders wear traditional lion dance pants with decorative detailing starting from the waistband and continuing downward (not only from knees/lower legs). Female: red sequined strapless tube top; lion dance pants with a black base, featuring red and gold decorative patterns and embellishments. Male: black fitted sleeveless mock-neck tank top (slim-cut silhouette with a subtle high neckline); lion dance pants with a red base, featuring gold decorative patterns and embellishments. Clothing must be realistic, well-fitted, with no added accessories or outfit redesign.
+
+      Color & materials: Lion head overall palette dominated by gold, with red and white accents from the lion head. Lion head looks handcrafted with authentic fabric, fur, embroidery, and painted patterns (not cartoonish/plastic).
+
+      Atmosphere: Light, controlled smoke/mist only in the lower frame up to about waist level; gently diffused, ceremonial, never obscuring the face, lion head, or curtains; not foggy or overwhelming.
+
+      Lighting: Clean, bright, slightly dramatic studio lighting highlighting facial features and textures (lion head, pants, lion body fabric, velvet curtains). Avoid cinematic blur, fantasy effects, or exaggerated stylization.
+
+      Final image:  Realistic, cohesive, professionally photographed, correct proportions/lighting, no artifacts, identity fully preserved.
+
+      Greeting card typography overlay (additional requirement): Add a greeting-card–style title text at the top of the image, centered horizontally. The text content must read exactly: “新年快樂”. The typography must be a traditional Chinese cursive calligraphy style (草書 / 行草-inspired brush calligraphy), with a strong sense of handwritten flow and natural stroke rhythm. The writing should feel like authentic hand-brushed calligraphy, with visible variation in stroke pressure, ink density, and organic line movement. The calligraphy should feel expressive and fluid, yet still refined, elegant, and premium—never messy, wild, or illegible. Avoid modern handwritten fonts, decorative fonts, playful styles, cartoon-like writing, or overly exaggerated brush effects. The overall feeling should resemble classic Lunar New Year calligraphy written freely by hand, balancing spontaneity with cultural sophistication.
+
+      The text color must appear as metallic gold foil embossing (hot-stamped gold effect): Realistic metallic gold sheen with subtle highlights and reflections. Slight embossed, tactile depth, as if pressed onto high-quality paper. Luxurious and ceremonial — not flat yellow, not matte gold, not glowing. The gold calligraphy should feel tasteful and restrained, suitable for a high-end Lunar New Year greeting card. The text must remain clean and legible, without excessive decoration, glow, or modern graphic effects. The greeting text must not overlap or obstruct the subject’s face, the lion head, or the main interaction, functioning purely as a refined header element completing the composition like a formal New Year card.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 喜氣拍立得 圖案春聯
     model: gemini-2.5-flash-image
     resolution: 
-    aspect_ratio: 
+    aspect_ratio: "3:4"
     prompt: |
-      The subject should be the person in the uploaded photo, whose facial features, makeup, hairstyle, skin tone, and body proportions are completely identical to the uploaded photo.
+      Use the uploaded person as the only subject. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, body proportions, and overall appearance exactly as in the uploaded photo. Do NOT beautify, stylize, or alter the subject’s identity in any way. No extra people may appear.
 
-      In a soft pink-toned studio, create a dreamlike, angelic portrait. The lighting should be bright yet soft, with slightly overexposed highlights, surrounding the subject to create a hazy, ethereal halo, like a dreamlike cosplay photo.
+      Create a realistic New Year–themed portrait where the primary focus is a Polaroid-style instant photo held very close to the camera. The instant photo should dominate the frame, appearing large and centered. Only a small portion of the subject’s fingers should be visible at the very bottom edge of the image, lightly holding the photo. The hand and fingers holding the instant photo must be partially cropped so attention is clearly drawn to the instant photo rather than the full hand or body.
 
-      The following two actions will occur randomly (one must appear, both must have a relaxed and natural feel, and must be a close-up or half-body shot):
-      Only one Cupid bow and one Cupid arrow may exist in the scene. No duplicates are allowed.
+      The instant photo should be held at a slight, natural tilt rather than perfectly straight.
+      The angle should feel casual and spontaneous, as if the photo was just taken and quickly lifted toward the camera, adding a relaxed, candid feeling without breaking realism.
 
-      Action 1 (must be a close-up or half-body shot):
+      The instant photo must look physically real, with correct perspective, thickness, paper texture, and natural alignment with the subject’s hand. It should have a warm tone, subtle Polaroid-style soft focus, and a gentle on-camera flash feel with soft highlight falloff and slightly lifted shadows. Lighting should be clean, bright, and natural, similar to indoor daylight or soft room lighting.
 
-      She holds a delicate Cupid's bow in one hand, casually placed beside her lap. The bow is slender and white, adorned with delicate gold decorations, and the arrows match. Her posture is gentle and slightly shy: knees together, upper body relaxed, head slightly tilted, gaze softly at the camera.
+      Inside the instant photo, change the subject’s clothing to a red top for a New Year theme.
+      • Male: red knit sweater.
+      • Female: red off-shoulder knit sweater.
+      The clothing change must look realistic, with proper fabric texture and fit, while fully preserving the subject’s identity and body proportions.
 
-      Action Two (must be a close-up or half-body shot):
+      In the instant photo, one hand must be raised with the palm facing outward, clearly showing five small red square Chinese New Year couplet stickers, exactly one per finger. Each sticker must feature the single Chinese character “福.” The stickers should look like real paper stickers naturally attached to the fingers, not floating or graphic elements.
+      If the subject is female, the other hand should gently touch or point toward her cheek in a playful, cute gesture.
+      If the subject is male, the other hand should rest naturally by his side with no deliberate gesture.
 
-      The subject leans forward, resting against a fallen white Roman column, her torso resting on the edge of the column's top, causing her shoulders, upper arms, and part of her chest to naturally sag.
+      Background (inside the instant photo):
+      A simple indoor wall decorated with two diamond-shaped Chinese New Year posters in gold-foil embossed style—one with a horse illustration and one with the character “福.” The posters should appear slightly smaller in scale, positioned farther back on the wall, and may be partially obscured by the subject’s body or shoulder. They must remain recognizable but secondary, adding festive context without competing with the subject’s face or gesture.
 
-      The model's head is slightly tilted, creating an elegant and soft three-quarter profile. One hand gently supports her chin, the knuckles relaxed and naturally curved, creating a soft perspective effect. Her gaze is calm and ethereal, looking directly at the camera.
+      The overall atmosphere should feel festive, playful, and modern with a lighthearted New Year mood. Use clean, natural indoor lighting. Avoid heavy filters, exaggerated colors, or artificial effects.
 
-      Her clothing must be: a light pink, super-short, puffy, off-the-shoulder dress. The bodice is a shapewear corset with steel support, a softly curved heart-shaped neckline edged with delicate lace, and thin straps. The skirt is a layered, light, pleated ballet tutu, flaring out around the hips and reaching the upper thighs. Made of sheer tulle and organza, it appears soft and translucent. A small, cute necklace or ribbon adorns her neck, adding to her doll-like sweetness. She wears white over-the-knee knit stockings with ribbed cuffs and soft fan-shaped lace trim, revealing her bare feet. The overall look should be sweet, girlish, and slightly Lolita-esque, rather than a simple long dress.
+      The final image must look realistic and cohesive, with the instant photo as the clear focal point, the holding hand only slightly visible at the bottom edge, and the outward-facing palm clearly displaying five “福” stickers, while fully preserving the subject’s true identity and natural appearance.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
 
-      Behind her are a pair of soft, layered white angel wings. A fluffy feathered angel halo adorns her head, forming a shimmering circle above and around her hair.
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 馬年形象照(半身)
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Please use the person in the uploaded photo as the sole subject in the image. The person's real face, features, identity, skin tone, hairstyle, expression, and body proportions must be completely identical to those in the uploaded photo. Do not beautify, stylize, or alter the person's identity in any way. No other people should appear in the image.
 
-      These two movements will create the following background:
+      Create a half-length portrait showing a natural and intimate interaction between the person and a real horse. The horse must be real, in a natural pose, and naturally positioned beside the person, maintaining gentle contact, such as the person pressing their cheek against the horse's face, gently embracing and touching the horse's muzzle, or standing calmly side-by-side. All interactions must conform to the laws of real-world physics; floating, distorted, or surreal poses are not allowed.
 
-      Around her, three white doves must be fixed, flying at different distances and heights, wings outstretched. Some are close to the camera with slight motion blur, while others are in the distance, collectively outlining her figure. The background should be a clean, pastel gradient with no harsh edges, and the clouds at the base of the pillars should emit a soft glow.
+      The horse's coat must be black with subtle warm undertones, clearly visible hair texture, soft highlights on the muzzle and forehead, and natural, realistic shadows around the eyes. Avoid overly bright, bluish, grayish, or pure black tones. The horse should appear calm, composed, and lifelike.
 
-      The overall image must convey the effect of a high-end, dreamy angelic portrait: soft pink tones, bright white, and a dreamlike atmosphere.
+      Overall color grading and lighting: Soft, natural sunlight with a warm, neutral tone 、Sunlight shines(not too cool, not too blue, and not overly intense). Skin tones should be natural and radiant. Shadows should be softly blended with smooth transitions, avoiding harsh contrasts. The overall atmosphere should be tranquil, refined, and artistic, similar to the effect of high-end fashion portraits shot outdoors or in open natural environments.
+
+      The background must be simple and understated, using soft, neutral tones—such as a light sky or a shallow, natural background. Avoid cluttered scenes, strong colors, or high-contrast backgrounds. The focus should be entirely on the emotional connection between the person and the horse.
+
+      The subject wears a burgundy shirt: clean, elegant, and simple, with good drape and a fine texture. Soft pleats and other delicate details create a timeless and poetic aesthetic. The overall look is simple and elegant. The styling should present a classic and understated style to enhance the calm and warm atmosphere, rather than overshadow it.
+
+      The final image should resemble a sophisticated fashion portrait—serene, delicate, realistic, and harmoniously unified.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 馬年形象照(黑白)
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the uploaded person as the only human subject in the image.
+      The subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions must remain exactly the same as in the uploaded photo.
+      Do not beautify, stylize, or alter the subject’s identity in any way.
+
+      Create a refined, luxury editorial-style portrait celebrating the Year of the Horse, centered on an intimate interaction between the subject and a real horse.
+
+      This must be an extreme close-up composition.
+      The framing is very tight and intimate, focusing primarily on the subject’s face and the horse’s head.
+      Both faces fill most of the frame, positioned extremely close to each other, with minimal negative space.
+      No full body, no half body, no wide framing.
+
+      The image should feel like a high-fashion campaign or luxury brand visual, emphasizing elegance, strength, and quiet connection rather than festivity or spectacle.
+
+      The composition features the subject and a horse positioned face-to-face at very close distance..
+
+      The horse must be a black horse.There is a tuft of white hair about the size of a thumb fixed in the center of the forehead.
+
+      Its coat appears deep black to charcoal black in tone, with natural highlights and texture visible under studio lighting.
+      The black coat should feel elegant, powerful, and refined—never glossy, fantasy-like, or artificial.
+      Subtle tonal variation is allowed to reveal muscle structure and hair texture, especially around the face and neck, while maintaining an overall dark, noble presence.
+      The horse is life-sized, realistic, and calm, with its head clearly visible in the frame.
+      The horse’s eye, muzzle, and facial texture are sharply defined, never blurred or abstracted.
+
+      The interaction is defined by mutual eye contact and gentle physical connection.
+      The subject and the horse quietly gaze into each other’s eyes at close range.
+      One of the subject’s hands is gently placed on the horse—such as resting softly on the horse’s cheek or upper neck—clearly visible within the close-up frame.
+      The touch is natural, light, and intentional, expressing trust and emotional connection rather than control or dominance.
+
+      There is no riding, no reins, no performance gesture, and no dynamic action.
+      The moment feels still, intentional, and emotionally restrained—like a silent exchange of presence captured in a single breath.
+
+      The subject’s pose is confident, poised, and minimal.
+      The expression is calm, composed, and slightly serious—editorial rather than smiling.
+      The subject looks directly at the horse, never at the camera.
+      The horse remains serene and attentive, naturally meeting the subject’s gaze.
+      Human and horse silhouettes remain clearly distinct at all times, with no visual merging or overlap of facial features.
+
+      The overall visual style is clean, minimal, and high-end.
+      Use a monochrome or near-monochrome palette.
+      Black-and-white photography only.
+
+      Avoid bright colors, festive red, or decorative New Year elements.
+
+      The background is simple and understated, such as a gray-white studio backdrop with very subtle texture.
+      No outdoor scenery, no stables, no props, no text, and no graphic elements.
+
+      Lighting is soft, directional, and sculptural, carefully shaping facial structure, bone lines, and the texture of the horse’s coat.
+      Use controlled studio lighting with gentle contrast, similar to luxury fashion editorials.
+      Avoid harsh shadows, fantasy lighting, cinematic exaggeration, or dramatic effects.
+
+      Clothing is minimal, modern, and elegant.
+      The subject wears a simple, refined outfit such as a fitted black turtleneck or clean silhouette clothing with no logos, patterns, or distractions.
+
+      The final image must look realistic, cohesive, and professionally photographed, presenting a sophisticated Year of the Horse portrait that conveys power, elegance, trust, and quiet intimacy—
+      like a luxury fashion campaign rather than a traditional holiday image—while fully preserving the subject’s true identity.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  # - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 農曆年四宮格-錦鯉 Female
+  #   model: gemini-2.5-flash-image
+  #   resolution: 
+  #   aspect_ratio: "3:4"
+  #   prompt: |
+  #     Use the uploaded person as the only human subject in the image. The subject’s real face, facial features, identity, skin tone, hairstyle, and body proportions must remain exactly the same as in the uploaded photo. Do not beautify, stylize, or alter the subject’s identity in any way. 
+
+  #     Create one single image as a perfectly even 2×2 four-panel grid (exactly 4 panels only). The four panels must be equal size and seamlessly merged with clean internal dividers but absolutely no white lines, borders, gaps, or spacing (a continuous collage).
+
+  #     Must include: top right and bottom left: half-body photo;stop left and bottom right: full-body photos . All poses must be natural.
+
+  #     Bright, airy, high-key studio look: soft daylight, gray balance (warm, NOT yellow), gentle shadows, clean highlights, crisp clarity. The entire set is the same minimal studio in all panels, featuring a semi-transparent plastic sheet backdrop (crinkled clear vinyl with visible folds/wrinkles) and a light floor with the same plastic material. Keep the overall scene luminous.
+
+  #     key requirement for koi: the number of koi in the entire four-panel picture must be exactly two (no more, no duplicates, and no extra small fish). These two koi must be artistic and stylized, not photorealistic: semi-translucent red koi with dramatic flowing fins that resemble silk/organza, painterly and dreamy, with delicate motion blur on the fins and a slightly surreal “floating in air” fashion-art effect. Keep the koi scale and placement consistent in all panels,  The koi must never cover the subject’s face, eyes, nose, or mouth, and must stay at least one face-width away from the face in every panel.
+
+  #     The composition must contain four different compositions and poses. (same outfit,  set, lighting, two koi positions) with Elegant and natural movements (Avoid excessive rigidity; absolutely prohibit unreasonable limbs and movements, and prevent unnecessary limb movements.).
+
+  #     Dress the subject in a sleeveless deep-red floor dress  with a clean fitted bodice and smooth matte-to-satin finish, the hem lightly pooling on the floor. Skirt with slits.Add a sheer red chiffon/organza scarf that is long, lightweight, and flowing, Create an elegant, natural sway and sophisticated fashion magazine look.
+
+  #     Keep the whole result clean, bright, editorial with only two stylized koi total and always a seamless 2×2 grid.
+  #   reference_folder: ""
+  #   use_comparison_template: false
+  #   use_random_source_selection: false
+  #   min_images: 2
+  #   max_images: 2
+  #   num_iterations: 50
+
+  # - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 農曆年四宮格-錦鯉 Male
+  #   model: gemini-2.5-flash-image
+  #   resolution: 
+  #   aspect_ratio: "3:4"
+  #   prompt: |
+  #     Use the uploaded person as the only human subject in the image. The subject’s real face, facial features, identity, skin tone, hairstyle, and body proportions must remain exactly the same as in the uploaded photo. Do not beautify, stylize, or alter the subject’s identity in any way. 
+
+  #     Create one single image as a perfectly even 2×2 four-panel grid (exactly 4 panels only). The four panels must be equal size and seamlessly merged with clean internal dividers but absolutely no white lines, borders, gaps, or spacing (a continuous collage).
+
+  #     Must include: top right and bottom left: half-body photo;stop left and bottom right: full-body photos . All poses must be natural.
+
+  #     Bright, airy, high-key studio look: soft daylight, gray balance (warm, NOT yellow), gentle shadows, clean highlights, crisp clarity. The entire set is the same minimal studio in all panels, featuring a semi-transparent plastic sheet backdrop (crinkled clear vinyl with visible folds/wrinkles) and a light floor with the same plastic material. Keep the overall scene luminous.
+
+  #     key requirement for koi: the number of koi in the entire four-panel picture must be exactly two (no more, no duplicates, and no extra small fish). These two koi must be artistic and stylized, not photorealistic: semi-translucent red koi with dramatic flowing fins that resemble silk/organza, painterly and dreamy, with delicate motion blur on the fins and a slightly surreal “floating in air” fashion-art effect. Keep the koi scale and placement consistent in all panels,  The koi must never cover the subject’s face, eyes, nose, or mouth, and must stay at least one face-width away from the face in every panel.
+
+  #     The composition must contain four different compositions and poses. (same outfit,  set, lighting, two koi positions) with Elegant and natural movements Like a gentleman (Avoid excessive rigidity; absolutely prohibit unreasonable limbs and movements, and prevent unnecessary limb movements.).
+
+  #     Dress the subject in a refined, fashion-editorialClaret monochrome look inspired by modern couture styling. The outfit consists of a silky deep-burgundy satin shirt with a fluid drape and soft sheen. The shirt features a relaxed open neckline with no tie, slightly elongated sleeves that fall naturally at the wrist, and a smooth, lightweight fabric that moves elegantly with the body. The silhouette is slim but not tight, maintaining a graceful, elongated line.
+
+  #     The shirt is paired with matching deep red slim-fit trousers in a satin blend. The trousers are high-waisted with a simple belt, and have a straight or slightly loose fit, ending at the ankle to create a smooth, vertical silhouette. The overall look is harmonious and unified, simple and monochromatic, emphasizing the texture and movement of the fabric rather than contrast. Black matte leather shoes complete the outfit. A matching satin scarf should reach mid-thigh; the length should not be altered.
+
+  #     Keep the whole result clean, bright, editorial with only two stylized koi total and always a seamless 2×2 grid.
+  #   reference_folder: ""
+  #   use_comparison_template: false
+  #   use_random_source_selection: false
+  #   min_images: 2
+  #   max_images: 2
+  #   num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 農曆年走春 四格 Female
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do NOT beautify, stylize, or alter identity. No extra people.
+
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal size and seamlessly stitched into one single image with NO borders, gaps, margins, dividers, or white lines—edge-to-edge continuous grid.
+
+      Theme & setting:
+      Create a four-panel outdoor springtime New Year photo series inspired by a traditional “zou chun” (spring outing) atmosphere. All four panels must feature the same subject and must clearly feel like they were captured consecutively at the same traditional courtyard location, with consistent lighting, environment, color tone, and mood. The scene takes place outdoors on a clear, sunny day in a traditional Taiwanese or Chinese courtyard setting. The environment includes red-toned walls, wooden pillars, tiled roof eaves, and open walkways. Natural sunlight creates warm highlights and soft shadows, producing a bright, gentle, and slightly vintage film-like tone suitable for New Year imagery. The atmosphere feels calm, elegant, and quietly festive rather than busy or playful.
+
+      Panel directions:
+      1) The subject is framed in a close-up portrait near a traditional building structure. The subject raises one hand upward, holding a traditional Chinese knot ornament slightly above eye level. The face remains clearly visible, softly lit by sunlight. The pose feels gentle and reflective, with a sense of reaching toward light rather than posing dramatically.Gentle, reflective “reaching toward light” pose.
+      2) Close-up (Tanghulu): Close-up near a pillar. Body faces camera. Hold a tanghulu at chest/face level. Calm, steady gaze; composed and elegant.
+      3) Medium shot (resting): Medium shot in the same courtyard. Seated or resting naturally. Relaxed, composed posture; architecture frames the subject. Quiet, grounded moment.
+      4) Close-up (Chinese paper-cut): Close-up. Hold a traditional Chinese paper-cut (jianzhi) near the hands, interacting softly. Slight head tilt or softened gaze; gentle, warm, serene. For this fourth panel only, the background must be fully blurred with strong depth-of-field separation. The subject’s face and hands remain sharp, while all background elements are completely out of focus, creating a soft, dreamy bokeh effect without losing realism.
+
+      Wardrobe (all panels):
+      Red-toned New Year styling, realistic and well-fitted, elegant and modern (not costume-like). 
+      Female: high-saturation pure red qipao with subtle same-tone embroidery + white shawl.
+      Male: high-saturation pure red magua with refined embroidery + white knitted inner layer.
+      All reds must be stable, evenly saturated, and clearly red (not orange-leaning).
+
+      Lighting & color:
+      Lighting must be entirely natural daylight, with a noticeably warm and soft quality. Sunlight should appear diffused and gentle, wrapping softly around the subject’s face and surroundings rather than creating harsh contrast. Highlights should feel warm and luminous, shadows soft and gradual, enhancing a bright yet comfortable visual experience. The overall color grading should be bright, warm, and slightly nostalgic, with a subtle vintage film softness that feels refined and airy. The image should evoke a classic New Year mood—radiant, hopeful, and elegant—without losing clarity or realism. Avoid artificial lighting, harsh contrast, overexposure, or modern cool tones.
+
+      Final output:
+      Realistic, cohesive, naturally photographed four-panel series with consistent time/place/mood, preserving identity with no artifacts.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 農曆年走春 四格 Male
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do NOT beautify, stylize, or alter identity. No extra people.
+
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal size and seamlessly stitched into one single image with NO borders, gaps, margins, dividers, or white lines—edge-to-edge continuous grid.
+
+      Theme & setting:
+      Create a four-panel outdoor springtime New Year photo series inspired by a traditional “zou chun” (spring outing) atmosphere. All four panels must feature the same subject and must clearly feel like they were captured consecutively at the same traditional courtyard location, with consistent lighting, environment, color tone, and mood. The scene takes place outdoors on a clear, sunny day in a traditional Taiwanese or Chinese courtyard setting. The environment includes red-toned walls, wooden pillars, tiled roof eaves, and open walkways. Natural sunlight creates warm highlights and soft shadows, producing a bright, gentle, and slightly vintage film-like tone suitable for New Year imagery. The atmosphere feels calm, elegant, and quietly festive rather than busy or playful.
+
+      Panel directions:
+      1) The subject is framed in a close-up portrait near a traditional building structure. The subject raises one hand upward, holding a traditional Chinese knot ornament slightly above eye level. The face remains clearly visible, softly lit by sunlight. The pose feels gentle and reflective, with a sense of reaching toward light rather than posing dramatically.Gentle, reflective “reaching toward light” pose.
+      2) Close-up (Tanghulu): Close-up near a pillar. Body sideways facing the camera.Hold a tanghulu at chest/face level. Calm, steady gaze; composed and elegant.There must be only one candied hawthorn skewer.
+      3) Medium shot (resting): Medium shot in the same courtyard. Seated or resting naturally. Relaxed, composed posture; architecture frames the subject. Quiet, grounded moment.
+      4) Close-up (Chinese paper-cut): Close-up. Hold a traditional Chinese paper-cut (jianzhi) near the hands, interacting softly. Slight head tilt or softened gaze; gentle, warm, serene. For this fourth panel only, the background must be fully blurred with strong depth-of-field separation. The subject’s face and hands remain sharp, while all background elements are completely out of focus, creating a soft, dreamy bokeh effect without losing realism.
+
+      Wardrobe (all panels):
+      Red-toned New Year styling, realistic and well-fitted, elegant and modern (not costume-like). 
+
+      high-saturation pure red magua with refined embroidery + white knitted inner layer.
+      All reds must be stable, evenly saturated, and clearly red (not orange-leaning).
+
+      Lighting & color:
+      Lighting must be entirely natural daylight, with a noticeably warm and soft quality. Sunlight should appear diffused and gentle, wrapping softly around the subject’s face and surroundings rather than creating harsh contrast. Highlights should feel warm and luminous, shadows soft and gradual, enhancing a bright yet comfortable visual experience. The overall color grading should be bright, warm, and slightly nostalgic, with a subtle vintage film softness that feels refined and airy. The image should evoke a classic New Year mood—radiant, hopeful, and elegant—without losing clarity or realism. Avoid artificial lighting, harsh contrast, overexposure, or modern cool tones.
+
+      Final output:
+      Realistic, cohesive, naturally photographed four-panel series with consistent time/place/mood, preserving identity with no artifacts.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0106 10 Styles/0106 紅包橘子四格
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do not beautify, stylize, or alter identity in any way. No extra people may appear.
+
+      Create a perfectly balanced 2×2 four-panel grid image, with all panels equal in size and seamlessly stitched into a single image with no borders, gaps, margins, dividers, or white lines, forming an edge-to-edge continuous grid. All four panels must clearly feel like they were taken during the same casual at-home photoshoot, in the same moment and environment, with consistent lighting, color tone, and overall mood.
+
+      This is a cute, festive Lunar New Year / Year of the Horse–themed portrait series, centered on playful, candid interaction with red envelopes (hongbao) and mandarin oranges. The mood should feel joyful, lively, playful, charming, and warm, never elegant, serious, editorial, or posed. All images must look like they were taken at home using a compact CCD digital camera with the flash turned on.
+
+      The flash lighting should feel direct and frontal, slightly harsh and high-contrast, brightly illuminating the subject while the background remains somewhat darker but still clearly visible. It should be easy to recognize a Lunar New Year–decorated living room. This creates an authentic early-digital CCD flash snapshot look with a casual, nostalgic feeling.
+
+      The subject wears a red knit sweater paired with a white scarf. Makeup is minimal and natural, with a subtle healthy warmth in the skin tone suitable for Lunar New Year lighting, avoiding any beautifying or stylized effects. Hair remains natural and consistent with the uploaded photo.
+
+      All red envelopes used across the four panels must share a single, consistent design. Each envelope features a horse motif representing the Year of the Horse and the Chinese character 「福」, both rendered as metallic gold foil embossing with a hot-stamped gold appearance, subtle reflective sheen, and slight embossed depth. The gold elements must feel elegant, traditional, premium, and ceremonial—never flat-printed, matte, glowing, cartoon-like, or modern. The red envelopes should look realistic and physical, with natural paper texture and thickness suitable for Lunar New Year gifting.
+
+      Four-panel pose & interaction guidance
+
+      Panel 1 – Big happy smile (fan-style red envelopes)
+      A close-up or medium-close shot.
+      The subject smiles openly and happily, showing clear joy.
+      She holds multiple red envelopes like a fan, partially covering part of her face while smiling or laughing naturally.
+      This panel should feel like the emotional highlight of the series—cute, joyful, and full of New Year energy.
+
+      Panel 2 – Mandarin orange on head (extra playful)
+      Half-body shot.
+      The subject balances a mandarin orange on top of her head.
+      Both hands are raised to gently hold or steady the orange.
+      Her expression is playful and cheeky, with a relaxed, mischievous energy rather than exaggerated cuteness.
+      Her gaze is directed playfully away from the camera (to the side or diagonally upward), not looking at the lens, creating a teasing, curious feel—like she’s aware of the orange above her head.
+      This panel should feel especially spontaneous and fun.
+
+      Panel 3 – Mandarin orange in palm
+      A close-up.
+      The subject gently holds a mandarin orange raised near chest-to-face level.
+      Her gaze is directed toward the mandarin orange below eye level, creating a natural, intimate interaction, as if quietly noticing and appreciating it.
+      She wears a soft, gentle smile—subtle and unposed—forming a calm, tender closing moment with a diary-like snapshot feeling, evoking a quiet appreciation of the New Year symbol of good fortune.
+
+      Panel 4 – Red envelope reaching toward camera
+      A medium shot from a different angle or distance than Panel 1.
+      The subject extends both arms straight toward the camera, holding one or more red envelopes.
+      The arms are fully extended, and the red envelopes appear closer to the lens and larger in perspective, creating strong depth and playful energy.
+      Her gaze is directed straight into the camera lens, making clear eye contact with the viewer and enhancing a feeling of engagement and friendly invitation.
+      The subject smiles openly and happily, showing clear joy.
+
+      All four panels must maintain a CCD digital camera flash photography look, with strong direct on-camera flash, crisp facial details, slightly overexposed highlights typical of CCD flash, a darker but readable background, and a casual, imperfect snapshot aesthetic. Avoid smartphone HDR, cinematic lighting, studio softness, or dramatic shadow shaping.
+
+      The overall color temperature should lean warm, with skin tones appearing slightly warmer and healthier under flash, a gentle yellow–orange warmth typical of indoor New Year snapshots, and reds that feel rich and cozy rather than sharp or cool. The warmth should feel natural and nostalgic, not filtered or stylized, preserving the authentic CCD flash snapshot look while enhancing a cozy, festive Lunar New Year atmosphere.
+
+      The final result must feel cohesive, consecutive, and naturally photographed, like a single playful Lunar New Year photoshoot casually captured at home with a CCD camera and flash, clearly showing festive living room context, varied shooting angles, strong depth, candid gestures, and joyful New Year energy, while fully preserving the subject’s true identity with no visual artifacts.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
