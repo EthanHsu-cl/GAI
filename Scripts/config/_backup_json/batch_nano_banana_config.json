@@ -1,7 +1,7 @@
 {
     "template_path": "templates/I2V templates.pptx",
     "comparison_template_path": "templates/I2V Comparison Template.pptx",
-    "testbed": "http://192.168.31.40:8000/image_generation/",
+    "testbed": "http://192.168.31.161:8000/image_generation/",
     "output": {
         "directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
         "group_tasks_by": 5

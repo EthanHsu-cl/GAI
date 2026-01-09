@@ -3,7 +3,7 @@
     "comparison_template_path": "templates/I2V Comparison Template.pptx",
     "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
     "comment_output_directory": "Optional: Global output directory for all generated PPTX files. Can be overridden per task. Default is current directory.",
-    "testbed": "http://192.168.31.40:8000/kling/",
+    "testbed": "http://192.168.31.161:8000/kling/",
     "model_version": "v2.5-turbo",
     "comment_model_version": "Model version to use for video generation. Options: 'v1.6', 'v2.1'. Default is 'v2.1' if not specified.",
     "schedule": {

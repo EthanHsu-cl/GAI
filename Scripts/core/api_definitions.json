@@ -1,6 +1,6 @@
 {
     "kling_effects": {
-        "endpoint": "http://192.168.31.40:8000/kling/",
+        "endpoint": "http://192.168.31.161:8000/kling/",
         "api_name": "/VideoEffect",
         "file_types": [
             ".jpg",
@@ -165,7 +165,7 @@
         ]
     },
     "kling": {
-        "endpoint": "http://192.168.31.40:8000/kling/",
+        "endpoint": "http://192.168.31.161:8000/kling/",
         "api_name": "/Image2Video",
         "file_types": [
             ".jpg",
@@ -215,7 +215,7 @@
         }
     },
     "kling_endframe": {
-        "endpoint": "http://192.168.31.40:8000/kling/",
+        "endpoint": "http://192.168.31.161:8000/kling/",
         "api_name": "/EndFrame",
         "file_types": [
             ".jpg",
@@ -276,7 +276,7 @@
         ]
     },
     "nano_banana": {
-        "endpoint": "http://192.168.31.40:8000/image_generation/",
+        "endpoint": "http://192.168.31.161:8000/image_generation/",
         "api_name": "/nano_banana",
         "file_types": [
             ".jpg",
@@ -321,7 +321,7 @@
         }
     },
     "vidu_effects": {
-        "endpoint": "http://192.168.31.40:8000/video_effect/",
+        "endpoint": "http://192.168.31.161:8000/video_effect/",
         "api_name": "/effect_submit_api",
         "file_types": [
             ".jpg",
@@ -376,7 +376,7 @@
         }
     },
     "vidu_reference": {
-        "endpoint": "http://192.168.31.40:8000/video_effect/",
+        "endpoint": "http://192.168.31.161:8000/video_effect/",
         "api_name": "/reference_api",
         "file_types": [
             ".jpg",
@@ -435,7 +435,7 @@
         }
     },
     "runway": {
-        "endpoint": "http://192.168.31.40:8000/runway/",
+        "endpoint": "http://192.168.31.161:8000/runway/",
         "api_name": "/submit_1",
         "file_types": {
             "video": [
@@ -514,7 +514,7 @@
         ]
     },
     "genvideo": {
-        "endpoint": "http://192.168.31.40:8000/genvideo/",
+        "endpoint": "http://192.168.31.161:8000/genvideo/",
         "api_name": "/submit_img2img",
         "file_types": [
             ".jpg",
@@ -570,7 +570,7 @@
         ]
     },
     "pixverse": {
-        "endpoint": "http://192.168.31.40:8000/video_effect/",
+        "endpoint": "http://192.168.31.161:8000/video_effect/",
         "api_name": "/submit_3",
         "file_types": [
             ".jpg",
@@ -701,7 +701,7 @@
         ]
     },
     "veo": {
-        "endpoint": "http://192.168.31.40:8000/google_veo/",
+        "endpoint": "http://192.168.31.161:8000/google_veo/",
         "api_name": "/text_to_video",
         "file_types": [],
         "validation": {},
@@ -776,7 +776,7 @@
         ]
     },
     "veo_itv": {
-        "endpoint": "http://192.168.31.40:8000/google_veo/",
+        "endpoint": "http://192.168.31.161:8000/google_veo/",
         "api_name": "/image_to_video",
         "file_types": [
             ".jpg",
@@ -863,7 +863,7 @@
         ]
     },
     "kling_ttv": {
-        "endpoint": "http://192.168.31.40:8000/kling/",
+        "endpoint": "http://192.168.31.161:8000/kling/",
         "api_name": "/TextToVideo",
         "file_types": [],
         "validation": {},

@@ -290,7 +290,7 @@ class VeoReportGenerator:
         info_box.text_frame.clear()
         
         # Add testbed link
-        testbed_url = "http://192.168.31.40:8000/google_veo/"
+        testbed_url = "http://192.168.31.161:8000/google_veo/"
         para = info_box.text_frame.paragraphs[0]
         para.clear()
         r1, r2 = para.add_run(), para.add_run()

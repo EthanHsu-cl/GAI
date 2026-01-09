@@ -1,6 +1,6 @@
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
-testbed: http://192.168.31.40:8000/image_generation/
+testbed: http://192.168.31.161:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
@@ -10,32 +10,97 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDrhyHTh-kZQ7VaL8jIKFEBAQNXUJ7eVMvjLCnaS-RZuxA?e=4pbBrP
-root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3b3e7873510_1_0#slide=id.g3b3e7873510_1_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB5kGrEeQx7T6RTQdcZl98zAdEzG98bDXJfzeKIBJABXtY?e=eijijr
+root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3b7578c9a77_0_0#slide=id.g3b7578c9a77_0_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0102 8 Styles/0102 日系自然照片 女生送巧克力-俯角 亞洲人
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
+  - folder: ../Media Files/Nano Banana/0109 2 Styles/0109 Younger & Older Me v1
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "16:9"
     prompt: |
-      Using the uploaded photo of the person as the primary subject, preserve their facial features, makeup, hairstyle, skin tone, and body proportions, ensuring complete consistency with the uploaded image.
+      Using the provided photo as an identity reference, generate a horizontal three-panel collage.
 
-      Transform it into a cinematic close-up portrait inspired by lifestyle photography.
+      From LEFT to RIGHT, the three images represent the SAME PERSON at different life stages:
+      - Left panel: approximately 5 years old
+      - Middle panel: present age (must closely match the original reference image)
+      - Right panel: approximately 60 years old
 
-      She lies on a soft, neutral-colored sofa, without any blankets.
+      Do NOT generate different individuals.
 
-      Her hair falls naturally in soft waves, and a few fresh cherries or strawberries (arranged randomly, but only one type of fruit at a time) are casually scattered around her, seemingly effortless and harmoniously natural. Three hands or illogical poses are strictly prohibited.
+      ====================
+      GLOBAL FRAMING & COMPOSITION RULE (CRITICAL)
+      ====================
+      - All three panels MUST use the same framing distance and crop level
+      - The subject size relative to the frame must be consistent across all panels
+      - Choose ONE framing style and apply it to all three images:
+        - Either all full-body shots
+        - Or all half-body / upper-body shots
+      - Do NOT mix full-body and half-body framing
+      - Camera distance, perspective, and zoom level must remain visually consistent
 
-      She wears a white spaghetti strap dress—simple yet elegant—that gleams softly in the sunlight. The V-neck and thin straps accentuate her beautiful shoulders and collarbones.
+      ====================
+      GLOBAL IDENTITY RULES
+      ====================
+      - The middle panel is the primary identity anchor and must closely match the original reference image
+      - Facial structure, feature spacing, ethnicity, and gender must remain consistent across all panels
+      - Avoid generic age templates for both children and elderly
+      - Background and lighting should remain visually similar
 
-      Her pose is relaxed and natural: she leans back, holding fruit near her nose, blinking only one eye, a warm, playful smile on her lips, or gazing captivatingly at the camera; or one hand holds fruit (fresh cherries or strawberries, randomly selected, but only one type at a time), the other resting naturally—all her movements are relaxed and natural.
+      ====================
+      LEFT PANEL – AGE 5 (CHILD)
+      ====================
+      - Depict the same person as a realistic 5-year-old child
+      - The child’s face MUST be derived from the original facial structure
+      - Preserve eye shape, eye spacing, nose shape, mouth shape, and overall facial proportions
+      - Avoid generic or stereotypical child faces
 
-      The lighting is soft and diffused, simulating natural window light shining from above at approximately a 45° angle. The color temperature is approximately 5200K, creating a clean, bright, sunny atmosphere, leaving soft highlights on her skin and hair. The overall tone should remain bright and fresh, with natural shadow transitions.
+      - The body should clearly reflect a child’s age:
+        - Smaller stature
+        - Narrower shoulders
+        - Childlike body proportions
+      - Pose and clothing do not need to be identical, but must be natural for a child
+      - The child must feel like a younger version of the same person, not a different child
 
-      Use a medium-close-up composition (approximately from head to chest), with an equivalent focal length of 50-85mm and an aperture of f/1.8-f/2.2, emphasizing eye contact, hair texture, and the natural glow of her skin.
+      ====================
+      MIDDLE PANEL – PRESENT (REFERENCE)
+      ====================
+      - Must closely match the original reference image
+      - Serves as the identity, scale, and framing reference
+      - No aging or de-aging effects should be applied
 
-      The final atmosphere should showcase the elegant temperament of a modern woman—fresh, romantic, and naturally radiant—like a magazine spread shot in the morning light.
+      ====================
+      RIGHT PANEL – AGE 60 (ELDERLY)
+      ====================
+      - Depict the same person at approximately 60 years old
+      - The elderly face MUST be an aged transformation of the original face, not a generic elderly face
+      - Preserve:
+        - Eye shape and spacing
+        - Nose bridge and tip shape
+        - Mouth width and lip shape
+        - Jawline and face contour (with natural aging softness)
+
+      - Apply aging as deformation, not replacement:
+        - Wrinkles follow the original facial structure
+        - Skin aging respects bone structure
+        - Facial proportions remain recognizable
+
+      - The body should reflect natural aging:
+        - Softer contours
+        - Reduced muscle tone
+        - Age-appropriate posture
+
+      - Pose and clothing should be natural for an older adult
+
+      ====================
+      FINAL CONSISTENCY CHECK
+      ====================
+      - All three panels must look like the same person photographed at different ages
+      - Framing distance must feel identical across panels
+      - Facial similarity must remain high in both child and elderly versions
+      - If results should look intentional and coherent, not like three unrelated photos
+
+
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
@@ -43,205 +108,76 @@ tasks:
     max_images: 2
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0102 8 Styles/0102 日系自然照片 女生送巧克力-俯角 黑人
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
+  - folder: ../Media Files/Nano Banana/0109 2 Styles/0109 Younger & Older Me v2
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "16:9"
     prompt: |
-      Using the uploaded photo of the person as the primary subject, preserve their facial features, makeup, hairstyle, skin tone, and body proportions, ensuring complete consistency with the uploaded image.
+      Using the provided photo as an identity reference, generate a horizontal three-panel collage.
 
-      Transform it into a cinematic close-up portrait inspired by lifestyle photography.
+      From LEFT to RIGHT, the three images represent the SAME PERSON at different life stages:
+      - Left panel: approximately 5 years old
+      - Middle panel: present age (must closely match the original reference image)
+      - Right panel: approximately 60 years old
 
-      She lies on a soft, neutral-colored sofa, without any blankets.
+      Do NOT generate different individuals.
 
-      Her hair falls naturally in soft waves, and a few fresh cherries or strawberries (arranged randomly, but only one type of fruit at a time) are casually scattered around her, seemingly effortless and harmoniously natural. Three hands or illogical poses are strictly prohibited.
+      ====================
+      GLOBAL RULES
+      ====================
+      - The middle panel must closely preserve the original reference image
+      - Identity must remain consistent across all panels
+      - Background and lighting should remain visually similar
+      - The left and right panels may adjust pose and clothing to be age-appropriate
+      - Avoid generic age templates for both children and elderly
 
-      She wears a white spaghetti strap dress—simple yet elegant—that gleams softly in the sunlight. The V-neck and thin straps accentuate her beautiful shoulders and collarbones.
+      ====================
+      LEFT PANEL – AGE 5 (CHILD)
+      ====================
+      - Depict the same person as a realistic 5-year-old child
+      - The child’s face MUST be derived from the adult reference image
+      - Preserve eye shape, eye spacing, nose shape, mouth shape, and facial proportions
+      - Avoid generic or stereotypical child faces
+      - The body should clearly reflect a child’s physique
+      - Clothing and pose should be natural for a child
 
-      Her pose is relaxed and natural: she leans back, holding fruit near her nose, blinking only one eye, a warm, playful smile on her lips, or gazing captivatingly at the camera; or one hand holds fruit (fresh cherries or strawberries, randomly selected, but only one type at a time), the other resting naturally—all her movements are relaxed and natural.
+      ====================
+      MIDDLE PANEL – PRESENT (REFERENCE)
+      ====================
+      - Must closely match the original reference image
+      - Serves as the primary identity anchor
 
-      The lighting is soft and diffused, simulating natural window light shining from above at approximately a 45° angle. The color temperature is approximately 5200K, creating a clean, bright, sunny atmosphere, leaving soft highlights on her skin and hair. The overall tone should remain bright and fresh, with natural shadow transitions.
+      ====================
+      RIGHT PANEL – AGE 60 (ELDERLY)
+      ====================
+      - Depict the same person at approximately 60 years old
+      - The elderly face MUST be an aged transformation of the original face,
+        NOT a generic elderly face
 
-      Use a medium-close-up composition (approximately from head to chest), with an equivalent focal length of 50-85mm and an aperture of f/1.8-f/2.2, emphasizing eye contact, hair texture, and the natural glow of her skin.
+      - Preserve the same core facial identity:
+        - Eye shape and spacing
+        - Nose bridge and tip shape
+        - Mouth width and lip shape
+        - Jawline and face contour (with natural aging softness)
 
-      The final atmosphere should showcase the elegant temperament of a modern woman—fresh, romantic, and naturally radiant—like a magazine spread shot in the morning light.
+      - Apply aging as deformation, not replacement:
+        - Wrinkles should follow the existing facial structure
+        - Skin aging should respect the original bone structure
+        - Avoid altering facial proportions
+
+      - Hair may turn gray or white naturally
+      - The body should reflect natural aging while remaining proportional
+      - Clothing and pose should be appropriate for an older adult
+
+      ====================
+      CRITICAL IDENTITY RULE
+      ====================
+      - The left and right panels must look like the same person at different ages,
+        not different people of similar age
+      - Avoid template-like elderly appearances
+      - If facial similarity to the middle panel is lost, the result is incorrect
+
     reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0102 8 Styles/0102 浪漫邱比特天使 亞洲人
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
-    prompt: |
-      The subject should be the person in the uploaded photo, whose facial features, makeup, hairstyle, skin tone, and body proportions are completely identical to the uploaded photo.
-
-      In a soft pink-toned studio, create a dreamlike, angelic portrait. The lighting should be bright yet soft, with slightly overexposed highlights, surrounding the subject to create a hazy, ethereal halo, like a dreamlike cosplay photo.
-
-      The following two actions will occur randomly (one must appear, both must have a relaxed and natural feel, and must be a close-up or half-body shot):
-      Only one Cupid bow and one Cupid arrow may exist in the scene. No duplicates are allowed.
-
-      Action 1 (must be a close-up or half-body shot):
-
-      She holds a delicate Cupid's bow in one hand, casually placed beside her lap. The bow is slender and white, adorned with delicate gold decorations, and the arrows match. Her posture is gentle and slightly shy: knees together, upper body relaxed, head slightly tilted, gaze softly at the camera.
-
-      Action Two (must be a close-up or half-body shot):
-
-      The subject leans forward, resting against a fallen white Roman column, her torso resting on the edge of the column's top, causing her shoulders, upper arms, and part of her chest to naturally sag.
-
-      A heart-shaped arrow shaft rests on a Roman column base; the shaft must be made of white oak, and the arrowhead must be a solid red heart. The arrow itself is also red, resting steadily on the table, not suspended in mid-air. The model's head is slightly tilted, creating an elegant and soft three-quarter profile. One hand gently supports her chin, the knuckles relaxed and naturally curved, creating a soft perspective effect. Her gaze is calm and ethereal, looking directly at the camera.
-
-      Her clothing must be: a light pink, super-short, puffy, off-the-shoulder dress. The bodice is a shapewear corset with steel support, a softly curved heart-shaped neckline edged with delicate lace, and thin straps. The skirt is a layered, light, pleated ballet tutu, flaring out around the hips and reaching the upper thighs. Made of sheer tulle and organza, it appears soft and translucent. A small, cute necklace or ribbon adorns her neck, adding to her doll-like sweetness. She wears white over-the-knee knit stockings with ribbed cuffs and soft fan-shaped lace trim, revealing her bare feet. The overall look should be sweet, girlish, and slightly Lolita-esque, rather than a simple long dress.
-
-      Behind her are a pair of soft, layered white angel wings. A fluffy feathered angel halo adorns her head, forming a shimmering circle above and around her hair.
-
-      These two movements will create the following background:
-
-      Around her, three white doves must be fixed, flying at different distances and heights, wings outstretched. Some are close to the camera with slight motion blur, while others are in the distance, collectively outlining her figure. The background should be a clean, pastel gradient with no harsh edges, and the clouds at the base of the pillars should emit a soft glow.
-
-      The overall image must convey the effect of a high-end, dreamy angelic portrait: soft pink tones, bright white, and a dreamlike atmosphere.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0102 8 Styles/0102 浪漫邱比特天使 黑人
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
-    prompt: |
-      The subject should be the person in the uploaded photo, whose facial features, makeup, hairstyle, skin tone, and body proportions are completely identical to the uploaded photo.
-
-      In a soft pink-toned studio, create a dreamlike, angelic portrait. The lighting should be bright yet soft, with slightly overexposed highlights, surrounding the subject to create a hazy, ethereal halo, like a dreamlike cosplay photo.
-
-      The following two actions will occur randomly (one must appear, both must have a relaxed and natural feel, and must be a close-up or half-body shot):
-      Only one Cupid bow and one Cupid arrow may exist in the scene. No duplicates are allowed.
-
-      Action 1 (must be a close-up or half-body shot):
-
-      She holds a delicate Cupid's bow in one hand, casually placed beside her lap. The bow is slender and white, adorned with delicate gold decorations, and the arrows match. Her posture is gentle and slightly shy: knees together, upper body relaxed, head slightly tilted, gaze softly at the camera.
-
-      Action Two (must be a close-up or half-body shot):
-
-      The subject leans forward, resting against a fallen white Roman column, her torso resting on the edge of the column's top, causing her shoulders, upper arms, and part of her chest to naturally sag.
-
-      A heart-shaped arrow shaft rests on a Roman column base; the shaft must be made of white oak, and the arrowhead must be a solid red heart. The arrow itself is also red, resting steadily on the table, not suspended in mid-air. The model's head is slightly tilted, creating an elegant and soft three-quarter profile. One hand gently supports her chin, the knuckles relaxed and naturally curved, creating a soft perspective effect. Her gaze is calm and ethereal, looking directly at the camera.
-
-      Her clothing must be: a light pink, super-short, puffy, off-the-shoulder dress. The bodice is a shapewear corset with steel support, a softly curved heart-shaped neckline edged with delicate lace, and thin straps. The skirt is a layered, light, pleated ballet tutu, flaring out around the hips and reaching the upper thighs. Made of sheer tulle and organza, it appears soft and translucent. A small, cute necklace or ribbon adorns her neck, adding to her doll-like sweetness. She wears white over-the-knee knit stockings with ribbed cuffs and soft fan-shaped lace trim, revealing her bare feet. The overall look should be sweet, girlish, and slightly Lolita-esque, rather than a simple long dress.
-
-      Behind her are a pair of soft, layered white angel wings. A fluffy feathered angel halo adorns her head, forming a shimmering circle above and around her hair.
-
-      These two movements will create the following background:
-
-      Around her, three white doves must be fixed, flying at different distances and heights, wings outstretched. Some are close to the camera with slight motion blur, while others are in the distance, collectively outlining her figure. The background should be a clean, pastel gradient with no harsh edges, and the clouds at the base of the pillars should emit a soft glow.
-
-      The overall image must convey the effect of a high-end, dreamy angelic portrait: soft pink tones, bright white, and a dreamlike atmosphere.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0102 8 Styles/0102 日系自然照片 女生送巧克力 亞洲人
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
-    prompt: |
-      The subject should be a person, and their facial features, makeup,race, hairstyle, skin tone, and body proportions must be preserved to ensure consistency with the uploaded photo. The photo should be taken in a softly lit kitchen environment, employing the aesthetic style characteristic of Fujifilm—cool-toned sunlight, bright whites, soft, low-contrast shadows, clean highlights, and a subtle matte finish. The overall atmosphere should evoke a tranquil morning, with soft, transparent, and relaxing colors, similar to the style of Fujifilm Pro 400H or Fujifilm Reala film: pure whites, natural skin tones, soft cool tones in shadows, and dreamy halos around bright areas.​
-
-      ​
-
-      The kitchen island countertop uses white marble tiles to create a natural, warm, and inviting atmosphere, rather than an artificial one—open cabinet doors, mismatched plates, scattered cutlery, jars on the countertop, books and ingredients casually placed in the background, and a slightly messy island stained with chocolate. Melted chocolate stains, chocolate shavings, chocolate pieces, a spoon dipped in chocolate, a half-eaten chocolate bar, and an imperfect handmade chocolate cake—these elements intertwine to create a warm, everyday sense of chaos.​
-
-      ​
-
-      Her posture should be natural and relaxed, unrestrained, as if capturing a moment from her real life, rather than a deliberately posed half-body portrait. She might lean against a table, one hand supporting her cheek or chin, fingers casually holding a piece of chocolate, elegantly and enticingly licking it from her fingertips, or holding a piece of chocolate as if about to offer it to someone else; or perhaps, bathed in dreamy morning light, gazing tenderly at the camera, or gently pressing her palm or fingers to her cheek, creating a visual effect that makes her face appear more pitiful. Everything should appear natural and casual, with a touch of unrefined beauty.​
-
-      ​
-
-      The woman in the photo is wearing an off-the-shoulder white chiffon knit top with a tank top underneath, and skinny jeans (but her lower body is not visible because of the table in front of her), creating a charming, soft, and languid atmosphere.​
-
-      ​
-
-      The scene is serene and peaceful, with natural window light illuminating her face and highlighting the soft grain and subtle depth of field of the film. The overall image is warm and clean, both nostalgic and refreshing—like a genuine family photograph taken with Fujifilm, where sweetness, chocolate, and a languid sense of comfort intertwine to create a tranquil and cozy kitchen scene.​  
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0102 8 Styles/0102 日系自然照片 女生送巧克力 黑人
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
-    prompt: |
-      The subject should be a person, and their facial features, makeup,race, hairstyle, skin tone, and body proportions must be preserved to ensure consistency with the uploaded photo. The photo should be taken in a softly lit kitchen environment, employing the aesthetic style characteristic of Fujifilm—cool-toned sunlight, bright whites, soft, low-contrast shadows, clean highlights, and a subtle matte finish. The overall atmosphere should evoke a tranquil morning, with soft, transparent, and relaxing colors, similar to the style of Fujifilm Pro 400H or Fujifilm Reala film: pure whites, natural skin tones, soft cool tones in shadows, and dreamy halos around bright areas.​
-
-      ​
-
-      The kitchen island countertop uses white marble tiles to create a natural, warm, and inviting atmosphere, rather than an artificial one—open cabinet doors, mismatched plates, scattered cutlery, jars on the countertop, books and ingredients casually placed in the background, and a slightly messy island stained with chocolate. Melted chocolate stains, chocolate shavings, chocolate pieces, a spoon dipped in chocolate, a half-eaten chocolate bar, and an imperfect handmade chocolate cake—these elements intertwine to create a warm, everyday sense of chaos.​
-
-      ​
-
-      Her posture should be natural and relaxed, unrestrained, as if capturing a moment from her real life, rather than a deliberately posed half-body portrait. She might lean against a table, one hand supporting her cheek or chin, fingers casually holding a piece of chocolate, elegantly and enticingly licking it from her fingertips, or holding a piece of chocolate as if about to offer it to someone else; or perhaps, bathed in dreamy morning light, gazing tenderly at the camera, or gently pressing her palm or fingers to her cheek, creating a visual effect that makes her face appear more pitiful. Everything should appear natural and casual, with a touch of unrefined beauty.​
-
-      ​
-
-      The woman in the photo is wearing an off-the-shoulder white chiffon knit top with a tank top underneath, and skinny jeans (but her lower body is not visible because of the table in front of her), creating a charming, soft, and languid atmosphere.​
-
-      ​
-
-      The scene is serene and peaceful, with natural window light illuminating her face and highlighting the soft grain and subtle depth of field of the film. The overall image is warm and clean, both nostalgic and refreshing—like a genuine family photograph taken with Fujifilm, where sweetness, chocolate, and a languid sense of comfort intertwine to create a tranquil and cozy kitchen scene.​  
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0102 8 Styles/0102 質感西裝四公格 亞洲人
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
-    prompt: |
-      Using the uploaded person as the sole subject, retaining their facial features and hairstyle, only changing the clothing and scene, a four-panel fashion editorial is generated. The overall atmosphere utilizes cinematic studio lighting, with deep red and black as the main color scheme, creating strong contrasts, a sharp main light, rich shadows, a slight film grain effect, and a cool, porcelain-like skin texture.
-
-      The subject always wears a sharply tailored, loose-fitting black suit jacket (must remain open, with the jacket length fixed to 5 cm below the hips), a white shirt, and a deep red tie; if female, this is paired with black slim-fit suit shorts and black socks or ankle boots; if male, it is paired with a loose black overcoat (reaching mid-calf), suit trousers, and black leather shoes.
-
-      In the upper left corner of the frame, a close-up upper-body portrait of the subject facing the camera is taken, with the head slightly tilted at a 45-degree angle, holding a rose. Facial shadows are soft, and the background is pure red or deep red.
-
-      Top right corner: A half-body or bust portrait of the model, whose expression is cool and focused. The background is deep red, with white candles in the foreground (deep foreground). Side or backlighting illuminates the face, creating a strong contrast of light and shadow, with slight motion blur or double exposure for a hazy glow, creating a dreamlike atmosphere.
-
-      Bottom left corner: A full-body or three-quarter-length portrait of the model, dressed in the same suit, standing in a clean, bright gray-white studio. Specks of light and shadow play on the floor. The right foot rests on a French crystal chandelier, surrounded by scattered rose petals. The pose is relaxed yet powerful, with sharp, clear shadows.
-
-      Bottom right corner: A frontal half-body or three-quarter-length portrait of the model against a pure red or deep red background. The model holds a large bouquet of deep red roses in her right hand, stylishly positioned on her right arm, looking directly at the camera. A few white particles, like snowflakes, float in the air. The four photos maintain a consistent color tone and a fashionable, dramatic atmosphere.
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0102 8 Styles/0102 質感西裝四公格 黑人
-    model: gemini-2.5-flash-image
-    resolution: 
-    aspect_ratio: 
-    prompt: |
-      Using the uploaded person as the sole subject, retaining their facial features and hairstyle, only changing the clothing and scene, a four-panel fashion editorial is generated. The overall atmosphere utilizes cinematic studio lighting, with deep red and black as the main color scheme, creating strong contrasts, a sharp main light, rich shadows, a slight film grain effect, and a cool, porcelain-like skin texture.
-
-      The subject always wears a sharply tailored, loose-fitting black suit jacket (must remain open, with the jacket length fixed to 5 cm below the hips), a white shirt, and a deep red tie; if female, this is paired with black slim-fit suit shorts and black socks or ankle boots; if male, it is paired with a loose black overcoat (reaching mid-calf), suit trousers, and black leather shoes.
-
-      In the upper left corner of the frame, a close-up upper-body portrait of the subject facing the camera is taken, with the head slightly tilted at a 45-degree angle, holding a rose. Facial shadows are soft, and the background is pure red or deep red.
-
-      Top right corner: A half-body or bust portrait of the model, whose expression is cool and focused. The background is deep red, with white candles in the foreground (deep foreground). Side or backlighting illuminates the face, creating a strong contrast of light and shadow, with slight motion blur or double exposure for a hazy glow, creating a dreamlike atmosphere.
-
-      Bottom left corner: A full-body or three-quarter-length portrait of the model, dressed in the same suit, standing in a clean, bright gray-white studio. Specks of light and shadow play on the floor. The right foot rests on a French crystal chandelier, surrounded by scattered rose petals. The pose is relaxed yet powerful, with sharp, clear shadows.
-
-      Bottom right corner: A frontal half-body or three-quarter-length portrait of the model against a pure red or deep red background. The model holds a large bouquet of deep red roses in her right hand, stylishly positioned on her right arm, looking directly at the camera. A few white particles, like snowflakes, float in the air. The four photos maintain a consistent color tone and a fashionable, dramatic atmosphere.
     use_comparison_template: false
     use_random_source_selection: false
     min_images: 2

@@ -121,7 +121,7 @@ All configuration files are located in the `Scripts/config/` directory and follo
 ### **Kling Configuration** (`config/batch_kling_config.yaml`)
 
 ```yaml
-testbed: http://192.168.31.40:8000/kling/
+testbed: http://192.168.31.161:8000/kling/
 model_version: v2.1
 
 tasks:
@@ -136,7 +136,7 @@ Applies premade video effects to images. Supports both preset effects and custom
 
 ```yaml
 base_folder: ../Media Files/Kling Effects/1127 Test
-testbed: http://192.168.31.40:8000/kling/
+testbed: http://192.168.31.161:8000/kling/
 
 # Global settings
 duration: '5'
@@ -180,7 +180,7 @@ BaseFolder/
 Generates videos from start and end frame image pairs, creating smooth A→B transitions.
 
 ```yaml
-testbed: http://192.168.31.40:8000/kling/
+testbed: http://192.168.31.161:8000/kling/
 model_version: v2.1
 generation_count: 1  # Global default, can override per task
 
@@ -211,7 +211,7 @@ tasks:
 Text-to-video generation (no input images required).
 
 ```yaml
-testbed: http://192.168.31.40:8000/kling/
+testbed: http://192.168.31.161:8000/kling/
 model: "v2.5-turbo"
 output_folder: ../Media Files/Kling TTV/Test
 
@@ -229,7 +229,7 @@ tasks:
 ### **Nano Banana Configuration** (`config/batch_nano_banana_config.yaml`)
 
 ```yaml
-testbed: http://192.168.31.40:8000/image_generation/
+testbed: http://192.168.31.161:8000/image_generation/
 tasks:
   - folder: /path/to/TaskName1
     prompt: "Generate variations"
@@ -245,7 +245,7 @@ tasks:
 
 ```yaml
 base_folder: ../Media Files/Vidu/1027 Product
-testbed: http://192.168.31.40:8000/video_effect/
+testbed: http://192.168.31.161:8000/video_effect/
 model_version: viduq2-pro
 
 tasks:
@@ -257,7 +257,7 @@ tasks:
 
 ```yaml
 base_folder: ../Media Files/Vidu_Ref/1201 1 Style
-testbed: http://192.168.31.40:8000/video_effect/
+testbed: http://192.168.31.161:8000/video_effect/
 model: viduq1
 duration: 5
 resolution: 1080p
@@ -274,7 +274,7 @@ tasks:
 
 ```yaml
 base_folder: ../Media Files/Pixverse
-testbed: http://192.168.31.40:8000/pixverse_image/
+testbed: http://192.168.31.161:8000/pixverse_image/
 
 tasks:
   - effect: Dynamic Motion
@@ -287,7 +287,7 @@ tasks:
 ### **GenVideo Configuration** (`config/batch_genvideo_config.yaml`)
 
 ```yaml
-testbed: http://192.168.31.40:8000/genvideo/
+testbed: http://192.168.31.161:8000/genvideo/
 
 tasks:
   - folder: /path/to/TaskName1
@@ -301,7 +301,7 @@ tasks:
 ### **Runway Configuration** (`config/batch_runway_config.yaml`)
 
 ```yaml
-testbed: http://192.168.31.40:8000/runway/
+testbed: http://192.168.31.161:8000/runway/
 model: gen4_aleph
 
 tasks:
@@ -333,7 +333,7 @@ tasks:
 Text-to-video generation (no input images required).
 
 ```yaml
-testbed: http://192.168.31.40:8000/google_veo/
+testbed: http://192.168.31.161:8000/google_veo/
 
 tasks:
   - prompt: "A serene landscape with mountains at sunset"

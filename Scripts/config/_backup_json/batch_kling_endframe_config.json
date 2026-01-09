@@ -6,7 +6,7 @@
         "group_tasks_by": 3
     },
     "comment_output": "Set group_tasks_by to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report.",
-    "testbed": "http://192.168.31.40:8000/kling/",
+    "testbed": "http://192.168.31.161:8000/kling/",
     "model_version": "v2.1",
     "comment_model_version": "Model version to use for video generation. Options: 'v1.6', 'v2.1'. Default is 'v2.1'.",
     "generation_count": 10,
