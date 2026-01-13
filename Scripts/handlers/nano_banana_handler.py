@@ -620,8 +620,8 @@ class NanoBananaHandler(BaseAPIHandler):
         Returns:
             str: Valid aspect ratio string (e.g., '16:9', '1:1', 'auto').
         """
-        # Check if aspect_ratio is specified in config (ensure it's a string)
-        config_ratio = str(task_config.get('aspect_ratio', '')) if task_config.get('aspect_ratio') else ''
+        # Check if aspect_ratio is specified in config (handle null/empty values)
+        config_ratio = str(task_config.get('aspect_ratio') or '')
         if config_ratio:
             if config_ratio in self.VALID_ASPECT_RATIOS:
                 return config_ratio
@@ -661,7 +661,8 @@ class NanoBananaHandler(BaseAPIHandler):
         model = task_config.get('model', 'gemini-2.5-flash-image')
         
         # Get resolution from task config or use default (ensure it's a string)
-        resolution = str(task_config.get('resolution', '1K'))
+        # Handle null/empty values by defaulting to '1K'
+        resolution = str(task_config.get('resolution') or '1K')
         
         # Check if using random source selection mode
         use_random_source = task_config.get('use_random_source_selection', False)

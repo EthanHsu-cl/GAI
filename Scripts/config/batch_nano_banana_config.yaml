@@ -4,245 +4,84 @@ testbed: http://192.168.31.161:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3
+  group_tasks_by: 4
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBnGzAS948XQ75z90kk_QwfAR6loOLNXT3yb8yKu5GwWAg?e=wkRCqX
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3a9edb0f8f8_0_0#slide=id.g3a9edb0f8f8_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgChr2Ui_3YDQZbY1uFbCPs9AQVnXttGCHT4sS1Uhk3MGtg?e=rYPuDL
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3b56916b1ea_0_0#slide=id.g3b56916b1ea_0_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0108 5 Styles/0108 Collage V1
+  - folder: ../Media Files/Nano Banana/0113 4 Styles/0113 樂來越愛你
     model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
+    resolution: "1K"
+    aspect_ratio: "3:4"
     prompt: |
-      Layout & Style: Generate a 9:16 vertical layout in a cold, minimal, high-fashion editorial style. The entire scene must remain strictly on a flat surface with no depth, no perspective, and no floating elements. Use a smooth, solid gray background viewed from a straight-down, top-view angle.
+      Use the two uploaded people as the only subjects. Their exact identities must be preserved with absolute accuracy. The generated faces must match the uploaded subjects 1:1, and the system is strictly forbidden from generating or resembling any actors from the film La La Land, including Ryan Gosling or Emma Stone. It must never replace the uploaded subjects with celebrity faces or merge their facial structure with those actors. Their faces, facial features, bone structure, hairstyles, expressions, and overall identities must remain unchanged exactly as in the uploaded photos. Do not modify their proportions, makeup style, hair color, jawline, or eyes, and do not apply smoothing, stylization, beautification, aging effects, or add any additional people.
 
-      Central Element: Place a large white sheet of paper at the center of the composition. On this sheet, print a single centered text block consisting of:
+      The clothing must follow the film’s aesthetic faithfully. Any male subject must wear Sebastian’s outfit — a white dress shirt with sleeves rolled up, the top button left unbuttoned, the black slim necktie loosened casually around the collar, black suit trousers, black socks, and black-and-white spectator shoes. If both uploaded people are male, they must both wear Sebastian’s full outfit. Any female subject must wear Mia’s outfit — a yellow square-neck short-sleeve dress with a soft, flowing skirt, and matching black-and-white spectator shoes.
 
-      A title inspired by the theme of the user-uploaded photos.
+      Create a realistic La La Land–style movie poster in which the two subjects sit on a simple wooden bench with a small distance between them. Their bodies face forward with hands resting naturally on their legs, while their heads turn gently toward each other as if sharing a quiet, cinematic moment together. They must not look at the camera. The camera framing must be pulled back significantly farther than before so that the two subjects occupy only about one-third of the full image composition. This wider framing must emphasize the cinematic environment, creating more atmospheric negative space while keeping the perspective level and eye-level for a natural, grounded feeling.
 
-      A short documentary-style line that feels minimal and poetic.
+      Beside the female subject, place a soft, flexible red handbag with noticeably softer material, resting flat on the bench surface. On the ground near her feet, include a pair of blue peep-toe high heels with thin heels and delicate ankle straps, positioned as if casually knocked over and lying on their side.
 
-      Note on Typography (The "Medium-Large" Scale): The typography must be elegantly centered. The scale should be equivalent to a refined magazine sub-headline. It must be distinctly larger and heavier than standard body copy to act as a clear focal point, but it must remain restrained and compact, occupying only a small percentage of the white sheet's total area to emphasize the minimal aesthetic. Do not include any years or dates.
+      The background must depict an elevated overlook of Los Angeles at dusk, with warm pink-orange sunset tones gradually transitioning into deep twilight blue. The city lights should glow atmospherically below, creating a dreamy but realistic dusk ambiance. The lighting and palette must reflect La La Land’s signature aesthetic — a smooth gradient sky, elegant warm-to-cool color transitions, soft edges, and gentle film-like contrast, forming an overall romantic and cinematic mood.
 
-      Surrounding Elements: Around the central sheet, place Polaroid-style photographs. The number of Polaroids must match the number of images uploaded by the user. Each Polaroid must display one user-uploaded photo exactly as provided, with natural cropping to fit the frame. The Polaroids should be noticeably larger than typical instant-film proportions.
+      At the top left of the poster, include the title “LA LA LOVE” in the authentic movie font, using tall geometric serif lettering with thin, elegant, art-deco inspired shapes, generous spacing, and clean white coloring. Directly beneath it, left-aligned, add “LOVE HAPPENS BETWEEN DREAMS.” in small, thin, uppercase sans-serif text with subtle spacing. The typography must blend naturally with the composition and must not obstruct the subjects.
 
-      Composition & Lighting: Arrange the Polaroids in an intentionally asymmetrical, organic layout on the flat surface. They may be slightly rotated or offset but must remain fully grounded (no elevation). Use soft, diffused, low-contrast shadows directly beneath the Polaroids and the central sheet to reinforce the flat tabletop placement.
-
-      Aesthetic Constraints: Maintain a cold, minimal, quiet fashion aesthetic. Do not include props, hands, decorative elements, environmental cues, or anything beyond the sheet, Polaroids, and flat gray surface.
+      The final poster must appear cinematic, modern, romantic, and visually consistent with an authentic La La Land promotional image. No parody elements, no cartoonish styling, no added people, no incorrect environmental details, and absolutely no substitution of the uploaded subjects with the original film actors. Only the two uploaded subjects in the correct outfits, sitting on the bench overlooking the Los Angeles dusk skyline, captured in a refined, film-accurate aesthetic.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
-    min_images: 1
-    max_images: 5
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0108 5 Styles/0108 Fortune Cookies
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:5"
-    prompt: |
-      Directives for Image Generation: A ultra-high-definition macro photograph capturing a photorealistic 15mm miniature human sitting on a colossal, single cracked fortune cookie.
-
-      Subject & Likeness:
-
-      Facial Fidelity: The miniature figure must be an exact, high-fidelity replica of the person in the uploaded image. Every facial feature, from the eye shape to the facial structure, must be sharp, highly recognizable, and perfectly clear.
-
-      Physical Realism: The figure is a living, breathing human shrunk down, not a figurine. Render natural human skin textures, visible pores, and organic light absorption (subsurface scattering).
-
-      Proportions: Maintain strict 1:7.5 adult human head-to-body proportions.
-
-      Pose & Attire: A relaxed, candid sitting posture on the far-left crest of the cookie. Wearing a white cotton t-shirt with visible fabric grain, blue denim jeans with realistic folds, and clean white canvas sneakers.
-
-      The Fortune Cookie & Text:
-
-      Environment: One giant, golden-brown fortune cookie, cracked into two clean halves, positioned in the center. The cookie texture should be hyper-detailed, showing its crispy, porous, baked surface.
-
-      Fortune Paper: A crisp, white rectangular paper strip bridges the two cookie halves.
-
-      Text Integrity: The text [INSERT_RANDOM_POSITIVE_FORTUNE_HERE] is printed clearly on the paper. The text must be fully legible, unobstructed by the figure or crumbs, and centered. No part of the message is hidden.
-
-      Photography & Composition:
-
-      Framing: A medium-macro full view that contains the entire structure of the cookie. The composition is clean, minimalist, and uncluttered.
-
-      Optics: A shallow depth-of-field effect (tilt-shift style). The miniature person's face and the fortune text are in razor-sharp focus, while the far edges of the cookie and the background transition into a smooth, creamy bokeh.
-
-      Lighting: Soft, directional studio lighting that defines the organic volume of the skin and cookie texture, casting a subtle, tiny contact shadow beneath the person.
-
-      Background & Lighting:
-
-      Background: A randomly selected, ultra-saturated solid color (chosen from a vibrant palette: #A61023, #FF7F24, #FFBF00, #008B8B, #D2B48C, #F08080, #FF69B4, or #0047AB). The background must be a 100% flat, monochromatic plane with zero gradients, zero vignetting, and zero lighting falloff. It must appear as a pure, uniform block of intense color.
-
-      Lighting: Soft, directional studio lighting that defines the cookie's volume and creates a tiny, realistic contact shadow beneath the object, while ensuring the background remains a perfectly even, flat color without any light-to-dark variance.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
     min_images: 2
     max_images: 2
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0108 5 Styles/0108 求籤-TW
+  - folder: ../Media Files/Nano Banana/0113 4 Styles/0113 First Love
     model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:5"
+    resolution: "1K"
+    aspect_ratio: "3:4"
     prompt: |
-      A realistic fortune-telling scene.
+      Use the two uploaded people as the only subjects. Their faces, facial features, bone structure, hairstyles, expressions, and overall identities must remain perfectly identical to the uploaded photos. The system must not alter their facial proportions, makeup style, jawline, nose shape, or eye shape. No face smoothing, beautification, aging, or stylization is allowed. No additional people may appear.
 
-      The camera is level and parallel to the scene.
-      The background and overall composition remain straight and aligned,
-      with no tilt, rotation, angled perspective, or diagonal framing.
+      Clothing Assignment Rule (IF condition — very important)
+      If the two uploaded people are one male and one female: Male must wear the black puffer jacket. Female must wear the blue puffer jacket and white pants
 
-      The photo fills the entire frame edge-to-edge, with no borders, margins, or visible background outside the image.
+      If the uploaded people are the same gender:
+      Assign jacket colors randomly, but one must wear black and the other must wear blue.
+      Whoever wears the blue puffer jacket must also wear white pants.
 
-      The subject is framed in a chest-up shot,
-      seated at the center behind a traditional fortune-telling table,
-      sitting upright and facing directly toward the camera.
+      Create a realistic winter romance poster featuring the two subjects in a snowy landscape. The composition must match the emotional feel of a Japanese drama poster:
 
-      Both the body and face are front-facing, and the subject is looking directly at the camera.
+      One subject wears a black puffer jacket, standing in the foreground, smiling naturally.
 
-      The main subject is based on the user-uploaded photo, with appearance and identity remaining consistent.
-      The subject’s facial features and clothing must remain unchanged,
-      preserving the original facial structure, proportions, recognizability,
-      and original outfit exactly as shown in the uploaded photo.
+      The other subject wears a blue puffer jacket and white pants, joyfully riding on the back of the first subject with arms wrapped around their shoulders.
+      Both must look joyful, warm, and natural, expressing a gentle sense of first love.
 
-      The subject is in the act of drawing a fortune.
+      The background features a wide snowy field with frost-covered trees, softly blurred. Large white snowflakes fall throughout the image, with soft bokeh-like snowfall effects. The overall color palette must be cold, bright, pastel blue, with a soft cinematic Japanese-drama tone—clean, airy, and emotional.
 
-      One hand is lifting a wooden fortune stick from the fortune container,
-      while the other hand is holding a small paper fortune slip.
+      Precise Title Typography (very important): At the top of the poster, include the title in the exact style: "Our Story". Thin serif font. Slight letter spacing. Subtle texture. Dark gray-blue color. Soft, low-contrast appearance. Positioned centered near the top, evenly spaced, NOT bold
 
-      The subject is drawing a fortune and is not writing calligraphy
-      or performing any writing actions.
+      "悸動". Placed directly underneath "Our Story". Font size must be noticeably smaller. Letter spacing must be slightly wider for an airy, elegant look. Subtle serif texture, dark gray-blue tone. Must NOT appear handwritten or stylized
 
-      The background is a traditional fortune-telling room
-      with warm wooden elements and subtle calligraphy decorations.
+      The typography must visually integrate into the poster as professionally typeset Japanese-romance key art—not cartoonish, not decorative, and not floating awkwardly.
 
-      The background composition should remain simple and not overly complex,
-      keeping the visual focus on the subject.
-
-      Overall background lighting is dim and subdued.
-
-      Apply a shallow depth of field to the background,
-      creating noticeable background blur.
-
-      Within the blurred background, include two traditional Chinese calligraphy artworks,
-      two to three softly glowing lantern lights,
-      and two green potted plants.
-
-      All background elements must remain out of focus, indistinct, and non-detailed,
-      serving only as atmospheric accents rather than focal objects.
-
-      At the top of the image, fortune result text is displayed
-      and randomly alternates between options such as
-      “上上”, “上”, “中”, or “平”.
-
-      All displayed text must be written in Traditional Chinese (繁體中文).
-
-      The text is arranged in a horizontal layout
-      and written in a bold Chinese calligraphy style.
-
-      The fortune text is placed on a white background
-      enclosed by a thin red square outline frame.
-
-      The frame is flat, minimal, and graphic,
-      presented as a layout overlay aligned to the image,
-      not as a physical object, sign, hanging element, or picture frame within the scene.
-
-      On the left and right sides of the image,
-      display the labels “宜” and “忌” respectively.
-
-      Each label is placed inside a solid red circular background,
-      with the character rendered in white and centered within the circle.
-
-      Each side forms its own vertical panel.
-
-      Under each label (“宜” on the left, “忌” on the right),
-      display exactly two short items arranged vertically.
-
-      The items are presented in a vertical, top-to-bottom layout
-      inspired by traditional almanac-style reading flow,
-      and are content items only,
-      not additional labels or repeated headings.
-
-      Only one set of “宜” and “忌” labels should appear in the entire image.
-      Do not duplicate or repeat the labels in any other form.
-
-      All fortune-related text, including result text, labels, and items,
-      is rendered in black text.
-
-      Each vertical panel is placed on a white background
-      and enclosed by thin red outline frames,
-      aligned neatly along the left and right sides of the image
-      as flat graphic layout overlays,
-      not as physical objects, hanging elements, or scrolls within the scene.
-
-      The items should be randomly generated for each result,
-      concise and culturally appropriate,
-      representing commonly accepted suitable or unsuitable actions
-      in a fortune-telling context
-      (such as work, relationships, communication, planning, rest, or decision-making).
-
-      Keep the content symbolic, neutral, and broadly applicable.
-      Avoid extreme, harmful, or overly specific actions.
-
-      The overall style is highly realistic with natural proportions.
-
-      Warm lighting and soft shadows create a cinematic atmosphere.
-      The dim background lighting, combined with layered light-and-shadow contrast,
-      produces a subdued and mysterious mood
-      without leaning toward fantasy or supernatural styles.
-
-      Do not alter the subject’s facial features, identity, clothing, or expression style.
-      Avoid calligraphy writing actions, calligraphy tools, fantasy elements,
-      or any decorative physical frames.
+      The final poster must feel emotional, cinematic, soft, snowy, and consistent with a high-quality Japanese romance drama. No parody. No unrealistic posing. No strong stylization filters.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: false
+    use_random_source_selection: true
     min_images: 2
     max_images: 2
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0108 5 Styles/0108 塔羅 V1
+  - folder: ../Media Files/Nano Banana/0113 4 Styles/0113 Poster
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "9:16"
     prompt: |
-      A beautifully composed tarot card scene based on a classic tarot deck.
-
-      The tarot card type is randomly selected from a standard tarot deck for each generation including:
-      The Fool, The Emperor, The Hierophant, The Chariot, Strength, The Hermit, Wheel of Fortune, Justice, Temperance, The Moon, The Sun, Judgement, and The World
-
-      The tarot card illustration appears only within the printed card artwork itself. The character illustrated on the tarot card is transformed from the uploaded user photo, remaining recognizable while enhancing and slightly enlarging the person’s facial features, especially the eyes and facial structure, to suit a tarot illustration style.
-
-      Only the imagery inside the tarot card is illustrated.
-      All other elements remain realistic and photographic, including the physical tarot card, the open book beneath it, the printed text on the book pages, surrounding objects, materials, lighting, and shadows.
-
-      The illustration inside the tarot card features clean, precise linework with clear contours and controlled detail, avoiding rough sketch lines, painterly textures, or excessive ornamentation.
-
-      The tarot card is placed on top of an open book.
-      The book displays a brief interpretation of the selected tarot card, written as a single sentence or a small set of concise keywords that summarize the card’s meaning.
-      The text appears as printed content on real paper, not illustrated lettering.
-
-      The scene is viewed from a clear top-down perspective (overhead view), with no tilt or dramatic camera angle.
-      The tarot card and book lie flat on a surface, maintaining natural proportions and realistic depth.
-
-      The tabletop is black, covered with a gypsy-inspired cloth featuring subtle patterns and rich fabric texture.
-      Crystals, candles, and dried botanical elements are arranged naturally around the book, such as dried flowers, grasses, or leaves.
-      All tabletop elements are rendered realistically with natural shadows and believable materials.
-
-      The composition is clearly focused on the tarot card as the primary subject.
-      The card is centered or visually dominant in the frame, while the book, cloth, crystals, candles, and dried botanicals remain secondary and do not compete for attention.
-
-      The overall environment is calm, elegant, and mysterious, with soft, warm lighting.
-      The atmosphere feels magical and spiritual, but never dark, scary, surreal, or horror-like.
-
-      Style contrast: illustrated tarot card artwork combined with a realistic, photographic environment, maintaining clear separation between illustration and reality.
-
-      Mood keywords: mystical, elegant, calm, symbolic, refined.
+      You are a professional graphic designer tasked with creating a minimalist, design-driven poster with a refined editorial aesthetic, based on a user-uploaded photo. The main subject extracted from the user’s photo must remain vertically and horizontally centered in the frame, with a clean cut-out edge and no visible white borders, outlines, frames, or matte edges. Place a bold central headline at the upper area of the composition, positioned behind the main subject, allowing the subject to naturally overlap and partially obscure the title text. The headline text must be white, directly related to the content, mood, or theme of the user’s photo, and rendered in solid, flat typography with absolutely no shadows, outlines, glows, gradients, embossing, bevels, or decorative effects of any kind. Above the headline, place several small supporting texts or short descriptors related to the photo, arranged with clear hierarchy and spacing, and always positioned on the topmost layer. Add a very small paragraph of text closely related to the headline, written like a short editorial caption or micro-essay, positioned on either the left or right side of the composition, and layered in front of the main subject, set in a noticeably smaller font size to create contrast and a magazine-like detail layer without drawing attention away from the main title. Include a decorative color palette element composed of extremely small square-shaped color swatches arranged in a single horizontal row, sampled from colors present in the user’s photo, used purely as a subtle visual accent. Preserve the original background of the user-uploaded photo exactly as provided, with no replacement, no artificial backdrop, no added gradients, textures, or background modifications. The composition should not include any white frames, borders, poster margins, or mockup-style edges. The overall result maintains a clean, minimalist, editorial fashion-poster aesthetic with clear layering, balanced negative space, and a refined, modern tone.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
@@ -250,49 +89,80 @@ tasks:
     max_images: 2
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0108 5 Styles/0108 塔羅 V2
+  - folder: ../Media Files/Nano Banana/0113 4 Styles/0113 旅遊機票
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "9:16"
+    aspect_ratio: "4:5"
     prompt: |
-      A beautifully composed tarot card scene based on a classic tarot deck.
+      Create a realistic travel flat-lay scene with a clean, neutral, and well-balanced visual style.
+      The entire scene is captured in a strict top-down, bird’s-eye view (flat-lay perspective).
 
-      The tarot card type is randomly selected from a standard tarot deck for each generation including:
-      The Fool, The Emperor, The Hierophant, The Chariot, Strength, The Hermit, Wheel of Fortune, Justice, Temperance, The Moon, The Sun, Judgement, and The World.
+      Use the uploaded photo as the main subject. The person in the photo becomes the protagonist.
+      Preserve the original facial features clearly and accurately, with realistic proportions and sharp focus on the face.
 
-      The tarot card illustration appears only within the printed card artwork itself. The character illustrated on the tarot card is transformed from the uploaded user photo, remaining recognizable while enhancing and slightly enlarging the person’s facial features, especially the eyes and facial structure, to suit a tarot illustration style.
+      Randomly generate a city in the world, strongly emphasizing randomness without predefining or suggesting any city.
+      Exclude Kyoto from the list of possible destinations. Kyoto must not be selected or depicted in any form.
 
-      Only the imagery inside the tarot card is illustrated.
-      All other elements remain realistic and photographic, including the physical tarot card, the open book beneath it, the printed text on the book pages, surrounding objects, materials, lighting, and shadows.
+      Transform the uploaded photo into a Polaroid photo taken at a famous landmark of the randomly generated city.
+      The Polaroid is placed at the visual center and is the primary focus of the composition.
 
-      The illustration inside the tarot card features clean, precise linework with clear contours and controlled detail, avoiding rough sketch lines, painterly textures, or excessive ornamentation.
+      The Polaroid photo must occupy more than 50% of the entire image area, clearly dominating the frame and serving as the unquestionable visual anchor.
 
-      The tarot card is placed on top of an open book.
-      The book displays a brief interpretation of the selected tarot card, written as a single sentence or a small set of concise keywords that summarize the card’s meaning.
-      The text appears as printed content on real paper, not illustrated lettering.
+      The city scenery inside the Polaroid appears contemporary and natural:
+      natural daylight, clear sky, neutral architecture, realistic tones.
+      No sunset atmosphere, no golden hour lighting, and no nostalgic or retro feeling.
 
-      The scene is viewed from a clear top-down perspective (overhead view), with no tilt or dramatic camera angle.
-      The tarot card and book lie flat on a surface, maintaining natural proportions and realistic depth.
+      The Polaroid photo has a subtle instant film look, with gentle film grain, soft tonal transitions, and a light analog film filter, while remaining realistic and natural.
 
-      The tabletop is white and covered with an off-white tablecloth, featuring a soft fabric texture and gentle natural folds.
-      Two to three crystals are placed naturally around the book.
-      A single candle is present, positioned subtly to enhance the atmosphere without dominating the composition.
-      Dried botanical elements such as dried flowers, grasses, or leaves are arranged sparingly.
+      At the bottom-right corner of the white Polaroid frame, add handwritten-style text showing ONLY the city name.
+      The handwriting is natural, clean, subtle, and clearly readable, with no decorative typography or additional text.
 
-      **A faint beam of refracted light passes through one crystal, casting a soft, barely noticeable prism-like glow onto the table surface and nearby objects.**
-      The light effect is subtle and restrained, adding a quiet sense of mysticism without drawing attention away from the tarot card.
+      Around the Polaroid, place 3-4 iconic objects or miniature landmark models related to the randomly generated city
+      (such as souvenirs, architectural miniatures, cultural symbols, maps, food items, or travel accessories).
 
-      All tabletop elements are rendered realistically with natural shadows and believable materials.
+      All supporting objects must be unique and non-repeating.
+      No duplicate items, mirrored copies, or repeated object instances are allowed.
 
-      The composition is clearly focused on the tarot card as the primary subject.
-      The card is centered or visually dominant in the frame, while the book, tablecloth, crystals, candle, dried botanicals, and light effect remain secondary and do not compete for attention.
+      No two supporting objects may belong to the same object category or type.
+      Each object must represent a distinctly different category
+      (for example: one miniature landmark, one cultural symbol, one food item, one travel accessory, one ticket-like item).
+      Do NOT include multiple objects of the same type under any circumstances.
 
-      The overall environment is calm, elegant, and mysterious, with soft, warm lighting.
-      The atmosphere feels magical and spiritual, but never dark, scary, surreal, or horror-like.
+      All objects are physically resting on the same flat surface as the map.
+      Objects must not float or hover.
+      Every object makes clear contact with the surface and casts a natural contact shadow.
 
-      Style contrast: illustrated tarot card artwork combined with a realistic, photographic environment, maintaining clear separation between illustration and reality.
+      All supporting objects are placed directly adjacent to the Polaroid photo and tightly grouped around it.
 
-      Mood keywords: mystical, elegant, calm, symbolic, refined.
+      The objects are arranged in a dense, compact flat-lay composition with minimal spacing.
+      Objects visually cluster around the Polaroid, with reduced gaps between items.
+      Multiple objects touch or closely align with the edges of the Polaroid and the frame.
+      Some objects are partially cropped by the frame, reinforcing a tightly filled, edge-to-edge layout.
+
+      The Polaroid, flight ticket, and surrounding objects together occupy more than 85% of the frame.
+      There is minimal empty or negative space anywhere in the composition.
+
+      Include a flight ticket next to the Polaroid.
+      The destination city name on the ticket must always be fully visible, unobstructed, and clearly readable.
+      It must not be cropped, covered, or partially hidden.
+      Do NOT include any label such as “Name”, “Passenger Name”, personal names, or form fields.
+
+      The background is a single, large world map filling the entire frame.
+      The surface appears in a very light beige, off-white tone.
+      Both landmasses and ocean areas are rendered in extremely low-contrast, near-identical neutral tones, with only subtle tonal differences separating sea and land.
+      Geographic outlines are barely visible and softly faded.
+      The map appears visually recessed and subdued, functioning strictly as a background layer and never competing with the Polaroid, ticket, or surrounding objects.
+
+      Soft natural daylight enters from one direction.
+      Soft, scattered sunlight falls across the surface of the world map,
+      creating gentle patches of light and shadow that enhance texture while remaining subtle and unobtrusive.
+
+      Lighting & Atmosphere:
+      Balanced exposure, natural contrast, clean composition.
+      Modern, refined, realistic finish.
+      Explicitly non-vintage and non-retro.
+      No aged, nostalgic, rustic, or old-fashioned aesthetic.
+      No reference to any specific year or time period.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false

@@ -1,0 +1,247 @@
+
+template_path: templates/I2V templates.pptx
+comparison_template_path: templates/I2V Comparison Template.pptx
+testbed: http://192.168.31.161:8000/image_generation/
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 3
+
+schedule:
+  start_time: ""
+  comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
+
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCY_EmGGYQbRrxOXcU8oym0AXCAM-PE9F_joonWPrsKTNY?e=nsWy8W
+root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3b27ffe973d_0_464#slide=id.g3b27ffe973d_0_464
+
+tasks:
+  - folder: ../Media Files/Nano Banana/0108 5 Styles New Year/0108 麻將賭徒 - 紅色風衣 V2
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do not beautify, stylize, or alter identity in any way. No extra people may appear.
+
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal in size and seamlessly stitched into one single image with no borders, gaps, margins, dividers, or white lines,  inspired by an exaggerated Hong Kong casino night aesthetic.
+
+      All four panels must share a consistent environment: a upscale mahjong table in the foreground and deep green velvet curtains as the background. Each panel must include visible mahjong tiles, and the subject must actively interact with them in every frame. Every image must show a person's face; there will never be a moment without a face; mahjong interaction is mandatory in all panels.White borders are prohibited on the four grids.
+
+      Outfit: A red trench coat with an open front, a well-fitting cut, and the hem must be fixed above the hips. The jacket must stop above the widest part of the hips and must never cover the lower hips or upper thighs. The fabric is smooth with a soft matte finish, lightly structured shoulders, narrow peak lapels, and a refined double-breasted front.A matching red belt, about 3 centimeters wide, cinches her waist, accentuating her beautiful hourglass figure.
+
+      Underneath, she wears a red high-waisted mini dress with thin spaghetti straps and a sweetheart neckline. The skirt is a true mini length, visibly exposing the upper thighs, with the hemline clearly positioned high on the leg and never extending beyond the jacket hem. The skirt must read as a short cocktail mini dress, not a midi or knee-length silhouette, and must remain fully visible in seated and standing poses.
+
+      Footwear consists of black pointed-toe platform boots with slim stiletto heels (7–8 cm). The boots fit closely around the ankle with matte leather texture and sharp, elegant lines, reinforcing a bold casino-night aesthetic.
+
+      Four-panel composition rules:
+      Top-left: Medium or three-quarter shot beside the mahjong table, confident posture, hands touching or arranging tiles.
+
+      Top-right: Tight facial close-up with one hand holding 3 mahjong tiles facing the camera front-on near the face, the tile faces fully visible and readable, with strong eye contact.
+
+      Bottom-left: Close-up emphasizing face and hands, one hand holding a “Fa” mahjong tile and the other hand holding a “Zhong” mahjong tile, both tiles clearly visible and facing the camera. The gesture feels playful or subtly provocative, with attention drawn equally to the face and both hands.
+
+      Bottom-right: Medium shot leaning or sitting at the table, relaxed but powerful pose, tiles clearly visible in the foreground.
+
+      Lighting is dramatic and cinematic with warm highlights, deep shadows, and reflective surfaces. The overall mood is bold, glamorous, and unapologetically Hong Kong—like a high-end casino fashion campaign.If you're holding mahjong tiles, you must hold them properly; you absolutely cannot hold them like you would playing cards. Mahjong tiles are not paper.The mahjong tiles must be laid out correctly; a jumbled or mirrored arrangement is strictly prohibited.The background is set outside dark green velvet curtains, and no lighting fixtures are allowed.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 1
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0108 5 Styles New Year/0108 麻將賭徒 - 紅色套裝 V2
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do not beautify, stylize, or alter identity in any way. No extra people may appear.
+
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal in size and seamlessly stitched into one single image with no borders, gaps, margins, dividers, or white lines,  inspired by an exaggerated Hong Kong casino night aesthetic.
+
+      All four panels must share a consistent environment: a upscale mahjong table in the foreground and deep green velvet curtains as the background. Each panel must include visible mahjong tiles, and the subject must actively interact with them in every frame. Every image must show a person's face; there will never be a moment without a face; mahjong interaction is mandatory in all panels.White borders are prohibited on the four grids.
+
+      Outfit:
+      Dressed in a refined, high-fashion red tailored suit. The upper garment is an oversized red suit jacket with a slightly androgynous, couture-inspired silhouette reminiscent of late 20th-century high fashion. The shoulders are softly structured with light padding, creating a clean, straight shoulder line without exaggeration. 
+
+      The coat has a single-breasted two-button design that must be kept buttoned up, positioned slightly low to create a deep and sharp V-shaped opening at the chest.
+
+      The lapels are wide notched lapels with crisp, straight edges that must remain symmetrical and undistorted. The jacket length extends past the hips to the upper thigh area, emphasizing an elongated vertical proportion. The fabric is a high-density wool or wool-blend suiting material, approximately 260–300 gsm, with a matte finish. The red tone is a saturated, fashion-forward true red, not leaning toward orange, with stable, even coloration and minimal sheen.
+
+      The deep V neckline reveals bare skin, styled intentionally as part of the fashion look. A delicate metal necklace is worn as the only accessory, featuring a fine chain that rests between the collarbones and the center of the chest. The metal tone is subtle, silver or white gold, adding refinement without drawing attention away from the suit.
+
+      The trousers are matching red tailored pants made from the exact same fabric and color as the jacket, ensuring perfect tonal continuity. The pants are high-waisted with a straight, wide-leg cut that falls cleanly from the hips. The silhouette is relaxed yet elegant, with no tapering at the hem. The length is intentionally long, allowing the fabric to softly stack and drape over the tops of the shoes, creating fluid folds and a luxurious runway-style proportion.
+
+      Footwear consists of clean white low-top leather sneakers. The design is minimal and contemporary, with a rounded toe and no visible logos. The leather upper has a smooth matte finish, paired with a medium-thickness white rubber sole.
+
+      Four-panel composition rules:
+      Top-left: Medium or three-quarter shot beside the mahjong table, confident posture, hands touching or arranging tiles.
+
+      Top-right: Tight facial close-up with one hand holding 3 mahjong tiles facing the camera front-on near the face, the tile faces fully visible and readable, with strong eye contact.
+
+      Bottom-left: Close-up emphasizing face and hands, one hand holding a “Fa” mahjong tile and the other hand holding a “Zhong” mahjong tile, both tiles clearly visible and facing the camera. The gesture feels playful or subtly provocative, with attention drawn equally to the face and both hands.
+
+      Bottom-right: Medium shot leaning or sitting at the table, relaxed but powerful pose, tiles clearly visible in the foreground.
+
+      Lighting is dramatic and cinematic with warm highlights, deep shadows, and reflective surfaces. The overall mood is bold, glamorous, and unapologetically Hong Kong—like a high-end casino fashion campaign.If you're holding mahjong tiles, you must hold them properly; you absolutely cannot hold them like you would playing cards. Mahjong tiles are not paper.The mahjong tiles must be laid out correctly; a jumbled or mirrored arrangement is strictly prohibited.The background is set outside dark green velvet curtains, and no lighting fixtures are allowed.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 1
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0108 5 Styles New Year/0108 農曆年走春 四格 Female
+    model: gemini-2.5-flash-image
+    resolution: "1K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do NOT beautify, stylize, or alter identity. No extra people.
+
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal size and seamlessly stitched into one single image with NO borders, gaps, margins, dividers, or white lines—edge-to-edge continuous grid.
+
+      Theme & setting:
+      Create a four-panel outdoor springtime New Year photo series inspired by a traditional “zou chun” (spring outing) atmosphere. All four panels must feature the same subject and must clearly feel like they were captured consecutively at the same traditional courtyard location, with consistent lighting, environment, color tone, and mood. The scene takes place outdoors on a clear, sunny day in a traditional Taiwanese or Chinese courtyard setting. The environment includes red-toned walls, wooden pillars, tiled roof eaves, and open walkways. Natural sunlight creates warm highlights and soft shadows, producing a bright, gentle, and slightly vintage film-like tone suitable for New Year imagery. The atmosphere feels calm, elegant, and quietly festive rather than busy or playful.
+
+      Panel directions:
+      1)The subject is framed in a close-up portrait near a traditional building structure. The subject raises one hand upward, clearly gripping the hanging loop / top cord of a traditional Chinese knot ornament charm between the fingers, holding it slightly above eye level. The Chinese knot charm hangs naturally downward from the loop, fully affected by gravity, with the decorative body and tassels visibly dangling below the hand—not floating, not suspended in midair, and not detached from the hand. The face remains clearly visible, softly lit by sunlight. The pose feels gentle and reflective, with a quiet sense of reaching toward light rather than posing dramatically, maintaining a calm, everyday intimacy.
+      2) Close-up (Tanghulu): Close-up near a pillar. Body sideways facing the camera.Hold a tanghulu at chest/face level. Calm, steady gaze; composed and elegant.There must be only one candied hawthorn skewer.
+      3) Medium shot (resting): Medium shot in the same courtyard. Seated or resting naturally. Relaxed, composed posture; architecture frames the subject. Quiet, grounded moment.
+      4) Close-up (Chinese paper-cut): Close-up. Hold a traditional Chinese paper-cut (jianzhi) near the hands, interacting softly. Slight head tilt or softened gaze; gentle, warm, serene. For this fourth panel only, the background must be fully blurred with strong depth-of-field separation. The subject’s face and hands remain sharp, while all background elements are completely out of focus, creating a soft, dreamy bokeh effect without losing realism.
+
+      Wardrobe (all panels):
+      Red-toned New Year styling, realistic and well-fitted, elegant and modern (not costume-like). 
+      Female: high-saturation pure red qipao with subtle same-tone embroidery + white shawl.
+      Male: high-saturation pure red magua with refined embroidery + white knitted inner layer.
+      All reds must be stable, evenly saturated, and clearly red (not orange-leaning).
+
+      Lighting & color:
+      Lighting must be entirely natural daylight, with a noticeably warm and soft quality. Sunlight should appear diffused and gentle, wrapping softly around the subject’s face and surroundings rather than creating harsh contrast. Highlights should feel warm and luminous, shadows soft and gradual, enhancing a bright yet comfortable visual experience. The overall color grading should be bright, warm, and slightly nostalgic, with a subtle vintage film softness that feels refined and airy. The image should evoke a classic New Year mood—radiant, hopeful, and elegant—without losing clarity or realism. Avoid artificial lighting, harsh contrast, overexposure, or modern cool tones.
+
+      Final output:
+      Realistic, cohesive, naturally photographed four-panel series with consistent time/place/mood, preserving identity with no artifacts.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 1
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0108 5 Styles New Year/0108 農曆年走春 四格 Male
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4" 
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do NOT beautify, stylize, or alter identity. No extra people.
+
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal size and seamlessly stitched into one single image with NO borders, gaps, margins, dividers, or white lines—edge-to-edge continuous grid.
+
+      Theme & setting:
+      Create a four-panel outdoor springtime New Year photo series inspired by a traditional “zou chun” (spring outing) atmosphere. All four panels must feature the same subject and must clearly feel like they were captured consecutively at the same traditional courtyard location, with consistent lighting, environment, color tone, and mood. The scene takes place outdoors on a clear, sunny day in a traditional Taiwanese or Chinese courtyard setting. The environment includes red-toned walls, wooden pillars, tiled roof eaves, and open walkways. Natural sunlight creates warm highlights and soft shadows, producing a bright, gentle, and slightly vintage film-like tone suitable for New Year imagery. The atmosphere feels calm, elegant, and quietly festive rather than busy or playful.
+
+      Panel directions:
+      1)The subject is framed in a close-up portrait near a traditional building structure. The subject raises one hand upward, clearly gripping the hanging loop / top cord of a traditional Chinese knot ornament charm between the fingers, holding it slightly above eye level. The Chinese knot charm hangs naturally downward from the loop, fully affected by gravity, with the decorative body and tassels visibly dangling below the hand—not floating, not suspended in midair, and not detached from the hand. The face remains clearly visible, softly lit by sunlight. The pose feels gentle and reflective, with a quiet sense of reaching toward light rather than posing dramatically, maintaining a calm, everyday intimacy.
+      2) Close-up (Tanghulu): Close-up near a pillar. Body sideways facing the camera.Hold a tanghulu at chest/face level. Calm, steady gaze; composed and elegant.There must be only one candied hawthorn skewer.
+      3) Medium shot (resting): Medium shot in the same courtyard. Seated or resting naturally. Relaxed, composed posture; architecture frames the subject. Quiet, grounded moment.
+      4) Close-up (Chinese paper-cut): Close-up. Hold a traditional Chinese paper-cut (jianzhi) near the hands, interacting softly. Slight head tilt or softened gaze; gentle, warm, serene. For this fourth panel only, the background must be fully blurred with strong depth-of-field separation. The subject’s face and hands remain sharp, while all background elements are completely out of focus, creating a soft, dreamy bokeh effect without losing realism.
+
+      Wardrobe (all panels):
+      Red-toned New Year styling, realistic and well-fitted, elegant and modern (not costume-like). 
+
+      high-saturation pure red magua with refined embroidery + white knitted inner layer.
+      All reds must be stable, evenly saturated, and clearly red (not orange-leaning).
+
+      Lighting & color:
+      Lighting must be entirely natural daylight, with a noticeably warm and soft quality. Sunlight should appear diffused and gentle, wrapping softly around the subject’s face and surroundings rather than creating harsh contrast. Highlights should feel warm and luminous, shadows soft and gradual, enhancing a bright yet comfortable visual experience. The overall color grading should be bright, warm, and slightly nostalgic, with a subtle vintage film softness that feels refined and airy. The image should evoke a classic New Year mood—radiant, hopeful, and elegant—without losing clarity or realism. Avoid artificial lighting, harsh contrast, overexposure, or modern cool tones.
+
+      Final output:
+      Realistic, cohesive, naturally photographed four-panel series with consistent time/place/mood, preserving identity with no artifacts.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 1
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0108 5 Styles New Year/0108 紅包橘子四格
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4" 
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do not beautify, stylize, or alter identity in any way. No extra people may appear.
+
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal in size and seamlessly stitched into one single image with no borders, gaps, margins, dividers, or white lines. All four panels must feel like they were taken during the same casual at-home photoshoot, in the same moment and environment, with consistent lighting, color tone, and mood.
+
+      This is a cute, festive Lunar New Year / Year of the Horse–themed portrait series focused on playful, candid interaction with red envelopes (hongbao) and mandarin oranges. The mood is joyful, lively, playful, charming, and warm—never elegant, serious, editorial, or posed. All images look like they were taken at home using a compact CCD digital camera with the flash turned on.
+
+      Flash lighting is direct and frontal, slightly harsh and high-contrast, brightly illuminating the subject while the background remains somewhat darker but still clearly readable. The setting is a recognizably Lunar New Year–decorated living room, creating an authentic early-digital CCD flash snapshot feel with a nostalgic, casual tone.
+
+      The subject wears a red knit sweater paired with a white scarf. Makeup is minimal and natural, with subtle healthy warmth suitable for New Year lighting. Hair remains natural and consistent with the uploaded photo.
+
+      All red envelopes across the four panels share one consistent design, featuring a horse motif (Year of the Horse) and the Chinese character 「福」 as metallic gold foil embossing. The gold appears hot-stamped with subtle reflective sheen and slight embossed depth, elegant and traditional—never flat, matte, glowing, cartoon-like, or modern. The envelopes look realistic, physical, and properly textured.
+
+      Panel 1 – Big happy smile (fan-style red envelopes):
+      A close-up or medium-close shot. The subject smiles openly and happily, holding multiple red envelopes like a fan that partially covers the face. This panel feels like the emotional highlight—cute, joyful, and full of New Year energy.
+
+      Panel 2 – Mandarin orange on head (extra playful):
+      A half-body shot. A mandarin orange is balanced on top of the head, with both hands raised to gently steady it. The expression is playful and cheeky, with relaxed mischievous energy. The gaze is directed away from the camera (sideways or diagonally upward), enhancing a spontaneous, teasing feel.
+
+      Panel 3 – Mandarin orange in palm:
+      A close-up shot. The subject gently holds a mandarin orange near chest-to-face level, looking toward it below eye level. The interaction feels natural and intimate, like quietly noticing and appreciating it.
+
+      Panel 4 – Red envelope reaching toward camera:
+      A medium shot from a different angle than Panel 1. Both arms extend straight toward the camera holding red envelopes, which appear larger due to perspective. The gaze meets the camera directly with a openly and happily smiles , creating strong engagement and playful depth.
+
+      All four panels maintain a CCD flash photography look with strong on-camera flash, crisp facial detail, slightly overexposed highlights, a darker but readable background, and a casual, imperfect snapshot aesthetic. Avoid smartphone HDR, cinematic lighting, studio softness, or dramatic shadow shaping.
+
+      Color temperature leans warm and nostalgic: skin tones appear healthy and slightly warm, reds feel rich and cozy, and the overall warmth feels natural rather than filtered or stylized.
+
+      The final result must feel cohesive and naturally photographed, like a single playful Lunar New Year photoshoot captured casually at home—showing festive context, varied angles, strong depth, candid gestures, and joyful New Year energy—while fully preserving the subject’s true identity with no visual artifacts.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 1
+    num_iterations: 50
+
+
+# Comments and documentation
+comments:
+  folder_structure: "Each task folder should contain 'Source' and 'Generated_Output' subfolders. For multi-image tasks, also include 'Additional' subfolder."
+  reference_folder: "Optional: Path to folder containing third set of images for 3-way comparison"
+  template_usage: "use_comparison_template: true uses comparison_template_path (3 placeholders), false uses template_path (2 placeholders)"
+  model: "Gemini model to use for generation. 'gemini-2.5-flash-image' (max 3 images, faster), 'gemini-3-pro-image-preview' (max 14 images, better quality). Must be specified per task; defaults to 'gemini-2.5-flash-image' if omitted. Root-level model is ignored."
+  resolution: "Output resolution. Options: '1K' (default). Must be specified per task if non-default value is needed."
+  aspect_ratio: "Output aspect ratio. Valid options: '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'. If omitted, auto-detects the closest ratio from source image dimensions."
+  use_multi_image: "Set to true to enable multi-image mode from Additional folder, false for single-image mode"
+  output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report. Example: with 4 tasks and group_tasks_by=4, creates 1 report; with 8 tasks, creates 2 reports."
+  
+  random_source_selection:
+    description: "Mode for selecting N images from Source folder per API call (images can be reused)"
+    use_random_source_selection: "Set to true to enable random source selection mode"
+    min_images: "Minimum images per API call (default: 1)"
+    max_images: "Maximum images per API call (default: model max, e.g., 3 for flash, 14 for pro)"
+    num_iterations: "Number of API calls to make. Defaults to number of source files if omitted."
+    notes: |
+      - All images in 'Source' folder - no 'Additional' folder needed
+      - num_iterations controls API call count (defaults to source file count)
+      - Image counts spread from min to max across iterations
+      - Images CAN be reused across iterations (not unique partitions)
+      - DETERMINISTIC: same folder = same selections every run
+      - Great for regression testing: update source images, re-run, compare results
+      - Use gemini-3-pro-image-preview model for up to 14 images per call
+    example: |
+      # 10 source images, 50 iterations = 50 API calls, each picks 1-5 images
+      use_random_source_selection: false
+      min_images: 1
+      max_images: 5
+      num_iterations: 50  # Optional: defaults to number of source files
+      model: gemini-3-pro-image-preview
+  
+  multi_image_config:
+    description: "Configuration for multi-image generation (Source + Additional folders mode)"
+    enabled: "Must be true to use multi-image features"
+    mode: "sequential: consistent reproducible pairing | random_pairing: randomly select from Additional folder"
+    folders: "Array of folder paths to select additional images from (typically ['../path/to/folder/Additional'])"
+    allow_duplicates: "true for sequential mode (recommended) | false: try to avoid repeating combinations in random mode"
+  multi_image_example_single: "Set 'use_multi_image': false to process only images from Source folder without additional images"
+  multi_image_example_dual: "Set 'use_multi_image': true with multi_image_config to pair Source images with Additional folder images sequentially"
