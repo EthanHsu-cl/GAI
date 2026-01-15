@@ -4,103 +4,43 @@ testbed: http://192.168.31.161:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 2
+  group_tasks_by: 3
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB5kGrEeQx7T6RTQdcZl98zAdEzG98bDXJfzeKIBJABXtY?e=eijijr
-root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3b7578c9a77_0_0#slide=id.g3b7578c9a77_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgC4cJn_OzrIS4M0RD8rK_gyARTFbwl5pdj1avFJiV8pVw4?e=uFwID6
+root_design_link: https://docs.google.com/presentation/d/1H6krGUSYM6KSr2iOFyXRCcADnZlS8QYl4F9DCRxf9zU/edit?slide=id.g3b27ffe973d_0_464#slide=id.g3b27ffe973d_0_464
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0109 2 Styles/0109 Younger & Older Me v1
+  - folder: ../Media Files/Nano Banana/0114 6 Styles CNY/0114 麻將賭徒 - 紅色風衣 V2 亞洲人
     model: gemini-3-pro-image-preview
     resolution: "1K"
-    aspect_ratio: "16:9"
+    aspect_ratio: "3:4"
     prompt: |
-      Using the provided photo as an identity reference, generate a horizontal three-panel collage.
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do not beautify, stylize, or alter identity in any way. No extra people may appear.
 
-      From LEFT to RIGHT, the three images represent the SAME PERSON at different life stages:
-      - Left panel: approximately 5 years old
-      - Middle panel: present age (must closely match the original reference image)
-      - Right panel: approximately 60 years old
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal in size and seamlessly stitched into one single image with no borders, gaps, margins, dividers, or white lines,  inspired by an exaggerated Hong Kong casino night aesthetic.
 
-      Do NOT generate different individuals.
+      All four panels must share a consistent environment: a upscale mahjong table in the foreground and deep green velvet curtains as the background. Each panel must include visible mahjong tiles, and the subject must actively interact with them in every frame. Every image must show a person's face; there will never be a moment without a face; mahjong interaction is mandatory in all panels.White borders are prohibited on the four grids.
 
-      ====================
-      GLOBAL FRAMING & COMPOSITION RULE (CRITICAL)
-      ====================
-      - All three panels MUST use the same framing distance and crop level
-      - The subject size relative to the frame must be consistent across all panels
-      - Choose ONE framing style and apply it to all three images:
-        - Either all full-body shots
-        - Or all half-body / upper-body shots
-      - Do NOT mix full-body and half-body framing
-      - Camera distance, perspective, and zoom level must remain visually consistent
+      Outfit: A red trench coat with an open front, a well-fitting cut, and the hem must be fixed above the hips. The jacket must stop above the widest part of the hips and must never cover the lower hips or upper thighs. The fabric is smooth with a soft matte finish, lightly structured shoulders, narrow peak lapels, and a refined double-breasted front.A matching red belt, about 3 centimeters wide, cinches her waist, accentuating her beautiful hourglass figure.
 
-      ====================
-      GLOBAL IDENTITY RULES
-      ====================
-      - The middle panel is the primary identity anchor and must closely match the original reference image
-      - Facial structure, feature spacing, ethnicity, and gender must remain consistent across all panels
-      - Avoid generic age templates for both children and elderly
-      - Background and lighting should remain visually similar
+      Underneath, she wears a red high-waisted mini dress with thin spaghetti straps and a sweetheart neckline. The skirt is a true mini length, visibly exposing the upper thighs, with the hemline clearly positioned high on the leg and never extending beyond the jacket hem. The skirt must read as a short cocktail mini dress, not a midi or knee-length silhouette, and must remain fully visible in seated and standing poses.
 
-      ====================
-      LEFT PANEL – AGE 5 (CHILD)
-      ====================
-      - Depict the same person as a realistic 5-year-old child
-      - The child’s face MUST be derived from the original facial structure
-      - Preserve eye shape, eye spacing, nose shape, mouth shape, and overall facial proportions
-      - Avoid generic or stereotypical child faces
+      Footwear consists of black pointed-toe platform boots with slim stiletto heels (7–8 cm). The boots fit closely around the ankle with matte leather texture and sharp, elegant lines, reinforcing a bold casino-night aesthetic.
 
-      - The body should clearly reflect a child’s age:
-        - Smaller stature
-        - Narrower shoulders
-        - Childlike body proportions
-      - Pose and clothing do not need to be identical, but must be natural for a child
-      - The child must feel like a younger version of the same person, not a different child
+      Four-panel composition rules:
+      Top-left: Medium or three-quarter shot beside the mahjong table, confident posture, hands touching or arranging tiles.
 
-      ====================
-      MIDDLE PANEL – PRESENT (REFERENCE)
-      ====================
-      - Must closely match the original reference image
-      - Serves as the identity, scale, and framing reference
-      - No aging or de-aging effects should be applied
+      Top-right:The close-up shot focuses on the face, with one hand holding three mahjong tiles, the tiles must be either "Zhong or "Fa"facing the camera, close to the face, the tiles are clearly visible, and the gaze is focused.The cards must not be floating in the hand or not being held by the fingers.
 
-      ====================
-      RIGHT PANEL – AGE 60 (ELDERLY)
-      ====================
-      - Depict the same person at approximately 60 years old
-      - The elderly face MUST be an aged transformation of the original face, not a generic elderly face
-      - Preserve:
-        - Eye shape and spacing
-        - Nose bridge and tip shape
-        - Mouth width and lip shape
-        - Jawline and face contour (with natural aging softness)
+      Bottom-left: Close-up emphasizing face and hands, one hand holding a “Fa” mahjong tile and the other hand holding a “Zhong” mahjong tile, both tiles clearly visible and facing the camera. The gesture feels playful or subtly provocative, with attention drawn equally to the face and both hands.
 
-      - Apply aging as deformation, not replacement:
-        - Wrinkles follow the original facial structure
-        - Skin aging respects bone structure
-        - Facial proportions remain recognizable
+      Bottom-right: Medium shot leaning or sitting at the table, relaxed but powerful pose, tiles clearly visible in the foreground.
 
-      - The body should reflect natural aging:
-        - Softer contours
-        - Reduced muscle tone
-        - Age-appropriate posture
-
-      - Pose and clothing should be natural for an older adult
-
-      ====================
-      FINAL CONSISTENCY CHECK
-      ====================
-      - All three panels must look like the same person photographed at different ages
-      - Framing distance must feel identical across panels
-      - Facial similarity must remain high in both child and elderly versions
-      - If results should look intentional and coherent, not like three unrelated photos
-
-
+      Lighting is dramatic and cinematic with warm highlights, deep shadows, and reflective surfaces. The overall mood is bold, glamorous, and unapologetically Hong Kong—like a high-end casino fashion campaign.If you're holding mahjong tiles, you must hold them properly; you absolutely cannot hold them like you would playing cards. Mahjong tiles are not paper.The mahjong tiles must be laid out correctly; a jumbled or mirrored arrangement is strictly prohibited.The background is set outside dark green velvet curtains, and no lighting fixtures are allowed.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
@@ -108,75 +48,164 @@ tasks:
     max_images: 2
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0109 2 Styles/0109 Younger & Older Me v2
+  - folder: ../Media Files/Nano Banana/0114 6 Styles CNY/0114 麻將賭徒 - 紅色套裝 V2 亞洲人
     model: gemini-3-pro-image-preview
     resolution: "1K"
-    aspect_ratio: "16:9"
+    aspect_ratio: "3:4"
     prompt: |
-      Using the provided photo as an identity reference, generate a horizontal three-panel collage.
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do not beautify, stylize, or alter identity in any way. No extra people may appear.
 
-      From LEFT to RIGHT, the three images represent the SAME PERSON at different life stages:
-      - Left panel: approximately 5 years old
-      - Middle panel: present age (must closely match the original reference image)
-      - Right panel: approximately 60 years old
+      Create a perfectly balanced 2×2 four-panel grid image. All panels are equal in size and seamlessly stitched into one single image with no borders, gaps, margins, dividers, or white lines,  inspired by an exaggerated Hong Kong casino night aesthetic.
 
-      Do NOT generate different individuals.
+      All four panels must share a consistent environment: a upscale mahjong table in the foreground and deep green velvet curtains as the background. Each panel must include visible mahjong tiles, and the subject must actively interact with them in every frame. Every image must show a person's face; there will never be a moment without a face; mahjong interaction is mandatory in all panels.White borders are prohibited on the four grids.
 
-      ====================
-      GLOBAL RULES
-      ====================
-      - The middle panel must closely preserve the original reference image
-      - Identity must remain consistent across all panels
-      - Background and lighting should remain visually similar
-      - The left and right panels may adjust pose and clothing to be age-appropriate
-      - Avoid generic age templates for both children and elderly
+      Outfit:
+      Dressed in a refined, high-fashion red tailored suit. The upper garment is an oversized red suit jacket with a slightly androgynous, couture-inspired silhouette reminiscent of late 20th-century high fashion. The shoulders are softly structured with light padding, creating a clean, straight shoulder line without exaggeration. 
 
-      ====================
-      LEFT PANEL – AGE 5 (CHILD)
-      ====================
-      - Depict the same person as a realistic 5-year-old child
-      - The child’s face MUST be derived from the adult reference image
-      - Preserve eye shape, eye spacing, nose shape, mouth shape, and facial proportions
-      - Avoid generic or stereotypical child faces
-      - The body should clearly reflect a child’s physique
-      - Clothing and pose should be natural for a child
+      The coat has a single-breasted two-button design that must be kept buttoned up, positioned slightly low to create a deep and sharp V-shaped opening at the chest.
 
-      ====================
-      MIDDLE PANEL – PRESENT (REFERENCE)
-      ====================
-      - Must closely match the original reference image
-      - Serves as the primary identity anchor
+      The lapels are wide notched lapels with crisp, straight edges that must remain symmetrical and undistorted. The jacket length extends past the hips to the upper thigh area, emphasizing an elongated vertical proportion. The fabric is a high-density wool or wool-blend suiting material, approximately 260–300 gsm, with a matte finish. The red tone is a saturated, fashion-forward true red, not leaning toward orange, with stable, even coloration and minimal sheen.
 
-      ====================
-      RIGHT PANEL – AGE 60 (ELDERLY)
-      ====================
-      - Depict the same person at approximately 60 years old
-      - The elderly face MUST be an aged transformation of the original face,
-        NOT a generic elderly face
+      The deep V neckline reveals bare skin, styled intentionally as part of the fashion look. A delicate metal necklace is worn as the only accessory, featuring a fine chain that rests between the collarbones and the center of the chest. The metal tone is subtle, silver or white gold, adding refinement without drawing attention away from the suit.
 
-      - Preserve the same core facial identity:
-        - Eye shape and spacing
-        - Nose bridge and tip shape
-        - Mouth width and lip shape
-        - Jawline and face contour (with natural aging softness)
+      The trousers are matching red tailored pants made from the exact same fabric and color as the jacket, ensuring perfect tonal continuity. The pants are high-waisted with a straight, wide-leg cut that falls cleanly from the hips. The silhouette is relaxed yet elegant, with no tapering at the hem. The length is intentionally long, allowing the fabric to softly stack and drape over the tops of the shoes, creating fluid folds and a luxurious runway-style proportion.
 
-      - Apply aging as deformation, not replacement:
-        - Wrinkles should follow the existing facial structure
-        - Skin aging should respect the original bone structure
-        - Avoid altering facial proportions
+      Footwear consists of clean white low-top leather sneakers. The design is minimal and contemporary, with a rounded toe and no visible logos. The leather upper has a smooth matte finish, paired with a medium-thickness white rubber sole.
 
-      - Hair may turn gray or white naturally
-      - The body should reflect natural aging while remaining proportional
-      - Clothing and pose should be appropriate for an older adult
+      Four-panel composition rules:
+      Top-left: Medium or three-quarter shot beside the mahjong table, confident posture, hands touching or arranging tiles.
 
-      ====================
-      CRITICAL IDENTITY RULE
-      ====================
-      - The left and right panels must look like the same person at different ages,
-        not different people of similar age
-      - Avoid template-like elderly appearances
-      - If facial similarity to the middle panel is lost, the result is incorrect
+      Top-right:The close-up shot focuses on the face, with one hand holding three mahjong tiles, the tiles must be either "Zhong or "Fa"facing the camera, close to the face, the tiles are clearly visible, and the gaze is focused.The cards must not be floating in the hand or not being held by the fingers.
 
+      Bottom-left: Close-up emphasizing face and hands, one hand holding a “Fa” mahjong tile and the other hand holding a “Zhong” mahjong tile, both tiles clearly visible and facing the camera. The gesture feels playful or subtly provocative, with attention drawn equally to the face and both hands.
+
+      Bottom-right: Medium shot leaning or sitting at the table, relaxed but powerful pose, tiles clearly visible in the foreground.
+
+      Lighting is dramatic and cinematic with warm highlights, deep shadows, and reflective surfaces. The overall mood is bold, glamorous, and unapologetically Hong Kong—like a high-end casino fashion campaign.If you're holding mahjong tiles, you must hold them properly; you absolutely cannot hold them like you would playing cards. Mahjong tiles are not paper.The mahjong tiles must be laid out correctly; a jumbled or mirrored arrangement is strictly prohibited.The background is set outside dark green velvet curtains, and no lighting fixtures are allowed.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0114 6 Styles CNY/0114 農曆年走春 四格 Female 亞洲人
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do NOT beautify, stylize, or alter identity. No extra people.
+
+      Create a perfectly balanced 2×2 four-panel grid image. Panels are equal size and seamlessly stitched into one single image with NO borders, gaps, margins, dividers, or white lines—edge-to-edge continuous grid.
+
+      Theme & setting:
+      Create a four-panel outdoor springtime New Year photo series inspired by a traditional “zou chun” (spring outing) atmosphere. All four panels must feature the same subject and must clearly feel like they were captured consecutively at the same traditional courtyard location, with consistent lighting, environment, color tone, and mood. The scene takes place outdoors on a clear, sunny day in a traditional Taiwanese or Chinese courtyard setting. The environment includes red-toned walls, wooden pillars, tiled roof eaves, and open walkways. Natural sunlight creates warm highlights and soft shadows, producing a bright, gentle, and slightly vintage film-like tone suitable for New Year imagery. The atmosphere feels calm, elegant, and quietly festive rather than busy or playful.
+
+      Panel directions:
+      1)The subject is framed in a close-up portrait near a traditional building structure. The subject raises one hand upward, clearly gripping the hanging loop / top cord of a traditional Chinese knot ornament charm between the fingers, holding it slightly above eye level. The Chinese knot charm hangs naturally downward from the loop, fully affected by gravity, with the decorative body and tassels visibly dangling below the hand—not floating, not suspended in midair, and not detached from the hand. The face remains clearly visible, softly lit by sunlight. The pose feels gentle and reflective, with a quiet sense of reaching toward light rather than posing dramatically, maintaining a calm, everyday intimacy.
+      2) Close-up (Tanghulu): Close-up near a pillar. Body sideways facing the camera.Hold a tanghulu at chest/face level. Calm, steady gaze; composed and elegant.There must be only one candied hawthorn skewer.
+      3) Medium shot (resting): Medium shot in the same courtyard. Seated or resting naturally. Relaxed, composed posture; architecture frames the subject. Quiet, grounded moment.
+      4) Close-up (Chinese paper-cut): Close-up. Hold a traditional Chinese paper-cut (jianzhi) near the hands, interacting softly. Slight head tilt or softened gaze; gentle, warm, serene. In the fourth image alone, the background must be partially blurred and have a strong depth-of-field effect.The character's face and hands remain clear, while some background elements are partially out of focus, creating a soft and dreamy bokeh effect without sacrificing realism.realism.The outline is still visible in the background.
+
+      Wardrobe (all panels):
+      Red-toned New Year styling, realistic and well-fitted, elegant and modern (not costume-like). 
+      Female: high-saturation pure red qipao with subtle same-tone embroidery + white shawl.
+      Male: high-saturation pure red magua with refined embroidery + white knitted inner layer.
+      All reds must be stable, evenly saturated, and clearly red (not orange-leaning).
+
+      Lighting & color:
+      Lighting must be entirely natural daylight, with a noticeably warm and soft quality. Sunlight should appear diffused and gentle, wrapping softly around the subject’s face and surroundings rather than creating harsh contrast. Highlights should feel warm and luminous, shadows soft and gradual, enhancing a bright yet comfortable visual experience. The overall color grading should be bright, warm, and slightly nostalgic, with a subtle vintage film softness that feels refined and airy. The image should evoke a classic New Year mood—radiant, hopeful, and elegant—without losing clarity or realism. Avoid artificial lighting, harsh contrast, overexposure, or modern cool tones.
+
+      Final output:
+      Realistic, cohesive, naturally photographed four-panel series with consistent time/place/mood, preserving identity with no artifacts.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0114 6 Styles CNY/0114 農曆年走春 四格 Male 亞洲人
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, expression, and body proportions EXACTLY as in the uploaded photo. Do NOT beautify, stylize, or alter identity. No extra people.
+
+      Create a perfectly balanced 2×2 four-panel grid image. Panels are equal size and seamlessly stitched into one single image with NO borders, gaps, margins, dividers, or white lines—edge-to-edge continuous grid.
+
+      Theme & setting:
+      Create a four-panel outdoor springtime New Year photo series inspired by a traditional “zou chun” (spring outing) atmosphere. All four panels must feature the same subject and must clearly feel like they were captured consecutively at the same traditional courtyard location, with consistent lighting, environment, color tone, and mood. The scene takes place outdoors on a clear, sunny day in a traditional Taiwanese or Chinese courtyard setting. The environment includes red-toned walls, wooden pillars, tiled roof eaves, and open walkways. Natural sunlight creates warm highlights and soft shadows, producing a bright, gentle, and slightly vintage film-like tone suitable for New Year imagery. The atmosphere feels calm, elegant, and quietly festive rather than busy or playful.
+
+      Panel directions:
+      1)The subject is framed in a close-up portrait near a traditional building structure. The subject raises one hand upward, clearly gripping the hanging loop / top cord of a traditional Chinese knot ornament charm between the fingers, holding it slightly above eye level. The Chinese knot charm hangs naturally downward from the loop, fully affected by gravity, with the decorative body and tassels visibly dangling below the hand—not floating, not suspended in midair, and not detached from the hand. The face remains clearly visible, softly lit by sunlight. The pose feels gentle and reflective, with a quiet sense of reaching toward light rather than posing dramatically, maintaining a calm, everyday intimacy.
+      2) Close-up (Tanghulu): Close-up near a pillar. Body sideways facing the camera.Hold a tanghulu at chest/face level. Calm, steady gaze; composed and elegant.There must be only one candied hawthorn skewer.
+      3) Medium shot (resting): Medium shot in the same courtyard. Seated or resting naturally. Relaxed, composed posture; architecture frames the subject. Quiet, grounded moment.
+      4) Close-up (Chinese paper-cut): Close-up. Hold a traditional Chinese paper-cut (jianzhi) near the hands, interacting softly. Slight head tilt or softened gaze; gentle, warm, serene. In the fourth image alone, the background must be partially blurred and have a strong depth-of-field effect.The character's face and hands remain clear, while some background elements are partially out of focus, creating a soft and dreamy bokeh effect without sacrificing realism.realism.The outline is still visible in the background.
+
+      Wardrobe (all panels):
+      Red-toned New Year styling, realistic and well-fitted, elegant and modern (not costume-like). 
+
+      high-saturation pure red magua with refined embroidery + white knitted inner layer.
+      All reds must be stable, evenly saturated, and clearly red (not orange-leaning).
+
+      Lighting & color:
+      Lighting must be entirely natural daylight, with a noticeably warm and soft quality. Sunlight should appear diffused and gentle, wrapping softly around the subject’s face and surroundings rather than creating harsh contrast. Highlights should feel warm and luminous, shadows soft and gradual, enhancing a bright yet comfortable visual experience. The overall color grading should be bright, warm, and slightly nostalgic, with a subtle vintage film softness that feels refined and airy. The image should evoke a classic New Year mood—radiant, hopeful, and elegant—without losing clarity or realism. Avoid artificial lighting, harsh contrast, overexposure, or modern cool tones.
+
+      Final output:
+      Realistic, cohesive, naturally photographed four-panel series with consistent time/place/mood, preserving identity with no artifacts.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0114 6 Styles CNY/0114 農曆年四宮格-錦鯉 Female 亞洲人
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Please use the person in the uploaded photo as the sole subject of the image. The person's real face, features, identity, skin tone, hairstyle, and body proportions must be exactly the same as in the uploaded photo. Do not beautify, stylize, or alter the person's identity in any way.
+
+      Please create a perfect 2x2 four-panel puzzle. All four puzzle pieces must be the same size and seamlessly joined; absolutely no white lines, borders, gaps, or spacing are allowed; please maintain the continuity of the puzzle.
+
+      The top right and bottom left corners of the puzzle must be close-ups, and the top left and bottom right corners must be full-body shots. The composition and poses of the four puzzle pieces must be completely different. The poses should be elegant and natural (avoid being too stiff; unnatural body movements and unnecessary gestures are prohibited).
+
+      The background style should be bright and refined: soft sunlight (warm tones, not yellow tones) fixed on the left, with a slight (5%) underwater light effect on the floor, and overall simple lighting. All photos should be taken in the same minimalist-style studio.
+
+      Key requirements for koi fish photos: Each of the four photos must feature exactly two koi fish (no more, no fewer, no more, and the koi must not be too small). These two koi fish must be artistic and stylized, not realistic: translucent red koi with flowing, graceful fins, light as silk/veil, presenting a dreamlike, painterly quality. The fins should have a soft motion blur effect, creating a slightly surreal, "floating in the air" fashion art effect. The proportion and position of the koi fish must be consistent in all photos. The koi fish must not obscure the subject's face, eyes, nose, or mouth, and in each photo, there must be at least one face width between the koi fish and the subject's face.
+
+      The model wears a deep red sleeveless long dress with a simple, fitted bodice and smooth, matte satin fabric. The skirt slightly trails on the floor and has a slit. She pairs it with a light, flowing red chiffon/organza scarf, the skirt swaying in the wind, creating an elegant and natural look, like a fashion magazine spread.
+
+      The overall style is simple and bright, like a magazine spread, featuring only two stylized koi fish. All four sections must show the characters' faces; scenes without heads are prohibited.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0114 6 Styles CNY/0114 農曆年四宮格-錦鯉 Male 亞洲人
+    model: gemini-2.5-flash-image
+    resolution: 
+    aspect_ratio: "3:4"
+    prompt: |
+      Please use the person in the uploaded photo as the sole subject of the image. The person's real face, features, identity, skin tone, hairstyle, and body proportions must be exactly the same as in the uploaded photo. Do not beautify, stylize, or alter the person's identity in any way.
+
+      Please create a perfect 2x2 four-panel puzzle. All four puzzle pieces must be the same size and seamlessly joined; absolutely no white lines, borders, gaps, or spacing are allowed; please maintain the continuity of the puzzle.
+
+      The top right and bottom left corners of the puzzle must be half-body close-ups, and the top left and bottom right corners must be full-body shots. The composition and pose of each of the four puzzle pieces must be completely different. The pose should be elegant and natural, displaying gentlemanly manners (avoid being too stiff; unnatural body movements and unnecessary gestures are prohibited).
+
+      The background style should be bright and refined: a soft ray of sunlight (warm tones, not yellow tones) is fixed on the left, the floor has a slight (5%) underwater light effect, and the overall lighting is simple. All photos should be taken in the same minimalist-style studio.
+
+      Key requirements for koi fish photos: Each of the four photos must feature exactly two koi fish (no more, no fewer, no more, and the fish must not be too small). These two koi fish must be artistic and stylized, not realistic: translucent red koi with flowing, graceful fins, light as silk/veil, presenting a dreamlike, painterly quality. The fins should have a soft motion blur effect, creating a slightly surreal, "floating in the air" fashion art effect. The proportion and position of the koi fish must be consistent in all photos. The koi fish must not obscure the subject's face, eyes, nose, or mouth, and in each photo, there must be at least one face width between the koi fish and the subject's face.
+
+      To create a sophisticated and elegant haute couture style, inspired by modern haute couture, we used a monochromatic color scheme of burgundy. The model wears a silky deep burgundy satin shirt with excellent drape and a soft sheen. The shirt features a relaxed V-neck design, requiring no tie, with slightly longer sleeves that drape naturally to the wrists. The fabric is lightweight and smooth, exuding an elegant air. The overall silhouette is fitted yet not constricting, with flowing, beautiful lines. A scarf in the same fabric, draped to the waist, adds a touch of sophistication.
+
+      The bottom is paired with matching deep red slim-fit satin-blend trousers. The trousers are high-waisted, cinched with a simple belt, and have a straight or slightly loose fit, ending at the ankle to create a smooth, vertical silhouette. The overall look is harmonious and unified; the simple monochromatic color scheme highlights the texture and dynamism of the fabric rather than contrasting colors. Black matte leather shoes complete the look with a finishing touch.
+
+      The overall style is simple and bright, like a magazine spread, featuring only two stylized koi fish. All four sections must show the subject's face; scenes lacking heads are prohibited.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
