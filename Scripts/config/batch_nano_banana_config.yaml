@@ -4,170 +4,610 @@ testbed: http://192.168.31.161:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 4
+  group_tasks_by: 3
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgChr2Ui_3YDQZbY1uFbCPs9AQVnXttGCHT4sS1Uhk3MGtg?e=rYPuDL
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3b56916b1ea_0_0#slide=id.g3b56916b1ea_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB2SbaN-EiGTq0YdrZRngNhAc3APIWa1K5Nr1fNy56os9M?e=jewf8v
+root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3b6c864d36f_0_0#slide=id.g3b6c864d36f_0_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0113 4 Styles/0113 樂來越愛你
-    model: gemini-3-pro-image-preview
-    resolution: "1K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Use the two uploaded people as the only subjects. Their exact identities must be preserved with absolute accuracy. The generated faces must match the uploaded subjects 1:1, and the system is strictly forbidden from generating or resembling any actors from the film La La Land, including Ryan Gosling or Emma Stone. It must never replace the uploaded subjects with celebrity faces or merge their facial structure with those actors. Their faces, facial features, bone structure, hairstyles, expressions, and overall identities must remain unchanged exactly as in the uploaded photos. Do not modify their proportions, makeup style, hair color, jawline, or eyes, and do not apply smoothing, stylization, beautification, aging effects, or add any additional people.
-
-      The clothing must follow the film’s aesthetic faithfully. Any male subject must wear Sebastian’s outfit — a white dress shirt with sleeves rolled up, the top button left unbuttoned, the black slim necktie loosened casually around the collar, black suit trousers, black socks, and black-and-white spectator shoes. If both uploaded people are male, they must both wear Sebastian’s full outfit. Any female subject must wear Mia’s outfit — a yellow square-neck short-sleeve dress with a soft, flowing skirt, and matching black-and-white spectator shoes.
-
-      Create a realistic La La Land–style movie poster in which the two subjects sit on a simple wooden bench with a small distance between them. Their bodies face forward with hands resting naturally on their legs, while their heads turn gently toward each other as if sharing a quiet, cinematic moment together. They must not look at the camera. The camera framing must be pulled back significantly farther than before so that the two subjects occupy only about one-third of the full image composition. This wider framing must emphasize the cinematic environment, creating more atmospheric negative space while keeping the perspective level and eye-level for a natural, grounded feeling.
-
-      Beside the female subject, place a soft, flexible red handbag with noticeably softer material, resting flat on the bench surface. On the ground near her feet, include a pair of blue peep-toe high heels with thin heels and delicate ankle straps, positioned as if casually knocked over and lying on their side.
-
-      The background must depict an elevated overlook of Los Angeles at dusk, with warm pink-orange sunset tones gradually transitioning into deep twilight blue. The city lights should glow atmospherically below, creating a dreamy but realistic dusk ambiance. The lighting and palette must reflect La La Land’s signature aesthetic — a smooth gradient sky, elegant warm-to-cool color transitions, soft edges, and gentle film-like contrast, forming an overall romantic and cinematic mood.
-
-      At the top left of the poster, include the title “L'AMOUR” in the authentic movie font, using tall geometric serif lettering with thin, elegant, art-deco inspired shapes, generous spacing, and clean white coloring. Directly beneath it, left-aligned, add “LOVE HAPPENS BETWEEN DREAMS.” in small, thin, uppercase sans-serif text with subtle spacing. The typography must blend naturally with the composition and must not obstruct the subjects.
-
-      The final poster must appear cinematic, modern, romantic, and visually consistent with an authentic La La Land promotional image. No parody elements, no cartoonish styling, no added people, no incorrect environmental details, and absolutely no substitution of the uploaded subjects with the original film actors. Only the two uploaded subjects in the correct outfits, sitting on the bench overlooking the Los Angeles dusk skyline, captured in a refined, film-accurate aesthetic.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0113 4 Styles/0113 First Love
-    model: gemini-3-pro-image-preview
-    resolution: "1K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Use the two uploaded people as the only subjects. Their faces, facial features, bone structure, hairstyles, expressions, and overall identities must remain perfectly identical to the uploaded photos. The system must not alter their facial proportions, makeup style, jawline, nose shape, or eye shape. No face smoothing, beautification, aging, or stylization is allowed. No additional people may appear.
-
-      Clothing Assignment Rule (IF condition — very important)
-      If the two uploaded people are one male and one female: Male must wear the black puffer jacket. Female must wear the blue puffer jacket and white pants
-
-      If the uploaded people are the same gender:
-      Assign jacket colors randomly, but one must wear black and the other must wear blue.
-      Whoever wears the blue puffer jacket must also wear white pants.
-
-      Create a realistic winter romance poster featuring the two subjects in a snowy landscape. The composition must match the emotional feel of a Japanese drama poster:
-
-      One subject wears a black puffer jacket, standing in the foreground, smiling naturally.
-
-      The other subject wears a blue puffer jacket and white pants, joyfully riding on the back of the first subject with arms wrapped around their shoulders.
-      Both must look joyful, warm, and natural, expressing a gentle sense of first love.
-
-      The background features a wide snowy field with frost-covered trees, softly blurred. Large white snowflakes fall throughout the image, with soft bokeh-like snowfall effects. The overall color palette must be cold, bright, pastel blue, with a soft cinematic Japanese-drama tone—clean, airy, and emotional.
-
-      Precise Title Typography (very important): At the top of the poster, include the title in the exact style: "Our Story". Thin serif font. Slight letter spacing. Subtle texture. Dark gray-blue color. Soft, low-contrast appearance. Positioned centered near the top, evenly spaced, NOT bold
-
-      "純愛". Placed directly underneath "Our Story". Font size must be noticeably smaller. Letter spacing must be slightly wider for an airy, elegant look. Subtle serif texture, dark gray-blue tone. Must NOT appear handwritten or stylized
-
-      The typography must visually integrate into the poster as professionally typeset Japanese-romance key art—not cartoonish, not decorative, and not floating awkwardly.
-
-      The final poster must feel emotional, cinematic, soft, snowy, and consistent with a high-quality Japanese romance drama. No parody. No unrealistic posing. No strong stylization filters.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0113 4 Styles/0113 Poster
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
-    prompt: |
-      You are a professional graphic designer tasked with creating a minimalist, design-driven poster with a refined editorial aesthetic, based on a user-uploaded photo. The main subject extracted from the user’s photo must remain vertically and horizontally centered in the frame, with a clean cut-out edge and no visible white borders, outlines, frames, or matte edges. Place a bold central headline at the upper area of the composition, positioned behind the main subject, allowing the subject to naturally overlap and partially obscure the title text. The headline text must be white, directly related to the content, mood, or theme of the user’s photo, and rendered in solid, flat typography with absolutely no shadows, outlines, glows, gradients, embossing, bevels, or decorative effects of any kind. Above the headline, place several small supporting texts or short descriptors related to the photo, arranged with clear hierarchy and spacing, and always positioned on the topmost layer. Add a very small paragraph of text closely related to the headline, written like a short editorial caption or micro-essay, positioned on either the left or right side of the composition, and layered in front of the main subject, set in a noticeably smaller font size to create contrast and a magazine-like detail layer without drawing attention away from the main title. Include a decorative color palette element composed of extremely small square-shaped color swatches arranged in a single horizontal row, sampled from colors present in the user’s photo, used purely as a subtle visual accent. Preserve the original background of the user-uploaded photo exactly as provided, with no replacement, no artificial backdrop, no added gradients, textures, or background modifications. The composition should not include any white frames, borders, poster margins, or mockup-style edges. The overall result maintains a clean, minimalist, editorial fashion-poster aesthetic with clear layering, balanced negative space, and a refined, modern tone.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 2
-    max_images: 2
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0113 4 Styles/0113 旅遊機票
+  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 好
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "4:5"
     prompt: |
-      Create a realistic travel flat-lay scene with a clean, neutral, and well-balanced visual style.
-      The entire scene is captured in a strict top-down, bird’s-eye view (flat-lay perspective).
+      MODEL: Gemini 3 / Banana Pro
 
-      Use the uploaded photo as the main subject. The person in the photo becomes the protagonist.
-      Preserve the original facial features clearly and accurately, with realistic proportions and sharp focus on the face.
+      CRITICAL FACE ID LOCK — HIGHEST PRIORITY:
+      Use the uploaded photos as absolute identity references.
+      Each person’s face must remain IDENTICAL to the uploaded photo.
 
-      Randomly generate a city in the world, strongly emphasizing randomness without predefining or suggesting any city.
-      Exclude Kyoto from the list of possible destinations. Kyoto must not be selected or depicted in any form.
+      DO NOT change, adjust, enhance, beautify, idealize, stylize, or reinterpret:
+      – face shape
+      – facial proportions
+      – eye shape, size, spacing, or eyelids
+      – eyebrow shape or thickness
+      – nose size, bridge, or tip
+      – mouth shape, lip thickness, or smile curve
+      – jawline, chin, cheekbones
+      – skin texture or skin tone
+      – age appearance
 
-      Transform the uploaded photo into a Polaroid photo taken at a famous landmark of the randomly generated city.
-      The Polaroid is placed at the visual center and is the primary focus of the composition.
+      NO AI beauty face.
+      NO average face.
+      NO “more attractive” face.
+      NO similar-looking person.
+      NO celebrity resemblance.
 
-      The Polaroid photo must occupy more than 50% of the entire image area, clearly dominating the frame and serving as the unquestionable visual anchor.
+      If the generated face does not look like the SAME REAL PERSON from the uploaded photo, the result is INVALID.
 
-      The city scenery inside the Polaroid appears contemporary and natural:
-      natural daylight, clear sky, neutral architecture, realistic tones.
-      No sunset atmosphere, no golden hour lighting, and no nostalgic or retro feeling.
+      The face must look like the exact same person photographed again in a studio,
+      not a reinterpretation, not an illustration, not an idealized version.
 
-      The Polaroid photo has a subtle instant film look, with gentle film grain, soft tonal transitions, and a light analog film filter, while remaining realistic and natural.
+      ────────────────────────
 
-      At the bottom-right corner of the white Polaroid frame, add handwritten-style text showing ONLY the city name.
-      The handwriting is natural, clean, subtle, and clearly readable, with no decorative typography or additional text.
+      Use the uploaded user photos as the ONLY subjects in the image.
+      The number of people in the final image must exactly match the number of uploaded photos (1–4 people only).
+      No extra people. No merged identities.
 
-      Around the Polaroid, place 3-4 iconic objects or miniature landmark models related to the randomly generated city
-      (such as souvenirs, architectural miniatures, cultural symbols, maps, food items, or travel accessories).
+      SCENE & BACKGROUND:
+      A professional studio photoshoot with a clean, seamless light grey to off-white background.
+      Background must be plain, smooth, and minimal.
 
-      All supporting objects must be unique and non-repeating.
-      No duplicate items, mirrored copies, or repeated object instances are allowed.
+      OUTFITS (STRICT):
+      – All subjects wear solid red knit sweaters (no logos, no patterns).
+      – Bottoms are pure white only:
+        – Adults: white trousers or white skirts
+        – Children: white skirts or white shorts
+      – Shoes: white or red only.
+      No other colors allowed.
 
-      No two supporting objects may belong to the same object category or type.
-      Each object must represent a distinctly different category
-      (for example: one miniature landmark, one cultural symbol, one food item, one travel accessory, one ticket-like item).
-      Do NOT include multiple objects of the same type under any circumstances.
+      POSE & MOOD:
+      Avoid stiff standing poses.
+      Subjects should appear lively and natural:
+      – slight leaning toward each other
+      – relaxed arms
+      – gentle body angles
+      – playful, warm family interaction
+      The mood should feel joyful, festive, and candid.
 
-      All objects are physically resting on the same flat surface as the map.
-      Objects must not float or hover.
-      Every object makes clear contact with the surface and casts a natural contact shadow.
+      PROP — CHINESE CHARACTER:
+      All subjects hold one oversized red Chinese character “好”.
+      – Physical prop only (foam board or cardboard)
+      – Color: festive red
+      – Typography: traditional calligraphy similar to 凝書體
+      – Thick, rounded brush strokes
+      – Handcrafted, friendly feeling
+      – Not geometric, not modern, not sharp
 
-      All supporting objects are placed directly adjacent to the Polaroid photo and tightly grouped around it.
+      HAND-DRAWN DECORATIONS:
+      Add cute hand-drawn doodles similar to the reference image:
+      – Handwritten “Happy New Year”
+      – Small hand-drawn flowers and simple festive icons
+      – Childlike, playful, hand-sketched style
+      – Decorations must NOT cover faces or distort bodies
 
-      The objects are arranged in a dense, compact flat-lay composition with minimal spacing.
-      Objects visually cluster around the Polaroid, with reduced gaps between items.
-      Multiple objects touch or closely align with the edges of the Polaroid and the frame.
-      Some objects are partially cropped by the frame, reinforcing a tightly filled, edge-to-edge layout.
+      LIGHTING & CAMERA:
+      Soft, even studio lighting.
+      No harsh shadows.
+      Eye-level camera.
+      High resolution, sharp focus.
+      Clean commercial photography.
 
-      The Polaroid, flight ticket, and surrounding objects together occupy more than 85% of the frame.
-      There is minimal empty or negative space anywhere in the composition.
-
-      Include a flight ticket next to the Polaroid.
-      The destination city name on the ticket must always be fully visible, unobstructed, and clearly readable.
-      It must not be cropped, covered, or partially hidden.
-      Do NOT include any label such as “Name”, “Passenger Name”, personal names, or form fields.
-
-      The background is a single, large world map filling the entire frame.
-      The surface appears in a very light beige, off-white tone.
-      Both landmasses and ocean areas are rendered in extremely low-contrast, near-identical neutral tones, with only subtle tonal differences separating sea and land.
-      Geographic outlines are barely visible and softly faded.
-      The map appears visually recessed and subdued, functioning strictly as a background layer and never competing with the Polaroid, ticket, or surrounding objects.
-
-      Soft natural daylight enters from one direction.
-      Soft, scattered sunlight falls across the surface of the world map,
-      creating gentle patches of light and shadow that enhance texture while remaining subtle and unobtrusive.
-
-      Lighting & Atmosphere:
-      Balanced exposure, natural contrast, clean composition.
-      Modern, refined, realistic finish.
-      Explicitly non-vintage and non-retro.
-      No aged, nostalgic, rustic, or old-fashioned aesthetic.
-      No reference to any specific year or time period.
+      FINAL FACE CHECK (MANDATORY):
+      Before finalizing the image, verify:
+      – Faces match the uploaded photos exactly
+      – Identity is immediately recognizable
+      If not, regenerate until identity matches.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 2
-    max_images: 2
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 米色全家福
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "4:3"
+    prompt: |
+      MODEL: Gemini 3 / Banana Pro
+
+      CRITICAL FACE ID LOCK — HIGHEST PRIORITY:
+      Use the uploaded photos as absolute identity references.
+      Each person’s face must remain IDENTICAL to the uploaded photo.
+
+      DO NOT change, adjust, enhance, beautify, idealize, stylize, or reinterpret:
+      – face shape
+      – facial proportions
+      – eye shape, size, spacing, eyelids
+      – eyebrows
+      – nose size or structure
+      – mouth shape or smile curve
+      – jawline, chin, cheekbones
+      – skin texture or skin tone
+      – age appearance
+
+      NO AI beauty face.
+      NO average face.
+      NO similar-looking person.
+      NO face replacement.
+      If the face does NOT look like the same real person from the uploaded photo, the result is INVALID.
+
+      The image must look like the same people photographed again in a studio,
+      not redesigned, not beautified, not reinterpreted.
+
+      ────────────────────────
+
+      Use the uploaded user photos as the ONLY subjects in the image.
+      The number of people in the final image must exactly match the number of uploaded photos (1–5 people).
+      No extra people. No merged identities.
+
+      SCENE & BACKGROUND:
+      A professional studio photoshoot.
+      Background color: soft beige / light cream tone.
+      Clean, seamless background with no texture, no patterns.
+
+      CENTER SETUP:
+      At the center of the scene is a large, round, upholstered chair or ottoman.
+      Color: beige or cream.
+
+      Under the chair and extending outward is a rectangular red carpet,
+      similar to traditional Lunar New Year studio setups.
+      The carpet should feel soft, festive, and ceremonial.
+
+      OUTFITS (STRICT COLOR PALETTE):
+      – Clothing colors limited to red, beige, cream, and off-white only.
+      – Knit sweaters, scarves, or soft winter fabrics.
+      – No logos, no text, no patterns.
+      – Bottoms in white, beige, or cream.
+      – Shoes and socks in red, beige, or white only.
+      No other colors allowed.
+
+      POSE & INTERACTION (FRIENDS MODE):
+      Subjects should appear as friends, NOT romantic partners.
+
+      ALLOWED:
+      – sitting close together on or around the round chair
+      – relaxed posture
+      – casual leaning
+      – friendly smiles
+      – light shoulder proximity
+      – natural group interaction
+
+      NOT ALLOWED:
+      – hugging
+      – holding hands
+      – face-to-face intimacy
+      – couple-like or romantic poses
+
+      The mood should feel warm, friendly, festive, and social.
+
+      PROPS & FESTIVE ELEMENTS:
+      – Some subjects may hold traditional red Spring Festival couplets (春聯)
+      – The couplets MUST display the exact Chinese text:
+        「恭喜發財」
+      – No other characters or phrases are allowed on the couplets
+      – Style: traditional vertical red couplets with gold or dark red calligraphy
+      – Physical paper couplets only, not digital text
+
+      FLOOR DECORATIONS:
+      – Multiple three-dimensional Chinese characters “福” and ”春”placed on the floor
+      – Solid physical props, not floating text
+      – Several traditional red lanterns placed around the chair and carpet
+      – Decorations should frame the group without blocking faces or bodies
+
+      COLOR & TONE ADJUSTMENT:
+      Overall image saturation should be slightly reduced.
+      Colors should feel warm but muted,
+      avoiding overly vivid or high-contrast reds.
+
+      LIGHTING & CAMERA:
+      Soft, even studio lighting.
+      No harsh shadows.
+      Gentle shadows under the chair, carpet, and feet only.
+      Eye-level camera.
+      Single-frame composition.
+      High resolution, sharp focus.
+
+      OVERALL STYLE:
+      Premium, calm, refined Lunar New Year group portrait.
+      Beige-red harmony with slightly lowered saturation.
+      Modern studio photography with traditional festive elements.
+      No watermarks, no borders, no UI elements.
+
+      FINAL FACE CHECK (MANDATORY):
+      Before finalizing:
+      – Verify all faces match the uploaded photos exactly
+      – Identity must be immediately recognizable
+      If not, regenerate until correct.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 馬上幸福全家福
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "9:16"
+    prompt: |
+      MODEL: Gemini 3 / Banana Pro
+
+      CRITICAL FACE ID LOCK — HIGHEST PRIORITY:
+      Use the uploaded photos as absolute identity references.
+      Each person’s face must remain IDENTICAL to the uploaded photo.
+      No beautification, no face reshaping, no identity drift.
+
+      ────────────────────────
+
+      Use the uploaded photos as the ONLY subjects.
+      Final image must contain exactly the same number of people (1–5).
+
+      CAMERA & FRAMING:
+      Medium-wide to wide studio portrait.
+      Camera placed slightly farther back than a standard group portrait.
+
+      Include:
+      – full round table
+      – red tablecloth draping fully to the floor with vertical pleats
+      – subjects seated behind the table
+      – upper wall space clearly visible above subjects
+
+      Composition should feel balanced and calm, not poster-like.
+
+      SCENE & BACKGROUND:
+      Seamless deep red studio background.
+
+      BACKGROUND CALLIGRAPHY (SPATIAL PRIORITY — IMPORTANT):
+      Chinese calligraphy text on the wall:
+      「馬上幸福」
+
+      Style:
+      – Traditional 行草書
+      – expressive brush strokes
+      – natural ink variation and flying-white texture
+      – metallic gold with subtle sheen (not glossy)
+
+      SPATIAL RULES:
+      – Calligraphy exists physically on the BACKGROUND WALL
+      – Text occupies the upper background area only
+      – Foreground subjects must PARTIALLY OVERLAP and obscure portions of the calligraphy
+      – This overlap must clearly indicate depth: text behind people, not floating
+
+      Do NOT allow the text to sit fully in front of subjects.
+      Do NOT center text as a poster headline.
+
+      TABLE & OBJECT COMPOSITION:
+      Round table centered.
+      Red tablecloth with rich vertical folds.
+
+      Tabletop objects arranged in three visual scales:
+      – Small: decorative 「福」「春」 ornaments
+      – Medium: neatly grouped mandarin oranges
+      – Primary accent: one rocking horse ornament (~15 cm tall)
+
+      The rocking horse must feel prominent but not oversized.
+      It should visually balance the oranges, not dominate the table.
+
+      OUTFITS (COLOR BALANCE — IMPORTANT):
+      Red-dominant outfits with white as secondary accents.
+      Avoid evenly split red/white distribution.
+      Middle subject may wear full red for visual anchoring.
+      Side subjects may mix red and white for rhythm.
+
+      POSE & INTERACTION:
+      Natural, relaxed group interaction.
+      Slight leaning, casual arm placement on table, friendly expressions.
+      Some subjects may look at camera, others at each other.
+
+      No romantic intimacy.
+      No hugging or couple-specific gestures.
+
+      LIGHTING & COLOR:
+      Soft, even studio lighting.
+      Slightly reduced saturation.
+      Deep, elegant reds.
+      Gold calligraphy remains readable but secondary.
+
+      OVERALL STYLE:
+      Premium Lunar New Year studio portrait.
+      Photographic realism with refined cultural composition.
+      Balanced, calm, and confident — not decorative overload.
+
+      FINAL CHECK:
+      Faces must be immediately recognizable as the uploaded people.
+      If identity drifts, regenerate.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 火鍋全家福
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "4:3"
+    prompt: |
+      Create one single 3:4 vertical image (NOT a collage, NOT a multi-panel image).
+
+      Scene setup:
+      Lunar New Year reunion dinner. Solid red background. Red tablecloth.
+      A traditional hot pot placed at the center of the table, with dumplings and fruits arranged naturally around it.
+
+      Background detail (IMPORTANT):
+      On the red background, include one traditional Chinese calligraphy artwork (framed plaque or hanging scroll style, festive and elegant).
+      The calligraphy must clearly and correctly display the four Chinese characters: 「恭賀新禧」.
+      Brush-style calligraphy only.
+      Do NOT add any other text, logos, seals, watermarks, or branding.
+
+      Camera & framing (STRICT):
+      Camera at eye level.
+      Frame must be tightly and cleanly composed.
+      Do NOT show the ceiling.
+      Do NOT show any lighting equipment.
+      Do NOT show lamps, softboxes, light panels, reflectors, rigs, cables, or studio gear.
+      Do NOT include behind-the-scenes elements.
+      The frame must contain ONLY people, table, food, chairs, calligraphy artwork, and seamless red background.
+
+      Use ALL uploaded person photos and include exactly the same number of people as provided by the user.
+      Do NOT add extra people and do NOT remove anyone.
+      Each person must appear once and only once.
+
+      Identity preservation (STRICT):
+      Preserve each person’s real identity exactly as in the uploaded photos.
+      Facial features, face shape, eyes, nose, mouth, skin tone, hairstyle, age appearance, and overall likeness must remain unchanged.
+      Do NOT beautify, stylize, cartoonize, age-shift, gender-shift, or alter any facial characteristics.
+      Do NOT merge faces or substitute identities between people.
+
+      Composition:
+      All people are gathered naturally around the hot pot, actively eating and interacting during the reunion dinner.
+      Natural dining gestures such as holding bowls or chopsticks are allowed.
+      Balanced group composition with all faces clearly visible.
+      No one cropped, no duplicated people, no missing individuals.
+
+      Emotions & interaction:
+      Warm, joyful, natural group interaction while eating hot pot.
+      Expressions should feel relaxed, conversational, and festive.
+      Avoid romantic, couple-like, or intimate interactions. Group dynamics must clearly read as family or friends dining together.
+
+      Rules (strict):
+      ONLY ONE image.
+      NO collage, NO grid, NO split frames.
+      NO poster layout.
+      NO decorative graphics.
+      NO borders or dividers.
+
+      Lighting & style:
+      Clean, soft, realistic lighting suitable for a festive Lunar New Year dinner scene.
+      Lighting must appear indirect and off-frame, as if coming from outside the scene.
+      Even skin tones, gentle shadows, no dramatic or stylized lighting.
+
+      Final image feeling:
+      A realistic, warm Lunar New Year hot pot gathering captured in a single moment.
+      Festive, traditional, and cohesive, with all identities preserved, exact number of people maintained, and no visible ceiling or lighting equipment.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 賀年斗方情境圖
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "4:5"
+    prompt: |
+      Create ONE single photorealistic Lunar New Year “斗方” using the uploaded image (any subject type: person, baby, pet, or group photo).
+
+      The result must look like a real New Year photo, not an illustration, collage, or graphic mockup.
+
+      ASPECT RATIO
+
+      Final image must be vertical 3:4.
+
+      MANDATORY SUBJECT INCLUSION（CRITICAL – NO EXCEPTIONS）
+
+      ALL people and/or pets present in the uploaded image MUST be included in the final design.
+
+      No person or pet may be omitted, removed, cropped out, replaced, or substituted.
+
+      If the uploaded image contains multiple people and/or pets:
+
+      Every individual must appear together within the SAME single 斗方.
+
+      Partial inclusion is strictly prohibited.
+
+      Do NOT generate additional people or animals.
+
+      Do NOT replace any subject with illustrations, symbols, silhouettes, or decorative substitutes.
+
+      All subjects must remain recognizable and clearly identifiable, preserving their key features and identity.
+
+      Failure to include ALL people and/or pets should be considered an incorrect result and must be regenerated.
+
+      STRICT COMPOSITION RULES
+
+      The image must contain ONLY ONE 斗方.
+
+      Do NOT generate multiple 斗方.
+
+      The 斗方 must be slightly smaller than typical center decorations, leaving visible surrounding space.
+
+      The 斗方 must be centered but not oversized or edge-to-edge.
+
+      PLACEMENT SCENE
+
+      Choose ONE scene only:
+
+      A traditional or modern dark wooden door
+
+      A clean white wall
+
+      If placed on a wooden door:
+
+      The 斗方 is centered on the door.
+
+      Hang traditional Lunar New Year firecracker decorations (鞭炮串) vertically on BOTH left and right sides of the door.
+
+      Firecrackers must be festive, red-dominant, and clearly visible.
+
+      Firecrackers must not overlap, cover, or block the 斗方.
+
+      DESIGN & COLOR REQUIREMENTS
+
+      The 斗方 must be square (1:1) and rotated 45 degrees (diamond orientation).
+
+      Base color must be predominantly RED.
+
+      Gold is accent color only (text, patterns, highlights).
+
+      Avoid pale, beige, pink, or non-festive base colors.
+
+      CONTENT
+
+      Preserve the identity and key features of ALL uploaded subjects.
+
+      Include ONE main Chinese New Year character or phrase (e.g. 福, 春, 財).
+
+      The year “2026” may appear optionally.
+
+      Randomly include several Lunar New Year decorative elements:
+
+      pineapple, peanuts, gold ingots, 财神, festive clouds, coins, or firecrackers.
+
+      Decorative elements must support the design, never dominate or replace the main subject or the 斗方.
+
+      REALISM REQUIREMENTS
+
+      The 斗方 must look like real printed paper.
+
+      Show subtle paper texture, natural edges, and realistic shadows.
+
+      Lighting must match the door or wall environment naturally.
+
+      No collage look, no floating objects, no surreal or illustrated effects.
+
+      FINAL GOAL
+
+      A realistic vertical 3:4 Lunar New Year photo showing ONE single, slightly smaller red-based 斗方, naturally pasted on a door or wall,
+      with ALL uploaded people and/or pets fully included, balanced festive decorations, and a joyful, traditional atmosphere.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 3
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 斗方印刷圖
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Create ONE single photorealistic Lunar New Year “斗方” using the uploaded image (any subject type: person, baby, pet, or group photo).
+
+      The result must look like a real New Year photo, not an illustration, collage, or graphic mockup.
+
+      ASPECT RATIO
+
+      Final image must be vertical 3:4.
+
+      MANDATORY SUBJECT INCLUSION（CRITICAL – NO EXCEPTIONS）
+
+      ALL people and/or pets present in the uploaded image MUST be included in the final design.
+
+      No person or pet may be omitted, removed, cropped out, replaced, or substituted.
+
+      If the uploaded image contains multiple people and/or pets:
+
+      Every individual must appear together within the SAME single 斗方.
+
+      Partial inclusion is strictly prohibited.
+
+      Do NOT generate additional people or animals.
+
+      Do NOT replace any subject with illustrations, symbols, silhouettes, or decorative substitutes.
+
+      All subjects must remain recognizable and clearly identifiable, preserving their key features and identity.
+
+      Failure to include ALL people and/or pets should be considered an incorrect result and must be regenerated.
+
+      STRICT COMPOSITION RULES
+
+      The image must contain ONLY ONE 斗方.
+
+      Do NOT generate multiple 斗方.
+
+      The 斗方 must be slightly smaller than typical center decorations, leaving visible surrounding space.
+
+      The 斗方 must be centered but not oversized or edge-to-edge.
+
+      PLACEMENT SCENE
+
+      Choose ONE scene only:
+
+      A traditional or modern dark wooden door
+
+      A clean white wall
+
+      If placed on a wooden door:
+
+      The 斗方 is centered on the door.
+
+      Hang traditional Lunar New Year firecracker decorations (鞭炮串) vertically on BOTH left and right sides of the door.
+
+      Firecrackers must be festive, red-dominant, and clearly visible.
+
+      Firecrackers must not overlap, cover, or block the 斗方.
+
+      DESIGN & COLOR REQUIREMENTS
+
+      The 斗方 must be square (1:1) and rotated 45 degrees (diamond orientation).
+
+      Base color must be predominantly RED.
+
+      Gold is accent color only (text, patterns, highlights).
+
+      Avoid pale, beige, pink, or non-festive base colors.
+
+      CONTENT
+
+      Preserve the identity and key features of ALL uploaded subjects.
+
+      Include ONE main Chinese New Year character or phrase (e.g. 福, 春, 財).
+
+      The year “2026” may appear optionally.
+
+      Randomly include several Lunar New Year decorative elements:
+
+      pineapple, peanuts, gold ingots, 财神, festive clouds, coins, or firecrackers.
+
+      Decorative elements must support the design, never dominate or replace the main subject or the 斗方.
+
+      REALISM REQUIREMENTS
+
+      The 斗方 must look like real printed paper.
+
+      Show subtle paper texture, natural edges, and realistic shadows.
+
+      Lighting must match the door or wall environment naturally.
+
+      No collage look, no floating objects, no surreal or illustrated effects.
+
+      FINAL GOAL
+
+      A realistic vertical 3:4 Lunar New Year photo showing ONE single, slightly smaller red-based 斗方, naturally pasted on a door or wall,
+      with ALL uploaded people and/or pets fully included, balanced festive decorations, and a joyful, traditional atmosphere.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 3
     num_iterations: 50
 
 
@@ -183,25 +623,31 @@ comments:
   output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report. Example: with 4 tasks and group_tasks_by=4, creates 1 report; with 8 tasks, creates 2 reports."
   
   random_source_selection:
-    description: "Mode for selecting N images from Source folder per API call (images can be reused)"
+    description: "Mode for selecting N images from Source folder per API call (NO REPEATS until pool exhausted)"
     use_random_source_selection: "Set to true to enable random source selection mode"
     min_images: "Minimum images per API call (default: 1)"
     max_images: "Maximum images per API call (default: model max, e.g., 3 for flash, 14 for pro)"
     num_iterations: "Number of API calls to make. Defaults to number of source files if omitted."
+    optimal_formula: "sources_needed = num_iterations × (min_images + max_images) / 2"
     notes: |
       - All images in 'Source' folder - no 'Additional' folder needed
       - num_iterations controls API call count (defaults to source file count)
-      - Image counts spread from min to max across iterations
-      - Images CAN be reused across iterations (not unique partitions)
+      - Image counts spread from min to max across iterations (even bucket distribution)
+      - NO REPEATS: uses 'consume from shuffled pool' algorithm
+      - If sources < optimal, images will repeat across cycles (with warning)
       - DETERMINISTIC: same folder = same selections every run
       - Great for regression testing: update source images, re-run, compare results
       - Use gemini-3-pro-image-preview model for up to 14 images per call
+    formula_examples: |
+      # min=1, max=4, iterations=50 → need 50 × (1+4)/2 = 125 sources
+      # min=1, max=5, iterations=50 → need 50 × (1+5)/2 = 150 sources
+      # min=1, max=3, iterations=50 → need 50 × (1+3)/2 = 100 sources
     example: |
-      # 10 source images, 50 iterations = 50 API calls, each picks 1-5 images
+      # 125 source images, 50 iterations = 50 API calls, each picks 1-4 images (no repeats)
       use_random_source_selection: true
       min_images: 1
-      max_images: 5
-      num_iterations: 50  # Optional: defaults to number of source files
+      max_images: 4
+      num_iterations: 50
       model: gemini-3-pro-image-preview
   
   multi_image_config:

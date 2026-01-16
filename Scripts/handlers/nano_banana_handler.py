@@ -295,32 +295,26 @@ class NanoBananaHandler(BaseAPIHandler):
         
         return self._source_image_cache[task_key]
     
-    def _get_random_source_selection(self, task_config, iteration_index):
-        """Deterministically select N images from Source folder for an API call.
+    def _build_selection_plan(self, task_config):
+        """Pre-build the complete selection plan for all iterations.
         
-        Uses a "spread" approach for reproducibility:
-        - Image count spreads from min_images to max_images based on iteration index
-        - Image selection spreads across ALL available source images
-        - Same folder + same config = same selection every time
-        - Images CAN be reused across iterations when num_iterations > source count
+        Uses optimized "consume from shuffled pool" approach:
+        - Deterministically shuffles source images using folder name as seed
+        - Pre-calculates image count for each iteration (even bucket distribution)
+        - Assigns images sequentially from shuffled pool (no repeats until exhausted)
+        - If pool exhausted, reshuffles and continues (with warning)
         
-        If num_iterations is specified:
-        - Uses that many API calls
-        - Spreads image selection across all source images evenly
-        
-        If num_iterations is NOT specified:
-        - Defaults to number of source files
+        Optimal formula: total_needed = num_iterations × (min + max) / 2
         
         Args:
-            task_config: Task configuration dictionary containing:
-                - min_images: Minimum images per call (default: 1)
-                - max_images: Maximum images per call (default: model max)
-                - num_iterations: Optional number of API calls to make
-            iteration_index: 0-based iteration index.
+            task_config: Task configuration dictionary.
         
         Returns:
-            list: List of selected image Path objects.
+            list: List of lists, where each inner list contains Path objects
+                  for that iteration's selected images.
         """
+        import random
+        
         task_key = str(task_config.get('folder', ''))
         
         # Get model limits
@@ -340,54 +334,126 @@ class NanoBananaHandler(BaseAPIHandler):
         total_available = len(source_images)
         
         if not source_images:
-            self.logger.error(f" ❌ No source images found for selection")
             return []
         
         # Clamp max to available images
         max_images = min(max_images, total_available)
         min_images = min(min_images, max_images)
         
-        # Get num_iterations: use config value if specified, otherwise default to source count
+        # Get num_iterations
         num_iterations = task_config.get('num_iterations', 0)
         if num_iterations <= 0:
             num_iterations = total_available
         
-        # Calculate how many images to select for this iteration (evenly distributed)
-        # With 50 iterations and min=1, max=5: exactly 10 iterations each for 1,2,3,4,5 images
-        if num_iterations <= 1:
-            # Single iteration: use max_images to provide most variety
-            num_images = max_images
-        elif min_images == max_images:
-            num_images = min_images
-        else:
-            # Even bucket distribution: divide iterations into equal-sized buckets
-            # Each bucket gets the same image count
-            num_counts = max_images - min_images + 1  # e.g., 5 for range 1-5
-            # Which bucket does this iteration fall into?
-            bucket = (iteration_index * num_counts) // num_iterations
-            # Clamp bucket to valid range (handles edge case where iteration_index == num_iterations-1)
-            bucket = min(bucket, num_counts - 1)
-            num_images = min_images + bucket
+        # Pre-calculate image counts for each iteration (even bucket distribution)
+        iteration_counts = []
+        for iteration_index in range(num_iterations):
+            if num_iterations <= 1:
+                num_images = max_images
+            elif min_images == max_images:
+                num_images = min_images
+            else:
+                num_counts = max_images - min_images + 1
+                bucket = (iteration_index * num_counts) // num_iterations
+                bucket = min(bucket, num_counts - 1)
+                num_images = min_images + bucket
+            iteration_counts.append(num_images)
         
-        # Deterministic image selection - spread across ALL source images
-        # Calculate step size to evenly spread across the full source pool
-        if num_images >= total_available:
-            # Use all images
-            selected = source_images[:]
+        # Calculate total images needed
+        total_needed = sum(iteration_counts)
+        
+        # Log optimization info
+        if total_needed <= total_available:
+            self.logger.info(
+                f" ✅ Optimal selection: {total_needed} images needed, "
+                f"{total_available} available (no repeats)"
+            )
         else:
-            # Calculate starting offset that spreads evenly across source pool
-            # This ensures we use all available source images across all iterations
-            step = total_available / num_iterations  # Fractional step for even spread
-            start_offset = int(iteration_index * step) % total_available
+            cycles = (total_needed + total_available - 1) // total_available
+            self.logger.warning(
+                f" ⚠️ {total_needed} images needed but only {total_available} available. "
+                f"Images will repeat across {cycles} cycles."
+            )
+        
+        # Create deterministic shuffled pool using folder name as seed
+        rng = random.Random(task_key)
+        
+        # Build selection plan by consuming from shuffled pool
+        selection_plan = []
+        available_pool = []
+        
+        for iteration_index in range(num_iterations):
+            num_images = iteration_counts[iteration_index]
             
-            # Select images with wrapping
-            selected = []
-            for i in range(num_images):
-                idx = (start_offset + i) % total_available
-                selected.append(source_images[idx])
+            # Refill pool if needed
+            if len(available_pool) < num_images:
+                # Reshuffle all source images and add to pool
+                shuffled = source_images[:]
+                rng.shuffle(shuffled)
+                available_pool.extend(shuffled)
+            
+            # Consume images from pool (no repeats within cycle)
+            selected = available_pool[:num_images]
+            available_pool = available_pool[num_images:]
+            
+            # Sort for consistent API input ordering
+            selected = sorted(selected, key=lambda x: x.name.lower())
+            selection_plan.append(selected)
         
-        # Sort selected images for consistent API input ordering
-        selected = sorted(selected, key=lambda x: x.name.lower())
+        return selection_plan
+    
+    def _get_random_source_selection(self, task_config, iteration_index):
+        """Deterministically select N images from Source folder for an API call.
+        
+        Uses optimized "consume from pool" approach for NO REPEATS:
+        - Pre-builds complete selection plan on first call
+        - Each iteration gets unique images (until pool exhausted)
+        - Deterministic: same folder + same config = same selection every time
+        
+        Optimal formula: sources_needed = num_iterations × (min + max) / 2
+        (Much better than old formula: num_iterations × max)
+        
+        Args:
+            task_config: Task configuration dictionary containing:
+                - min_images: Minimum images per call (default: 1)
+                - max_images: Maximum images per call (default: model max)
+                - num_iterations: Optional number of API calls to make
+            iteration_index: 0-based iteration index.
+        
+        Returns:
+            list: List of selected image Path objects.
+        """
+        task_key = str(task_config.get('folder', ''))
+        
+        # Build selection plan on first call for this task
+        if not hasattr(self, '_selection_plans'):
+            self._selection_plans = {}
+        
+        if task_key not in self._selection_plans:
+            self._selection_plans[task_key] = self._build_selection_plan(task_config)
+        
+        selection_plan = self._selection_plans[task_key]
+        
+        if not selection_plan:
+            self.logger.error(f" ❌ No source images found for selection")
+            return []
+        
+        # Get pre-computed selection for this iteration
+        if iteration_index >= len(selection_plan):
+            self.logger.error(
+                f" ❌ Iteration {iteration_index} exceeds plan size {len(selection_plan)}"
+            )
+            return []
+        
+        selected = selection_plan[iteration_index]
+        
+        # Get config values for logging
+        model = task_config.get('model', 'gemini-2.5-flash-image')
+        model_max = self.MODEL_MAX_IMAGES.get(model, self.DEFAULT_MAX_IMAGES)
+        min_images = max(1, min(task_config.get('min_images', self.DEFAULT_MIN_IMAGES), model_max))
+        max_images = max(min_images, min(task_config.get('max_images', model_max), model_max))
+        num_iterations = task_config.get('num_iterations', 0) or len(self._get_source_images_for_task(task_config))
+        num_images = len(selected)
         
         # Initialize tracking for this task if needed
         if task_key not in self._random_source_selections:
@@ -401,7 +467,7 @@ class NanoBananaHandler(BaseAPIHandler):
             'selected_files': [img.name for img in selected],
             'min_images': min_images,
             'max_images': max_images,
-            'selection_mode': 'even_bucket_distribution',
+            'selection_mode': 'consume_from_shuffled_pool',
             'timestamp': datetime.now().isoformat()
         }
         self._random_source_selections[task_key].append(selection_record)

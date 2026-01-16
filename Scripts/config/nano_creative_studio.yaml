@@ -1,0 +1,221 @@
+
+template_path: templates/I2V templates.pptx
+comparison_template_path: templates/I2V Comparison Template.pptx
+testbed: http://192.168.31.161:8000/image_generation/
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 3
+
+schedule:
+  start_time: ""
+  comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
+
+root_source_video_link: 
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3ba78df2f3e_1_98#slide=id.g3ba78df2f3e_1_98
+
+tasks:
+  - folder: ../Media Files/Nano Banana/0116 5 Styles Creative Studio/0116 電影海報-FRIENDS
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Please use all uploaded photos as the only source of characters in the image. Their faces, facial features, bone structure, hairstyles, expressions, and overall identities must remain perfectly identical to the uploaded photos. The system must not alter their facial proportions, makeup style, jawline, nose shape, or eye shape. No face smoothing, beautification, aging, or stylization is allowed.
+
+      All characters must appear as if they were photographed together at the same time and in the same studio environment, with consistent lighting, color tone, and photographic realism. The number of people in the image must match the number of uploaded photos, with no additional characters added. All characters are seated side by side behind a single wooden table, shown from the upper body up, arranged tightly in a horizontal, cinematic poster-style composition.
+
+      The scene should follow a classic American TV show poster aesthetic. In the foreground, place a slightly vintage wooden table with visible wood texture. Several characters should naturally lean in together to share the same chocolate milkshake, with multiple people drinking from a single glass at the same time. Each character must have their own individual straw, even when sharing the same milkshake, and every character should be actively drinking through their straw. Hands must rest casually on the table or remain out of frame, and no one should be holding or gripping the straws. Avoid a one-person-one-drink arrangement; instead, emphasize shared milkshakes to reinforce a sense of closeness and friendship. If the number of uploaded people is three or fewer (including three), all characters must share and drink from one single chocolate milkshake. If the number of uploaded people is four, use exactly two chocolate milkshakes, with the characters evenly divided so that two people share one milkshake and the other two people share the second milkshake. Each milkshake should be topped with whipped cream d a cherry on top. In addition to the main chocolate milkshakes, place one to two creamy chocolate dessert drinks in tall glass cups, with cherry on top, clearly showing layers of chocolate syrup and cream on the table, to enrich the scene while keeping the composition clean and uncluttered. A white plate was placed under tall glasses containing creamy chocolate dessert drinks. The interaction between people and desserts should feel natural, candid, and friendly.
+
+      All characters must be looking directly toward the camera while drinking, maintaining eye contact with the viewer to create a strong, engaging poster presence.
+
+      The camera angle should be close to eye level, slightly balanced rather than dramatic, with a comfortable viewing distance that shows the group clearly without feeling too close or wide.
+      All characters and the wooden table must be positioned in the lower portion of the image. At least the upper half of the canvas must remain open, uncluttered negative space reserved exclusively for the title text. The composition should clearly separate the subject area below and the title area above.
+      The framing should feel calm, evenly spaced, and poster-like, allowing all characters to be seen clearly with natural proportions.
+
+      The background should be a clean, solid-colored wall in a muted gray or blue-gray tone, with no decorations or patterns, keeping the focus on the people and the table. The camera angle should be slightly below eye level with a subtle upward perspective, creating a close, intimate group feeling where everyone appears equally important. Lighting should be soft, even, and studio-like, without harsh shadows, producing a polished yet warm poster-quality photograph.
+
+      At the top center of the image, add the title text “FAMILY” The lettering must have a hand-drawn, slightly irregular black line style. Between each letter, place a small circular dot, alternating in red, blue, and yellow colors. The spacing, proportions, and alignment of the letters and dots should be clean, balanced, and consistent. The title must be clearly readable and positioned so it does not overlap or cover any faces. The typography should closely resemble a classic TV show poster design rather than a modern or decorative font.
+
+      The overall mood should feel warm, relaxed, and friendship-focused, resembling an iconic ensemble TV show poster. The final image should immediately evoke a classic American sitcom group poster feeling, while featuring only the uploaded people, realistic photography, accurate faces, and a faithful recreation of the described layout, props, and typography.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 5 Styles Creative Studio/0116 日本綜藝海報-不良一族尋愛記
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Please use exactly the two uploaded photos as the only source of characters in the image. Preserve both individuals’ real faces, facial features, bone structure, skin tone, hairstyles, expressions, and overall identities exactly as they appear in the uploaded photos. Do not beautify, stylize, smooth skin, alter facial proportions, change age, or modify identity in any way. The two people must clearly remain recognizable as the original uploaded individuals.
+
+      Create a vertical poster-style image split cleanly into two equal halves down the center. The two sides must feel like completely different worlds with strong contrast in color, lighting, and atmosphere, while forming one unified poster. The split must be seamless, with no visible borders or lines.
+
+      One half must depict a dark, masculine male room with strong blue-toned lighting. Introduce bright white-to-purple key lighting focused directly on the male users, illuminating their faces and upper bodies clearly. The lighting should feel intentional and stage-like, similar to a Japanese variety show poster, rather than dark or cinematic. White and soft purple lights should wash over the subjects, while blue and purple tones remain in the background, creating a lively, high-contrast yet readable look. The space must feel well-lit, energetic, and visually clear rather than shadow-heavy. Place a black leather sofa at the center, where male users are seated in relaxed but confident poses. The sofa should feature subtle Japanese graffiti-style markings. Behind them, include a small, understated vertical blue neon sign with Japanese characters reading “極惡,” arranged top-to-bottom and rendered in a bold kaishu-style (traditional brush-style) typeface with thick strokes. The character “惡” must be completely obscured by the seated figures or foreground elements and must NOT be readable at all, while only the upper character “極” may remain partially visible. The neon text should function purely as a subtle decorative accent rather than a focal point, blending naturally into the scene without drawing dominant attention or overpowering the composition. Also include shelves and sections of metal mesh or wire fencing. Add a small, curated number of Japanese-style collectible figures or hobby items to suggest personal taste without clutter. All male users must appear only in this purple-toned room.
+
+      The other half must depict a vivid neon-pink female room inspired by Japanese Harajuku gyaru style. The space should be filled with fluorescent pink tones, bold patterns, and an exaggerated fashion-forward aesthetic. At the center, place a thick, plush, furry cushioned padded lounging mat with noticeable height and volume, clearly soft and fluffy with long fibers, and with no backrest, armrest, or vertical support. Female users should be seated or posed confidently on top of this plush floor mat. The room décor should resemble a stylish, lived-in gyaru hangout rather than a cute or childish bedroom. Include zebra-pattern accents, vanity mirrors with lights, shelves, decorative floral elements, and personality-driven Harajuku-style decorations such as edgy figurines, fashion objects, neon signs, bold accessories, and statement décor pieces. The collectibles should feel fashionable, expressive, and slightly rebellious—not overly cute dolls or childish plush toys—suggesting confident young women with strong taste and attitude. The space should feel layered, cozy, and social, as if friends actually gather and spend time there, while remaining intentional and curated rather than cluttered. The overall atmosphere should be edgy, flashy, and unapologetically bold rather than cute or sweet. Female users must maintain cool, tough, confident expressions with no smiling, conveying a strong, stylish presence typical of Harajuku gyaru aesthetics. All female users must appear only in this pink room.
+
+      If both male and female users are uploaded, assign males exclusively to the male room and females exclusively to the female room. If all uploaded users are the same gender, randomly divide them between the two rooms while keeping identities unchanged and ensuring visual balance.
+
+      All characters must be seated, facing forward or slightly angled toward the camera, with confident, rebellious, and streetwise body language rather than formal or polite poses. Their posture should feel relaxed, slightly slouched or asymmetrical, conveying a delinquent, tough, and cool attitude typical of Japanese street gangs. Male users should be styled in Japanese yankii fashion, while female users should wear bold, sexy, and attitude-driven outfits featuring elements such as leather textures, sheer or semi-transparent tops, short skirts, or fitted silhouettes. The clothing should be simple rather than overly layered or decorative, focusing on a hot, confident, and edgy look with strong personality instead of a traditional gyaru costume style. Subtle to visible tattoos may appear on exposed skin such as arms, shoulders, necks, or hands, reinforcing the delinquent aesthetic without overwhelming the characters. Use a medium camera distance showing upper bodies and seating clearly, with symmetrical, poster-like framing. Lighting must remain consistent within each room to reinforce the strong color contrast.
+
+      At the bottom portion of the poster, add the title text “恋・地獄。” The typography must closely resemble the original show logo style, using extremely bold, heavy-weight Japanese characters with thick strokes and compact proportions, similar to high-impact Japanese variety show or sports-event typography. The characters should feel powerful, blocky, and visually loud rather than elegant or thin. The text must be vivid pink, bold and eye-catching, and positioned prominently near the bottom center of the poster. Add the subtitle text “— Love Is Hell —” in the same vivid pink color, using a slightly cursive, handwritten-style script that feels expressive and stylish. The subtitle should be smaller than the main title and complement it without overpowering it. Both the main title and subtitle must remain solid pink with no white, black, or any other colored outlines, strokes, shadows, or borders.
+
+      The final image should feel bold, flashy, dramatic, and playful, strongly evoking a high-impact Japanese variety show poster through extreme color contrast, confident group presence, accurate faces, and faithful recreation of the described layout, rooms, lighting, and typography, using only the uploaded people and no external references.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 5 Styles Creative Studio/0116 電影海報-你的名字
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Please use exactly the two uploaded photos as the only source of characters in the image. Preserve both individuals’ real faces, facial features, bone structure, skin tone, hairstyles, expressions, and overall identities exactly as they appear in the uploaded photos. Do not beautify, stylize, smooth skin, alter facial proportions, change age, or modify identity in any way. The two people must clearly remain recognizable as the original uploaded individuals.
+
+      The scene should be a realistic cinematic recreation rendered in a fully photorealistic style. The camera viewpoint must be from the top of a long outdoor staircase, looking downward. The staircase setting should closely resemble a residential hillside stairway in Japan. The handrails along the stairs must be a deep wine-red or burgundy color. The right side of the frame should open up to a wide, expansive city view with layered urban buildings stretching into the distance, while the left side of the frame should be lined with lush green trees and foliage. Above, the sky must be a vivid, clear blue with bright white clouds, creating a strong sense of openness and summer daylight. The composition must feel calm, emotional, and slightly nostalgic.
+
+      Clothing follows a strict identity rule: Any male subject must wear black suit trousers paired with a white short-sleeve Japanese high school uniform shirt featuring a visible school emblem on the chest pocket, along with a green striped tie. Any female subject must wear a black pleated skirt, black socks, brown leather shoes, and a white short-sleeve Japanese high school uniform shirt with a red ribbon tie at the collar. The uniforms should feel authentic, neat, and natural, closely resembling real Japanese school uniforms rather than costumes.
+      If both uploaded people are male, they must both wear male character full outfit.
+      If both uploaded people are female, they must both wear  female character full outfit.
+
+      Male character should be positioned closer to the camera at the upper part of the stairs. This male character must be positioned on the left side of the frame. This character should be mostly facing the camera, with the upper body and face clearly visible, only slightly turning back as if just beginning to glance behind. Although the body and face are oriented toward the camera, the eyes must be looking slightly to the side and must NOT look directly into the camera. The pose should show most of the front of the face rather than a side or back view. Female character should be positioned farther down the stairs, and must be positioned on the right side of the frame, looking upward toward the first character. If both uploaded photos are of the same gender, randomly assign one person to the upper position and the other to the lower position while keeping identities unchanged.
+
+      Lighting and color grading are extremely important. The scene should be lit by strong, clear midday sunlight, creating a bright and vivid look. Emphasize rich blue skies and clean highlights, while avoiding greenish or yellowish color casts. Greens in the environment should appear fresh, not warm or muddy. The image should feel sunlit, crisp, and refreshing, with high saturation and clarity, rather than soft, yellow, or hazy. The overall atmosphere should evoke a Makoto Shinkai–inspired feeling through brightness, clarity, and emotional freshness, while remaining fully realistic.
+
+      The final image should feel like a live-action movie poster moment frozen in time—quiet, emotional, and full of anticipation—faithfully recreating the described scene, composition, uniforms, lighting, color tone, and typography using only the two uploaded people, with no external references or additional elements.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 5 Styles Creative Studio/0116 拍貼系列-金魚
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Use the uploaded person as the ONLY subject in all panels. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, and body proportions EXACTLY as in the uploaded photo. Do not beautify, stylize, or alter identity in any way. No extra people may appear. No non-uploaded individuals may appear.
+
+      Create a playful four-frame photo-booth collage styled like a goldfish aquarium photo booth, closely matching the provided reference image. The two uploaded subjects must always appear together in all four frames, maintaining realistic scale, consistent distance, and natural body proportions, wearing exactly the same clothing and hairstyles as in the uploaded photos. The entire composition must feel like it was captured in a single continuous physical aquarium environment, not four separate images.
+
+      The subjects appear behind one continuous, invisible aquarium glass plane, with goldfish swimming naturally between the camera and the subjects. The glass must feel optically neutral and unobtrusive, showing only extremely subtle diffusion without reflections, glare, shine, light streaks, mirrored effects, or visible glass surfaces. There must never be any visible water surface, reflective bands, horizontal or vertical light lines, exposure breaks, or any form of top or bottom reflection. The image must not contain waterline artifacts, mirrored faces, ghosting, double outlines, motion trails, or duplicated facial features under any circumstances.
+
+      The layout must be a perfectly balanced 2×2 grid, seamlessly stitched into a single continuous image with absolutely no borders, no dividers, no seams, no margins, and no panel separation cues. The background must remain visually continuous from top to bottom and side to side, with identical density, color depth, haze, and exposure across all four frames, so the collage reads as one uninterrupted space rather than stacked images.
+
+      The background color and atmosphere must closely match the reference image, remaining deep navy-blue to near-black at all times. The background should feel dense, calm, and subdued, with no visible light sources, no beams, no gradients, no glow patches, and no directional lighting. The background must never appear cyan, teal, turquoise, greenish, bright blue, or illuminated, and must never compete with the subjects’ faces for visual attention.
+
+      Lighting must be fully diffused, soft, and frontal. The subjects’ faces must be the brightest and most visually anchored elements in every frame, clearly lifted by exposure and midtones without altering facial structure or texture. Facial highlights should appear clean and natural on the forehead, nose bridge, and cheeks, while the surrounding environment remains darker and restrained. Skin tones must precisely match the reference image, staying within neutral-warm beige to soft peach undertones. Skin must never appear gray, bluish, cyan, greenish, desaturated, underwater-muted, or color-shifted. Any blue cast from the environment must be completely excluded from the skin while preserving the deep blue background. Skin must feel alive, human, and naturally luminous, with no smoothing, no beauty filters, and no artificial enhancement.
+
+      Goldfish should swim gently and naturally in the foreground with soft edges and realistic depth. Their colors must remain warm golden-yellow to soft orange only, with natural variation and no white, pale, cream, lemon-yellow, glowing, or overexposed appearance. Goldfish must never cross directly in front of eyes, nose, mouth, or central facial features, and must never obscure identity. Fish may pass near hair edges, cheeks, shoulders, or the outer frame area only.
+
+      Each of the four frames must feature a different, natural interaction between the two subjects, such as leaning closer together, softly pointing at a fish, sharing a quiet smile, reacting playfully, or gently observing the aquarium. The interactions must feel spontaneous, relaxed, and photo-booth-like, never posed, stiff, symmetrical, or repeated across frames.
+
+      Global contrast should be slightly lowered and black levels softened to maintain a cinematic underwater depth. Highlights must bloom gently and evenly without streaks, bands, reflections, or artifacts. Avoid HDR effects, high clarity, sharpening halos, artificial edge definition, structural separation lines, or any visual cues that suggest layering or compositing.
+
+      The final image must feel dreamy, cinematic, calm, and intimate, unmistakably resembling a real goldfish aquarium photo booth. It must contain no reflection lines, no light bands, no ghosting, no mirrored effects, and no background lighting artifacts, with color, lighting, and atmosphere tightly aligned to the reference image.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 2
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 5 Styles Creative Studio/0116 Collage-Graphic Pop 
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "1:1" 
+    prompt: |
+      Create a modern collage-style design template with bold, saturated colors and a tactile, mixed-material aesthetic.
+      Use one large, vertically oriented photo as the central visual element, slightly tilted for a casual yet intentional composition.
+
+      Ensure that all photos remain fully visible and completely unobstructed at all times.
+      No stickers, graphic elements, frames, shadows, or decorative objects may overlap, cover, crop, or partially obscure any area of the photos.
+      Treat the photo area as a protected zone; all design elements must be positioned outside the photo boundaries.
+
+      Do not modify the photo content in any way — no distortion, repainting, style transfer, or content alteration.
+      Display photos with randomized solid frames, alternating between black or white borders, with clean, sharp edges resembling printed photo frames.
+      Attach the main photo at the top using an oversized metallic safety pin with realistic reflective metal texture, positioned outside the image area.
+
+      When layering multiple photos, allow overlap only at the edges or corners of the photos.
+      Limit the overlapping area to no more than 10% of each photo’s total surface area, ensuring the majority of each image remains clearly visible.
+      Avoid central overlaps or large stacking coverage; overlaps should feel subtle, intentional, and structurally restrained.
+
+      Layer smaller secondary photo frames behind the main image, offset to the left side, partially visible while respecting the overlap limits.
+
+      Add exactly three sticker-based elements placed around the photo, not on top of it:
+      – Two geometric stickers using stars, circles, or jagged starburst shapes only, sharing the same color and material.
+      – The shared color must be randomly selected from red or blue only, with no other colors used for these two stickers.
+      – One small sticky note, clearly distinct from the geometric stickers.
+
+      Render the two geometric stickers with a simple, minimal, and understated design, avoiding decorative details or complex styling.
+      Apply one shared material style to both geometric stickers, randomly selected from:
+      – fabric-based textures with visible textile grain and stitched edges, resembling embroidered patches,
+      – printed paper textures with subtle grain, speckled ink details, and gentle surface gloss.
+
+      Render the sticky note as a small matte paper note with subtle edge irregularities and a natural adhesive appearance.
+      Place a short handwritten-style title on the sticky note, written with a marker-like stroke, slightly imperfect and casual.
+      The handwritten text should function as a photo title, conceptually matching the photo, without describing specific visual details.
+
+      Ensure all stickers and notes have no white outlines, borders, or frames, appearing as solid cut-out shapes.
+      Keep all sticker and note designs simple, minimal, and unembellished, avoiding playful or decorative illustration styles.
+
+      Combine materials such as glossy photo paper, matte photo frames, textured paper stickers, handwritten ink, and reflective metal elements to enhance a tactile, editorial collage feel.
+      Maintain a strong visual hierarchy through scale, spacing, and contrast, with ample white space surrounding the composition.
+      Use a clean, solid white background with no gradients, textures, shadows, or environmental elements.
+      This is a reusable design template — do not describe or reference the content of the photos.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+
+# Comments and documentation
+comments:
+  folder_structure: "Each task folder should contain 'Source' and 'Generated_Output' subfolders. For multi-image tasks, also include 'Additional' subfolder."
+  reference_folder: "Optional: Path to folder containing third set of images for 3-way comparison"
+  template_usage: "use_comparison_template: true uses comparison_template_path (3 placeholders), false uses template_path (2 placeholders)"
+  model: "Gemini model to use for generation. 'gemini-2.5-flash-image' (max 3 images, faster), 'gemini-3-pro-image-preview' (max 14 images, better quality). Must be specified per task; defaults to 'gemini-2.5-flash-image' if omitted. Root-level model is ignored."
+  resolution: "Output resolution. Options: '1K' (default). Must be specified per task if non-default value is needed."
+  aspect_ratio: "Output aspect ratio. Valid options: '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'. If omitted, auto-detects the closest ratio from source image dimensions."
+  use_multi_image: "Set to true to enable multi-image mode from Additional folder, false for single-image mode"
+  output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report. Example: with 4 tasks and group_tasks_by=4, creates 1 report; with 8 tasks, creates 2 reports."
+  
+  random_source_selection:
+    description: "Mode for selecting N images from Source folder per API call (images can be reused)"
+    use_random_source_selection: "Set to true to enable random source selection mode"
+    min_images: "Minimum images per API call (default: 1)"
+    max_images: "Maximum images per API call (default: model max, e.g., 3 for flash, 14 for pro)"
+    num_iterations: "Number of API calls to make. Defaults to number of source files if omitted."
+    notes: |
+      - All images in 'Source' folder - no 'Additional' folder needed
+      - num_iterations controls API call count (defaults to source file count)
+      - Image counts spread from min to max across iterations
+      - Images CAN be reused across iterations (not unique partitions)
+      - DETERMINISTIC: same folder = same selections every run
+      - Great for regression testing: update source images, re-run, compare results
+      - Use gemini-3-pro-image-preview model for up to 14 images per call
+    example: |
+      # 10 source images, 50 iterations = 50 API calls, each picks 1-5 images
+      use_random_source_selection: false
+      min_images: 1
+      max_images: 5
+      num_iterations: 50  # Optional: defaults to number of source files
+      model: gemini-3-pro-image-preview
+  
+  multi_image_config:
+    description: "Configuration for multi-image generation (Source + Additional folders mode)"
+    enabled: "Must be true to use multi-image features"
+    mode: "sequential: consistent reproducible pairing | random_pairing: randomly select from Additional folder"
+    folders: "Array of folder paths to select additional images from (typically ['../path/to/folder/Additional'])"
+    allow_duplicates: "true for sequential mode (recommended) | false: try to avoid repeating combinations in random mode"
+  multi_image_example_single: "Set 'use_multi_image': false to process only images from Source folder without additional images"
+  multi_image_example_dual: "Set 'use_multi_image': true with multi_image_config to pair Source images with Additional folder images sequentially"

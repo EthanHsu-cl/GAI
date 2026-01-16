@@ -295,7 +295,7 @@
             "output": "Generated_Output",
             "metadata": "Metadata"
         },
-        "rate_limit": 5,
+        "rate_limit": 12,
         "task_delay": 10,
         "max_retries": 1,
         "special_handling": "base64_images",
