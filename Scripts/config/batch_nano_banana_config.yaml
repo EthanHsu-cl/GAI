@@ -509,100 +509,136 @@ tasks:
     resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
-      Create ONE single photorealistic Lunar New Year “斗方” using the uploaded image (any subject type: person, baby, pet, or group photo).
+      Create ONE single Lunar New Year “斗方” using the uploaded image
+      (any subject type: person, baby, pet, or group photo).
 
-      The result must look like a real New Year photo, not an illustration, collage, or graphic mockup.
+      This is a HYBRID OUTPUT:
+
+      The outer 斗方 shape must be completely flat and print-ready
+
+      The inner content may contain photographic or illustrated elements
+
+      Do NOT convert the entire image into a flat illustration style.
 
       ASPECT RATIO
 
       Final image must be vertical 3:4.
 
-      MANDATORY SUBJECT INCLUSION（CRITICAL – NO EXCEPTIONS）
+      BACKGROUND & CUTTING GUIDE (REQUIRED)
 
-      ALL people and/or pets present in the uploaded image MUST be included in the final design.
+      The background must be pure, clean white.
 
-      No person or pet may be omitted, removed, cropped out, replaced, or substituted.
+      Outside the 斗方, add a clear cutting guide:
 
-      If the uploaded image contains multiple people and/or pets:
+      Thin dashed outline following the exact diamond shape of the 斗方
 
-      Every individual must appear together within the SAME single 斗方.
+      Optional small scissor icon near the guide
 
-      Partial inclusion is strictly prohibited.
+      Cutting guides must:
 
-      Do NOT generate additional people or animals.
+      Exist ONLY in the white background
 
-      Do NOT replace any subject with illustrations, symbols, silhouettes, or decorative substitutes.
+      Never touch or overlap the 斗方 artwork
 
-      All subjects must remain recognizable and clearly identifiable, preserving their key features and identity.
+      The cutting guide is a visual reference only, not part of the 斗方 design.
 
-      Failure to include ALL people and/or pets should be considered an incorrect result and must be regenerated.
+      CRITICAL FLATNESS RULE (OUTER SHAPE ONLY)
+
+      The 斗方 itself must be perfectly flat:
+
+      NO paper folds
+
+      NO creases
+
+      NO bending
+
+      NO curled corners
+
+      NO paper shadows
+
+      NO physical paper texture
+
+      Treat the 斗方 as a flat printed design, not a photographed object.
+
+      INNER CONTENT STYLE (CONTROLLED FLEXIBILITY)
+
+      The content inside the 斗方 may include:
+
+      Photorealistic portraits
+
+      Photo-based cutouts
+
+      OR a semi-illustrated / portrait-style rendering similar to the previous reference results
+
+      Illustration-style rendering is ALLOWED but must:
+
+      Preserve facial identity and key features
+
+      Not simplify into cartoon or sticker style
+
+      The choice between photorealistic or illustrated rendering may be randomized,
+      but the outer 斗方 design must remain consistent.
+
+      MANDATORY SUBJECT INCLUSION (NO EXCEPTIONS)
+
+      ALL people and/or pets in the uploaded image MUST appear.
+
+      No omissions, no replacements, no partial inclusion.
+
+      Do NOT add extra people or animals.
+
+      Subjects must remain clearly recognizable.
 
       STRICT COMPOSITION RULES
 
       The image must contain ONLY ONE 斗方.
 
-      Do NOT generate multiple 斗方.
+      The 斗方 must be:
 
-      The 斗方 must be slightly smaller than typical center decorations, leaving visible surrounding space.
+      Square (1:1)
 
-      The 斗方 must be centered but not oversized or edge-to-edge.
+      Rotated 45 degrees (diamond orientation)
 
-      PLACEMENT SCENE
-
-      Choose ONE scene only:
-
-      A traditional or modern dark wooden door
-
-      A clean white wall
-
-      If placed on a wooden door:
-
-      The 斗方 is centered on the door.
-
-      Hang traditional Lunar New Year firecracker decorations (鞭炮串) vertically on BOTH left and right sides of the door.
-
-      Firecrackers must be festive, red-dominant, and clearly visible.
-
-      Firecrackers must not overlap, cover, or block the 斗方.
+      Centered with generous white space around it
 
       DESIGN & COLOR REQUIREMENTS
 
-      The 斗方 must be square (1:1) and rotated 45 degrees (diamond orientation).
+      Base color: rich Lunar New Year red
 
-      Base color must be predominantly RED.
+      Gold used as accent only (text, borders, decorative elements)
 
-      Gold is accent color only (text, patterns, highlights).
+      Overall design language should match:
 
-      Avoid pale, beige, pink, or non-festive base colors.
+      Traditional Lunar New Year door couplet aesthetics
+
+      The previously referenced door-mounted 斗方 style
 
       CONTENT
 
-      Preserve the identity and key features of ALL uploaded subjects.
+      Include ONE main Chinese New Year character or phrase (e.g. 福).
 
-      Include ONE main Chinese New Year character or phrase (e.g. 福, 春, 財).
+      The year 2026 may appear.
 
-      The year “2026” may appear optionally.
+      Decorative elements may include:
+      clouds, firecrackers, coins, peanuts, gold ingots, pineapple, 财神
 
-      Randomly include several Lunar New Year decorative elements:
-
-      pineapple, peanuts, gold ingots, 财神, festive clouds, coins, or firecrackers.
-
-      Decorative elements must support the design, never dominate or replace the main subject or the 斗方.
-
-      REALISM REQUIREMENTS
-
-      The 斗方 must look like real printed paper.
-
-      Show subtle paper texture, natural edges, and realistic shadows.
-
-      Lighting must match the door or wall environment naturally.
-
-      No collage look, no floating objects, no surreal or illustrated effects.
+      Decorations must remain graphic and flat, supporting the design.
 
       FINAL GOAL
 
-      A realistic vertical 3:4 Lunar New Year photo showing ONE single, slightly smaller red-based 斗方, naturally pasted on a door or wall,
-      with ALL uploaded people and/or pets fully included, balanced festive decorations, and a joyful, traditional atmosphere.
+      A print-ready Lunar New Year 斗方 on a white background,
+      with:
+
+      A perfectly flat, clean-cut outer shape
+
+      Hybrid inner content (photo or illustrated portrait)
+
+      Clear cutting guide outside the artwork
+
+      No folds, no paper shadows, no physical paper behavior
+
+      Optimized for printing, cutting, and real-world use,
+      while preserving the festive, traditional New Year aesthetic.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
