@@ -290,7 +290,7 @@ tasks:
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
-    min_images: 1
+    min_images: 2
     max_images: 5
     num_iterations: 50
 
