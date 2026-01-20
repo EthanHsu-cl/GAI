@@ -1024,8 +1024,7 @@ class UnifiedAPIProcessor:
         Each effect folder should have Source, Generated_Video, and Metadata subfolders.
         """
         base_folder = Path(self.config.get('base_folder', ''))
-        if not base_folder.exists():
-            raise FileNotFoundError(f"Base folder not found: {base_folder}")
+        base_folder.mkdir(parents=True, exist_ok=True)
 
         valid_tasks = []
         invalid_images = []
@@ -1108,8 +1107,7 @@ class UnifiedAPIProcessor:
     def _validate_vidu_effects_structure(self):
         """Enhanced Vidu Effects validation with parallel processing"""
         base_folder = Path(self.config.get('base_folder', ''))
-        if not base_folder.exists():
-            raise FileNotFoundError(f"Base folder not found: {base_folder}")
+        base_folder.mkdir(parents=True, exist_ok=True)
 
         valid_tasks = []
         invalid_images = []
@@ -1183,8 +1181,7 @@ class UnifiedAPIProcessor:
     def _validate_vidu_reference_structure(self):
         """Enhanced Vidu Reference validation with smart reference finding"""
         base_folder = Path(self.config.get('base_folder', ''))
-        if not base_folder.exists():
-            raise FileNotFoundError(f"Base folder not found: {base_folder}")
+        base_folder.mkdir(parents=True, exist_ok=True)
 
         configured_tasks = {t['effect']: t for t in self.config.get('tasks', [])}
         valid_tasks = []
@@ -1702,8 +1699,7 @@ class UnifiedAPIProcessor:
     def validate_pixverse_structure(self):
         """Enhanced Pixverse validation with base folder structure"""
         base_folder = Path(self.config.get("base_folder", ""))
-        if not base_folder.exists():
-            raise FileNotFoundError(f"Base folder not found: {base_folder}")
+        base_folder.mkdir(parents=True, exist_ok=True)
         
         valid_tasks = []
         invalid_images = []

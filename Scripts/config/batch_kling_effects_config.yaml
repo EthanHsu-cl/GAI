@@ -16,10 +16,10 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: ../Media Files/Kling Effects/1218 4 Styles
+base_folder: ../Media Files/Kling Effects/0119 6 Effects
 
-design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=46494616#gid=46494616
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBJ3wSU_HdfTKIsAJTSBUd6AZl7s77rZh5M_s82CXU94mc?e=YrSB4E
+design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=2134584856#gid=2134584856
+source_video_link: 
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,16 +28,22 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'countdown_teleport'
+    custom_effect: 'bouquet_drop'
 
   - effect:
-    custom_effect: 'firework_2026'
+    custom_effect: 'bullet_time_360'
 
   - effect:
-    custom_effect: 'first_toast_of_the_year'
+    custom_effect: 'overdrive'
 
   - effect: 
-    custom_effect: 'cheers_2026'
+    custom_effect: 'swing_swing'
+
+  - effect:
+    custom_effect: 'poping'
+
+  - effect:
+    custom_effect: 'subject_3_dance'
 
 comments:
   base_folder: >

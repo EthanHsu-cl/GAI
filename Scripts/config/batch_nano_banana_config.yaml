@@ -10,640 +10,302 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB2SbaN-EiGTq0YdrZRngNhAc3APIWa1K5Nr1fNy56os9M?e=jewf8v
-root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3b6c864d36f_0_0#slide=id.g3b6c864d36f_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDv_8QLpGiTT6jn_pn8TiFuAW-9sUQ9q6wUIPJ0d9UJSow?e=GLfeiQ
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3ba8fcecbcf_0_0#slide=id.g3ba8fcecbcf_0_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 好
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:5"
-    prompt: |
-      MODEL: Gemini 3 / Banana Pro
-
-      CRITICAL FACE ID LOCK — HIGHEST PRIORITY:
-      Use the uploaded photos as absolute identity references.
-      Each person’s face must remain IDENTICAL to the uploaded photo.
-
-      DO NOT change, adjust, enhance, beautify, idealize, stylize, or reinterpret:
-      – face shape
-      – facial proportions
-      – eye shape, size, spacing, or eyelids
-      – eyebrow shape or thickness
-      – nose size, bridge, or tip
-      – mouth shape, lip thickness, or smile curve
-      – jawline, chin, cheekbones
-      – skin texture or skin tone
-      – age appearance
-
-      NO AI beauty face.
-      NO average face.
-      NO “more attractive” face.
-      NO similar-looking person.
-      NO celebrity resemblance.
-
-      If the generated face does not look like the SAME REAL PERSON from the uploaded photo, the result is INVALID.
-
-      The face must look like the exact same person photographed again in a studio,
-      not a reinterpretation, not an illustration, not an idealized version.
-
-      ────────────────────────
-
-      Use the uploaded user photos as the ONLY subjects in the image.
-      The number of people in the final image must exactly match the number of uploaded photos (1–4 people only).
-      No extra people. No merged identities.
-
-      SCENE & BACKGROUND:
-      A professional studio photoshoot with a clean, seamless light grey to off-white background.
-      Background must be plain, smooth, and minimal.
-
-      OUTFITS (STRICT):
-      – All subjects wear solid red knit sweaters (no logos, no patterns).
-      – Bottoms are pure white only:
-        – Adults: white trousers or white skirts
-        – Children: white skirts or white shorts
-      – Shoes: white or red only.
-      No other colors allowed.
-
-      POSE & MOOD:
-      Avoid stiff standing poses.
-      Subjects should appear lively and natural:
-      – slight leaning toward each other
-      – relaxed arms
-      – gentle body angles
-      – playful, warm family interaction
-      The mood should feel joyful, festive, and candid.
-
-      PROP — CHINESE CHARACTER:
-      All subjects hold one oversized red Chinese character “好”.
-      – Physical prop only (foam board or cardboard)
-      – Color: festive red
-      – Typography: traditional calligraphy similar to 凝書體
-      – Thick, rounded brush strokes
-      – Handcrafted, friendly feeling
-      – Not geometric, not modern, not sharp
-
-      HAND-DRAWN DECORATIONS:
-      Add cute hand-drawn doodles similar to the reference image:
-      – Handwritten “Happy New Year”
-      – Small hand-drawn flowers and simple festive icons
-      – Childlike, playful, hand-sketched style
-      – Decorations must NOT cover faces or distort bodies
-
-      LIGHTING & CAMERA:
-      Soft, even studio lighting.
-      No harsh shadows.
-      Eye-level camera.
-      High resolution, sharp focus.
-      Clean commercial photography.
-
-      FINAL FACE CHECK (MANDATORY):
-      Before finalizing the image, verify:
-      – Faces match the uploaded photos exactly
-      – Identity is immediately recognizable
-      If not, regenerate until identity matches.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 米色全家福
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:3"
-    prompt: |
-      MODEL: Gemini 3 / Banana Pro
-
-      CRITICAL FACE ID LOCK — HIGHEST PRIORITY:
-      Use the uploaded photos as absolute identity references.
-      Each person’s face must remain IDENTICAL to the uploaded photo.
-
-      DO NOT change, adjust, enhance, beautify, idealize, stylize, or reinterpret:
-      – face shape
-      – facial proportions
-      – eye shape, size, spacing, eyelids
-      – eyebrows
-      – nose size or structure
-      – mouth shape or smile curve
-      – jawline, chin, cheekbones
-      – skin texture or skin tone
-      – age appearance
-
-      NO AI beauty face.
-      NO average face.
-      NO similar-looking person.
-      NO face replacement.
-      If the face does NOT look like the same real person from the uploaded photo, the result is INVALID.
-
-      The image must look like the same people photographed again in a studio,
-      not redesigned, not beautified, not reinterpreted.
-
-      ────────────────────────
-
-      Use the uploaded user photos as the ONLY subjects in the image.
-      The number of people in the final image must exactly match the number of uploaded photos (1–5 people).
-      No extra people. No merged identities.
-
-      SCENE & BACKGROUND:
-      A professional studio photoshoot.
-      Background color: soft beige / light cream tone.
-      Clean, seamless background with no texture, no patterns.
-
-      CENTER SETUP:
-      At the center of the scene is a large, round, upholstered chair or ottoman.
-      Color: beige or cream.
-
-      Under the chair and extending outward is a rectangular red carpet,
-      similar to traditional Lunar New Year studio setups.
-      The carpet should feel soft, festive, and ceremonial.
-
-      OUTFITS (STRICT COLOR PALETTE):
-      – Clothing colors limited to red, beige, cream, and off-white only.
-      – Knit sweaters, scarves, or soft winter fabrics.
-      – No logos, no text, no patterns.
-      – Bottoms in white, beige, or cream.
-      – Shoes and socks in red, beige, or white only.
-      No other colors allowed.
-
-      POSE & INTERACTION (FRIENDS MODE):
-      Subjects should appear as friends, NOT romantic partners.
-
-      ALLOWED:
-      – sitting close together on or around the round chair
-      – relaxed posture
-      – casual leaning
-      – friendly smiles
-      – light shoulder proximity
-      – natural group interaction
-
-      NOT ALLOWED:
-      – hugging
-      – holding hands
-      – face-to-face intimacy
-      – couple-like or romantic poses
-
-      The mood should feel warm, friendly, festive, and social.
-
-      PROPS & FESTIVE ELEMENTS:
-      – Some subjects may hold traditional red Spring Festival couplets (春聯)
-      – The couplets MUST display the exact Chinese text:
-        「恭喜發財」
-      – No other characters or phrases are allowed on the couplets
-      – Style: traditional vertical red couplets with gold or dark red calligraphy
-      – Physical paper couplets only, not digital text
-
-      FLOOR DECORATIONS:
-      – Multiple three-dimensional Chinese characters “福” and ”春”placed on the floor
-      – Solid physical props, not floating text
-      – Several traditional red lanterns placed around the chair and carpet
-      – Decorations should frame the group without blocking faces or bodies
-
-      COLOR & TONE ADJUSTMENT:
-      Overall image saturation should be slightly reduced.
-      Colors should feel warm but muted,
-      avoiding overly vivid or high-contrast reds.
-
-      LIGHTING & CAMERA:
-      Soft, even studio lighting.
-      No harsh shadows.
-      Gentle shadows under the chair, carpet, and feet only.
-      Eye-level camera.
-      Single-frame composition.
-      High resolution, sharp focus.
-
-      OVERALL STYLE:
-      Premium, calm, refined Lunar New Year group portrait.
-      Beige-red harmony with slightly lowered saturation.
-      Modern studio photography with traditional festive elements.
-      No watermarks, no borders, no UI elements.
-
-      FINAL FACE CHECK (MANDATORY):
-      Before finalizing:
-      – Verify all faces match the uploaded photos exactly
-      – Identity must be immediately recognizable
-      If not, regenerate until correct.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 馬上幸福全家福
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
-    prompt: |
-      MODEL: Gemini 3 / Banana Pro
-
-      CRITICAL FACE ID LOCK — HIGHEST PRIORITY:
-      Use the uploaded photos as absolute identity references.
-      Each person’s face must remain IDENTICAL to the uploaded photo.
-      No beautification, no face reshaping, no identity drift.
-
-      ────────────────────────
-
-      Use the uploaded photos as the ONLY subjects.
-      Final image must contain exactly the same number of people (1–5).
-
-      CAMERA & FRAMING:
-      Medium-wide to wide studio portrait.
-      Camera placed slightly farther back than a standard group portrait.
-
-      Include:
-      – full round table
-      – red tablecloth draping fully to the floor with vertical pleats
-      – subjects seated behind the table
-      – upper wall space clearly visible above subjects
-
-      Composition should feel balanced and calm, not poster-like.
-
-      SCENE & BACKGROUND:
-      Seamless deep red studio background.
-
-      BACKGROUND CALLIGRAPHY (SPATIAL PRIORITY — IMPORTANT):
-      Chinese calligraphy text on the wall:
-      「馬上幸福」
-
-      Style:
-      – Traditional 行草書
-      – expressive brush strokes
-      – natural ink variation and flying-white texture
-      – metallic gold with subtle sheen (not glossy)
-
-      SPATIAL RULES:
-      – Calligraphy exists physically on the BACKGROUND WALL
-      – Text occupies the upper background area only
-      – Foreground subjects must PARTIALLY OVERLAP and obscure portions of the calligraphy
-      – This overlap must clearly indicate depth: text behind people, not floating
-
-      Do NOT allow the text to sit fully in front of subjects.
-      Do NOT center text as a poster headline.
-
-      TABLE & OBJECT COMPOSITION:
-      Round table centered.
-      Red tablecloth with rich vertical folds.
-
-      Tabletop objects arranged in three visual scales:
-      – Small: decorative 「福」「春」 ornaments
-      – Medium: neatly grouped mandarin oranges
-      – Primary accent: one rocking horse ornament (~15 cm tall)
-
-      The rocking horse must feel prominent but not oversized.
-      It should visually balance the oranges, not dominate the table.
-
-      OUTFITS (COLOR BALANCE — IMPORTANT):
-      Red-dominant outfits with white as secondary accents.
-      Avoid evenly split red/white distribution.
-      Middle subject may wear full red for visual anchoring.
-      Side subjects may mix red and white for rhythm.
-
-      POSE & INTERACTION:
-      Natural, relaxed group interaction.
-      Slight leaning, casual arm placement on table, friendly expressions.
-      Some subjects may look at camera, others at each other.
-
-      No romantic intimacy.
-      No hugging or couple-specific gestures.
-
-      LIGHTING & COLOR:
-      Soft, even studio lighting.
-      Slightly reduced saturation.
-      Deep, elegant reds.
-      Gold calligraphy remains readable but secondary.
-
-      OVERALL STYLE:
-      Premium Lunar New Year studio portrait.
-      Photographic realism with refined cultural composition.
-      Balanced, calm, and confident — not decorative overload.
-
-      FINAL CHECK:
-      Faces must be immediately recognizable as the uploaded people.
-      If identity drifts, regenerate.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 5
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 火鍋全家福
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:3"
-    prompt: |
-      Create one single 3:4 vertical image (NOT a collage, NOT a multi-panel image).
-
-      Scene setup:
-      Lunar New Year reunion dinner. Solid red background. Red tablecloth.
-      A traditional hot pot placed at the center of the table, with dumplings and fruits arranged naturally around it.
-
-      Background detail (IMPORTANT):
-      On the red background, include one traditional Chinese calligraphy artwork (framed plaque or hanging scroll style, festive and elegant).
-      The calligraphy must clearly and correctly display the four Chinese characters: 「恭賀新禧」.
-      Brush-style calligraphy only.
-      Do NOT add any other text, logos, seals, watermarks, or branding.
-
-      Camera & framing (STRICT):
-      Camera at eye level.
-      Frame must be tightly and cleanly composed.
-      Do NOT show the ceiling.
-      Do NOT show any lighting equipment.
-      Do NOT show lamps, softboxes, light panels, reflectors, rigs, cables, or studio gear.
-      Do NOT include behind-the-scenes elements.
-      The frame must contain ONLY people, table, food, chairs, calligraphy artwork, and seamless red background.
-
-      Use ALL uploaded person photos and include exactly the same number of people as provided by the user.
-      Do NOT add extra people and do NOT remove anyone.
-      Each person must appear once and only once.
-
-      Identity preservation (STRICT):
-      Preserve each person’s real identity exactly as in the uploaded photos.
-      Facial features, face shape, eyes, nose, mouth, skin tone, hairstyle, age appearance, and overall likeness must remain unchanged.
-      Do NOT beautify, stylize, cartoonize, age-shift, gender-shift, or alter any facial characteristics.
-      Do NOT merge faces or substitute identities between people.
-
-      Composition:
-      All people are gathered naturally around the hot pot, actively eating and interacting during the reunion dinner.
-      Natural dining gestures such as holding bowls or chopsticks are allowed.
-      Balanced group composition with all faces clearly visible.
-      No one cropped, no duplicated people, no missing individuals.
-
-      Emotions & interaction:
-      Warm, joyful, natural group interaction while eating hot pot.
-      Expressions should feel relaxed, conversational, and festive.
-      Avoid romantic, couple-like, or intimate interactions. Group dynamics must clearly read as family or friends dining together.
-
-      Rules (strict):
-      ONLY ONE image.
-      NO collage, NO grid, NO split frames.
-      NO poster layout.
-      NO decorative graphics.
-      NO borders or dividers.
-
-      Lighting & style:
-      Clean, soft, realistic lighting suitable for a festive Lunar New Year dinner scene.
-      Lighting must appear indirect and off-frame, as if coming from outside the scene.
-      Even skin tones, gentle shadows, no dramatic or stylized lighting.
-
-      Final image feeling:
-      A realistic, warm Lunar New Year hot pot gathering captured in a single moment.
-      Festive, traditional, and cohesive, with all identities preserved, exact number of people maintained, and no visible ceiling or lighting equipment.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 5
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 賀年斗方情境圖
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:5"
-    prompt: |
-      Create ONE single photorealistic Lunar New Year “斗方” using the uploaded image (any subject type: person, baby, pet, or group photo).
-
-      The result must look like a real New Year photo, not an illustration, collage, or graphic mockup.
-
-      ASPECT RATIO
-
-      Final image must be vertical 3:4.
-
-      MANDATORY SUBJECT INCLUSION（CRITICAL – NO EXCEPTIONS）
-
-      ALL people and/or pets present in the uploaded image MUST be included in the final design.
-
-      No person or pet may be omitted, removed, cropped out, replaced, or substituted.
-
-      If the uploaded image contains multiple people and/or pets:
-
-      Every individual must appear together within the SAME single 斗方.
-
-      Partial inclusion is strictly prohibited.
-
-      Do NOT generate additional people or animals.
-
-      Do NOT replace any subject with illustrations, symbols, silhouettes, or decorative substitutes.
-
-      All subjects must remain recognizable and clearly identifiable, preserving their key features and identity.
-
-      Failure to include ALL people and/or pets should be considered an incorrect result and must be regenerated.
-
-      STRICT COMPOSITION RULES
-
-      The image must contain ONLY ONE 斗方.
-
-      Do NOT generate multiple 斗方.
-
-      The 斗方 must be slightly smaller than typical center decorations, leaving visible surrounding space.
-
-      The 斗方 must be centered but not oversized or edge-to-edge.
-
-      PLACEMENT SCENE
-
-      Choose ONE scene only:
-
-      A traditional or modern dark wooden door
-
-      A clean white wall
-
-      If placed on a wooden door:
-
-      The 斗方 is centered on the door.
-
-      Hang traditional Lunar New Year firecracker decorations (鞭炮串) vertically on BOTH left and right sides of the door.
-
-      Firecrackers must be festive, red-dominant, and clearly visible.
-
-      Firecrackers must not overlap, cover, or block the 斗方.
-
-      DESIGN & COLOR REQUIREMENTS
-
-      The 斗方 must be square (1:1) and rotated 45 degrees (diamond orientation).
-
-      Base color must be predominantly RED.
-
-      Gold is accent color only (text, patterns, highlights).
-
-      Avoid pale, beige, pink, or non-festive base colors.
-
-      CONTENT
-
-      Preserve the identity and key features of ALL uploaded subjects.
-
-      Include ONE main Chinese New Year character or phrase (e.g. 福, 春, 財).
-
-      The year “2026” may appear optionally.
-
-      Randomly include several Lunar New Year decorative elements:
-
-      pineapple, peanuts, gold ingots, 财神, festive clouds, coins, or firecrackers.
-
-      Decorative elements must support the design, never dominate or replace the main subject or the 斗方.
-
-      REALISM REQUIREMENTS
-
-      The 斗方 must look like real printed paper.
-
-      Show subtle paper texture, natural edges, and realistic shadows.
-
-      Lighting must match the door or wall environment naturally.
-
-      No collage look, no floating objects, no surreal or illustrated effects.
-
-      FINAL GOAL
-
-      A realistic vertical 3:4 Lunar New Year photo showing ONE single, slightly smaller red-based 斗方, naturally pasted on a door or wall,
-      with ALL uploaded people and/or pets fully included, balanced festive decorations, and a joyful, traditional atmosphere.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 3
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0115 6 Styles CNY/0115 斗方印刷圖
+  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Cork Board
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
-      Create ONE single Lunar New Year “斗方” using the uploaded image
-      (any subject type: person, baby, pet, or group photo).
-
-      This is a HYBRID OUTPUT:
-
-      The outer 斗方 shape must be completely flat and print-ready
-
-      The inner content may contain photographic or illustrated elements
-
-      Do NOT convert the entire image into a flat illustration style.
-
-      ASPECT RATIO
-
-      Final image must be vertical 3:4.
-
-      BACKGROUND & CUTTING GUIDE (REQUIRED)
-
-      The background must be pure, clean white.
-
-      Outside the 斗方, add a clear cutting guide:
-
-      Thin dashed outline following the exact diamond shape of the 斗方
-
-      Optional small scissor icon near the guide
-
-      Cutting guides must:
-
-      Exist ONLY in the white background
-
-      Never touch or overlap the 斗方 artwork
-
-      The cutting guide is a visual reference only, not part of the 斗方 design.
-
-      CRITICAL FLATNESS RULE (OUTER SHAPE ONLY)
-
-      The 斗方 itself must be perfectly flat:
-
-      NO paper folds
-
-      NO creases
-
-      NO bending
-
-      NO curled corners
-
-      NO paper shadows
-
-      NO physical paper texture
-
-      Treat the 斗方 as a flat printed design, not a photographed object.
-
-      INNER CONTENT STYLE (CONTROLLED FLEXIBILITY)
-
-      The content inside the 斗方 may include:
-
-      Photorealistic portraits
-
-      Photo-based cutouts
-
-      OR a semi-illustrated / portrait-style rendering similar to the previous reference results
-
-      Illustration-style rendering is ALLOWED but must:
-
-      Preserve facial identity and key features
-
-      Not simplify into cartoon or sticker style
-
-      The choice between photorealistic or illustrated rendering may be randomized,
-      but the outer 斗方 design must remain consistent.
-
-      MANDATORY SUBJECT INCLUSION (NO EXCEPTIONS)
-
-      ALL people and/or pets in the uploaded image MUST appear.
-
-      No omissions, no replacements, no partial inclusion.
-
-      Do NOT add extra people or animals.
-
-      Subjects must remain clearly recognizable.
-
-      STRICT COMPOSITION RULES
-
-      The image must contain ONLY ONE 斗方.
-
-      The 斗方 must be:
-
-      Square (1:1)
-
-      Rotated 45 degrees (diamond orientation)
-
-      Centered with generous white space around it
-
-      DESIGN & COLOR REQUIREMENTS
-
-      Base color: rich Lunar New Year red
-
-      Gold used as accent only (text, borders, decorative elements)
-
-      Overall design language should match:
-
-      Traditional Lunar New Year door couplet aesthetics
-
-      The previously referenced door-mounted 斗方 style
-
-      CONTENT
-
-      Include ONE main Chinese New Year character or phrase (e.g. 福).
-
-      The year 2026 may appear.
-
-      Decorative elements may include:
-      clouds, firecrackers, coins, peanuts, gold ingots, pineapple, 财神
-
-      Decorations must remain graphic and flat, supporting the design.
-
-      FINAL GOAL
-
-      A print-ready Lunar New Year 斗方 on a white background,
-      with:
-
-      A perfectly flat, clean-cut outer shape
-
-      Hybrid inner content (photo or illustrated portrait)
-
-      Clear cutting guide outside the artwork
-
-      No folds, no paper shadows, no physical paper behavior
-
-      Optimized for printing, cutting, and real-world use,
-      while preserving the festive, traditional New Year aesthetic.
+      Use the provided reference image as the final visual target and overall aesthetic direction. Create a cork board–style bulletin board collage with a warm, cozy, and creative scrapbook feeling. The user will upload between one and five photos, and the final composition must display no more than five photos in total. These photos should be presented as a mix of regular photo prints and Polaroid-style images, naturally arranged and pinned onto a realistic cork board background. The photos themselves must remain exactly the same as the original user uploads without any alterations to the content, except for possible cropping of the lower body if needed to fit the layout.
+      The overall composition should feel handmade and organic, with photos slightly tilted or overlapping, secured by push pins, clips, or pieces of tape. Add AI-generated decorative elements such as playful stickers, big hearts, different colored synthetic fiber star badges, doodles, stamps, and sparkles to enhance the collage. Include memo notes, sticky notes, or postcards with handwritten or casual typography that complements the photos.
+      Generate one receipt-style paper that reflects the content of the scene, summarizing the visual theme, memories, keywords, or short phrases inspired by the uploaded images. All paper elements should have realistic textures, soft shadows, and subtle depth to create a believable cork board pinboard effect.
+      The final output should be a single high-resolution image that looks like a carefully curated cork board collage, with balanced composition, cohesive colors, and a polished yet imperfect, human-made aesthetic consistent with the reference image.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
     min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Hanging Photo
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "4:5"
+    prompt: |
+      A refined literary-style collage graphic design in a flat, 2D composition.
+
+      The entire canvas uses a single, continuous background with no visible divisions, panels, or segmented areas.
+      The background is a rich chocolate-brown tone with a visible fabric material texture, resembling tightly woven textile.
+      Only the fabric weave pattern is visible; the surface must be completely flat.
+      Do not show any wrinkles, folds, creases, draping, or fabric deformation of any kind.
+
+      The fabric texture is clear, crisp, and evenly distributed across the entire background.
+      The weave structure should be distinctly readable but subtle, consistent, and controlled.
+      The color sits in a balanced mid-dark range, deeper than medium brown but lighter than near-black tones.
+      The hue is neutral to slightly cool, avoiding overly warm or orange undertones.
+      The surface is matte with soft, uniform lighting, enhancing texture clarity without creating shadows or depth.
+      Use one solid background color only; do not use gradients, lighting falloff, or color blocks.
+
+      The layout is organized through visual hierarchy rather than background separation.
+
+      In the upper portion of the composition, two thin ivory-colored graphic strings run horizontally across the canvas, one positioned higher and one lower.
+      The strings are a soft off-white or warm ivory tone, clearly lighter than the background but subtle and understated.
+      They should not appear bright white, yellow, or beige-heavy.
+
+      Each string appears as a single, continuous stroke with slow, flowing bends and gentle directional changes.
+      The curves are long and relaxed, creating a sense of natural movement rather than short or jittery distortions.
+      The strings feel lightly guided by hand, as if drawn in one calm, uninterrupted motion.
+
+      Do not use multiple overlapping strings, stacked strokes, or repeated line layers.
+      Avoid shaky, wobbly, vibrating, or sketch-like line effects.
+      The variation comes from gradual curvature, not from noise or trembling.
+
+      The strings are graphic and stylized, not realistic or three-dimensional.
+      No rope fibers, fraying, knots, or physical depth.
+
+      The photos are visually suspended from these two strings.
+
+      All user-uploaded photos must be displayed exactly once.
+      Do not duplicate, omit, replace, crop, stretch, squeeze, or generate additional photos.
+      The total number of photos shown must exactly match the number of images uploaded by the user.
+
+      Each photo must preserve its original aspect ratio and proportions.
+      Do not compress, distort, or reshape the photos in any way.
+      The images should scale uniformly, maintaining their natural width-to-height relationship.
+
+      The photos are evenly distributed across the two strings in quantity, but not perfectly aligned.
+      Each photo has slight variations in vertical position, rotation, and spacing.
+      Avoid rigid grids, straight baselines, or perfectly aligned edges.
+      The arrangement should feel casually composed and naturally staggered, not mechanically precise.
+
+      Each photo is visually attached to the strings using small, minimal wooden clothespins, simplified and graphic rather than realistic.
+      Each photo is framed with a clean, solid white Polaroid-style border only.
+      Do not use black frames, dark borders, outlines, or any black edging around the photos.
+
+      A handwritten, cursive-style title is placed near the top of the composition.
+      The title is inspired by the mood and content of the user-uploaded photos.
+      The lettering feels organic, personal, and editorial, similar to a handwritten magazine headline.
+      The title should be subtle and elegant, not bold or overly decorative.
+
+      The lower area of the composition contains editorial text placed directly on the same background.
+      This text appears as a short, magazine-style caption or reflective analysis inspired by the user-uploaded photos.
+      The writing is calm, poetic, and literary, similar to an indie arts magazine.
+      The text consists of a single sentence of approximately 15–20 words.
+
+      The entire composition remains flat and graphic, with no depth, no perspective, and no realistic lighting or shadows.
+      High-quality graphic design, restrained details, balanced spacing, and a sophisticated editorial aesthetic.
+      The final image resembles a designed magazine layout or poster, not a photograph or real installation.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Soft Lifestyle
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "1:1"
+    prompt: |
+      Global Setup:
+      - Create a fixed-layout journal-style scrapbook composition using the user-uploaded photos
+      - This is a layout template
+      - The structure and placement rules must be followed strictly
+      - The layout is divided into two sections: left journal paper collage area and right vertical three-photo strip
+      - The left and right sections must visually overlap
+      - Do not separate the layout into clean columns
+
+      Global Photo Rule:
+      - Each user-uploaded photo may be used only once in the entire composition
+      - The same photo must never appear in both the left and right sections
+      - Do not duplicate, reuse, or repeat any user-uploaded photo in any form
+      - Do not duplicate photos to satisfy layout or quantity requirements
+      - Empty space is allowed; duplication is not
+
+      Left Side – Journal Area:
+      - Use clean white scrapbook paper or white notebook paper as the base
+      - The paper color must be white, not beige, cream, or off-white
+      - The notebook paper must look physically real and used
+      - Visible natural wrinkles and creases
+      - Slightly uneven paper surface
+      - Subtle shadows created by the folds
+      - The paper must not look flat, smooth, or digitally perfect
+      - Wrinkles should feel organic and random, like paper that has been folded and handled
+      - Include visible ruled lines and rough, ripped edges
+
+      Left Side – Text:
+      - Add short handwritten-style notes or casual captions
+      - Text should feel personal and diary-like, not formal
+
+      Left Side – Photos:
+      - User-uploaded photos are primarily placed on the left scrapbook paper
+      - Photos appear as printed snapshots taped or clipped onto the paper
+      - Photos may slightly overlap the paper edges
+      - If multiple photos are placed, attach them using visible washi tape or paper clips
+
+      Left Side – Decorative Stickers:
+      - Decorative stickers placed near the photos must be contextually related to the photo content
+      - Stickers should visually match the theme, subject, or mood of the photos
+      - Do not use random or unrelated decorative stickers
+
+      Left Side – Decorations:
+      - Add stationery-style decorations around the paper
+      - Paper clips
+      - Washi tape
+      - Small stickers or hand-drawn accents
+      - Decorations should feel naturally placed and slightly imperfect, like a real scrapbook
+
+      Right Side – Three-Photo Strip (Landscape Priority):
+      - Use one vertical photo strip composed of exactly three stacked frames
+      - This strip functions as a landscape storytelling module
+
+      Right Side – Three-Photo Strip (Narrative Logic):
+      - The right-side three-photo strip functions as a cinematic storytelling sequence
+
+      - The middle frame must always use a real user-uploaded photo
+      - This middle photo acts as the narrative anchor of the strip
+
+      - The top and bottom frames are generated images
+      - Generated images must NOT reuse or duplicate any user-uploaded photo
+      - Generated images must NOT include people or human figures
+
+      - The generated frames should visually extend the mood, setting, or emotion
+        of the middle photo, similar to cinematic establishing or detail shots
+
+      - Generated content may include:
+        - Realistic landscape scenes related to the middle photo
+        - Environmental details that suggest the same location
+        - Object close-ups that carry emotional or narrative meaning
+
+      - The generated frames should emphasize:
+        - Realistic lighting
+        - Natural depth and atmosphere
+        - A cinematic, film-like quality
+
+      - The top and bottom frames should feel like:
+        - A before-and-after moment
+        - Or a near-and-far perspective
+        - Or an emotional cutaway within the same story world
+
+      - Do NOT generate symmetrical or mirrored images
+      - Do NOT generate generic or unrelated scenery
+
+
+      Right Side – Black Base:
+      - Place the entire three-photo strip on a single solid black background
+      - The black background forms the entire strip, not a thin border
+      - All three frames are embedded within the same black base
+      - The black base remains visible around the frames
+      - Include a thicker black area at the bottom
+
+      Right Side – Plastic Sleeve Detail:
+      - Cover the entire photo strip with a thin transparent plastic sleeve
+      - The sleeve resembles a real photo booth protective plastic sleeve
+      - The plastic sleeve fits the strip precisely in size and shape
+      - The surface appears slightly glossy and semi-reflective
+      - Subtle natural reflections and light distortions appear on the plastic
+      - The plastic creates a faint separation between the strip and the viewer
+      - The effect must feel physical and realistic, not like a digital overlay
+      - Avoid strong glare, heavy reflections, or exaggerated shine
+
+      Right Side – Circular Washi Tape:
+      - Add a small circular washi tape at the top of the photo strip
+      - The tape is round, like a sticker or dot
+      - The tape appears to attach the strip to the background
+      - The tape slightly overlaps the top edge of the strip
+      - The tape must not cover any frame content
+
+      Right Side – Bottom Caption:
+      - At the very bottom of the photo strip, add a tiny decorative caption
+      - The text reads exactly: "Memories"
+      - The text is extremely small and barely noticeable
+      - Use a light typewriter-style font
+      - Text color is white
+      - The caption functions only as a decorative detail
+      - Do not include any dates, numbers, or additional words or symbols
+
+      Right Side – No Text Rule:
+      - No other text is allowed on the right-side photo strip
+      - Do not place words, numbers, captions, or symbols on frames or on the black background
+
+      Overlap Rules:
+      - The right photo strip must partially overlap the left scrapbook paper
+      - The overlap should feel natural, like layered scrapbook elements
+      - The photo strip appears placed on top of the paper
+      - Maintain clear visual depth and layering
+
+      Photo Integrity Rules:
+      - Do not change faces in any way
+      - Do not stretch, compress, distort, warp, or reshape user-uploaded photos
+      - Maintain original proportions and visual integrity
+      - Do not alter the content of user-uploaded photos
+
+      Background:
+      - Soft baby blue checkered pattern background
+      - Low saturation pastel blue and white color palette
+      - Clean, flat, smooth surface
+      - Wallpaper-like appearance
+      - Fresh and airy feeling
+      - No wrinkles, folds, fabric texture, or paper texture
+      - No shadows, depth, or physical imperfections
+
+      Final Rules:
+      - Design around the photos
+      - Do not redesign or modify user-uploaded photos
+      - No alternative compositions are allowed
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Photo Strip
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "9:16"
+    prompt: |
+      Using the provided image as the final visual reference, generate a clean and modern “Photo Strip” composition. The user will upload between one and three photos only, and these original photos must not be altered, stylized, recolored, enhanced, or regenerated in any way. Each uploaded photo should visually occupy approximately 50%–60% of the total canvas width, ensuring a strong presence while maintaining balanced negative space. Place a vertical photo strip centered on the canvas, featuring a solid white frame that resembles a classic photo booth strip. The uploaded photos should appear inside the strip in their original quality and order. For the background, prioritize selecting a single uploaded photo with the smallest proportion of people, or a non-portrait image primarily depicting scenes or landscapes, and crop and scale it proportionally to fill the entire canvas as a full-bleed background. Do not combine multiple uploaded photos to form the background under any circumstances. Remove any light leak, film burn, or vintage exposure effects so the overall aesthetic remains crisp, bright, and contemporary. Add small, decorative, randomly generated text elements on the white photo strip only; these texts should be inspired by the photo content or atmosphere, such as casual phrases, place-related words, or abstract design labels, and should function purely as visual decoration. Maintain a strong visual hierarchy with the centered photo strip as the primary focal point, balanced spacing, and a refined editorial layout aligned with modern lifestyle and design lab aesthetics, while strictly preserving the integrity of all user-uploaded photos.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
     max_images: 3
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Modular
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "9:16"
+    prompt: |
+      Create a single, vertically oriented modular photo story layout that resembles a cinematic travel journal webpage, presented as one complete scrollable composition. Use one user-uploaded photo as a full-width hero background at the top, with a black gradient overlay (darker at the bottom, lighter at the top) to ensure strong text contrast. Overlay large bold title typography, a smaller location subtitle, navigation-style labels (e.g., “Home”, “Photos”, “Stories”) near the top, a visible date, and a short reflective paragraph aligned left in a clean editorial layout.
+      If fewer than six photos are uploaded, generate additional images to support the modular layout. Generated images should either complement the uploaded photos thematically or be derived from them through cropped details, maintaining strong visual coherence and consistent style.
+      As the layout scrolls downward, deepen the black gradient into a darker midsection. Place the remaining user-uploaded photos (up to five) into a centered horizontal carousel module with consistent sizing and spacing. Include visible left and right navigation arrows styled as modern, semi-transparent white carousel controls layered above the images to clearly suggest interactivity. Each photo should function as an independent module while adhering to a strict grid system. Beneath the carousel, add small UI-style supporting text modules that match the overall typographic hierarchy.
+      In the lower half, transition the gradient into another large background image to maintain vertical continuity. Overlay minimal footer-style text such as story credits or a subtle social reference.
+      Additional rule: the bottom background image should, whenever possible, use one of the user-uploaded photos (preferably a different one from the top hero image) rather than a fully generated image.
+      The overall aesthetic should be cinematic and modern, with warm natural tones, deep blacks, soft shadows, consistent typography, and a polished travel story webpage mockup feel.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Airdrop post
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "9:16"
+    prompt: |
+      The user will upload between one and four photos (maximum four). Based on these images, generate a polished, modern fashion lookbook interface that closely resembles an iOS photo album screen. If the user uploads two or three photos, the uploaded images should be arranged in a top–middle–bottom vertical sequence, preserving their order. All visual content must be strictly limited to the images uploaded by the user; no additional images may be automatically generated under any circumstances.
+      At the very top of the screen, include a clean, minimal album title that reflects the shared theme, mood, or usage scenario inferred from the user’s uploaded photos, written as a short category-style phrase rather than a full sentence. Most importantly, place a clearly visible iOS-style modal popup in the exact center of the screen, appearing as a foreground overlay above the image grid. This popup must resemble a native iOS system dialog, featuring rounded corners, a soft shadow, and a light translucent background. The modal should contain a title such as “Rename Album,” a single text input field whose content is dynamically generated to match the theme and meaning of the uploaded photos, and two action buttons at the bottom labeled “Cancel” and “Save,” styled according to standard iOS interface conventions. The text shown inside the input field should be context-aware and directly related to the visual content, avoiding generic or placeholder wording. The background images should remain clearly visible but visually secondary to the popup, reinforcing the impression that the user is actively renaming an album within an iOS photo application. At the bottom of the overall screen, include a short, subtle caption written in a warm, lifestyle-oriented tone that emotionally connects to the images and describes when, how, or why these styles or items might be used. All visual and textual elements—including the top title, the modal dialog, the generated companion images, and the bottom caption—must feel cohesive, intentional, and specifically tailored to the user’s uploaded photos, creating a realistic and believable iOS album-editing experience.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 4
+    max_images: 4
     num_iterations: 50
 
 
