@@ -4,308 +4,349 @@ testbed: http://192.168.31.161:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3
+  group_tasks_by: 2
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDv_8QLpGiTT6jn_pn8TiFuAW-9sUQ9q6wUIPJ0d9UJSow?e=GLfeiQ
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3ba8fcecbcf_0_0#slide=id.g3ba8fcecbcf_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAhP5-QgLkjR7sP_8sSQBgUAZP7ptWQ7VMesZO6Qmnv4jY?e=s0d5ls
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bae2f0651d_26_0#slide=id.g3bae2f0651d_26_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Cork Board
+  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio 2/0120 Collage - Light Leak Snapshot
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "3:4"
+    aspect_ratio: "9:16"
     prompt: |
-      Use the provided reference image as the final visual target and overall aesthetic direction. Create a cork board–style bulletin board collage with a warm, cozy, and creative scrapbook feeling. The user will upload between one and five photos, and the final composition must display no more than five photos in total. These photos should be presented as a mix of regular photo prints and Polaroid-style images, naturally arranged and pinned onto a realistic cork board background. The photos themselves must remain exactly the same as the original user uploads without any alterations to the content, except for possible cropping of the lower body if needed to fit the layout.
-      The overall composition should feel handmade and organic, with photos slightly tilted or overlapping, secured by push pins, clips, or pieces of tape. Add AI-generated decorative elements such as playful stickers, big hearts, different colored synthetic fiber star badges, doodles, stamps, and sparkles to enhance the collage. Include memo notes, sticky notes, or postcards with handwritten or casual typography that complements the photos.
-      Generate one receipt-style paper that reflects the content of the scene, summarizing the visual theme, memories, keywords, or short phrases inspired by the uploaded images. All paper elements should have realistic textures, soft shadows, and subtle depth to create a believable cork board pinboard effect.
-      The final output should be a single high-resolution image that looks like a carefully curated cork board collage, with balanced composition, cohesive colors, and a polished yet imperfect, human-made aesthetic consistent with the reference image.
+      Create a film-style visual layout designed strictly as a reusable presentation template.
+
+      ### Composition & Film Strip Structure
+      The central element is one vertical black film strip placed perfectly at the center of the canvas. This strip must occupy approximately 80% of the total image height. It must not touch the top or bottom edges of the image, leaving visible, balanced padding above and below.
+
+      The film strip holds exactly vertically stacked photo frames. The film border is always solid black, clean, and uniform, resembling real photographic negative film. Add subtle, understated film-style markings to this border, such as small technical text (e.g., "KODAK PORTRA 400"), frame numbers (e.g., "14", "14A"), or minimal symbols commonly found on negatives. These markings must be decorative and non-distracting.
+
+      ### Background Generation & Effects
+      The background filling the entire canvas behind the film strip must be a generated image.
+      - Content: Generate a natural landscape scene with sky or a composition of natural elements. The background must contain no people, man-made structures, or distracting subjects.
+      - Tonal Matching: The color palette, lighting temperature, and overall atmosphere of this generated natural background must be directly derived from, and complementary to, the dominant tones found within the three photos inside the film strip.
+      - Darkening & Texture: The entire generated background must be significantly darkened overall so it visually recedes. Apply a very subtle, fine film grain effect across the background, most noticeable near the bottom area.
+      - Light Leak: Add a warm, softly diffused light leak effect exclusively to the background image, positioned prominently along the right edge. Do not apply any light leak to the film strip itself.
+
+      ### Photo Treatment (Inside the Film Strip)
+      Strictly preserve all user-uploaded photos inside the frames: DO NOT alter faces, features, expressions, poses, or objects. DO NOT warp, crop, or change their original aspect ratio.
+      - Filter: Apply a consistent analog / cinematic film filter only to the three photos within the strip (soft contrast, subtle color shifts, natural nostalgic tone).
+      - Vignette: Apply a subtle film-style vignette gently darkening the edges and corners of each of the three photo frames.
+
+      ### Typography
+      Add exactly two handwritten-style words in an elegant, delicate script font. The words should be inspired by the emotional theme of the photos.
+      - Word 1 Placement: Near the bottom-left area of the second (middle) photo frame.
+      - Word 2 Placement: Near the top-right area of the third (bottom) photo frame.
+      - Each word may slightly overlap its respective photo frame and extend onto the surrounding background, creating a layered, organic look.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
-    min_images: 1
+    min_images: 3
+    max_images: 3
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio 2/0120 美式高校置物櫃
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "2:3"
+    prompt: |
+      Use the provided 2–5 input photos as visual source materials and transform them into a single, cohesive final artwork inspired by an American high school locker aesthetic.
+      The entire background must be the surface of a school locker only. The locker door fills the entire frame with no visible hallways, classrooms, or surrounding school environments. Everything appears attached directly onto the locker surface.
+      Set the locker background color to a fixed pink tone defined by the HEX color code #ff82a0.
+      Treat this color as locked and non-negotiable. Do not increase saturation, do not shift hue, and do not reinterpret this pink. Avoid neon, fluorescent, overly vivid, or pastel variations. The locker color must stay within this exact pink range.
+      Apply this pink to a metal locker surface with a slightly matte-to-satin finish. Subtle reflections, soft highlights, and horizontal locker vents should remain visible without altering the base color.
+      At the center, place a slightly wrinkled poster or paper sheet taped casually onto the locker door. Integrate the people or subjects from the input photos into this central poster area, arranged as a cohesive group image resembling a fashion editorial, pop album cover, or stylized yearbook photo.
+      Surround the central poster with playful locker decorations: stickers, star shapes, ticket stubs, doodles, handwritten-style graphics, polaroid photos, and nostalgic icons. These elements should complement the fixed pink locker color without overpowering it.
+      The overall mood should be youthful, nostalgic, and feminine with a Y2K-inspired “hot mess” locker aesthetic. Maintain balanced saturation, soft contrast, and a polished scrapbook collage finish.
+      Ensure the final output looks like one finished poster-style artwork photographed directly on a pink locker door, with the locker’s color clearly framing the entire composition.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
     max_images: 5
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Hanging Photo
+  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio 2/0120 拍貼系列-Style3 2020S
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Use all uploaded photos as the only subjects. Their real identities must remain recognizable and consistent.
+      Preserve the subjects’ facial features, identity, skin tone, hairstyle, and body proportions EXACTLY as in the uploaded photos.
+      Do not redraw, replace, or re-generate the people.
+      Adding any other person or repeating the same person is prohibited.
+      This is a photographic purikura-style filter application inspired by CURRENT Japanese purikura trends (FJK / SJK / LJK),
+      NOT a realistic portrait and NOT a modern beauty editorial.
+
+      Identity preservation rules
+
+      – The same people must remain clearly identifiable
+      – Facial structure, face shape, and hairstyle must remain consistent
+      – Do NOT replace faces
+      – Do NOT turn subjects into illustrations, anime, or dolls
+
+      Facial treatment (EYES ARE CRITICAL – CURRENT PURIKURA STYLE)
+
+      – Eyes must appear about 25–30% larger than the original image, achieved through facial proportion refinement, NOT exaggerated scaling
+      – Slightly taller eye shape with soft rounded corners
+      – Clean, soft upper eyelid line (no harsh eyeliner, no cat-eye)
+      – Subtle lower eyelid fullness (natural aegyo-sal impression, not drawn)
+      – Iris size and color remain realistic (no glow, no anime shine)
+      – Eye whites clean and bright but NOT over-whitened
+      – Eyes must feel soft, friendly, and human, never cartoonish or doll-like
+
+      Face & skin:
+      – Overall face slightly more compact and centralized (very subtle)
+      – Mild jawline softening only
+      – Skin retouching light, clean, and purikura-like
+      – No plastic skin, no heavy whitening, no editorial beauty look.
+
+      Style & booth identity
+
+      Create a playful four-frame photo-booth collage styled like a CURRENT Japanese purikura booth popular among FJK / SJK / LJK.
+
+      Overall vibe:
+      – cute
+      – trendy
+      – clean
+      – soft
+      – girly
+      – Instagram-ready
+      – unmistakably modern Japanese purikura aesthetic
+
+      Layout
+
+      – Perfect 2×2 four-frame grid
+      – Equal-sized panels
+      – Seamlessly stitched edge-to-edge
+      – NO borders, margins, dividers, or white lines
+      – One unified purikura output (not separated images)
+
+      Subjects & poses (REFERENCE-ALIGNED)
+
+      – All subjects must appear together in all four frames
+      – Relative positions and scale remain consistent across frames
+      – Each frame must feature a DIFFERENT pose
+      – Poses must closely imitate the reference purikura poses, including:
+        • peace signs close to the face or eyes
+        • cheek-touch pose
+        • finger-heart near chin
+        • slight head tilt with close shoulder distance
+        • leaning together for intimacy
+      – Expressions should be soft, cute, and natural:
+        gentle smile / shy smile / light pout
+      – Avoid exaggerated comedy poses or large spacing between subjects
+      – Clothing must remain unchanged
+
+      Head accessories (KEY UPDATE – MORE VIVID & EXAGGERATED, REF-ACCURATE)
+
+      – Add bows or headbands to SOME subjects only
+      – Accessories appear in RANDOM 1–2 frames only
+      – At most TWO frames may contain head accessories
+      – Never appear in all four frames
+
+      – Sequined pink ribbon headband
+      – Lace plush headband (soft, fluffy texture)
+      – Kitty-style pink glitter bow headband (purikura booth rental feel)
+
+      – Accessories should feel playful, bold, and slightly exaggerated
+      – Slightly oversized but controlled
+      – Clearly readable at thumbnail size
+
+      Color direction (IMPORTANT):
+      – High-saturation candy colors:
+        hot pink, vivid baby pink, cherry red, bright mint green
+      – Must stand out clearly from hair and background
+      – Avoid muted or dusty tones
+
+      Placement rules:
+      – On top of the head or slightly off-center
+      – Do NOT obscure bangs, eyes, eyebrows, or facial features
+
+      Restrictions:
+      – Do NOT use animal ears
+      – Do NOT use cosplay or luxury accessories
+      – Do NOT overload accessories
+
+      Background & lighting
+
+      – Simple, clean purikura booth background
+      – Soft pastel tones only (pink / white / light purple)
+      – Flat, friendly booth lighting
+      – Soft glow without haze
+      – No detailed environments
+
+      Decorations (CRITICAL UPDATE – HEARTS ONLY, NON-NEON, REF-MATCHED)
+
+      – DO NOT add ANY text, letters, numbers, words, or typography of any kind
+      – DO NOT add speech bubbles, stars, sparkles, stickers, outlines, glow effects, or neon effects
+      – Add ONLY hand-drawn heart doodles
+
+      Heart appearance (STRICTLY MATCH REFERENCE – NOT NEON):
+
+      – Hand-drawn pen / marker style (like writing directly on purikura print)
+      – Flat color fill or simple outline ONLY
+      – NO glow, NO neon, NO light emission, NO gradient
+      – Uneven, imperfect stroke thickness
+      – Slight wobble, casual asymmetry
+      – Organic, human-drawn feeling
+      – NOT vector, NOT sticker-like, NOT digital icon style
+
+      Heart color palette ONLY:
+      – hot pink
+      – bright red
+      – vivid pastel pink
+      – matte or flat ink appearance (no shine)
+
+      Heart distribution rules (VERY IMPORTANT):
+      – ONLY 2 out of the 4 frames may contain hearts
+      – The remaining 2 frames must have ZERO decorations
+      – Do NOT distribute hearts evenly across frames
+      – Heart quantity must be limited and intentional (a few hearts per frame)
+
+      Placement:
+      – Floating loosely around faces, cheeks, or hands
+      – Near gestures (peace signs, finger-heart)
+      – Never overlapping eyes, eyebrows, nose, or mouth
+      – Must float clearly ON TOP of the photo layer
+
+      STRICTLY FORBIDDEN:
+      – Neon-style hearts
+      – Glowing or luminous hearts
+      – Gradient or outlined neon hearts
+      – Hearts in all four frames
+      – Any symbols other than hearts
+      – Decorative overload
+
+      Mood & intent
+
+      Cute, intimate friendship memories captured in a CURRENT Japanese purikura booth.
+      The final image should feel:
+      – pastel
+      – bubbly
+      – clean
+      – softly retouched
+      – trendy
+      – unmistakably modern Japanese purikura.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio 2/0120 旅遊機票
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "4:5"
     prompt: |
-      A refined literary-style collage graphic design in a flat, 2D composition.
+      Use the uploaded photo as the primary subject. The person in the photo becomes the main character.
 
-      The entire canvas uses a single, continuous background with no visible divisions, panels, or segmented areas.
-      The background is a rich chocolate-brown tone with a visible fabric material texture, resembling tightly woven textile.
-      Only the fabric weave pattern is visible; the surface must be completely flat.
-      Do not show any wrinkles, folds, creases, draping, or fabric deformation of any kind.
+      Preserve the facial features clearly and accurately, maintaining natural proportions, and ensure the face is clearly in focus.
 
-      The fabric texture is clear, crisp, and evenly distributed across the entire background.
-      The weave structure should be distinctly readable but subtle, consistent, and controlled.
-      The color sits in a balanced mid-dark range, deeper than medium brown but lighter than near-black tones.
-      The hue is neutral to slightly cool, avoiding overly warm or orange undertones.
-      The surface is matte with soft, uniform lighting, enhancing texture clarity without creating shadows or depth.
-      Use one solid background color only; do not use gradients, lighting falloff, or color blocks.
+      Do not alter the person's identity, facial features, face shape, skin tone, body proportions, or hairstyle.
 
-      The layout is organized through visual hierarchy rather than background separation.
+      Create a simple, neutral, and balanced realistic travel flat lay photograph.
 
-      In the upper portion of the composition, two thin ivory-colored graphic strings run horizontally across the canvas, one positioned higher and one lower.
-      The strings are a soft off-white or warm ivory tone, clearly lighter than the background but subtle and understated.
-      They should not appear bright white, yellow, or beige-heavy.
+      Use a strict overhead perspective (flat lay perspective) for the entire scene.
 
-      Each string appears as a single, continuous stroke with slow, flowing bends and gentle directional changes.
-      The curves are long and relaxed, creating a sense of natural movement rather than short or jittery distortions.
-      The strings feel lightly guided by hand, as if drawn in one calm, uninterrupted motion.
+      Randomly generate a city from around the world, emphasizing randomness; do not pre-set or imply any city.
 
-      Do not use multiple overlapping strings, stacked strokes, or repeated line layers.
-      Avoid shaky, wobbly, vibrating, or sketch-like line effects.
-      The variation comes from gradual curvature, not from noise or trembling.
+      Exclude Kyoto. Kyoto must not appear or be selected in any form.
 
-      The strings are graphic and stylized, not realistic or three-dimensional.
-      No rope fibers, fraying, knots, or physical depth.
+      Convert the uploaded photo into a Polaroid photograph taken at a randomly generated city's famous landmark.
 
-      The photos are visually suspended from these two strings.
+      Polaroid photographs exhibit subtle, instant imaging effects with soft film grain, gentle tonal transitions, and subtle simulated filters, while maintaining a realistic and natural texture.
 
-      All user-uploaded photos must be displayed exactly once.
-      Do not duplicate, omit, replace, crop, stretch, squeeze, or generate additional photos.
-      The total number of photos shown must exactly match the number of images uploaded by the user.
+      The Polaroid photograph is located at the visual center and is the main focal point of the composition.
 
-      Each photo must preserve its original aspect ratio and proportions.
-      Do not compress, distort, or reshape the photos in any way.
-      The images should scale uniformly, maintaining their natural width-to-height relationship.
+      The Polaroid photograph must occupy at least 50% of the entire image area, clearly occupying the center of the frame and becoming the undisputed visual focal point.
 
-      The photos are evenly distributed across the two strings in quantity, but not perfectly aligned.
-      Each photo has slight variations in vertical position, rotation, and spacing.
-      Avoid rigid grids, straight baselines, or perfectly aligned edges.
-      The arrangement should feel casually composed and naturally staggered, not mechanically precise.
+      The cityscape in the Polaroid photograph should present a modern yet natural style:
 
-      Each photo is visually attached to the strings using small, minimal wooden clothespins, simplified and graphic rather than realistic.
-      Each photo is framed with a clean, solid white Polaroid-style border only.
-      Do not use black frames, dark borders, outlines, or any black edging around the photos.
+      Natural sunlight, clear skies, neutral-toned architecture, and realistic colors.
 
-      A handwritten, cursive-style title is placed near the top of the composition.
-      The title is inspired by the mood and content of the user-uploaded photos.
-      The lettering feels organic, personal, and editorial, similar to a handwritten magazine headline.
-      The title should be subtle and elegant, not bold or overly decorative.
+      There should be no sunset atmosphere, no golden hour light, and no nostalgic or retro feel.
 
-      The lower area of the composition contains editorial text placed directly on the same background.
-      This text appears as a short, magazine-style caption or reflective analysis inspired by the user-uploaded photos.
-      The writing is calm, poetic, and literary, similar to an indie arts magazine.
-      The text consists of a single sentence of approximately 15–20 words.
+      Add handwritten text in the lower right corner of the white Polaroid frame, displaying only the city name.
 
-      The entire composition remains flat and graphic, with no depth, no perspective, and no realistic lighting or shadows.
-      High-quality graphic design, restrained details, balanced spacing, and a sophisticated editorial aesthetic.
-      The final image resembles a designed magazine layout or poster, not a photograph or real installation.
+      The handwritten font should be natural, clean, simple, and legible, without any decorative fonts or other text.
+
+      Around the Polaroid photograph, place 3-4 iconic items or miniature landmarks related to the randomly generated city (e.g., souvenirs, architectural models, cultural symbols, maps, food, or travel goods).
+
+      All auxiliary items must be unique and cannot be duplicated.
+
+      Duplicate items, mirrored copies, or duplicate instances of items are not allowed.
+
+      No two auxiliary items can belong to the same category or type.
+
+      Each object must represent a distinct category (e.g., a miniature landmark, a cultural symbol, a food item, a travel accessory, a ticket-like item).
+
+      No multiple objects of the same type may be included under any circumstances.
+
+      All objects must be placed on the same plane as the map.
+
+      Objects must not float or hover.
+
+      Each object must be in full contact with the plane and cast a natural contact shadow.
+
+      All supporting elements must be placed adjacent to the Polaroid photograph and arranged closely around it.
+
+      Objects must be arranged in a compact, tiling composition with minimal spacing.
+
+      Objects visually cluster around the Polaroid photograph with minimal gaps between them.
+
+      Multiple objects must touch or be close to the edges of the Polaroid photograph and the frame.
+
+      Some objects may be partially cropped by the frame to reinforce the compact, edge-to-edge layout.
+
+      The total area of ​​the Polaroid photograph, the ticket, and surrounding objects must exceed 85% of the frame.
+
+      There should be virtually no blank or negative space in the image.
+
+      Place a ticket next to the Polaroid photograph. The destination city name on the ticket must be clearly visible, unobstructed, and easily identifiable at all times.
+
+      It must not be cropped, obscured, or partially hidden.
+
+      Do not add any labels such as "Name," "Passenger Name," individual names, or form fields.
+
+      The background is a large world map occupying the entire frame.
+
+      The map surface is a very light off-white tone.
+
+      Land and sea areas are presented in extremely low contrast, almost identical tones, with only subtle tonal differences distinguishing them.
+
+      Geographical outlines are almost invisible and slightly faded.
+
+      The map appears visually recessed and understated, serving only as a background layer and not clashing with the Polaroid photo, ticket, or surrounding objects.
+
+      Soft natural light shines in from one direction.
+
+      The soft sunlight falls on the world map,
+
+      creating dappled light and shadow that enhances the map's texture while maintaining a subtle and unobtrusive effect.
+
+      Light and Atmosphere:
+
+      Balanced exposure, natural contrast, and simple composition.
+
+      A modern, sophisticated, and realistic style.
+
+      It explicitly rejects retro and nostalgic elements.
+
+      There is no old-fashioned, vintage, rustic, or outdated aesthetic.
+
+      No specific year or period is mentioned.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 5
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Soft Lifestyle
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "1:1"
-    prompt: |
-      Global Setup:
-      - Create a fixed-layout journal-style scrapbook composition using the user-uploaded photos
-      - This is a layout template
-      - The structure and placement rules must be followed strictly
-      - The layout is divided into two sections: left journal paper collage area and right vertical three-photo strip
-      - The left and right sections must visually overlap
-      - Do not separate the layout into clean columns
-
-      Global Photo Rule:
-      - Each user-uploaded photo may be used only once in the entire composition
-      - The same photo must never appear in both the left and right sections
-      - Do not duplicate, reuse, or repeat any user-uploaded photo in any form
-      - Do not duplicate photos to satisfy layout or quantity requirements
-      - Empty space is allowed; duplication is not
-
-      Left Side – Journal Area:
-      - Use clean white scrapbook paper or white notebook paper as the base
-      - The paper color must be white, not beige, cream, or off-white
-      - The notebook paper must look physically real and used
-      - Visible natural wrinkles and creases
-      - Slightly uneven paper surface
-      - Subtle shadows created by the folds
-      - The paper must not look flat, smooth, or digitally perfect
-      - Wrinkles should feel organic and random, like paper that has been folded and handled
-      - Include visible ruled lines and rough, ripped edges
-
-      Left Side – Text:
-      - Add short handwritten-style notes or casual captions
-      - Text should feel personal and diary-like, not formal
-
-      Left Side – Photos:
-      - User-uploaded photos are primarily placed on the left scrapbook paper
-      - Photos appear as printed snapshots taped or clipped onto the paper
-      - Photos may slightly overlap the paper edges
-      - If multiple photos are placed, attach them using visible washi tape or paper clips
-
-      Left Side – Decorative Stickers:
-      - Decorative stickers placed near the photos must be contextually related to the photo content
-      - Stickers should visually match the theme, subject, or mood of the photos
-      - Do not use random or unrelated decorative stickers
-
-      Left Side – Decorations:
-      - Add stationery-style decorations around the paper
-      - Paper clips
-      - Washi tape
-      - Small stickers or hand-drawn accents
-      - Decorations should feel naturally placed and slightly imperfect, like a real scrapbook
-
-      Right Side – Three-Photo Strip (Landscape Priority):
-      - Use one vertical photo strip composed of exactly three stacked frames
-      - This strip functions as a landscape storytelling module
-
-      Right Side – Three-Photo Strip (Narrative Logic):
-      - The right-side three-photo strip functions as a cinematic storytelling sequence
-
-      - The middle frame must always use a real user-uploaded photo
-      - This middle photo acts as the narrative anchor of the strip
-
-      - The top and bottom frames are generated images
-      - Generated images must NOT reuse or duplicate any user-uploaded photo
-      - Generated images must NOT include people or human figures
-
-      - The generated frames should visually extend the mood, setting, or emotion
-        of the middle photo, similar to cinematic establishing or detail shots
-
-      - Generated content may include:
-        - Realistic landscape scenes related to the middle photo
-        - Environmental details that suggest the same location
-        - Object close-ups that carry emotional or narrative meaning
-
-      - The generated frames should emphasize:
-        - Realistic lighting
-        - Natural depth and atmosphere
-        - A cinematic, film-like quality
-
-      - The top and bottom frames should feel like:
-        - A before-and-after moment
-        - Or a near-and-far perspective
-        - Or an emotional cutaway within the same story world
-
-      - Do NOT generate symmetrical or mirrored images
-      - Do NOT generate generic or unrelated scenery
-
-
-      Right Side – Black Base:
-      - Place the entire three-photo strip on a single solid black background
-      - The black background forms the entire strip, not a thin border
-      - All three frames are embedded within the same black base
-      - The black base remains visible around the frames
-      - Include a thicker black area at the bottom
-
-      Right Side – Plastic Sleeve Detail:
-      - Cover the entire photo strip with a thin transparent plastic sleeve
-      - The sleeve resembles a real photo booth protective plastic sleeve
-      - The plastic sleeve fits the strip precisely in size and shape
-      - The surface appears slightly glossy and semi-reflective
-      - Subtle natural reflections and light distortions appear on the plastic
-      - The plastic creates a faint separation between the strip and the viewer
-      - The effect must feel physical and realistic, not like a digital overlay
-      - Avoid strong glare, heavy reflections, or exaggerated shine
-
-      Right Side – Circular Washi Tape:
-      - Add a small circular washi tape at the top of the photo strip
-      - The tape is round, like a sticker or dot
-      - The tape appears to attach the strip to the background
-      - The tape slightly overlaps the top edge of the strip
-      - The tape must not cover any frame content
-
-      Right Side – Bottom Caption:
-      - At the very bottom of the photo strip, add a tiny decorative caption
-      - The text reads exactly: "Memories"
-      - The text is extremely small and barely noticeable
-      - Use a light typewriter-style font
-      - Text color is white
-      - The caption functions only as a decorative detail
-      - Do not include any dates, numbers, or additional words or symbols
-
-      Right Side – No Text Rule:
-      - No other text is allowed on the right-side photo strip
-      - Do not place words, numbers, captions, or symbols on frames or on the black background
-
-      Overlap Rules:
-      - The right photo strip must partially overlap the left scrapbook paper
-      - The overlap should feel natural, like layered scrapbook elements
-      - The photo strip appears placed on top of the paper
-      - Maintain clear visual depth and layering
-
-      Photo Integrity Rules:
-      - Do not change faces in any way
-      - Do not stretch, compress, distort, warp, or reshape user-uploaded photos
-      - Maintain original proportions and visual integrity
-      - Do not alter the content of user-uploaded photos
-
-      Background:
-      - Soft baby blue checkered pattern background
-      - Low saturation pastel blue and white color palette
-      - Clean, flat, smooth surface
-      - Wallpaper-like appearance
-      - Fresh and airy feeling
-      - No wrinkles, folds, fabric texture, or paper texture
-      - No shadows, depth, or physical imperfections
-
-      Final Rules:
-      - Design around the photos
-      - Do not redesign or modify user-uploaded photos
-      - No alternative compositions are allowed
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 5
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Photo Strip
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
-    prompt: |
-      Using the provided image as the final visual reference, generate a clean and modern “Photo Strip” composition. The user will upload between one and three photos only, and these original photos must not be altered, stylized, recolored, enhanced, or regenerated in any way. Each uploaded photo should visually occupy approximately 50%–60% of the total canvas width, ensuring a strong presence while maintaining balanced negative space. Place a vertical photo strip centered on the canvas, featuring a solid white frame that resembles a classic photo booth strip. The uploaded photos should appear inside the strip in their original quality and order. For the background, prioritize selecting a single uploaded photo with the smallest proportion of people, or a non-portrait image primarily depicting scenes or landscapes, and crop and scale it proportionally to fill the entire canvas as a full-bleed background. Do not combine multiple uploaded photos to form the background under any circumstances. Remove any light leak, film burn, or vintage exposure effects so the overall aesthetic remains crisp, bright, and contemporary. Add small, decorative, randomly generated text elements on the white photo strip only; these texts should be inspired by the photo content or atmosphere, such as casual phrases, place-related words, or abstract design labels, and should function purely as visual decoration. Maintain a strong visual hierarchy with the centered photo strip as the primary focal point, balanced spacing, and a refined editorial layout aligned with modern lifestyle and design lab aesthetics, while strictly preserving the integrity of all user-uploaded photos.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
+    use_random_source_selection: false
+    min_images: 3
     max_images: 3
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Modular
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
-    prompt: |
-      Create a single, vertically oriented modular photo story layout that resembles a cinematic travel journal webpage, presented as one complete scrollable composition. Use one user-uploaded photo as a full-width hero background at the top, with a black gradient overlay (darker at the bottom, lighter at the top) to ensure strong text contrast. Overlay large bold title typography, a smaller location subtitle, navigation-style labels (e.g., “Home”, “Photos”, “Stories”) near the top, a visible date, and a short reflective paragraph aligned left in a clean editorial layout.
-      If fewer than six photos are uploaded, generate additional images to support the modular layout. Generated images should either complement the uploaded photos thematically or be derived from them through cropped details, maintaining strong visual coherence and consistent style.
-      As the layout scrolls downward, deepen the black gradient into a darker midsection. Place the remaining user-uploaded photos (up to five) into a centered horizontal carousel module with consistent sizing and spacing. Include visible left and right navigation arrows styled as modern, semi-transparent white carousel controls layered above the images to clearly suggest interactivity. Each photo should function as an independent module while adhering to a strict grid system. Beneath the carousel, add small UI-style supporting text modules that match the overall typographic hierarchy.
-      In the lower half, transition the gradient into another large background image to maintain vertical continuity. Overlay minimal footer-style text such as story credits or a subtle social reference.
-      Additional rule: the bottom background image should, whenever possible, use one of the user-uploaded photos (preferably a different one from the top hero image) rather than a fully generated image.
-      The overall aesthetic should be cinematic and modern, with warm natural tones, deep blacks, soft shadows, consistent typography, and a polished travel story webpage mockup feel.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
-    max_images: 5
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0116 6 Styles Creative Studio/0116 Collage - Airdrop post
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
-    prompt: |
-      The user will upload between one and four photos (maximum four). Based on these images, generate a polished, modern fashion lookbook interface that closely resembles an iOS photo album screen. If the user uploads two or three photos, the uploaded images should be arranged in a top–middle–bottom vertical sequence, preserving their order. All visual content must be strictly limited to the images uploaded by the user; no additional images may be automatically generated under any circumstances.
-      At the very top of the screen, include a clean, minimal album title that reflects the shared theme, mood, or usage scenario inferred from the user’s uploaded photos, written as a short category-style phrase rather than a full sentence. Most importantly, place a clearly visible iOS-style modal popup in the exact center of the screen, appearing as a foreground overlay above the image grid. This popup must resemble a native iOS system dialog, featuring rounded corners, a soft shadow, and a light translucent background. The modal should contain a title such as “Rename Album,” a single text input field whose content is dynamically generated to match the theme and meaning of the uploaded photos, and two action buttons at the bottom labeled “Cancel” and “Save,” styled according to standard iOS interface conventions. The text shown inside the input field should be context-aware and directly related to the visual content, avoiding generic or placeholder wording. The background images should remain clearly visible but visually secondary to the popup, reinforcing the impression that the user is actively renaming an album within an iOS photo application. At the bottom of the overall screen, include a short, subtle caption written in a warm, lifestyle-oriented tone that emotionally connects to the images and describes when, how, or why these styles or items might be used. All visual and textual elements—including the top title, the modal dialog, the generated companion images, and the bottom caption—must feel cohesive, intentional, and specifically tailored to the user’s uploaded photos, creating a realistic and believable iOS album-editing experience.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 4
-    max_images: 4
     num_iterations: 50
 
 
