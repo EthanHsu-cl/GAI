@@ -10,39 +10,55 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAhP5-QgLkjR7sP_8sSQBgUAZP7ptWQ7VMesZO6Qmnv4jY?e=s0d5ls
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bae2f0651d_26_0#slide=id.g3bae2f0651d_26_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDXoy_10c6dRIYnAATtBJJdAfNUOyFgU_ed17ddg9EjE-c?e=rvEF05
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bb00fbe62e_10_0#slide=id.g3bb00fbe62e_10_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio 2/0120 Collage - Light Leak Snapshot
+  - folder: ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 Collage - Highlight Series
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "9:16"
     prompt: |
-      Create a film-style visual layout designed strictly as a reusable presentation template.
+      Please use all user-uploaded photos as the ONLY image sources in the final composition. Every uploaded photo must be displayed exactly once. Do NOT duplicate, omit, replace, merge, hallucinate, or regenerate any photo or person. The total number of photos shown must exactly match the number of images uploaded. Each uploaded photo must preserve its original aspect ratio and proportions exactly. Do not stretch, squeeze, compress, distort, reshape, or reframe any image. Images may be resized uniformly only. No photo may be duplicated or regenerated.
 
-      ### Composition & Film Strip Structure
-      The central element is one vertical black film strip placed perfectly at the center of the canvas. This strip must occupy approximately 80% of the total image height. It must not touch the top or bottom edges of the image, leaving visible, balanced padding above and below.
+      Create a fashion editorial–style layout inspired by premium apparel brand campaigns and seasonal lookbooks. The overall composition should feel modern, minimal, high-end, and print-ready, similar to a luxury fashion brand presentation rather than a collage or scrapbook. The background must be a textured paper surface with a subtle rough, grainy, tactile quality, resembling high-quality printed or recycled art paper. The background color must be sampled from the dominant color palette of the uploaded photos to ensure visual harmony. Avoid pure white or flat digital backgrounds.
 
-      The film strip holds exactly vertically stacked photo frames. The film border is always solid black, clean, and uniform, resembling real photographic negative film. Add subtle, understated film-style markings to this border, such as small technical text (e.g., "KODAK PORTRA 400"), frame numbers (e.g., "14", "14A"), or minimal symbols commonly found on negatives. These markings must be decorative and non-distracting.
+      Select one uploaded portrait photo that is front-facing and suitable for a half-body presentation as the foreground subject, and perform precise background removal. The foreground cut-out subject must be enlarged and placed centered in the lower-middle area of the canvas, visually dominating the composition. The subject’s lower portion must be cropped off by the bottom edge of the frame itself, creating the intentional impression that the body continues beyond the canvas rather than being fully visible. This cropping must feel like a deliberate editorial framing choice, not an obstruction by other elements. The foreground cut-out subject must be placed fully above and in front of all other elements. The subject must clearly and visibly overlap the film negatives, occupying a higher visual layer at all times. Under no circumstances may the subject appear behind, embedded within, masked by, or visually subordinated to the film negatives. The subject must appear as a clean editorial cutout with no white outline, no sticker edge, no glow, no halo, and no artificial border. The cut-out subject must be an exact, pixel-faithful extraction of the original uploaded photo. No changes of any kind are allowed to pose, gesture, angle, expression, gaze direction, posture, or body language. Do NOT generate new actions, poses, angles, or interpretations. The cut-out subject must preserve exact facial features, body proportions, clothing details, wrinkles, folds, hair strands, and silhouette as in the original image. No beautification, enhancement, re-lighting, or stylization is allowed. The foreground subject must be shown as a half-body portrait only. This must be achieved strictly by cropping the original uploaded photo. Do NOT generate, extend, or hallucinate missing body parts. If the uploaded photo is already half-body or upper-body, keep it exactly as is.
 
-      ### Background Generation & Effects
-      The background filling the entire canvas behind the film strip must be a generated image.
-      - Content: Generate a natural landscape scene with sky or a composition of natural elements. The background must contain no people, man-made structures, or distracting subjects.
-      - Tonal Matching: The color palette, lighting temperature, and overall atmosphere of this generated natural background must be directly derived from, and complementary to, the dominant tones found within the three photos inside the film strip.
-      - Darkening & Texture: The entire generated background must be significantly darkened overall so it visually recedes. Apply a very subtle, fine film grain effect across the background, most noticeable near the bottom area.
-      - Light Leak: Add a warm, softly diffused light leak effect exclusively to the background image, positioned prominently along the right edge. Do not apply any light leak to the film strip itself.
+      Behind the foreground subject, arrange the remaining uploaded photos into two diagonal, parallel rows of minimalist film-style strips positioned in the lower portion of the composition. The strips must use clean, simple rectangular frames only, with smooth continuous edges. There must be NO perforations, NO sprocket holes, NO grid patterns, NO square cutouts, and NO segmented frame markings of any kind. The rectangles should feel modern, flat, and minimal, maintaining a continuous long-rectangle appearance rather than traditional film negatives, but include subtle, realistic photographic details such as small frame numbers, tiny alphanumeric markings, film stock text, or fine measurement tick marks along the edges.The two strips must be placed close together with a narrow, consistent gap between them, clearly reading as a paired set rather than separated elements. The two rows must be parallel, slightly tilted, and extend horizontally beyond the left and right edges of the canvas, partially running out of frame, creating a sense of depth and flow rather than rigid alignment. These minimalist film-style strips must visually anchor the bottom of the layout and remain clearly behind the foreground subject at all times.
 
-      ### Photo Treatment (Inside the Film Strip)
-      Strictly preserve all user-uploaded photos inside the frames: DO NOT alter faces, features, expressions, poses, or objects. DO NOT warp, crop, or change their original aspect ratio.
-      - Filter: Apply a consistent analog / cinematic film filter only to the three photos within the strip (soft contrast, subtle color shifts, natural nostalgic tone).
-      - Vignette: Apply a subtle film-style vignette gently darkening the edges and corners of each of the three photo frames.
+      Each film negative frame must contain one unique uploaded photo, used exactly once, with no repetition. Film border color and tone should be derived from and harmonize with the overall palette.
 
-      ### Typography
-      Add exactly two handwritten-style words in an elegant, delicate script font. The words should be inspired by the emotional theme of the photos.
-      - Word 1 Placement: Near the bottom-left area of the second (middle) photo frame.
-      - Word 2 Placement: Near the top-right area of the third (bottom) photo frame.
-      - Each word may slightly overlap its respective photo frame and extend onto the surrounding background, creating a layered, organic look.
+      All headline typography and primary text must appear only in the upper portion of the composition, clearly separated from the imagery below. The headline should use an elegant, high-quality serif typeface with a refined editorial feel. Text content should be inferred from the user’s photos or mood and must avoid years or numeric dates. The headline should read like a fashion campaign title, not promotional copy.
+
+      Supporting text should be minimal and secondary. Avoid loud graphics, stickers, icons, UI elements, illustration styles, cartoon effects, AI artifacts, surreal distortions, or decorative gimmicks.
+
+      The final result should read as a professionally art-directed fashion editorial or lookbook cover, with clear hierarchy: headline at the top, foreground cut-out subject visually on top of the film negatives, and film negatives grounding the bottom. The image must feel cohesive, premium, restrained, and suitable for brand presentation or editorial use.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 5
+    max_images: 6
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 Collage - Calendar
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Prompt: A photorealistic flat lay digital scrapbook collage with a strict defined stacking order.
+
+      Composition & Hierarchy: The core of the collage grouping is anchored vertically within the middle third of the canvas width, organized in the following layers from bottom to top:
+
+      Layer 1 (Background Base): A blurred, empty minimalist modern urban street scene with clean architectural walls and pavement. The color palette is dominated by soft, muted Japanese-style pastel tones (beige, light cream, pale grey), creating a calm, low-saturation, and airy atmosphere. Directly on this background surface, in the top-left corner, there is a title rendered in an elegant, casual handwritten script, arranged in two lines: "My Monthly" positioned directly above "Recap", rendered in a muted charcoal color.
+
+      Layer 2 (Bottom Element - Placed directly on the background): A 1:1 square calendar grid made of textured pure white paper. It features a row of fashionable, thin sans-serif weekday abbreviations (e.g., MON, TUE) along the very top edge, immediately followed below by tightly filled numerical dates in the same font, with no year mentioned. Its visual appearance and design serve as a neutral, standalone base, completely independent of and visually unrelated to the content or style of the source photographs in Layer 3 overlying it.
+
+      Layer 3 (Middle Overlay - Scattered across the calendar and spilling onto the background): Three oversized Polaroid-style photos with white borders, scattered in a highly irregular, haphazard fashion, completely breaking central symmetry. Each Polaroid frame holds a unique, distinct source photograph rendered completely unchanged and uncropped. There is no repetition among the images within the four frames. While clustered around the calendar area, they significantly spill over the edges of the calendar grid, extending outwards and resting directly on the surrounding Layer 1 background surface. Their visual scale is significantly larger than the underlying calendar grid, heavily dominating the composition and obscuring most of the dates below them.
+
+      Layer 4 (Top Details - Placed on top of the photos): Two realistic matte photographic stickers depicting non-human subjects (e.g., objects, nature), precisely die-cut without white borders, alongside one piece of translucent, textured torn washi tape. These items are the topmost elements, overlapping the Polaroid photos beneath them.
+
+      Overall Style: High-resolution photograph with authentic textures and soft natural lighting across all layers.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
@@ -50,303 +66,93 @@ tasks:
     max_images: 3
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio 2/0120 美式高校置物櫃
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "2:3"
-    prompt: |
-      Use the provided 2–5 input photos as visual source materials and transform them into a single, cohesive final artwork inspired by an American high school locker aesthetic.
-      The entire background must be the surface of a school locker only. The locker door fills the entire frame with no visible hallways, classrooms, or surrounding school environments. Everything appears attached directly onto the locker surface.
-      Set the locker background color to a fixed pink tone defined by the HEX color code #ff82a0.
-      Treat this color as locked and non-negotiable. Do not increase saturation, do not shift hue, and do not reinterpret this pink. Avoid neon, fluorescent, overly vivid, or pastel variations. The locker color must stay within this exact pink range.
-      Apply this pink to a metal locker surface with a slightly matte-to-satin finish. Subtle reflections, soft highlights, and horizontal locker vents should remain visible without altering the base color.
-      At the center, place a slightly wrinkled poster or paper sheet taped casually onto the locker door. Integrate the people or subjects from the input photos into this central poster area, arranged as a cohesive group image resembling a fashion editorial, pop album cover, or stylized yearbook photo.
-      Surround the central poster with playful locker decorations: stickers, star shapes, ticket stubs, doodles, handwritten-style graphics, polaroid photos, and nostalgic icons. These elements should complement the fixed pink locker color without overpowering it.
-      The overall mood should be youthful, nostalgic, and feminine with a Y2K-inspired “hot mess” locker aesthetic. Maintain balanced saturation, soft contrast, and a polished scrapbook collage finish.
-      Ensure the final output looks like one finished poster-style artwork photographed directly on a pink locker door, with the locker’s color clearly framing the entire composition.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
-    max_images: 5
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio 2/0120 拍貼系列-Style3 2020S
+  - folder: ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 Musical taste
     model: gemini-3-pro-image-preview
     resolution: "1K"
     aspect_ratio: "3:4"
     prompt: |
-      Use all uploaded photos as the only subjects. Their real identities must remain recognizable and consistent.
-      Preserve the subjects’ facial features, identity, skin tone, hairstyle, and body proportions EXACTLY as in the uploaded photos.
-      Do not redraw, replace, or re-generate the people.
-      Adding any other person or repeating the same person is prohibited.
-      This is a photographic purikura-style filter application inspired by CURRENT Japanese purikura trends (FJK / SJK / LJK),
-      NOT a realistic portrait and NOT a modern beauty editorial.
+      Use the TWO uploaded images as strict references. Image 1 is the user’s real portrait photo and must be used only to preserve the person’s true identity. Image 2 is the music app UI screenshot and must be used only as the phone screen content. Create ONE single composite image only.
 
-      Identity preservation rules
+      The person’s identity must be preserved exactly. Facial structure, facial proportions, hairstyle, hair color, and skin tone must remain clearly recognizable. Do not beautify, stylize, idealize, cartoonize, or alter the person’s real appearance. This must remain fully photorealistic.
 
-      – The same people must remain clearly identifiable
-      – Facial structure, face shape, and hairstyle must remain consistent
-      – Do NOT replace faces
-      – Do NOT turn subjects into illustrations, anime, or dolls
+      The person must appear as a real-scale adult human, not miniature. The person’s full height should visually occupy approximately 75–85% of the phone’s long edge, making the figure feel large, confident, and dominant rather than decorative. Head size must feel natural relative to the phone width. Legs must remain full-length without shortening. Feet must clearly and firmly stand on the phone screen surface with full sole contact. The person must not float, sink, clip, or intersect unnaturally with the phone. The posture must feel relaxed and natural, standing upright with balanced weight, gently touching or adjusting the headphones with one hand. The headphones must be white or light gray. Feet must wear realistic shoes and be physically grounded.
 
-      Facial treatment (EYES ARE CRITICAL – CURRENT PURIKURA STYLE)
+      Create a premium, clean, high-end commercial studio visual where a real-scale human is physically standing on top of a single smartphone displaying the music app interface. This is not a fantasy illustration, not a miniature diorama, and not a conceptual art piece. The image must feel like a polished global music-streaming brand key visual.
 
-      – Eyes must appear about 25–30% larger than the original image, achieved through facial proportion refinement, NOT exaggerated scaling
-      – Slightly taller eye shape with soft rounded corners
-      – Clean, soft upper eyelid line (no harsh eyeliner, no cat-eye)
-      – Subtle lower eyelid fullness (natural aegyo-sal impression, not drawn)
-      – Iris size and color remain realistic (no glow, no anime shine)
-      – Eye whites clean and bright but NOT over-whitened
-      – Eyes must feel soft, friendly, and human, never cartoonish or doll-like
+      The smartphone must be a SINGLE, realistic modern device only. No duplicated phones, no stacked phones, no reflections, no mirrors, and no secondary devices.
 
-      Face & skin:
-      – Overall face slightly more compact and centralized (very subtle)
-      – Mild jawline softening only
-      – Skin retouching light, clean, and purikura-like
-      – No plastic skin, no heavy whitening, no editorial beauty look.
+      The phone framing must EXACTLY match the reference image (Image 4). The smartphone must appear very large and very close to the camera, strongly dominating the lower portion of the frame. The device must occupy a substantial visual mass so that the phone clearly feels foreground-heavy rather than decorative. One far-end corner of the phone must be intentionally cropped out of the frame, exactly like the reference. This cropped corner must be the far, receding top-right corner of the phone, cleanly cut off by the image edge. The crop must feel deliberate, photographic, and natural.
 
-      Style & booth identity
+      The phone angle must EXACTLY match the reference. The phone lies completely flat on the ground plane and is viewed from a calm, low-angle three-quarter perspective. The near end of the phone (bottom-left) must feel very close to the camera, while the far end (top-right) gently recedes into the background. The camera must feel close to the phone surface, not pulled back. The phone must never appear small, distant, or centered loosely in the frame.
 
-      Create a playful four-frame photo-booth collage styled like a CURRENT Japanese purikura booth popular among FJK / SJK / LJK.
+      The phone body must remain physically correct and geometrically stable. The device must NOT bend, warp, taper, compress, skew, or distort due to perspective. The long edges of the phone must remain straight and parallel in perspective. Thickness must remain consistent from end to end. The screen must remain a true rectangle in perspective with no keystone distortion.
 
-      Overall vibe:
-      – cute
-      – trendy
-      – clean
-      – soft
-      – girly
-      – Instagram-ready
-      – unmistakably modern Japanese purikura aesthetic
+      The visible screen area must feel broad, generous, and dominant. Bezels must appear thin and realistic. The music app UI must remain sharp, readable, perfectly flush to the screen surface, and completely free of distortion or perspective warping.
 
-      Layout
+      The camera uses a low-angle three-quarter studio perspective identical to the reference image. The camera is positioned slightly above the phone surface and looks across it rather than down onto it. The camera must NOT be top-down, NOT front-facing, and NOT steeply tilted. Use a natural commercial lens look with no wide-angle exaggeration.
 
-      – Perfect 2×2 four-frame grid
-      – Equal-sized panels
-      – Seamlessly stitched edge-to-edge
-      – NO borders, margins, dividers, or white lines
-      – One unified purikura output (not separated images)
+      Use clean, soft, evenly distributed studio lighting with a large diffused key light from the upper-left and a gentle fill light. Lighting must be uniform and controlled. There must be absolutely NO vignette, NO dark corners, NO edge falloff, and NO spotlight effect. Shadows must be soft and minimal. A subtle, realistic contact shadow must appear directly beneath the shoes on the phone screen and beneath the phone on the ground plane, grounding both physically.
 
-      Subjects & poses (REFERENCE-ALIGNED)
+      The background must be a seamless, infinite studio gradient in light sand tones. The background must be smooth, uniform, and calm, with no texture, no walls, no visible floor line, no color banding, and no environmental elements. The overall palette must feel bright, neutral, premium, and airy.
 
-      – All subjects must appear together in all four frames
-      – Relative positions and scale remain consistent across frames
-      – Each frame must feature a DIFFERENT pose
-      – Poses must closely imitate the reference purikura poses, including:
-        • peace signs close to the face or eyes
-        • cheek-touch pose
-        • finger-heart near chin
-        • slight head tilt with close shoulder distance
-        • leaning together for intimacy
-      – Expressions should be soft, cute, and natural:
-        gentle smile / shy smile / light pout
-      – Avoid exaggerated comedy poses or large spacing between subjects
-      – Clothing must remain unchanged
+      The person and the phone must share identical light direction, color temperature, and shadow logic. Integration must feel physically believable and visually refined. There must be no vignette, no dark halo around the subject, no uneven exposure, and no contrast-heavy edges.
 
-      Head accessories (KEY UPDATE – MORE VIVID & EXAGGERATED, REF-ACCURATE)
-
-      – Add bows or headbands to SOME subjects only
-      – Accessories appear in RANDOM 1–2 frames only
-      – At most TWO frames may contain head accessories
-      – Never appear in all four frames
-
-      – Sequined pink ribbon headband
-      – Lace plush headband (soft, fluffy texture)
-      – Kitty-style pink glitter bow headband (purikura booth rental feel)
-
-      – Accessories should feel playful, bold, and slightly exaggerated
-      – Slightly oversized but controlled
-      – Clearly readable at thumbnail size
-
-      Color direction (IMPORTANT):
-      – High-saturation candy colors:
-        hot pink, vivid baby pink, cherry red, bright mint green
-      – Must stand out clearly from hair and background
-      – Avoid muted or dusty tones
-
-      Placement rules:
-      – On top of the head or slightly off-center
-      – Do NOT obscure bangs, eyes, eyebrows, or facial features
-
-      Restrictions:
-      – Do NOT use animal ears
-      – Do NOT use cosplay or luxury accessories
-      – Do NOT overload accessories
-
-      Background & lighting
-
-      – Simple, clean purikura booth background
-      – Soft pastel tones only (pink / white / light purple)
-      – Flat, friendly booth lighting
-      – Soft glow without haze
-      – No detailed environments
-
-      Decorations (CRITICAL UPDATE – HEARTS ONLY, NON-NEON, REF-MATCHED)
-
-      – DO NOT add ANY text, letters, numbers, words, or typography of any kind
-      – DO NOT add speech bubbles, stars, sparkles, stickers, outlines, glow effects, or neon effects
-      – Add ONLY hand-drawn heart doodles
-
-      Heart appearance (STRICTLY MATCH REFERENCE – NOT NEON):
-
-      – Hand-drawn pen / marker style (like writing directly on purikura print)
-      – Flat color fill or simple outline ONLY
-      – NO glow, NO neon, NO light emission, NO gradient
-      – Uneven, imperfect stroke thickness
-      – Slight wobble, casual asymmetry
-      – Organic, human-drawn feeling
-      – NOT vector, NOT sticker-like, NOT digital icon style
-
-      Heart color palette ONLY:
-      – hot pink
-      – bright red
-      – vivid pastel pink
-      – matte or flat ink appearance (no shine)
-
-      Heart distribution rules (VERY IMPORTANT):
-      – ONLY 2 out of the 4 frames may contain hearts
-      – The remaining 2 frames must have ZERO decorations
-      – Do NOT distribute hearts evenly across frames
-      – Heart quantity must be limited and intentional (a few hearts per frame)
-
-      Placement:
-      – Floating loosely around faces, cheeks, or hands
-      – Near gestures (peace signs, finger-heart)
-      – Never overlapping eyes, eyebrows, nose, or mouth
-      – Must float clearly ON TOP of the photo layer
-
-      STRICTLY FORBIDDEN:
-      – Neon-style hearts
-      – Glowing or luminous hearts
-      – Gradient or outlined neon hearts
-      – Hearts in all four frames
-      – Any symbols other than hearts
-      – Decorative overload
-
-      Mood & intent
-
-      Cute, intimate friendship memories captured in a CURRENT Japanese purikura booth.
-      The final image should feel:
-      – pastel
-      – bubbly
-      – clean
-      – softly retouched
-      – trendy
-      – unmistakably modern Japanese purikura.
+      The final image must look like a real, high-end global music streaming campaign visual: clean, minimal, bright, realistic, premium, calm.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
-    max_images: 5
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 1
     num_iterations: 50
+    multi_image_config:
+      enabled: true
+      mode: sequential
+      folders:
+        - ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 Musical taste/Additional
+      allow_duplicates: true
 
-  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio 2/0120 旅遊機票
+  - folder: ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 農民曆-TW
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "4:5"
     prompt: |
-      Use the uploaded photo as the primary subject. The person in the photo becomes the main character.
+      A high-quality, perfectly vertical top-down photograph of a daily calendar pad flat on a vintage surface, captured directly overhead with zero perspective distortion.
 
-      Preserve the facial features clearly and accurately, maintaining natural proportions, and ensure the face is clearly in focus.
+      ### Physical Object & Environment:
 
-      Do not alter the person's identity, facial features, face shape, skin tone, body proportions, or hairstyle.
+      Soft, natural side-lighting emphasizes the paper grain and the slight thickness, casting a realistic shadow onto the background. The background features traditional Taiwanese Decorative Tiles with classic geometric patterns. These tiles have a glazed ceramic texture, and thin, clean grout lines, evoking a nostalgic 1950s-70s atmosphere.
 
-      Create a simple, neutral, and balanced realistic travel flat lay photograph.
+      ### Physical Object:
 
-      Use a strict overhead perspective (flat lay perspective) for the entire scene.
+      - Material: A magazine-thick stack of off-white, semi-translucent paper (#FDF9F2). The paper shows a 5% ghosting effect, faintly revealing the layout underneath.
 
-      Randomly generate a city from around the world, emphasizing randomness; do not pre-set or imply any city.
+      - Top Binding: Secured at the very top by a solid horizontal Red binding strip (spine).
 
-      Exclude Kyoto. Kyoto must not appear or be selected in any form.
+      - Torn Detail: A neat, horizontal torn edge at the top of the paper sheet, directly below the binding, showing fine, evenly frayed fibers from a clean manual rip.
 
-      Convert the uploaded photo into a Polaroid photograph taken at a randomly generated city's famous landmark.
+      - Lighting: Soft side-lighting emphasizes the paper grain, torn texture, and the stack's vertical depth.
 
-      Polaroid photographs exhibit subtle, instant imaging effects with soft film grain, gentle tonal transitions, and subtle simulated filters, while maintaining a realistic and natural texture.
+      ### Design & Content:
 
-      The Polaroid photograph is located at the visual center and is the main focal point of the composition.
+      - Layout: Modernized Traditional Chinese Almanac (Tung Shing) in a strictly limited 4-color palette: Navy Blue (#00437A), Red (#D32F2F), Light Water Blue (#A5C6D8), and Soft Pink (#F2B5B5).
 
-      The Polaroid photograph must occupy at least 50% of the entire image area, clearly occupying the center of the frame and becoming the undisputed visual focal point.
+      - Illustration: A modern hand-drawn caricature with grainy, dry-brush lithographic textures (no pencils/crayons), achieving a highly recognizable, 20% realistic likeness closely capturing the user's actual facial features. The character, depicted in a relaxed and happy manner with face fully visible, is performing a humorous, low-energy slacking action that directly illustrates the text in the bottom section.
 
-      The cityscape in the Polaroid photograph should present a modern yet natural style:
+      - Typography: All text in Traditional Chinese (繁體中文) using Heavy Bold Ming/Song Serif font (粗明體) with a simulated print texture.
 
-      Natural sunlight, clear skies, neutral-toned architecture, and realistic colors.
+      - Composition:
 
-      There should be no sunset atmosphere, no golden hour light, and no nostalgic or retro feel.
+        1. Header: "今日運勢" (centered, unframed).
 
-      Add handwritten text in the lower right corner of the white Polaroid frame, displaying only the city name.
+        2. Sides: Symmetrical Navy/Red scroll banners positioned on the left and right sides, each containing a traditional 4-character auspicious Chinese idiom (e.g., 心平氣和/ 萬事如意/ 心想事成/ 平安喜樂/ 身體健康/ 大吉大利/ 一帆風順).
 
-      The handwritten font should be natural, clean, simple, and legible, without any decorative fonts or other text.
-
-      Around the Polaroid photograph, place 3-4 iconic items or miniature landmarks related to the randomly generated city (e.g., souvenirs, architectural models, cultural symbols, maps, food, or travel goods).
-
-      All auxiliary items must be unique and cannot be duplicated.
-
-      Duplicate items, mirrored copies, or duplicate instances of items are not allowed.
-
-      No two auxiliary items can belong to the same category or type.
-
-      Each object must represent a distinct category (e.g., a miniature landmark, a cultural symbol, a food item, a travel accessory, a ticket-like item).
-
-      No multiple objects of the same type may be included under any circumstances.
-
-      All objects must be placed on the same plane as the map.
-
-      Objects must not float or hover.
-
-      Each object must be in full contact with the plane and cast a natural contact shadow.
-
-      All supporting elements must be placed adjacent to the Polaroid photograph and arranged closely around it.
-
-      Objects must be arranged in a compact, tiling composition with minimal spacing.
-
-      Objects visually cluster around the Polaroid photograph with minimal gaps between them.
-
-      Multiple objects must touch or be close to the edges of the Polaroid photograph and the frame.
-
-      Some objects may be partially cropped by the frame to reinforce the compact, edge-to-edge layout.
-
-      The total area of ​​the Polaroid photograph, the ticket, and surrounding objects must exceed 85% of the frame.
-
-      There should be virtually no blank or negative space in the image.
-
-      Place a ticket next to the Polaroid photograph. The destination city name on the ticket must be clearly visible, unobstructed, and easily identifiable at all times.
-
-      It must not be cropped, obscured, or partially hidden.
-
-      Do not add any labels such as "Name," "Passenger Name," individual names, or form fields.
-
-      The background is a large world map occupying the entire frame.
-
-      The map surface is a very light off-white tone.
-
-      Land and sea areas are presented in extremely low contrast, almost identical tones, with only subtle tonal differences distinguishing them.
-
-      Geographical outlines are almost invisible and slightly faded.
-
-      The map appears visually recessed and understated, serving only as a background layer and not clashing with the Polaroid photo, ticket, or surrounding objects.
-
-      Soft natural light shines in from one direction.
-
-      The soft sunlight falls on the world map,
-
-      creating dappled light and shadow that enhances the map's texture while maintaining a subtle and unobtrusive effect.
-
-      Light and Atmosphere:
-
-      Balanced exposure, natural contrast, and simple composition.
-
-      A modern, sophisticated, and realistic style.
-
-      It explicitly rejects retro and nostalgic elements.
-
-      There is no old-fashioned, vintage, rustic, or outdated aesthetic.
-
-      No specific year or period is mentioned.
+      3. Bottom: Navy/Red bordered frame containing a Red circular "宜" stamp. Following the stamp is exactly one humorous, "slacking/low-energy survival" phrase.
+      - The word "死" is strictly prohibited. Avoid using "躺平" as a standalone term.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false
-    min_images: 3
-    max_images: 3
+    min_images: 1
+    max_images: 1
     num_iterations: 50
 
 

@@ -1,0 +1,478 @@
+
+template_path: templates/I2V templates.pptx
+comparison_template_path: templates/I2V Comparison Template.pptx
+testbed: http://192.168.31.161:8000/image_generation/
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 3
+
+schedule:
+  start_time: ""
+  comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
+
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB_tOmO-3osR4Ab6Op__T4PAUis5RFUAHiLzOurNK3MvBk?e=5drfDa
+root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3ba8ee6735e_0_0#slide=id.g3ba8ee6735e_0_0
+
+tasks:
+  - folder: ../Media Files/Nano Banana/0119 2 Styles CNY/0119 時尚港風全家福
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "5:4" 
+    prompt: |
+      Generate ONE single horizontal image with a strict 5:4 aspect ratio.
+      Photorealistic editorial photography only (no illustration, no painterly rendering).
+
+      CORE CONCEPT:
+      A cinematic Lunar New Year family portrait with a subtle Hong Kong vintage atmosphere.
+      The image should feel intimate, elegant, and nostalgic, with controlled darkness and warm emotional focus.
+
+      SUBJECT INPUT & FACE ID (STRICT):
+      The user will upload 1 to 3 real portrait photos.
+      Use EXACTLY the same number of people (1–3 only).
+      Strictly preserve face identity:
+      - facial structure, proportions, eyes, nose, mouth, jawline must match exactly
+      - no beautifying, no idealization, no face reinterpretation
+      - maintain natural skin texture and age appearance
+      Face ID accuracy is more important than artistic stylization.
+
+      SCENE SETTING (LOCKED):
+      Vintage dining room interior at night.
+      Walls: beige vertical pinstripe wallpaper.
+      Left wall: ONE large framed traditional Chinese floral painting.
+      - The painting must occupy roughly 50% of the visible wall height.
+      - Dark wooden frame, classic floral subject.
+
+      Right side:
+      - sheer white curtains covering a window
+      - a tall vintage floor lamp with a cream-colored scalloped fabric lampshade
+
+      FURNITURE & COMPOSITION:
+      A dark wooden rectangular dining table centered in the frame.
+      Classic wooden chairs around the table.
+
+      Seat placement:
+      - 1 person → center-back seat (facing camera)
+      - 2 people → left + center-back seats
+      - 3 people → left + center-back + right seats
+
+      Camera:
+      - eye-level
+      - straight-on
+      - stable, symmetrical framing
+      - table edge visible in the foreground
+
+      TABLE OBJECTS (MINIMAL):
+      - Blue-and-white porcelain teapot or lidded jar near center-left
+      - Small structured handbag near center-right
+      Clean, uncluttered table surface.
+
+      WARDROBE (SATURATED RED):
+      All subjects wear Lunar New Year clothing in vivid, saturated red tones.
+      - qipao / cheongsam or Hong Kong vintage-inspired attire
+      - reds should appear bright, festive, and clean
+      Avoid muted maroon or brownish reds.
+
+      LIGHTING (FACE-PRIORITY, ADJUSTED):
+      Overall exposure remains slightly dark and cinematic.
+
+      Primary key light:
+      - warm yellow tungsten tone
+      - soft but intentionally controlled on faces
+      - faces and upper bodies must appear clearly brighter than the background
+      - facial features must be fully readable, well-exposed, and crisp
+      - avoid overexposure or hotspot highlights on skin
+
+      Lighting behavior:
+      - faces are the brightest elements in the frame, but remain natural and balanced
+      - smooth falloff toward the background
+      - no harsh shadows across eyes or facial contours
+
+      The floor lamp:
+      - emits soft ambient light only
+      - acts as a secondary practical light
+      - must NOT compete with the key light
+
+      COLOR GRADING:
+      Apply a subtle purple-red cinematic tint across the image.
+      - gentle magenta undertones
+      - warm reds and deep browns
+      Avoid yellow-green casts or overly neutral grading.
+
+      EXPRESSION:
+      All subjects display gentle, natural smiles.
+      Warm, calm, and composed.
+
+      TYPOGRAPHY (FINAL, FIXED):
+      Add text at the bottom center:
+      Text content: " Lunar New Year"
+
+      Typography rules:
+      - Google Font: Raleway
+      - Font weight: Black 900
+      - pure white color only
+      - NO outline
+      - NO shadow
+      - NO glow
+      - NO distortion or proportion changes
+      Clean, modern, editorial presentation.
+
+      TEXT SCALE (EDITORIAL EMPHASIS):
+      - Increase the text size significantly compared to standard caption scale.
+      - The text should appear approximately 30% larger than a typical editorial title.
+      - The text should feel bold, dominant, and confident, occupying a strong visual presence in the lower portion of the frame.
+      - The text may span a large horizontal width and visually anchor the composition.
+
+      TEXT BEHAVIOR (GRAPHIC OVERLAY — CRITICAL):
+      - The text is a foreground graphic layer, not part of the physical scene.
+      - The text ignores all occlusion, safety, and avoidance rules.
+      - The text is allowed to overlap any object, including the table, hands, arms, or furniture.
+      - The text may touch or press directly against the bottom edge of the frame.
+      - No bottom margin or safe area is required.
+      - The overlap must feel intentional and confident, like a high-fashion editorial layout.
+      - The text must remain fully readable and must not be cropped.
+
+      RESTRICTIONS:
+      - One single image only
+      - No collage, no borders
+      - No extra text
+      - No modern decor
+      - No ceiling lights
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 3
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0119 2 Styles CNY/0119 可印製紅包
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      FINAL PROMPT (FOR GEMINI 3 — STRUCTURE LOCKED, CONTENT PRESERVED)
+      Create a flat, print-ready, UNFOLDED Chinese red envelope dieline layout.
+      The final output image MUST be in an exact 3:4 aspect ratio and suitable for direct A4 printing.
+      This prompt fully overrides and replaces any previous instructions.
+      All structural, dimensional, layout, and placement rules below are strict and non-negotiable.
+
+      ENVELOPE TYPE
+      Traditional flat Chinese red envelope (side-glued).
+
+      DIELINE STRUCTURE & DIMENSIONS (ABSOLUTELY LOCKED)
+      The unfolded dieline MUST include BOTH a back panel and a front panel.
+      Panel dimensions (real-world scale):
+      Back panel (left): 9 cm (width) × 18 cm (height)
+
+
+      Front panel (center-right): 9 cm (width) × 18 cm (height)
+
+
+      When unfolded flat:
+      Total main body width (back + front) = 18 cm
+
+
+      This width MUST be preserved exactly before adding flaps
+
+
+      Required flaps:
+      Right-side glue flap: 1 cm wide, attached to the outer edge of the FRONT panel
+
+
+      Bottom flap: 1 cm extending downward across BOTH panels
+
+
+      Top closure flap: 2 cm extending upward across BOTH panels
+
+
+      Unfolded layout order (left to right):
+      Back panel (9 cm)
+
+
+      Front panel (9 cm)
+
+
+      Right-side glue flap (1 cm)
+
+
+      Top and bottom flaps extend vertically and do NOT replace panel width.
+      The back and front panels MUST appear as two equal, clearly visible vertical sections.
+      Do NOT merge, hide, collapse, or visually downplay the back panel.
+
+      LAYOUT & LINE TREATMENT
+      Show the dieline fully unfolded and flat in ONE single image
+
+
+      All proportions must be precise and to scale
+
+
+      Do NOT warp, stretch, rotate, mirror, or reinterpret the structure
+
+
+      Show clean outer dieline outlines only
+
+
+      Do NOT include numeric dimensions, arrows, labels, or measurement text
+
+
+      Background outside the dieline must be pure white
+
+
+      Center the entire dieline within a strict 3:4 canvas
+
+
+
+      DOU-FANG STYLE CUTTING INDICATORS (VISUAL ONLY)
+      Add traditional “斗方” paper-cut style cutting indicators around the OUTER perimeter.
+      Allowed:
+      Small, subtle scissor icons
+
+
+      Light dashed or dotted cutting guide lines OUTSIDE the dieline
+
+
+      Rules:
+      Decorative reference only
+
+
+      Must NOT alter the dieline shape
+
+
+      Must NOT appear inside any panel
+
+
+      Traditional and restrained (not cute, not cartoonish)
+
+
+
+      USER IMAGE HANDLING (CRITICAL — NO EXCEPTIONS)
+      ALL user-uploaded images MUST be used and shown.
+      Rules:
+      Every uploaded image must appear at least once
+
+
+      Do NOT omit, replace, or drop any image
+
+
+      Identity must be preserved exactly (no stylization, no distortion)
+
+
+      If TWO people are uploaded:
+      Both people must appear together on the FRONT panel
+
+
+      They should stand side by side
+
+
+      They should be smiling naturally
+
+
+      They should wear coordinated Lunar New Year–appropriate clothing (festive red or traditional New Year attire)
+
+
+      Poses should feel celebratory, warm, and respectful
+
+
+
+      CONTENT PLACEMENT RULES (VERY IMPORTANT)
+      FRONT PANEL ONLY
+      ALL portraits and main visuals go on the FRONT panel safe area only
+
+
+      BACK PANEL (LEFT) RESTRICTIONS
+      The back panel must remain visually secondary.
+      Do NOT place on the back panel:
+      Portraits
+
+
+      People or animals
+
+
+      Main illustrations
+
+
+      Large or attention-grabbing text
+
+
+      Allowed on the back panel:
+      Subtle background texture
+
+
+      Light traditional patterns
+
+
+      Minimal border decoration only
+
+
+      ABSOLUTE PROHIBITION
+      Do NOT generate any envelope pocket lines, fold seams, or inner-envelope crease lines on the back panel
+
+
+      Especially NO horizontal flap or pocket line near the top of the back panel
+
+
+      The back panel must appear as one clean, uninterrupted decorative surface
+
+
+
+      DESIGN CONTENT & STYLE (PRESERVE CURRENT VERSION FEEL)
+      Preserve the visual richness and festive quality of the current successful design output.
+      Design characteristics:
+      Rich red base color
+
+
+      Gold as the main accent
+
+
+      Ornamental borders and frames
+
+
+      Traditional Chinese motifs (clouds, lanterns, florals, geometric patterns)
+
+
+      Gold-foil, embossed, or stamped visual effects
+
+
+      Tone:
+      Festive
+
+
+      Refined
+
+
+      Traditional
+
+
+      Elegant
+
+
+      NOT allowed:
+      Cute, cartoonish, childish styles
+
+
+      Over-simplified or playful illustration styles
+
+
+      Visual emphasis must remain on the FRONT panel only.
+
+      TEXT ELEMENTS
+      Include ONE or TWO celebratory text elements, randomly selected from:
+      「新年快樂」
+
+
+      「2026」
+
+
+      Short Chinese New Year blessings, such as:
+
+
+      恭喜發財
+
+
+      財源滾滾
+
+
+      萬事如意
+
+
+      平安喜樂
+
+
+      福氣滿滿
+
+
+      心想事成
+
+
+      年年有餘
+
+
+      Text rules:
+      Text must be printed as part of the design (not floating)
+
+
+      Gold-foil, embossed, or seal-stamp style typography
+
+
+      Text may appear on the front panel or back panel
+
+
+      Do NOT place text on glue flap or folding flaps
+
+
+      Keep balance and legibility
+
+
+      Avoid overcrowding
+
+
+
+      OUTPUT REQUIREMENTS
+      Single unfolded dieline image
+
+
+      No mockups
+
+
+      No folded views
+
+
+      No perspective distortion
+
+
+      Structural accuracy takes priority over decoration
+
+
+
+      ABSOLUTE CONSTRAINT (FINAL)
+      Do NOT change the envelope structure, proportions, panel order, or dimensions under any circumstances.
+      All creative freedom applies ONLY to decoration and content placement within these locked rules.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 1
+    max_images: 3
+    num_iterations: 50
+
+
+# Comments and documentation
+comments:
+  folder_structure: "Each task folder should contain 'Source' and 'Generated_Output' subfolders. For multi-image tasks, also include 'Additional' subfolder."
+  reference_folder: "Optional: Path to folder containing third set of images for 3-way comparison"
+  template_usage: "use_comparison_template: true uses comparison_template_path (3 placeholders), false uses template_path (2 placeholders)"
+  model: "Gemini model to use for generation. 'gemini-2.5-flash-image' (max 3 images, faster), 'gemini-3-pro-image-preview' (max 14 images, better quality). Must be specified per task; defaults to 'gemini-2.5-flash-image' if omitted. Root-level model is ignored."
+  resolution: "Output resolution. Options: '1K' (default). Must be specified per task if non-default value is needed."
+  aspect_ratio: "Output aspect ratio. Valid options: '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'. If omitted, auto-detects the closest ratio from source image dimensions."
+  use_multi_image: "Set to true to enable multi-image mode from Additional folder, false for single-image mode"
+  output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report. Example: with 4 tasks and group_tasks_by=4, creates 1 report; with 8 tasks, creates 2 reports."
+  
+  random_source_selection:
+    description: "Mode for selecting N images from Source folder per API call (images can be reused)"
+    use_random_source_selection: "Set to true to enable random source selection mode"
+    min_images: "Minimum images per API call (default: 1)"
+    max_images: "Maximum images per API call (default: model max, e.g., 3 for flash, 14 for pro)"
+    num_iterations: "Number of API calls to make. Defaults to number of source files if omitted."
+    notes: |
+      - All images in 'Source' folder - no 'Additional' folder needed
+      - num_iterations controls API call count (defaults to source file count)
+      - Image counts spread from min to max across iterations
+      - Images CAN be reused across iterations (not unique partitions)
+      - DETERMINISTIC: same folder = same selections every run
+      - Great for regression testing: update source images, re-run, compare results
+      - Use gemini-3-pro-image-preview model for up to 14 images per call
+    example: |
+      # 10 source images, 50 iterations = 50 API calls, each picks 1-5 images
+      use_random_source_selection: false
+      min_images: 1
+      max_images: 5
+      num_iterations: 50  # Optional: defaults to number of source files
+      model: gemini-3-pro-image-preview
+  
+  multi_image_config:
+    description: "Configuration for multi-image generation (Source + Additional folders mode)"
+    enabled: "Must be true to use multi-image features"
+    mode: "sequential: consistent reproducible pairing | random_pairing: randomly select from Additional folder"
+    folders: "Array of folder paths to select additional images from (typically ['../path/to/folder/Additional'])"
+    allow_duplicates: "true for sequential mode (recommended) | false: try to avoid repeating combinations in random mode"
+  multi_image_example_single: "Set 'use_multi_image': false to process only images from Source folder without additional images"
+  multi_image_example_dual: "Set 'use_multi_image': true with multi_image_config to pair Source images with Additional folder images sequentially"

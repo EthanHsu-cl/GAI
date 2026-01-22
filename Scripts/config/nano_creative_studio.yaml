@@ -11,202 +11,105 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgATxxcoyHL5ToKqLbA6ziQiAbrzAZ08HYbakFGo8abPE0Q?e=QIyiPU
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bacbb59b85_10_65#slide=id.g3bacbb59b85_10_65
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCY2HeNHRz_RqS_WmQJTl-xAXC0ogwbe-rEndM9AAyCFl0?e=Zmogm5
+root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bb05a65ca3_0_26#slide=id.g3bb05a65ca3_0_26
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio/0120 Collage - Film Strip
+  - folder: ../Media Files/Nano Banana/0122 My Favorite Wine Beer
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "9:16"
+    aspect_ratio: "4:5"
     prompt: |
-      **Role:** Professional Graphic Designer & Editorial Layout Expert.
+      Input Assets
+      The user will upload two images only:
 
-      **Task:** Create a vertical "Travel Memory" poster composition using the uploaded reference images.
+      One portrait photo of a person
 
-      **Design Layout & Composition (Fixed Structure):**
-      1.  **Split Composition:** Divide the visual field. The layout must be strictly 2D flat graphic design, NO 3D perspective distortion.
-      2.  **Left Column (The Film Strip):**
-          -   Create a **perfectly straight, strictly vertical**, solid black film strip running from the absolute top to the bottom of the left edge. **Constraint:** It must be parallel to the canvas edge with absolutely **NO tilt, slant, or rotation**.
-          -   **Constraint:** The film strip must have **NO sprocket holes**. It should appear as a solid black rectangular container.
-          -   **Film Border Details:** Add subtle, understated film-style markings onto the solid black border areas between and around the stacked photos. These should include minimal technical text (e.g., film stock names like "KODAK PORTRA"), small frame numbers (e.g., "— 12A —", "▶ 13"), or tiny arbitrary symbols commonly found on photographic negatives. These markings must be decorative, faint, and not distracting.
-          -   Inside this strip, vertically stack [3 to 5] **unique and distinct** photos selected from the provided source images. **Constraint:** Do not repeat the same photo within the strip.
-          -   Maintain the original aspect ratio of the photos where possible; do not warp or distort the subjects.
-      3.  **Background Layer:**
-          -   Select one of the provided images to fill the entire background (full bleed).
-          -   **Crucial Constraint:** Prioritize selecting a scenic or landscape image that features **no visible people** (or minimally visible), serving as a clean, neutral backdrop for the text.
-          -   The background image should be positioned *behind* the left film strip.
+      One photo of a liquor bottle or a cocktail served in a glass
 
-      **Aesthetic & Style (The "Vintage" Filter):**
-      -   **Texture:** Apply heavy analog film grain and noise across the entire image.
-      -   **Color Grading:** Warm, nostalgic retro tones (Kodak Portra style). Slightly faded blacks and warm highlights.
+      No additional reference images are allowed.
 
-      **Text Elements (Strict Typography & Content Control):**
-      *All text must be purely typographical with no added graphic effects.*
-      1.  **Color Requirement:** All text must be rendered in **pure, solid red fill** (Vintage Red/Crimson) only. **Constraint:** Absolutely NO outlines, NO drop shadows, NO gradients, and NO background color boxes behind the text letters.
-      2.  **Main Title Generation:**
-          -   **Content:** Analyze the visual elements of the chosen background image (e.g., mountains, ocean, city lights, forest). **Randomly generate** a short, impactful 2-3 word phrase related to travel or adventure that directly reflects the specific environment or mood of that background image.
-          -   **Font Style:** Bold, Condensed Sans-Serif (like Impact or Helvetica Compressed). Large, dominant size.
-      3.  **Body Text Generation:**
-          -   **Content:** **Randomly generate** a very concise short paragraph (approx. 10-13 words) describing the feeling of the journey.
-          -   **Font Style:** Clean, standard Sans-Serif. Much smaller size than the title.
-      4.  **Layout & Density:**
-          -   Position the title in the upper-right or center-right area, with the body text block directly below it.
-          -   **Density Match:** The overall visual weight, line breaks, and character count should closely approximate the text block seen in the reference image ("ROAD TRIP" example).
+      Scene & Concept
 
-      **Output Requirement:**
-      -   Treat the user's uploaded photos as the primary assets.
-      -   Do not invent new scenery; use the content from the inputs.
-      -   Output a high-resolution flat graphic image with clean, solid red typography.
+      Create a photorealistic scene where the person and a giant liquor bottle or cocktail glass appear together in the same physical environment.
+
+      The bottle or glass must be approximately the same height as the person, or at least 80% of the person’s height
+
+      The person and the bottle/glass stand side by side on the floor
+
+      The interaction should be natural and minimal, such as:
+
+      Lightly touching
+
+      Leaning against
+
+      Resting an arm on the bottle or glass
+
+      Avoid exaggerated or theatrical poses.
+
+      Identity & Object Preservation (STRICT)
+
+      Person
+
+      The person’s facial features, face shape, skin tone, hairstyle, body shape, and proportions must remain 100% identical to the uploaded photo
+
+      Do not beautify, stylize, slim, reshape, or reinterpret the person
+
+      Do not alter the person’s body size, height, or silhouette
+
+      Clothing and accessories must remain exactly the same
+
+      Bottle / Glass
+
+      The liquor bottle or cocktail glass must be recreated exactly as uploaded
+
+      Preserve 100% of the original shape, size, material, transparency, color, and label or logo design
+
+      Do not redesign, replace, simplify, or regenerate the label or glass shape
+
+      No fictional branding, no placeholder text, no reinterpretation
+
+      Lighting & Physical Integration
+
+      The person and the bottle/glass must share the same environmental lighting
+
+      Apply realistic shadows beneath both the person and the bottle/glass
+
+      Reflections and highlights on glass surfaces must match the scene lighting
+
+      The result must look like a single real photograph, not a cutout or collage
+
+      Avoid any artificial post-processing or compositing artifacts
+
+      Environment
+
+      Place the scene in a realistic indoor environment (e.g., bar, lounge, or similar lifestyle space)
+
+      Lighting should feel natural and coherent across all elements
+
+      Background must support realism and depth without overpowering the subjects
+
+      Camera & Style
+
+      Eye-level camera angle
+
+      Full-body or near full-body framing
+
+      Photorealistic textures: natural skin, real fabric, accurate glass rendering
+
+      No CGI look, no surreal distortion, no stylization
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 3
-    max_images: 4
+    use_random_source_selection: false
+    min_images: 1
+    max_images: 1
     num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio/0120 攝影兩宮格
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4" 
-    prompt: |
-      Please use all uploaded photos as the only source of characters in the image. Preserve every person’s real face, facial features, bone structure, skin tone, hairstyle, clothing, and overall identity exactly as shown in their original photos. Do not beautify faces, smooth skin, stylize features, alter proportions, change age, or modify identity in any way. No additional people may appear. Each uploaded person must appear only once in the final image, with no duplication, cloning, or repeated faces.
-
-      Create a vertically oriented image divided clearly into two stacked horizontal frames, resembling a casual photo exchange between friends. The overall mood should feel natural, playful, and nostalgic, inspired by a Japanese springtime aesthetic. The setting should feel like a green park in early spring, with soft sunlight, fresh greenery, trees, and a relaxed outdoor atmosphere. The color tone should be light, airy, and slightly warm, emphasizing fresh greens and gentle daylight. The two stacked frames must be seamlessly stitched together with no white borders, gaps, margins, or visible separators of any kind. The transition between the upper and lower frames should be clean and continuous, forming a single unified image rather than two separate photos placed side by side or with padding.
-
-      In the upper frame, randomly select one single person from the uploaded users to act as the photographer. This person must appear alone in the upper frame and must not appear anywhere else in the image. The character should be posing with a compact camera or film camera, gently and naturally holding it near their face rather than actively taking a photo. The camera should rest casually against the face, covering only one eye, while the other eye remains clearly visible. Both eyes must be open, relaxed, and clearly visible with no blinking, squinting, or eye closure. The camera must not cover both eyes or obscure the entire face. The upper frame must be shot from a clear low-angle (upward-looking) perspective, meaning the subject is being photographed from below. The background should be dominated by sky, treetops, or bright open air, with no visible ground or floor elements in the frame. The pose should feel calm, casual, and intentional, as if posing playfully for a photo during a relaxed moment in the park. The expression should feel natural, soft, and friendly, not dramatic or exaggerated. The upper frame should feel like a posed yet spontaneous portrait moment rather than an action shot.
-
-      In the lower frame, depict all remaining uploaded users together, excluding the person already used in the upper frame. No one from the upper frame may reappear here. This lower frame represents the scene being photographed by the person above. The characters should be seated together on a picnic blanket spread over green grass, clearly engaged in a casual picnic scene. The camera viewpoint in the lower frame should be from above, looking downward toward the group, creating a gentle top-down perspective as if the photographer is standing and photographing them. The characters should be grouped naturally, sitting close together on the blanket, interacting casually as friends. Their expressions should feel lively, relaxed, and genuine, as if being photographed during a fun moment in the park. Poses can include small gestures like peace signs, relaxed seated postures, leaning toward one another, or playful body language, but should remain natural rather than exaggerated. The camera distance should not feel too far; faces and upper bodies must be clearly visible and readable.
-
-      The lower frame must include a visible camera-viewfinder overlay, simulating what the photographer sees through the camera. The camera view should be enclosed within a clearly visible solid black rectangular frame inside the image, creating the feeling of looking through a real camera display. This black frame should add depth and realism to the camera view without blocking faces or dominating the composition. The overlay should resemble a real camera interface, with subtle black or dark gray frame lines, corner markers, and small UI details such as a REC indicator, battery icon. The overlay should clearly suggest a live camera view but must not block faces or dominate the image. It should feel like a transparent interface layered over the scene.
-
-      Both frames should share the same park environment and seasonal feeling, reinforcing the idea that these moments are happening at the same time. Lighting should be consistent across both frames, with soft daylight, gentle shadows, and a springtime atmosphere. The overall composition should feel intimate, friendly, and observational, as if capturing a memory between friends rather than staging a photoshoot.
-
-      The final image should read as a Japanese-style casual memory photo: warm, green, youthful, and emotionally light. It should clearly communicate the relationship between the photographer (upper frame) and the photographed picnic group (lower frame), with no duplicated characters, no identity confusion, and a strong sense of perspective and storytelling.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
-    max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio/0120 拍貼系列-Style1 1995
-    model: gemini-3-pro-image-preview
-    resolution: "1K"
-    aspect_ratio: "3:4" 
-    prompt: |
-      Use all uploaded photos as the only subjects. Their faces, facial features, identities, hairstyles, expressions, poses, and clothing must remain exactly the same as in the uploaded photos. Do not redraw, replace, or re-generate the people in any way. Adding any other person, duplicating a person, or merging identities is strictly prohibited. This is a photographic filter application, not an illustration or redraw.
-
-      Create a playful SINGLE-FRAME photo-booth image styled like an early-2000s Japanese Heisei-era purikura (プリクラ) photo booth. The image should feel as if it were generated directly inside an authentic early-2000s purikura machine, with a bright, cute, crowded, and slightly chaotic atmosphere that closely matches real purikura samples from that era rather than a clean or modern graphic design.
-
-      All uploaded subjects must appear together within ONE single frame at all times. Their relative scale, distance, proportions, and framing must remain consistent with the original photos. The image should capture one clear, intimate purikura interaction moment (such as peace signs close to face, close shoulders, cheek-touch, or friendly posing), rather than a collage or sequence. The composition must feel like a single purikura print, not divided or segmented in any way.
-
-      The visual structure must be a SINGLE FULL-FRAME IMAGE.
-      There must be absolutely NO grid, NO four-frame layout, NO borders, NO white edges, NO outlines, NO separators, NO margins, and NO panel divisions of any kind. The output must appear as one uninterrupted purikura photo.
-
-      Apply classic Heisei-era purikura aesthetics throughout the entire image. 
-      The background must be a SINGLE, FLAT, SOLID COLOR ONLY — no mixing, no patchwork, no multi-color blobs, no layered shapes, and no overlapping color fields.
-      Strongly favor one pure background color per image, such as:
-      pure bright yellow, vivid purple, candy pink, sky blue, or solid pastel tones.
-      DO NOT combine multiple background colors in the same image.
-      DO NOT create mixed-color, camouflage, or collage-style backgrounds.
-
-      Lighting should be high-key, flat, and evenly distributed, with minimal shadow depth and no directional or cinematic lighting. Skin smoothing must be extremely light and natural, just enough to resemble early purikura airbrushing, avoiding any modern beauty filters, plastic textures, or artificial perfection. Eye enlargement, if present, must be subtle and natural, consistent with early-2000s purikura machines and never exaggerated or anime-like. The overall color balance should feel cheerful, warm, busy, and saturated, not modern, moody, or editorial.
-
-      Decorative elements must be layered on top of the photo in a way that resembles real purikura sticker placement. Pixel-style hearts and symbols may appear as accents, but the majority of decorations should be flat, pure-color, hand-drawn graffiti-style doodles. Handwritten elements must look like simple marker or pen drawings with solid fills, thick strokes, and imperfect hand-drawn lines. Avoid neon glow, halos, light streaks, gradients, or luminous effects. Include simple 2D doodle illustrations such as hearts, stars, bows, ribbons, teddy bears, animals, clouds, or cute icons, all rendered in a flat sticker-like style. All decorations must clearly float on top of the image and must never blend into faces or skin.
-
-      Add the fixed text exactly as written: “めっちゃ 仲仔♡”.
-      The text must appear in a colorful, lively, handwritten-style font typical of early-2000s purikura booths, using solid colors with playful outlines or thick strokes. Avoid neon glow, lighting effects, gradients, or modern typography. Supporting sticker text such as 一生仲仔、最強仲仔、仲仔、宝物、最強、最高、ぶちあげ、アゲ、我等友情永久不滅、Best Friend、FOREVER FRIEND、心友、信友、ずっ友 may appear scattered around the frame in a casual, hand-placed manner, but should not overcrowd the image.
-
-      The overall mood must feel joyful, intimate, energetic, and nostalgic, capturing the feeling of a real Heisei-era purikura memory that is colorful, playful, slightly over-decorated, and emotionally warm. Identity preservation is critical: faces must remain exactly the same as in the uploaded photos, with no face replacement, no illu
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
-    max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0120 4 Styles Creative Studio/0120 拍貼系列-Style2 2005
-    model: gemini-3-pro-image-preview
-    resolution: "1K"
-    aspect_ratio: "3:4" 
-    prompt: |
-      Use all uploaded photos as the only subjects.
-      Their real identities must remain recognizable and consistent.
-      This is a photographic purikura-style filter application, NOT a realistic portrait and NOT a modern beauty retouch. Do not redraw, replace, or re-generate the people and Adding any other person or repeating the same person is prohibited.
-      Identity preservation rules:
-      – The same people must remain clearly identifiable
-      – Facial structure, face shape, and hairstyle must remain consistent
-      – Purikura-style facial modification is ALLOWED and REQUIRED:
-      • The eyes may be slightly enlarged in a natural early-purikura manner, avoiding exaggerated manga-style proportions
-      • skin may be softly airbrushed
-      • proportions may be slightly exaggerated in a cute, non-realistic way
-      – Do NOT replace faces or turn them into illustrations or anime
-      Create a playful single-frame photo-booth image styled like an early-2000s Japanese Heisei-era purikura (プリクラ) machine.
-      The image must look like it was produced directly by a real purikura booth:
-      – bright
-      – cute
-      – slightly over-processed
-      – energetic
-      – nostalgic
-      – intentionally a little chaotic
-      Layout:
-      – Single unified purikura frame only
-      – NO four-frame or multi-panel layout of any kind
-      – NO borders, margins, dividers, or white lines
-      – One complete purikura output, not a collage and not separated images
-      Subjects:
-      – All subjects must appear together within the same single frame
-      – Relative positions and scale remain consistent
-      – Natural, playful interaction is required within the single image
-      – Classic purikura poses (peace signs, close shoulders, cute expressions)
-      Classic Heisei purikura facial treatment (REQUIRED):
-      – Slightly larger, rounder, clearly defined eyes with restrained enlargement
-      – Soft facial retouching with visible “machine smoothing”
-      – Slight whitening / brightening of skin tone
-      – No realistic skin texture emphasis
-      – No modern beauty, no cinematic realism
-      Overall color & exposure:
-      – Bright, high-key look
-      – Slight overexposure
-      – Warm pink-magenta dominant tone, while dark solid-color backgrounds such as purple or black may also appear for contrast
-      – Soft glow / bloom on highlights
-      – Flat contrast (no deep shadows)
-      – Avoid modern HDR, film grading, or clarity enhancement
-      Decorations & stickers (KEEP MINIMAL, NOT DENSE):
-      – Use ONLY 1–2 sticker elements total (e.g., one small heart + one tiny star OR one simple crown only)
-      – Keep doodles simple and sparse, with lots of clean negative space
-      – No layered clusters, no heavy overlap, no “sticker wall” look
-      – Stickers must float on top of the image, not embedded into faces
-      – Do NOT cover eyes, eyebrows, nose, or mouth
-      Handwritten text style (CRITICAL):
-      – Imperfect strokes, uneven thickness
-      – Cute, bubbly, casual handwriting
-      – White or bright colors with outlines or glow
-      Main text content (choose ONLY ONE, placed once in the single image):
-      「ずーっと心友!!」
-      「ずっとなかよし♡」
-      「ずっ友!!」
-      「だいすき♡」
-      Optional supporting sticker text:
-      Do NOT add supporting text, or at most add ONLY ONE short phrase from the list once, small and unobtrusive:
-      一生仲仔、最強仲仔、仲仔、宝物、最強、最高、ぶちあげ、アゲ、
-      我等友情永久不滅、Best Friend、FOREVER FRIEND、心友、信友
-      Mood & intent:
-      Joyful, intimate, nostalgic friendship energy.
-      The final image must unmistakably look like an authentic early-2000s Japanese purikura print:
-      – bright
-      – cute
-      – over-decorated
-      – handwritten
-      – emotionally warm
-      – unmistakably Heisei-era
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 2
-    max_images: 4
-    num_iterations: 50
+    multi_image_config:
+      enabled: true
+      mode: sequential
+      folders:
+        - ../Media Files/Nano Banana/0122 My Favorite Wine Beer/Additional
+      allow_duplicates: true
 
 
 # Comments and documentation

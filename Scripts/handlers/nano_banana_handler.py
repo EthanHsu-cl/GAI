@@ -605,16 +605,34 @@ class NanoBananaHandler(BaseAPIHandler):
         skipped = 0
         max_retries = self.api_defs.get('max_retries', 3)
         
+        # Pre-build selection plan to get actual selected images for naming
+        task_key = str(task.get('folder', ''))
+        if not hasattr(self, '_selection_plans'):
+            self._selection_plans = {}
+        if task_key not in self._selection_plans:
+            self._selection_plans[task_key] = self._build_selection_plan(task)
+        selection_plan = self._selection_plans.get(task_key, [])
+        
         for iteration_idx in range(num_iterations):
-            # Use first source image as anchor for metadata naming
-            anchor_file = source_images[iteration_idx % len(source_images)] if source_images else None
+            # Get the actual selected images for this iteration from pre-built plan
+            selected_images = selection_plan[iteration_idx] if iteration_idx < len(selection_plan) else []
             
-            if not anchor_file:
+            if not selected_images:
                 self.logger.warning(f" ⚠️ No source images for iteration {iteration_idx}")
                 continue
             
-            # Create unique identifier for this iteration
-            base_name = f"iter{iteration_idx:03d}_{anchor_file.stem}"
+            # Create unique identifier based on actual selected image names
+            # Use first selected image as primary, include count if multiple
+            primary_image = selected_images[0]
+            if len(selected_images) == 1:
+                base_name = f"iter{iteration_idx:03d}_{primary_image.stem}"
+            else:
+                # Include all image names for multi-image selections
+                image_names = "_".join([img.stem for img in selected_images])
+                # Truncate if too long (max 200 chars for filename safety)
+                if len(image_names) > 150:
+                    image_names = image_names[:147] + "..."
+                base_name = f"iter{iteration_idx:03d}_{image_names}"
             
             # Check if already processed
             if self._is_iteration_processed(base_name, metadata_folder):
@@ -634,7 +652,7 @@ class NanoBananaHandler(BaseAPIHandler):
             for attempt in range(max_retries):
                 try:
                     success = self.process(
-                        anchor_file,
+                        primary_image,
                         task_with_iteration,
                         output_folder,
                         metadata_folder,
