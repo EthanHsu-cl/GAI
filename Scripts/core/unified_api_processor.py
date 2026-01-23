@@ -14,6 +14,13 @@ from concurrent.futures import ThreadPoolExecutor
 import logging
 import sys
 
+# Register HEIC/HEIF format support for Pillow
+try:
+    import pillow_heif
+    pillow_heif.register_heif_opener()
+except ImportError:
+    pass
+
 try:
     from wakepy import keep
     WAKEPY_AVAILABLE = True

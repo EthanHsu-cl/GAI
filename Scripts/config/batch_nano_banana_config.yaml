@@ -10,149 +10,156 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDXoy_10c6dRIYnAATtBJJdAfNUOyFgU_ed17ddg9EjE-c?e=rvEF05
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bb00fbe62e_10_0#slide=id.g3bb00fbe62e_10_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBJ4SFONkEORKdhAtxMuKQQARtJQwPNB0Zk44BXaOE-VVg?e=ygV1hd
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3b9d25cdcf3_11_192#slide=id.g3b9d25cdcf3_11_192
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 Collage - Highlight Series
+  - folder: ../Media Files/Nano Banana/0122 7 Styles Creative Studio/0122 Collage - Cork Board
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Create a cork board–style bulletin board collage with a warm, cozy, and creative scrapbook feeling. The user will upload between two and five photos, and the final composition must display no more than five photos in total. These photos should be presented as a mix of regular photo prints and Polaroid-style images, naturally arranged and pinned onto a realistic cork board background. All Polaroid-style images must have completely blank lower frames, with no text, captions, numbers, or dates displayed. The photos themselves must remain exactly the same as the original user uploads without any alterations to the content, except for possible cropping of the lower body if needed to fit the layout.
+      The overall composition should feel handmade and organic, with photos slightly tilted or overlapping, secured by push pins, clips, or pieces of tape. Add AI-generated decorative elements such as playful stickers, big hearts, different colored synthetic fiber star badges, doodles, stamps, and sparkles to enhance the collage. Include memo notes, sticky notes, or postcards with handwritten or casual typography that complements the photos. No dates, timestamps, calendars, or date-related numbers should appear anywhere in the entire image, including on photos, papers, notes, receipts, or decorative elements.
+      Generate one receipt-style paper that reflects the content of the scene, summarizing the visual theme, memories, keywords, or short phrases inspired by the uploaded images. All paper elements should have realistic textures, soft shadows, and subtle depth to create a believable cork board pinboard effect.
+      The final output should be a single high-resolution image that looks like a carefully curated cork board collage, with balanced composition, cohesive colors, and a polished yet imperfect, human-made aesthetic consistent with the reference image.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0122 7 Styles Creative Studio/0122 Collage - Photo Strip
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "9:16"
     prompt: |
-      Please use all user-uploaded photos as the ONLY image sources in the final composition. Every uploaded photo must be displayed exactly once. Do NOT duplicate, omit, replace, merge, hallucinate, or regenerate any photo or person. The total number of photos shown must exactly match the number of images uploaded. Each uploaded photo must preserve its original aspect ratio and proportions exactly. Do not stretch, squeeze, compress, distort, reshape, or reframe any image. Images may be resized uniformly only. No photo may be duplicated or regenerated.
-
-      Create a fashion editorial–style layout inspired by premium apparel brand campaigns and seasonal lookbooks. The overall composition should feel modern, minimal, high-end, and print-ready, similar to a luxury fashion brand presentation rather than a collage or scrapbook. The background must be a textured paper surface with a subtle rough, grainy, tactile quality, resembling high-quality printed or recycled art paper. The background color must be sampled from the dominant color palette of the uploaded photos to ensure visual harmony. Avoid pure white or flat digital backgrounds.
-
-      Select one uploaded portrait photo that is front-facing and suitable for a half-body presentation as the foreground subject, and perform precise background removal. The foreground cut-out subject must be enlarged and placed centered in the lower-middle area of the canvas, visually dominating the composition. The subject’s lower portion must be cropped off by the bottom edge of the frame itself, creating the intentional impression that the body continues beyond the canvas rather than being fully visible. This cropping must feel like a deliberate editorial framing choice, not an obstruction by other elements. The foreground cut-out subject must be placed fully above and in front of all other elements. The subject must clearly and visibly overlap the film negatives, occupying a higher visual layer at all times. Under no circumstances may the subject appear behind, embedded within, masked by, or visually subordinated to the film negatives. The subject must appear as a clean editorial cutout with no white outline, no sticker edge, no glow, no halo, and no artificial border. The cut-out subject must be an exact, pixel-faithful extraction of the original uploaded photo. No changes of any kind are allowed to pose, gesture, angle, expression, gaze direction, posture, or body language. Do NOT generate new actions, poses, angles, or interpretations. The cut-out subject must preserve exact facial features, body proportions, clothing details, wrinkles, folds, hair strands, and silhouette as in the original image. No beautification, enhancement, re-lighting, or stylization is allowed. The foreground subject must be shown as a half-body portrait only. This must be achieved strictly by cropping the original uploaded photo. Do NOT generate, extend, or hallucinate missing body parts. If the uploaded photo is already half-body or upper-body, keep it exactly as is.
-
-      Behind the foreground subject, arrange the remaining uploaded photos into two diagonal, parallel rows of minimalist film-style strips positioned in the lower portion of the composition. The strips must use clean, simple rectangular frames only, with smooth continuous edges. There must be NO perforations, NO sprocket holes, NO grid patterns, NO square cutouts, and NO segmented frame markings of any kind. The rectangles should feel modern, flat, and minimal, maintaining a continuous long-rectangle appearance rather than traditional film negatives, but include subtle, realistic photographic details such as small frame numbers, tiny alphanumeric markings, film stock text, or fine measurement tick marks along the edges.The two strips must be placed close together with a narrow, consistent gap between them, clearly reading as a paired set rather than separated elements. The two rows must be parallel, slightly tilted, and extend horizontally beyond the left and right edges of the canvas, partially running out of frame, creating a sense of depth and flow rather than rigid alignment. These minimalist film-style strips must visually anchor the bottom of the layout and remain clearly behind the foreground subject at all times.
-
-      Each film negative frame must contain one unique uploaded photo, used exactly once, with no repetition. Film border color and tone should be derived from and harmonize with the overall palette.
-
-      All headline typography and primary text must appear only in the upper portion of the composition, clearly separated from the imagery below. The headline should use an elegant, high-quality serif typeface with a refined editorial feel. Text content should be inferred from the user’s photos or mood and must avoid years or numeric dates. The headline should read like a fashion campaign title, not promotional copy.
-
-      Supporting text should be minimal and secondary. Avoid loud graphics, stickers, icons, UI elements, illustration styles, cartoon effects, AI artifacts, surreal distortions, or decorative gimmicks.
-
-      The final result should read as a professionally art-directed fashion editorial or lookbook cover, with clear hierarchy: headline at the top, foreground cut-out subject visually on top of the film negatives, and film negatives grounding the bottom. The image must feel cohesive, premium, restrained, and suitable for brand presentation or editorial use.
+      Using the provided image as the final visual reference, generate a clean and modern “Photo Strip” composition. The user will upload between one and three photos only, and these original photos must not be altered, stylized, recolored, enhanced, or regenerated in any way. Each uploaded photo should visually occupy approximately 50%–60% of the total canvas width, ensuring a strong presence while maintaining balanced negative space. Place a vertical photo strip centered on the canvas, featuring a solid white frame that resembles a classic photo booth strip. The uploaded photos should appear inside the strip in their original quality and order. For the background, generate a full-bleed landscape image that visually echoes and harmonizes with the user’s uploaded photo (e.g., similar setting, mood, colors, or environmental elements), and crop and scale it proportionally to fill the entire canvas. Do not combine multiple uploaded photos to form the background under any circumstances. Remove any light leak, film burn, or vintage exposure effects so the overall aesthetic remains crisp, bright, and contemporary. Add small, decorative, randomly generated text elements on the white photo strip only; these texts should be inspired by the photo content or atmosphere, such as casual phrases, place-related words, or abstract design labels, and should function purely as visual decoration. Maintain a strong visual hierarchy with the centered photo strip as the primary focal point, balanced spacing, and a refined editorial layout aligned with modern lifestyle and design lab aesthetics, while strictly preserving the integrity of all user-uploaded photos.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
-    min_images: 5
-    max_images: 6
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 Collage - Calendar
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Prompt: A photorealistic flat lay digital scrapbook collage with a strict defined stacking order.
-
-      Composition & Hierarchy: The core of the collage grouping is anchored vertically within the middle third of the canvas width, organized in the following layers from bottom to top:
-
-      Layer 1 (Background Base): A blurred, empty minimalist modern urban street scene with clean architectural walls and pavement. The color palette is dominated by soft, muted Japanese-style pastel tones (beige, light cream, pale grey), creating a calm, low-saturation, and airy atmosphere. Directly on this background surface, in the top-left corner, there is a title rendered in an elegant, casual handwritten script, arranged in two lines: "My Monthly" positioned directly above "Recap", rendered in a muted charcoal color.
-
-      Layer 2 (Bottom Element - Placed directly on the background): A 1:1 square calendar grid made of textured pure white paper. It features a row of fashionable, thin sans-serif weekday abbreviations (e.g., MON, TUE) along the very top edge, immediately followed below by tightly filled numerical dates in the same font, with no year mentioned. Its visual appearance and design serve as a neutral, standalone base, completely independent of and visually unrelated to the content or style of the source photographs in Layer 3 overlying it.
-
-      Layer 3 (Middle Overlay - Scattered across the calendar and spilling onto the background): Three oversized Polaroid-style photos with white borders, scattered in a highly irregular, haphazard fashion, completely breaking central symmetry. Each Polaroid frame holds a unique, distinct source photograph rendered completely unchanged and uncropped. There is no repetition among the images within the four frames. While clustered around the calendar area, they significantly spill over the edges of the calendar grid, extending outwards and resting directly on the surrounding Layer 1 background surface. Their visual scale is significantly larger than the underlying calendar grid, heavily dominating the composition and obscuring most of the dates below them.
-
-      Layer 4 (Top Details - Placed on top of the photos): Two realistic matte photographic stickers depicting non-human subjects (e.g., objects, nature), precisely die-cut without white borders, alongside one piece of translucent, textured torn washi tape. These items are the topmost elements, overlapping the Polaroid photos beneath them.
-
-      Overall Style: High-resolution photograph with authentic textures and soft natural lighting across all layers.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 3
+    min_images: 2
     max_images: 3
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 Musical taste
-    model: gemini-3-pro-image-preview
-    resolution: "1K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Use the TWO uploaded images as strict references. Image 1 is the user’s real portrait photo and must be used only to preserve the person’s true identity. Image 2 is the music app UI screenshot and must be used only as the phone screen content. Create ONE single composite image only.
-
-      The person’s identity must be preserved exactly. Facial structure, facial proportions, hairstyle, hair color, and skin tone must remain clearly recognizable. Do not beautify, stylize, idealize, cartoonize, or alter the person’s real appearance. This must remain fully photorealistic.
-
-      The person must appear as a real-scale adult human, not miniature. The person’s full height should visually occupy approximately 75–85% of the phone’s long edge, making the figure feel large, confident, and dominant rather than decorative. Head size must feel natural relative to the phone width. Legs must remain full-length without shortening. Feet must clearly and firmly stand on the phone screen surface with full sole contact. The person must not float, sink, clip, or intersect unnaturally with the phone. The posture must feel relaxed and natural, standing upright with balanced weight, gently touching or adjusting the headphones with one hand. The headphones must be white or light gray. Feet must wear realistic shoes and be physically grounded.
-
-      Create a premium, clean, high-end commercial studio visual where a real-scale human is physically standing on top of a single smartphone displaying the music app interface. This is not a fantasy illustration, not a miniature diorama, and not a conceptual art piece. The image must feel like a polished global music-streaming brand key visual.
-
-      The smartphone must be a SINGLE, realistic modern device only. No duplicated phones, no stacked phones, no reflections, no mirrors, and no secondary devices.
-
-      The phone framing must EXACTLY match the reference image (Image 4). The smartphone must appear very large and very close to the camera, strongly dominating the lower portion of the frame. The device must occupy a substantial visual mass so that the phone clearly feels foreground-heavy rather than decorative. One far-end corner of the phone must be intentionally cropped out of the frame, exactly like the reference. This cropped corner must be the far, receding top-right corner of the phone, cleanly cut off by the image edge. The crop must feel deliberate, photographic, and natural.
-
-      The phone angle must EXACTLY match the reference. The phone lies completely flat on the ground plane and is viewed from a calm, low-angle three-quarter perspective. The near end of the phone (bottom-left) must feel very close to the camera, while the far end (top-right) gently recedes into the background. The camera must feel close to the phone surface, not pulled back. The phone must never appear small, distant, or centered loosely in the frame.
-
-      The phone body must remain physically correct and geometrically stable. The device must NOT bend, warp, taper, compress, skew, or distort due to perspective. The long edges of the phone must remain straight and parallel in perspective. Thickness must remain consistent from end to end. The screen must remain a true rectangle in perspective with no keystone distortion.
-
-      The visible screen area must feel broad, generous, and dominant. Bezels must appear thin and realistic. The music app UI must remain sharp, readable, perfectly flush to the screen surface, and completely free of distortion or perspective warping.
-
-      The camera uses a low-angle three-quarter studio perspective identical to the reference image. The camera is positioned slightly above the phone surface and looks across it rather than down onto it. The camera must NOT be top-down, NOT front-facing, and NOT steeply tilted. Use a natural commercial lens look with no wide-angle exaggeration.
-
-      Use clean, soft, evenly distributed studio lighting with a large diffused key light from the upper-left and a gentle fill light. Lighting must be uniform and controlled. There must be absolutely NO vignette, NO dark corners, NO edge falloff, and NO spotlight effect. Shadows must be soft and minimal. A subtle, realistic contact shadow must appear directly beneath the shoes on the phone screen and beneath the phone on the ground plane, grounding both physically.
-
-      The background must be a seamless, infinite studio gradient in light sand tones. The background must be smooth, uniform, and calm, with no texture, no walls, no visible floor line, no color banding, and no environmental elements. The overall palette must feel bright, neutral, premium, and airy.
-
-      The person and the phone must share identical light direction, color temperature, and shadow logic. Integration must feel physically believable and visually refined. There must be no vignette, no dark halo around the subject, no uneven exposure, and no contrast-heavy edges.
-
-      The final image must look like a real, high-end global music streaming campaign visual: clean, minimal, bright, realistic, premium, calm.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    min_images: 1
-    max_images: 1
-    num_iterations: 50
-    multi_image_config:
-      enabled: true
-      mode: sequential
-      folders:
-        - ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 Musical taste/Additional
-      allow_duplicates: true
-
-  - folder: ../Media Files/Nano Banana/0122 4 Styles Creative Studio/0122 農民曆-TW
+  - folder: ../Media Files/Nano Banana/0122 7 Styles Creative Studio/0122 Collage - Modular
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "4:5"
+    aspect_ratio: "9:16"
     prompt: |
-      A high-quality, perfectly vertical top-down photograph of a daily calendar pad flat on a vintage surface, captured directly overhead with zero perspective distortion.
-
-      ### Physical Object & Environment:
-
-      Soft, natural side-lighting emphasizes the paper grain and the slight thickness, casting a realistic shadow onto the background. The background features traditional Taiwanese Decorative Tiles with classic geometric patterns. These tiles have a glazed ceramic texture, and thin, clean grout lines, evoking a nostalgic 1950s-70s atmosphere.
-
-      ### Physical Object:
-
-      - Material: A magazine-thick stack of off-white, semi-translucent paper (#FDF9F2). The paper shows a 5% ghosting effect, faintly revealing the layout underneath.
-
-      - Top Binding: Secured at the very top by a solid horizontal Red binding strip (spine).
-
-      - Torn Detail: A neat, horizontal torn edge at the top of the paper sheet, directly below the binding, showing fine, evenly frayed fibers from a clean manual rip.
-
-      - Lighting: Soft side-lighting emphasizes the paper grain, torn texture, and the stack's vertical depth.
-
-      ### Design & Content:
-
-      - Layout: Modernized Traditional Chinese Almanac (Tung Shing) in a strictly limited 4-color palette: Navy Blue (#00437A), Red (#D32F2F), Light Water Blue (#A5C6D8), and Soft Pink (#F2B5B5).
-
-      - Illustration: A modern hand-drawn caricature with grainy, dry-brush lithographic textures (no pencils/crayons), achieving a highly recognizable, 20% realistic likeness closely capturing the user's actual facial features. The character, depicted in a relaxed and happy manner with face fully visible, is performing a humorous, low-energy slacking action that directly illustrates the text in the bottom section.
-
-      - Typography: All text in Traditional Chinese (繁體中文) using Heavy Bold Ming/Song Serif font (粗明體) with a simulated print texture.
-
-      - Composition:
-
-        1. Header: "今日運勢" (centered, unframed).
-
-        2. Sides: Symmetrical Navy/Red scroll banners positioned on the left and right sides, each containing a traditional 4-character auspicious Chinese idiom (e.g., 心平氣和/ 萬事如意/ 心想事成/ 平安喜樂/ 身體健康/ 大吉大利/ 一帆風順).
-
-      3. Bottom: Navy/Red bordered frame containing a Red circular "宜" stamp. Following the stamp is exactly one humorous, "slacking/low-energy survival" phrase.
-      - The word "死" is strictly prohibited. Avoid using "躺平" as a standalone term.
+      Create a single, vertically oriented modular photo story layout that resembles a cinematic travel journal webpage, presented as one complete scrollable composition. Use one user-uploaded photo as a full-width hero background at the top, with a black gradient overlay (darker at the bottom, lighter at the top) to ensure strong text contrast. Overlay large bold title typography, a smaller location subtitle, navigation-style labels (e.g., “Home”, “Photos”, “Stories”) near the top, a visible date, and a short reflective paragraph aligned left in a clean editorial layout.
+      If fewer than six photos are uploaded, generate additional images to support the modular layout. Generated images should either complement the uploaded photos thematically, maintaining strong visual coherence and consistent style.Each photo should function as an independent module while adhering to a strict grid system, and no photo may be repeated—each user-uploaded or generated image may appear only once within the composition.
+      As the layout scrolls downward, deepen the black gradient into a darker midsection. Place the remaining user-uploaded photos (up to five) into a centered horizontal carousel module with consistent sizing and spacing. Include visible left and right navigation arrows styled as modern, semi-transparent white carousel controls layered above the images to clearly suggest interactivity. Each photo should function as an independent module while adhering to a strict grid system. Beneath the carousel, add small UI-style supporting text modules that match the overall typographic hierarchy.
+      In the lower half, transition the gradient into another large background image to maintain vertical continuity. Overlay minimal footer-style text such as story credits or a subtle social reference.
+      Additional rule: the bottom background image should, whenever possible, use one of the user-uploaded photos (preferably a different one from the top hero image) rather than a fully generated image.
+      The overall aesthetic should be cinematic and modern, with warm natural tones, deep blacks, soft shadows, consistent typography, and a polished travel story webpage mockup feel.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0122 7 Styles Creative Studio/0122 Collage - Airdrop post
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "9:16"
+    prompt: |
+      The user will four photos (maximum four). The four uploaded photos must be displayed in a strict 2×2 grid layout, evenly aligned with equal spacing, with no variation in size, position, or arrangement. Based on these images, generate a polished, modern fashion lookbook interface that closely resembles an iOS photo album screen. All visual content must be strictly limited to the images uploaded by the user; no additional images may be automatically generated under any circumstances.
+      At the very top of the screen, include a clean, minimal album title that reflects the shared theme, mood, or usage scenario inferred from the user’s uploaded photos, written as a short category-style phrase rather than a full sentence. Most importantly, place a clearly visible iOS-style modal popup in the exact center of the screen, appearing as a foreground overlay above the image grid. The modal popup’s width must be strictly limited to approximately 60% of the total screen width, maintaining standard iOS proportions and visual balance. This popup must resemble a native iOS system dialog, featuring rounded corners, a soft shadow, and a light translucent background. The modal should contain a title such as “Rename Album,” a single text input field whose content is dynamically generated to match the theme and meaning of the uploaded photos, and two action buttons at the bottom labeled “Cancel” and “Save,” styled according to standard iOS interface conventions. The text shown inside the input field should be context-aware and directly related to the visual content, avoiding generic or placeholder wording. The background images should remain clearly visible but visually secondary to the popup, reinforcing the impression that the user is actively renaming an album within an iOS photo application. At the bottom of the overall screen, include a short, subtle caption written in a warm, lifestyle-oriented tone that emotionally connects to the images and describes when, how, or why these styles or items might be used. All visual and textual elements—including the top title, the modal dialog, the generated companion images, and the bottom caption—must feel cohesive, intentional, and specifically tailored to the user’s uploaded photos, creating a realistic and believable iOS album-editing experience.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 4
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0122 7 Styles Creative Studio/0122 Collage - Soft Lifestyle
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "1:1"
+    prompt: |
+      Scrapbook collage layout, layered composition. 
+
+      Global Rules:
+      - Utilize every user-provided image exactly once in the entire composition. No omissions and no repetitions.
+      - STRICT PHOTO INTEGRITY: Aside from the explicitly AI-generated Top & Bottom Frames in the Right Section, all user-uploaded input images must be rendered with their original visual content. Do not color-grade, distort, warp, or stretch user photos. Proportional cropping is allowed to fit the layout, but original aspect ratio integrity must be maintained.
+
+      Background: Flat baby blue checkered pattern, low saturation, clean pastel aesthetics.
+
+      Left Section (Journal Area):
+      - Base: Real white wrinkled notebook paper with ruled lines and ripped edges. Organic creases and subtle shadows.
+      - Content: Distribute all user-uploaded photos (excluding the one used for the right strip) as printed snapshots. Attached with visible washi tape and paper clips.
+      - Details: Short handwritten-style notes rendered in dark brown or dark grey ink, and thematic stickers. Strictly do not include any years, months, days, or date-related references.
+
+      Right Section (Three-Photo Strip):
+      - Structure: One vertical strip with three stacked frames on a solid black base.
+      - Narrative Logic: Middle frame must feature the one user-uploaded photo that has the largest scenic/landscape area coverage. 
+      - Top & Bottom Frames: Ultra-realistic, high-fidelity AI-generated photography related to the Middle frame (landscapes or object close-ups). These frames must be distinct variations or extensions of the environment, not exact duplicates of the middle photo's background scenery. Must have authentic camera texture and natural depth. Strictly no human figures.
+      - Finish: Encased in a glossy, semi-reflective transparent plastic sleeve. 
+      - Decoration: A small circular dot washi tape at the top. Tiny white typewriter-style text "Memories" at the bottom.
+
+      Composition Rules:
+      - Overlap: Right strip partially overlaps the left paper for physical depth.
+      - Lighting: Realistic natural lighting with cinematic film-like quality.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
     min_images: 1
-    max_images: 1
+    max_images: 5
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0122 7 Styles Creative Studio/0122 日本綜藝海報-不良一族尋愛記
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Please use all uploaded photos as the only source of characters in the image. Preserve every person’s real face, facial features, bone structure, skin tone, hairstyle, clothing, and overall identity exactly as shown in their original photos. No additional people may appear. Each uploaded person must appear only once in the final image, with no duplication, cloning, or repeated faces. Do not beautify faces, smooth skin, stylize features, alter proportions, change age, or modify identity in any way. 
+
+      Create a vertical poster-style image divided cleanly into two equal halves down the center, representing two distinct rooms. Each half must depict a completely different world with strong contrast in color, lighting, and atmosphere, while together forming one unified, cohesive poster. The division between the two rooms must be seamless, with no visible borders or lines.
+
+      Under all circumstances, both rooms must contain at least one person; it is strictly prohibited for either room to be empty. If both male and female users are uploaded, assign all male users exclusively to the male room and all female users exclusively to the female room. If all uploaded users are of the same gender, still divide them between the two rooms. In this case, assign some users to the opposite-themed room purely for visual balance, while strictly preserving each person’s identity, facial features, and gender. The room theme must not imply or alter the person’s gender in any way.
+
+      One half must depict a dark, masculine male room with strong blue-toned lighting. Place a black leather sofa at the center, where male users are seated in relaxed but confident poses. The sofa should feature subtle Japanese graffiti-style markings. Introduce bright white-to-purple key lighting focused directly on the male users, illuminating their faces and upper bodies clearly. The lighting should feel intentional and stage-like, similar to a Japanese variety show poster, rather than dark or cinematic. White and soft purple lights should wash over the subjects, while blue and purple tones remain in the background, creating a lively, high-contrast yet readable look. The space must feel well-lit, energetic, and visually clear rather than shadow-heavy. Behind them, include a small, understated vertical blue neon sign with Japanese characters reading “極惡,” arranged top-to-bottom and rendered in a bold kaishu-style (traditional brush-style) typeface with thick strokes. The neon text should function purely as a subtle decorative accent rather than a focal point, blending naturally into the scene without drawing dominant attention or overpowering the composition. Also include shelves and sections of metal mesh or wire fencing. Add a small, curated number of Japanese-style collectible figures or hobby items to suggest personal taste without clutter. All male users must appear only in this purple-toned room.
+
+      The other half must depict a vivid neon-pink female room inspired by Japanese Harajuku gyaru style. The space should be filled with fluorescent pink tones, bold patterns, and an exaggerated fashion-forward aesthetic. At the center, place a thick, plush, furry cushioned padded lounging mat with noticeable height and volume, clearly soft and fluffy with long fibers, and with no backrest, armrest, or vertical support. Female users should be seated or posed confidently on top of this plush floor mat. The room décor should resemble a stylish, lived-in gyaru hangout rather than a cute or childish bedroom. Include zebra-pattern accents, vanity mirrors with lights, shelves, decorative floral elements, and personality-driven Harajuku-style decorations such as edgy figurines, fashion objects, neon signs, bold accessories, and statement décor pieces. The collectibles should feel fashionable, expressive, and slightly rebellious—not overly cute dolls or childish plush toys—suggesting confident young women with strong taste and attitude. The space should feel layered, cozy, and social, as if friends actually gather and spend time there, while remaining intentional and curated rather than cluttered. The overall atmosphere should be edgy, flashy, and unapologetically bold rather than cute or sweet. Female users must maintain cool, tough, confident expressions with no smiling, conveying a strong, stylish presence typical of Harajuku gyaru aesthetics. All female users must appear only in this pink room.
+
+      All characters must be seated, facing forward or slightly angled toward the camera, with confident, rebellious, and streetwise body language rather than formal or polite poses. Their posture should feel relaxed, slightly slouched or asymmetrical, conveying a delinquent, tough, and cool attitude typical of Japanese street gangs. Room assignment must never affect or alter gender-based styling rules. Regardless of which room they are placed in, male users should be styled in Japanese yankii fashion, while female users should wear leather textures, sheer or semi-transparent tops, short skirts, or fitted silhouettes, but do not change person's hairstyle. The clothing should be simple rather than overly layered or decorative, focusing on a hot, confident, and edgy look with strong personality instead of a traditional gyaru costume style. Subtle to visible tattoos may appear on exposed skin such as arms, shoulders, necks, or hands, reinforcing the delinquent aesthetic without overwhelming the characters. Use a close-up camera distance showing upper bodies and seating clearly, with symmetrical, poster-like framing. Lighting must remain consistent within each room to reinforce the strong color contrast.
+
+      At the bottom portion of the poster, add the title text “恋・地獄。” The typography must closely resemble the original show logo style, using extremely bold, heavy-weight Japanese characters with thick strokes and compact proportions, similar to high-impact Japanese variety show or sports-event typography. The characters should feel powerful, blocky, and visually loud rather than elegant or thin. The text must be vivid pink, bold and eye-catching, and positioned prominently near the bottom center of the poster. Add the subtitle text “— Love Is Hell —” in the same vivid pink color, using a slightly cursive, handwritten-style script that feels expressive and stylish. The subtitle should be smaller than the main title and complement it without overpowering it. Both the main title and subtitle must remain solid pink with no white, black, or any other colored outlines, strokes, shadows, or borders.
+
+      The final image should feel bold, flashy, dramatic, and playful, strongly evoking a high-impact Japanese variety show poster through extreme color contrast, confident group presence, accurate faces, and faithful recreation of the described layout, rooms, lighting, and typography, using only the uploaded people and no external references.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0122 7 Styles Creative Studio/0122 攝影兩宮格V2
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Please use all uploaded photos as the only source of characters in the image. Preserve every person’s real face, facial features, bone structure, skin tone, hairstyle, clothing, and overall identity exactly as shown in their original photos. Do not beautify faces, smooth skin, stylize features, alter proportions, change age, or modify identity in any way. No additional people may appear. Each uploaded person must appear only once in the final image, with no duplication, cloning, or repeated faces.
+
+      Create a vertically oriented image divided clearly into two stacked horizontal frames, resembling a casual photo exchange between friends. The overall mood should feel natural, playful, and nostalgic, inspired by a Japanese springtime aesthetic. The setting should feel like a green park in early spring, with soft sunlight, fresh greenery, trees, and a relaxed outdoor atmosphere. The color tone should be light, airy, and slightly warm, emphasizing fresh greens and gentle daylight. The two stacked frames must be seamlessly stitched together with no white borders, gaps, margins, or visible separators of any kind. The transition between the upper and lower frames should be clean and continuous, forming a single unified image rather than two separate photos placed side by side or with padding.
+
+      In the upper frame, randomly select one single person from the uploaded users to act as the photographer. This person must appear alone in the upper frame and must not appear anywhere else in the image. The character should be posing with a compact camera or film camera, gently and naturally holding it near their face rather than actively taking a photo. The camera should rest casually against the face, covering only one eye, while the other eye remains clearly visible. Both eyes must be open, relaxed, and clearly visible with no blinking, squinting, or eye closure. The camera must not cover both eyes or obscure the entire face. The upper frame must be shot from a clear low-angle (upward-looking) perspective, meaning the subject is being photographed from below. The background should be dominated by sky, treetops, or bright open air, with no visible ground or floor elements in the frame. The pose should feel calm, casual, and intentional, as if posing playfully for a photo during a relaxed moment in the park. The expression should feel natural, soft, and friendly, not dramatic or exaggerated. The upper frame should feel like a posed yet spontaneous portrait moment rather than an action shot. The photographer must be fully intact within the upper frame with no cut-off, missing limbs, duplicated body parts, stretched anatomy, or incomplete rendering; the head, camera, hands, and upper torso must all be cleanly and fully visible without cropping errors or visual artifacts.
+
+      In the lower frame, depict all remaining uploaded users together, excluding the person already used in the upper frame. No one from the upper frame may reappear here. This lower frame represents the scene being photographed by the person above. Close-up shot that faces are clearly visible and readable. The characters should be seated together on a picnic blanket spread over green grass, clearly engaged in a casual picnic scene. The camera viewpoint in the lower frame should be from above, looking downward toward the group, creating a gentle top-down perspective as if the photographer is standing and photographing them. The background should consist entirely of grass and the picnic blanket, with no visible horizon line, sky, tree branche, or distant background elements. The characters should be grouped naturally, sitting close together on the blanket, interacting casually as friends. Their expressions should feel lively, relaxed, and genuine, as if being photographed during a fun moment in the park. Poses can include small gestures like peace signs, relaxed seated postures, leaning toward one another, or playful body language, but should remain natural rather than exaggerated.  
+
+      The lower frame must include a visible camera-viewfinder overlay, simulating what the photographer sees through the camera. The camera view must be fully enclosed by a continuous, solid black display border that wraps around the entire image area, similar to the physical edge of a real camera screen or electronic viewfinder. This border should be a single, uninterrupted rectangular frame with visible thickness, not thin lines, not floating markers, and not partial corner brackets. The black border should feel like the outer boundary of a camera screen, clearly separating the camera view from the surrounding image, rather than an internal UI element. It must completely frame the scene on all four sides, forming a closed rectangle that visually contains the entire lower-frame image. Inside this black display border, add subtle camera UI elements such as a REC indicator and a battery icon. These UI details must remain minimal and unobtrusive. No grid lines, rule-of-thirds guides, focus boxes, face-detection frames, corner brackets, or segmented overlays of any kind are allowed anywhere in the image. The overlay should clearly suggest a live camera display while remaining clean, cinematic, and realistic, with the black border acting as the dominant framing element rather than thin UI markings.
+
+      Both frames should share the same park environment and seasonal feeling, reinforcing the idea that these moments are happening at the same time. Lighting should be consistent across both frames, with soft daylight, gentle shadows, and a springtime atmosphere. The overall composition should feel intimate, friendly, and observational, as if capturing a memory between friends rather than staging a photoshoot.
+
+      The final image should read as a Japanese-style casual memory photo: warm, green, youthful, and emotionally light. It should clearly communicate the relationship between the photographer (upper frame) and the photographed picnic group (lower frame), with no duplicated characters, no identity confusion, and a strong sense of perspective and storytelling.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    min_images: 2
+    max_images: 4
     num_iterations: 50
 
 
