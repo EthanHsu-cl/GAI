@@ -6,6 +6,7 @@ import yaml
 import requests
 import base64
 import subprocess
+import platform
 from datetime import datetime
 from gradio_client import Client, handle_file
 from PIL import Image
@@ -26,6 +27,9 @@ try:
     WAKEPY_AVAILABLE = True
 except ImportError:
     WAKEPY_AVAILABLE = False
+
+# Detect platform for sleep prevention
+IS_MACOS = platform.system() == 'Darwin'
 
 # Add parent directory to path for handler imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -1789,22 +1793,64 @@ class UnifiedAPIProcessor:
         """
         Main execution flow for API processing.
         
-        Prevents system sleep during processing using wakepy if available.
-        Falls back to normal operation if wakepy is not installed.
+        Prevents system sleep during processing:
+        - macOS: Uses native 'caffeinate' command (most reliable)
+        - Other platforms: Uses wakepy if available
         
         Returns:
             bool: True if processing completed successfully, False otherwise
         """
         self.logger.info(f"🚀 Starting {self.api_name.replace('_', ' ').title()} Processor")
         
-        # Use wakepy context manager to prevent sleep during processing
-        if WAKEPY_AVAILABLE:
+        # macOS: Use native caffeinate command (most reliable)
+        if IS_MACOS:
+            self.logger.info("☕ System sleep prevention activated (macOS caffeinate)")
+            return self._run_with_caffeinate()
+        # Other platforms: Use wakepy if available
+        elif WAKEPY_AVAILABLE:
             self.logger.info("☕ System sleep prevention activated (wakepy)")
             with keep.running(on_fail='warn'):
-                return self._execute_processing()
+                result = self._execute_processing()
+                self.logger.info("💤 System sleep prevention deactivated")
+                return result
         else:
-            self.logger.warning("⚠️ wakepy not installed - system may sleep during processing")
-            self.logger.warning("   Install with: pip install wakepy")
+            self.logger.warning("⚠️ No sleep prevention available - system may sleep during processing")
+            self.logger.warning("   macOS: caffeinate not found | Other: Install wakepy with: pip install wakepy")
+            return self._execute_processing()
+    
+    def _run_with_caffeinate(self):
+        """
+        Run processing with macOS caffeinate to prevent sleep.
+        
+        Caffeinate is macOS's native tool that reliably prevents system sleep.
+        Runs caffeinate as a subprocess that wraps the entire processing.
+        
+        Returns:
+            bool: True if processing completed successfully, False otherwise
+        """
+        try:
+            # Start caffeinate process in background
+            caffeinate_process = subprocess.Popen(
+                ['caffeinate', '-di'],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            
+            try:
+                # Run the actual processing
+                result = self._execute_processing()
+                return result
+            finally:
+                # Always terminate caffeinate when done
+                caffeinate_process.terminate()
+                caffeinate_process.wait(timeout=5)
+                self.logger.info("💤 System sleep prevention deactivated")
+        except FileNotFoundError:
+            self.logger.warning("⚠️ caffeinate command not found - running without sleep prevention")
+            return self._execute_processing()
+        except Exception as e:
+            self.logger.error(f"❌ Error running with caffeinate: {e}")
+            self.logger.warning("⚠️ Falling back to execution without sleep prevention")
             return self._execute_processing()
     
     def _execute_processing(self):
@@ -1847,9 +1893,6 @@ class UnifiedAPIProcessor:
 
         elapsed = time.time() - start_time
         self.logger.info(f"🎉 Completed {len(valid_tasks)} tasks in {elapsed/60:.1f} minutes")
-        
-        if WAKEPY_AVAILABLE:
-            self.logger.info("💤 System sleep prevention deactivated")
         
         return True
 

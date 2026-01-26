@@ -298,11 +298,14 @@ class NanoBananaHandler(BaseAPIHandler):
     def _build_selection_plan(self, task_config):
         """Pre-build the complete selection plan for all iterations.
         
-        Uses sorted list consumption approach:
-        - Source images are sorted alphabetically by filename
-        - Pre-calculates image count for each iteration (even bucket distribution)
-        - Assigns images sequentially from sorted pool (no repeats until exhausted)
-        - If pool exhausted, restarts from beginning and continues
+        Two modes based on 'use_deterministic_random' option:
+        1. Sequential (default): Sorted alphabetically, consumed sequentially
+        2. Deterministic Random: Shuffled with seed, appears random but reproducible
+        
+        Both modes:
+        - Pre-calculate image count for each iteration (even bucket distribution)
+        - No repeats until pool exhausted, then restart from beginning
+        - Same folder + same config = same selection plan every time
         
         Optimal formula: total_needed = num_iterations × (min + max) / 2
         
@@ -360,6 +363,27 @@ class NanoBananaHandler(BaseAPIHandler):
         # Calculate total images needed
         total_needed = sum(iteration_counts)
         
+        # Check if deterministic random mode is enabled
+        use_deterministic_random = task_config.get('use_deterministic_random', False)
+        random_seed = task_config.get('random_seed', None)
+        
+        # Determine selection mode for logging
+        if use_deterministic_random:
+            # Determine seed for deterministic shuffling
+            if random_seed is not None:
+                # Use explicit seed from config
+                seed = int(random_seed)
+                self.logger.info(f" 🎲 Using deterministic random mode with seed: {seed}")
+            else:
+                # Auto-generate seed from folder path for consistency
+                seed = abs(hash(task_key)) % (2**32)
+                self.logger.info(f" 🎲 Using deterministic random mode (auto-seed: {seed})")
+            
+            selection_mode = f'deterministic_random_seed_{seed}'
+        else:
+            selection_mode = 'sequential_sorted'
+            self.logger.info(f" 📝 Using sequential sorted mode")
+        
         # Log optimization info
         if total_needed <= total_available:
             self.logger.info(
@@ -373,25 +397,48 @@ class NanoBananaHandler(BaseAPIHandler):
                 f"Images will repeat across {cycles} cycles."
             )
         
-        # Build selection plan by consuming from sorted pool sequentially
+        # Prepare source pool based on mode
+        if use_deterministic_random:
+            # Shuffle with deterministic seed
+            source_pool = source_images[:]
+            random.seed(seed)
+            random.shuffle(source_pool)
+            self.logger.debug(f" 🔀 Shuffled source pool with seed {seed}")
+        else:
+            # Use sorted list (already sorted from _get_source_images_for_task)
+            source_pool = source_images[:]
+        
+        # Build selection plan by consuming from pool sequentially
         selection_plan = []
         available_pool = []
         
         for iteration_index in range(num_iterations):
             num_images = iteration_counts[iteration_index]
             
-            # Refill pool if needed (restart from sorted list)
+            # Refill pool if needed
             if len(available_pool) < num_images:
-                # Use sorted source images directly (no shuffling)
-                available_pool.extend(source_images[:])
+                if use_deterministic_random:
+                    # Re-shuffle with same seed for consistent repeats
+                    temp_pool = source_images[:]
+                    random.seed(seed)
+                    random.shuffle(temp_pool)
+                    available_pool.extend(temp_pool)
+                else:
+                    # Use sorted source images
+                    available_pool.extend(source_images[:])
             
             # Consume images from pool (no repeats within cycle)
             selected = available_pool[:num_images]
             available_pool = available_pool[num_images:]
             
-            # Sort for consistent API input ordering
+            # Sort selected images for consistent API input ordering
             selected = sorted(selected, key=lambda x: x.name.lower())
             selection_plan.append(selected)
+        
+        # Store selection mode for metadata tracking
+        if not hasattr(self, '_selection_modes'):
+            self._selection_modes = {}
+        self._selection_modes[task_key] = selection_mode
         
         return selection_plan
     
@@ -452,6 +499,9 @@ class NanoBananaHandler(BaseAPIHandler):
         if task_key not in self._random_source_selections:
             self._random_source_selections[task_key] = []
         
+        # Get selection mode from stored value
+        selection_mode = getattr(self, '_selection_modes', {}).get(task_key, 'sequential_sorted')
+        
         # Record selection for reproducibility
         selection_record = {
             'iteration_index': iteration_index,
@@ -460,7 +510,9 @@ class NanoBananaHandler(BaseAPIHandler):
             'selected_files': [img.name for img in selected],
             'min_images': min_images,
             'max_images': max_images,
-            'selection_mode': 'consume_from_shuffled_pool',
+            'selection_mode': selection_mode,
+            'use_deterministic_random': task_config.get('use_deterministic_random', False),
+            'random_seed': task_config.get('random_seed'),
             'timestamp': datetime.now().isoformat()
         }
         self._random_source_selections[task_key].append(selection_record)

@@ -10,8 +10,8 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBJ4SFONkEORKdhAtxMuKQQARtJQwPNB0Zk44BXaOE-VVg?e=ygV1hd
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3b9d25cdcf3_11_192#slide=id.g3b9d25cdcf3_11_192
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAOCgQ9ut7KR7PVlw8-XohFAbP-2iBId77aVuPC41p7ApY?e=CbCUNw
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3be08482908_0_0#slide=id.g3be08482908_0_0
 
 tasks:
   - folder: ../Media Files/Nano Banana/0123 2 Styles Creative Studio 2/0123 Collage - Film Strip
@@ -66,6 +66,8 @@ tasks:
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
     min_images: 3
     max_images: 4
     num_iterations: 50
@@ -79,8 +81,49 @@ tasks:
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
     min_images: 2
     max_images: 3
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0123 Collage - Highlight Series
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "9:16"
+    prompt: |
+      ### [Global Logic & Layout]
+      - Image Usage: Use every uploaded photo exactly once. Strictly NO duplicates or distortions.
+      - Image Preservation: Absolute fidelity to original subjects. STRICTLY PROHIBITED to alter facial features, expressions, poses, or gaze. Pixel-perfect preservation required.
+      - Background: Single uniform color with subtle fine-grain noise texture; tactile matte finish, no patterns.
+      - Vertical Zones: Top 30% for Typography; Bottom 70% for Visuals.
+
+      ### [Layer 1: Foreground Subject]
+      - Selection: Prioritize standing professional portraits; strictly NO selfies.
+      - Composition: Half-body cut-out (no borders/outlines), centered, anchored to bottom edge.
+      - Scale: Exactly 50% of canvas height. Must be visually dominant over film strips.
+      - Padding: Maintain a significant vertical void between the subject's head and the typography.
+
+      ### [Layer 2: Minimalist Film Strips]
+      - Structure: Two identical, parallel diagonal strips at the bottom. Must bleed off-canvas.
+      - Frame Specs: 10% canvas area per frame; clean rectangular borders with subtle film markings.
+      - Distribution Rule (All frames except Bottom-Center): Use INPUT IMAGES ONLY.
+        - Lateral Frames: Position photos with prominent people here (left/right ends).
+        - Top Strip Center: Use an input image containing NO people. If unavailable, use the input image with the smallest human-to-background ratio.
+      - Fixed Fill Rule (Bottom Strip Center ONLY): Use a photorealistic generated Conditional Fill (background/scenery aesthetic from inputs, strictly NO people).
+      - Layering: Positioned behind the Foreground Subject.
+
+      ### [Typography & Aesthetic]
+      - Placement: Uppermost area of the top 30% zone.
+      - Content: Elegant serif headline + subtext. Strictly NO years, dates, or numerical markers.
+      - Style: High-end fashion editorial; zero UI elements or AI artifacts.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 6
+    max_images: 6
     num_iterations: 50
 
 
@@ -102,22 +145,67 @@ comments:
     max_images: "Maximum images per API call (default: model max, e.g., 3 for flash, 14 for pro)"
     num_iterations: "Number of API calls to make. Defaults to number of source files if omitted."
     optimal_formula: "sources_needed = num_iterations × (min_images + max_images) / 2"
+    
+    selection_modes:
+      sequential_sorted: |
+        Default mode. Images sorted alphabetically, consumed in order.
+        Predictable, consistent order every run. Best for sequential pairing.
+      deterministic_random: |
+        Images shuffled with deterministic seed, appears random but reproducible.
+        Same seed = same "random" order every run. Best for randomized variety while maintaining reproducibility.
+    
+    use_deterministic_random: |
+      Set to true to enable deterministic randomization (shuffles with seed).
+      Set to false or omit for sequential sorted mode (alphabetical order).
+      
+    random_seed: |
+      Optional explicit seed for deterministic random mode (any integer).
+      - If specified: Uses this exact seed every time (full manual control)
+      - If omitted: Auto-generates seed from folder path hash (consistent per folder)
+      AUTO-SEED BEHAVIOR: Seed is based on the folder path STRING from config.
+        - Same folder string = same seed = same shuffle (reproducible)
+        - Different path formats = different seeds (e.g., "./path" vs "path")
+        - Recommended: Use explicit random_seed for guaranteed consistency
+    
     notes: |
       - All images in 'Source' folder - no 'Additional' folder needed
       - num_iterations controls API call count (defaults to source file count)
       - Image counts spread from min to max across iterations (even bucket distribution)
-      - NO REPEATS: uses 'consume from shuffled pool' algorithm
+      - NO REPEATS: Pool is consumed sequentially (sorted or shuffled based on mode)
       - If sources < optimal, images will repeat across cycles (with warning)
-      - DETERMINISTIC: same folder = same selections every run
+      - FULLY DETERMINISTIC: same config + same sources = identical selections every run
+      - Selection mode and seed are logged and stored in metadata for reproducibility
       - Great for regression testing: update source images, re-run, compare results
       - Use gemini-3-pro-image-preview model for up to 14 images per call
+    
     formula_examples: |
       # min=1, max=4, iterations=50 → need 50 × (1+4)/2 = 125 sources
       # min=1, max=5, iterations=50 → need 50 × (1+5)/2 = 150 sources
       # min=1, max=3, iterations=50 → need 50 × (1+3)/2 = 100 sources
-    example: |
-      # 125 source images, 50 iterations = 50 API calls, each picks 1-4 images (no repeats)
+    
+    example_sequential: |
+      # Sequential mode: Images A,B,C,D consumed in alphabetical order
       use_random_source_selection: true
+      min_images: 1
+      max_images: 4
+      num_iterations: 50
+      # use_deterministic_random: false  # Default, can be omitted
+      model: gemini-3-pro-image-preview
+    
+    example_random_autoseed: |
+      # Deterministic random with auto-seed (based on folder path)
+      use_random_source_selection: true
+      use_deterministic_random: true  # Enable randomization
+      min_images: 1
+      max_images: 4
+      num_iterations: 50
+      model: gemini-3-pro-image-preview
+    
+    example_random_explicit: |
+      # Deterministic random with explicit seed (full control)
+      use_random_source_selection: true
+      use_deterministic_random: true
+      random_seed: 42  # Always uses seed 42
       min_images: 1
       max_images: 4
       num_iterations: 50
