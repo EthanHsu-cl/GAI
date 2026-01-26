@@ -11,121 +11,210 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBO28OYmMjbSIPJWcI97-4iAUGwgbAN696bXJ0LWeKGOTU?e=XVCG9X
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBkvJXR17FkS7BwZj248vW8AV6_YKVHgaIJDhM7NpDkx3E?e=oL5e1b
 root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3b9d25cdcf3_20_144#slide=id.g3b9d25cdcf3_20_144
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0122 2 Styles Creative Studio/0122 拍貼系列-Style1 1995
+  - folder: ../Media Files/Nano Banana/0123 2 Styles Creative Studio/0123 Light Leak Snapshot
     model: gemini-3-pro-image-preview
-    resolution: "1K"
-    aspect_ratio: "3:4"
+    resolution: "2K"
+    aspect_ratio: "9:16"
     prompt: |
-      Use all uploaded photos as the only subjects. Their faces, facial features, identities, hairstyles, expressions, poses, and clothing must remain exactly the same as in the uploaded photos. Do not redraw, replace, or re-generate the people in any way. Adding any other person, duplicating a person, or merging identities is strictly prohibited. This is a photographic filter application, not an illustration or redraw.
+      ### Layout and Composition
+      - Vertically oriented black film strip positioned precisely at the dead center of the canvas
+      - Perfectly centered both horizontally and vertically, maintaining a suspended "island" appearance
+      - Film strip height fixed at 80%, strictly forbidden from touching the top and bottom edges
+      - Mandatory equal and balanced negative space surrounding all four sides of the film strip
+      - Three vertically stacked frames designed with authentic photographic film strip borders
+      - Minimalist technical markings ("KODAK PORTRA 400", frame numbers) and authentic decorative film symbols along the border
 
-      Create a playful SINGLE-FRAME photo-booth image styled like an early-2000s Japanese Heisei-era purikura (プリクラ) photo booth. The image should feel as if it were generated directly inside an authentic early-2000s purikura machine, with a bright, cute, crowded, and slightly chaotic atmosphere that closely matches real purikura samples from that era rather than a clean or modern graphic design.
+      ### Background Generation
+      - Natural landscape featuring visible sky, without people or structures
+      - The generated background's color palette, temperature, and overall atmosphere must be directly derived from, and complementary to, the dominant tones found within the three photos inside the film strip
+      - Background darkened with fine grain applied to the bottom
+      - Warm diffused light leak positioned exclusively on the right edge
 
-      All uploaded subjects must appear together within ONE single frame at all times. Their relative scale, distance, proportions, and framing must remain consistent with the original photos. The image should capture one clear, intimate purikura interaction moment (such as peace signs close to face, close shoulders, cheek-touch, or friendly posing), rather than a collage or sequence. The composition must feel like a single purikura print, not divided or segmented in any way.
+      ### Photo Treatment (Strict Integrity & Proportions)
+      - 100% Source Image Detail Restoration: Every visual detail from the uploaded photos must be perfectly preserved without alteration
+      - Absolute preservation: No color adjustment, grading, or filtering of original photos
+      - Strict Proportional Scaling: Maintain original aspect ratios at all times
+      - Zero Distortion: Do not stretch, squash, warp, or pull the images to fit the frame
+      - Only proportional cropping is permitted to adapt to the layout; subjects must remain anatomically and visually accurate
 
-      The visual structure must be a SINGLE FULL-FRAME IMAGE.
-      There must be absolutely NO grid, NO four-frame layout, NO borders, NO white edges, NO outlines, NO separators, NO margins, and NO panel divisions of any kind. The output must appear as one uninterrupted purikura photo.No photos should show white borders in other scenes, be held by the subject, or be framed.
-
-      Apply classic Heisei-era purikura aesthetics throughout the entire image. 
-      The background must be a SINGLE, FLAT, SOLID COLOR ONLY — no mixing, no patchwork, no multi-color blobs, no layered shapes, and no overlapping color fields.
-      Strongly favor one pure background color per image, such as:
-      pure bright yellow, vivid purple, candy pink, sky blue, or solid pastel tones.
-      DO NOT combine multiple background colors in the same image.
-      DO NOT create mixed-color, camouflage, or collage-style backgrounds.
-
-      Lighting should be high-key, flat, and evenly distributed, with minimal shadow depth and no directional or cinematic lighting. Skin smoothing must be extremely light and natural, just enough to resemble early purikura airbrushing, avoiding any modern beauty filters, plastic textures, or artificial perfection. Eye enlargement, if present, must be subtle and natural, consistent with early-2000s purikura machines and never exaggerated or anime-like. The overall color balance should feel cheerful, warm, busy, and saturated, not modern, moody, or editorial.
-
-      Decorative elements must be layered on top of the photo in a way that resembles real purikura sticker placement. Pixel-style hearts and symbols may appear as accents, but the majority of decorations should be flat, pure-color, hand-drawn graffiti-style doodles. Handwritten elements must look like simple marker or pen drawings with solid fills, thick strokes, and imperfect hand-drawn lines. Avoid neon glow, halos, light streaks, gradients, or luminous effects. Include simple 2D doodle illustrations such as hearts, stars, bows, ribbons, teddy bears, animals, clouds, or cute icons, all rendered in a flat sticker-like style. All decorations must clearly float on top of the image and must never blend into faces or skin.
-
-      Add the fixed text exactly as written: “めっちゃ 仲仔♡”.
-      The text must appear in a colorful, lively, handwritten-style font typical of early-2000s purikura booths, using solid colors with playful outlines or thick strokes. Avoid neon glow, lighting effects, gradients, or modern typography. Supporting sticker text such as 一生仲仔、最強仲仔、仲仔、宝物、最強、最高、ぶちあげ、アゲ、我等友情永久不滅、Best Friend、FOREVER FRIEND、心友、信友、ずっ友 may appear scattered around the frame in a casual, hand-placed manner, but should not overcrowd the image.
-
-      The overall mood must feel joyful, intimate, energetic, and nostalgic, capturing the feeling of a real Heisei-era purikura memory that is colorful, playful, slightly over-decorated, and emotionally warm. Identity preservation is critical: faces must remain exactly the same as in the uploaded photos, with no face replacement, no illu
+      ### Typography
+      - Two words in elegant, delicate handwritten script
+      - Word 1: Positioned at the bottom-left of the second frame
+      - Word 2: Positioned at the top-right of the third frame
+      - Script should slightly overlap frames and background for a layered look
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
-    min_images: 2
-    max_images: 4
+    min_images: 3
+    max_images: 3
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0122 2 Styles Creative Studio/0122 拍貼系列-Style2 2005
+  - folder: ../Media Files/Nano Banana/0123 2 Styles Creative Studio/0123 拍貼系列-Style3 2020S
     model: gemini-3-pro-image-preview
     resolution: "1K"
     aspect_ratio: "3:4"
     prompt: |
-      Use all uploaded photos as the only subjects.
-      Their real identities must remain recognizable and consistent.
-      This is a photographic purikura-style filter application, NOT a realistic portrait and NOT a modern beauty retouch. Do not redraw, replace, or re-generate the people and Adding any other person or repeating the same person is prohibited. The output must appear as one uninterrupted purikura photo.No photos should show white borders in other scenes, be held by the subject, or be framed.
-      Identity preservation rules:
+      Use all uploaded photos as the only subjects. Their real identities must remain recognizable and consistent.
+      Preserve the subjects’ facial features, identity, skin tone, hairstyle, and body proportions EXACTLY as in the uploaded photos.
+      Do not redraw, replace, or re-generate the people.
+      Adding any other person or repeating the same person is prohibited.
+      This is a photographic purikura-style filter application inspired by CURRENT Japanese purikura trends (FJK / SJK / LJK),
+      NOT a realistic portrait and NOT a modern beauty editorial.
+
+      Identity preservation rules
+
       – The same people must remain clearly identifiable
       – Facial structure, face shape, and hairstyle must remain consistent
-      – Purikura-style facial modification is ALLOWED and REQUIRED:
-      • The eyes may be slightly enlarged in a natural early-purikura manner, avoiding exaggerated manga-style proportions
-      • skin may be softly airbrushed
-      • proportions may be slightly exaggerated in a cute, non-realistic way
-      – Do NOT replace faces or turn them into illustrations or anime
-      Create a playful single-frame photo-booth image styled like an early-2000s Japanese Heisei-era purikura (プリクラ) machine.
-      The image must look like it was produced directly by a real purikura booth:
-      – bright
+      – Do NOT replace faces
+      – Do NOT turn subjects into illustrations, anime, or dolls
+
+      Facial treatment (EYES ARE CRITICAL – CURRENT PURIKURA STYLE)
+
+      – Eyes must appear about 25–30% larger than the original image, achieved through facial proportion refinement, NOT exaggerated scaling
+      – Slightly taller eye shape with soft rounded corners
+      – Clean, soft upper eyelid line (no harsh eyeliner, no cat-eye)
+      – Subtle lower eyelid fullness (natural aegyo-sal impression, not drawn)
+      – Iris size and color remain realistic (no glow, no anime shine)
+      – Eye whites clean and bright but NOT over-whitened
+      – Eyes must feel soft, friendly, and human, never cartoonish or doll-like
+
+      Face & skin:
+      – Overall face slightly more compact and centralized (very subtle)
+      – Mild jawline softening only
+      – Skin retouching light, clean, and purikura-like
+      – No plastic skin, no heavy whitening, no editorial beauty look.
+
+      Style & booth identity
+
+      Create a playful four-frame photo-booth collage styled like a CURRENT Japanese purikura booth popular among FJK / SJK / LJK.
+
+      Overall vibe:
       – cute
-      – slightly over-processed
-      – energetic
-      – nostalgic
-      – intentionally a little chaotic
-      Layout:
-      – Single unified purikura frame only
-      – NO four-frame or multi-panel layout of any kind
+      – trendy
+      – clean
+      – soft
+      – girly
+      – Instagram-ready
+      – unmistakably modern Japanese purikura aesthetic
+
+      Layout
+
+      – Perfect 2×2 four-frame grid
+      – Equal-sized panels
+      – Seamlessly stitched edge-to-edge
       – NO borders, margins, dividers, or white lines
-      – One complete purikura output, not a collage and not separated images
-      Subjects:
-      – All subjects must appear together within the same single frame
-      – Relative positions and scale remain consistent
-      – Natural, playful interaction is required within the single image
-      – Classic purikura poses (peace signs, close shoulders, cute expressions)
-      Classic Heisei purikura facial treatment (REQUIRED):
-      – Slightly larger, rounder, clearly defined eyes with restrained enlargement
-      – Soft facial retouching with visible “machine smoothing”
-      – Slight whitening / brightening of skin tone
-      – No realistic skin texture emphasis
-      – No modern beauty, no cinematic realism
-      Overall color & exposure:
-      – Bright, high-key look
-      – Slight overexposure
-      – Warm pink-magenta dominant tone, while dark solid-color backgrounds such as purple or black may also appear for contrast
-      – Soft glow / bloom on highlights
-      – Flat contrast (no deep shadows)
-      – Avoid modern HDR, film grading, or clarity enhancement
-      Decorations & stickers (KEEP MINIMAL, NOT DENSE):
-      – Use ONLY 1–2 sticker elements total (e.g., one small heart + one tiny star OR one simple crown only)
-      – Keep doodles simple and sparse, with lots of clean negative space
-      – No layered clusters, no heavy overlap, no “sticker wall” look
-      – Stickers must float on top of the image, not embedded into faces
-      – Do NOT cover eyes, eyebrows, nose, or mouth
-      Handwritten text style (CRITICAL):
-      – Imperfect strokes, uneven thickness
-      – Cute, bubbly, casual handwriting
-      – White or bright colors with outlines or glow
-      Main text content (choose ONLY ONE, placed once in the single image):
-      「ずーっと心友!!」
-      「ずっとなかよし♡」
-      「ずっ友!!」
-      「だいすき♡」
-      Optional supporting sticker text:
-      Do NOT add supporting text, or at most add ONLY ONE short phrase from the list once, small and unobtrusive:
-      一生仲仔、最強仲仔、仲仔、宝物、最強、最高、ぶちあげ、アゲ、
-      我等友情永久不滅、Best Friend、FOREVER FRIEND、心友、信友
-      Mood & intent:
-      Joyful, intimate, nostalgic friendship energy.
-      The final image must unmistakably look like an authentic early-2000s Japanese purikura print:
-      – bright
-      – cute
-      – over-decorated
-      – handwritten
-      – emotionally warm
-      – unmistakably Heisei-era
+      – One unified purikura output (not separated images)
+
+      Subjects & poses (REFERENCE-ALIGNED)
+
+      – All subjects must appear together in all four frames
+      – Relative positions and scale remain consistent across frames
+      – Each frame must feature a DIFFERENT pose
+      – Poses must closely imitate the reference purikura poses, including:
+        • peace signs close to the face or eyes
+        • cheek-touch pose
+        • finger-heart near chin
+        • slight head tilt with close shoulder distance
+        • leaning together for intimacy
+      – Expressions should be soft, cute, and natural:
+        gentle smile / shy smile / light pout
+      – Avoid exaggerated comedy poses or large spacing between subjects
+      – Clothing must remain unchanged
+
+      Head accessories (KEY UPDATE – MORE VIVID & EXAGGERATED, REF-ACCURATE)
+
+      – Add bows or headbands to SOME subjects only
+      – Accessories appear in RANDOM 1–2 frames only
+      – At most TWO frames may contain head accessories
+      – Never appear in all four frames
+
+      – Sequined pink ribbon headband
+      – Lace plush headband (soft, fluffy texture)
+      – Kitty-style pink glitter bow headband (purikura booth rental feel)
+
+      – Accessories should feel playful, bold, and slightly exaggerated
+      – Slightly oversized but controlled
+      – Clearly readable at thumbnail size
+
+      Color direction (IMPORTANT):
+      – High-saturation candy colors:
+        hot pink, vivid baby pink, cherry red, bright mint green
+      – Must stand out clearly from hair and background
+      – Avoid muted or dusty tones
+
+      Placement rules:
+      – On top of the head or slightly off-center
+      – Do NOT obscure bangs, eyes, eyebrows, or facial features
+
+      Restrictions:
+      – Do NOT use animal ears
+      – Do NOT use cosplay or luxury accessories
+      – Do NOT overload accessories
+
+      Background & lighting
+
+      – Simple, clean purikura booth background
+      – Soft pastel tones only (pink / white / light purple)
+      – Flat, friendly booth lighting
+      – Soft glow without haze
+      – No detailed environments
+
+      Decorations (CRITICAL UPDATE – HEARTS ONLY, NON-NEON, REF-MATCHED)
+
+      – DO NOT add ANY text, letters, numbers, words, or typography of any kind
+      – DO NOT add speech bubbles, stars, sparkles, stickers, outlines, glow effects, or neon effects
+      – Add ONLY hand-drawn heart doodles
+
+      Heart appearance (STRICTLY MATCH REFERENCE – NOT NEON):
+
+      – Hand-drawn pen / marker style (like writing directly on purikura print)
+      – Flat color fill or simple outline ONLY
+      – NO glow, NO neon, NO light emission, NO gradient
+      – Uneven, imperfect stroke thickness
+      – Slight wobble, casual asymmetry
+      – Organic, human-drawn feeling
+      – NOT vector, NOT sticker-like, NOT digital icon style
+
+      Heart color palette ONLY:
+      – hot pink
+      – bright red
+      – vivid pastel pink
+      – matte or flat ink appearance (no shine)
+
+      Heart distribution rules (VERY IMPORTANT):
+      – ONLY 2 out of the 4 frames may contain hearts
+      – The remaining 2 frames must have ZERO decorations
+      – Do NOT distribute hearts evenly across frames
+      – Heart quantity must be limited and intentional (a few hearts per frame)
+
+      Placement:
+      – Floating loosely around faces, cheeks, or hands
+      – Near gestures (peace signs, finger-heart)
+      – Never overlapping eyes, eyebrows, nose, or mouth
+      – Must float clearly ON TOP of the photo layer
+
+      STRICTLY FORBIDDEN:
+      – Neon-style hearts
+      – Glowing or luminous hearts
+      – Gradient or outlined neon hearts
+      – Hearts in all four frames
+      – Any symbols other than hearts
+      – Decorative overload
+
+      Mood & intent
+
+      Cute, intimate friendship memories captured in a CURRENT Japanese purikura booth.
+      The final image should feel:
+      – pastel
+      – bubbly
+      – clean
+      – softly retouched
+      – trendy
+      – unmistakably modern Japanese purikura.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true

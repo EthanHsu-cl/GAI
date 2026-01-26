@@ -298,11 +298,11 @@ class NanoBananaHandler(BaseAPIHandler):
     def _build_selection_plan(self, task_config):
         """Pre-build the complete selection plan for all iterations.
         
-        Uses optimized "consume from shuffled pool" approach:
-        - Deterministically shuffles source images using folder name as seed
+        Uses sorted list consumption approach:
+        - Source images are sorted alphabetically by filename
         - Pre-calculates image count for each iteration (even bucket distribution)
-        - Assigns images sequentially from shuffled pool (no repeats until exhausted)
-        - If pool exhausted, reshuffles and continues (with warning)
+        - Assigns images sequentially from sorted pool (no repeats until exhausted)
+        - If pool exhausted, restarts from beginning and continues
         
         Optimal formula: total_needed = num_iterations × (min + max) / 2
         
@@ -313,8 +313,6 @@ class NanoBananaHandler(BaseAPIHandler):
             list: List of lists, where each inner list contains Path objects
                   for that iteration's selected images.
         """
-        import random
-        
         task_key = str(task_config.get('folder', ''))
         
         # Get model limits
@@ -375,22 +373,17 @@ class NanoBananaHandler(BaseAPIHandler):
                 f"Images will repeat across {cycles} cycles."
             )
         
-        # Create deterministic shuffled pool using folder name as seed
-        rng = random.Random(task_key)
-        
-        # Build selection plan by consuming from shuffled pool
+        # Build selection plan by consuming from sorted pool sequentially
         selection_plan = []
         available_pool = []
         
         for iteration_index in range(num_iterations):
             num_images = iteration_counts[iteration_index]
             
-            # Refill pool if needed
+            # Refill pool if needed (restart from sorted list)
             if len(available_pool) < num_images:
-                # Reshuffle all source images and add to pool
-                shuffled = source_images[:]
-                rng.shuffle(shuffled)
-                available_pool.extend(shuffled)
+                # Use sorted source images directly (no shuffling)
+                available_pool.extend(source_images[:])
             
             # Consume images from pool (no repeats within cycle)
             selected = available_pool[:num_images]
@@ -405,13 +398,13 @@ class NanoBananaHandler(BaseAPIHandler):
     def _get_random_source_selection(self, task_config, iteration_index):
         """Deterministically select N images from Source folder for an API call.
         
-        Uses optimized "consume from pool" approach for NO REPEATS:
+        Uses sorted list consumption approach for consistent selection:
         - Pre-builds complete selection plan on first call
         - Each iteration gets unique images (until pool exhausted)
-        - Deterministic: same folder + same config = same selection every time
+        - Fully deterministic: same folder + same config = same selection every time
+        - Images are consumed in alphabetical filename order
         
         Optimal formula: sources_needed = num_iterations × (min + max) / 2
-        (Much better than old formula: num_iterations × max)
         
         Args:
             task_config: Task configuration dictionary containing:
