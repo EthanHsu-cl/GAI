@@ -3,7 +3,7 @@ output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 template_path: templates/I2V templates.pptx
 testbed: http://192.168.31.161:8000/video_effect/
 design_link: https://platform.pixverse.ai/effect-list
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB2n9_7SWuJTI_itrCnsU6SAeC7sG2d1CyWx5wyFVQJ60A?e=jLFPt2
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAUeBZxpJErRJLbnBSaZHH4AY24W8N_CyW20xkLCb6AxuA?e=TigUU9
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 0

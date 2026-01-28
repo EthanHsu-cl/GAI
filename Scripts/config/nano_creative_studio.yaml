@@ -11,66 +11,57 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: 
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3be08482908_19_82#slide=id.g3be08482908_19_82
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB6N2KiLg4tSqPkt1vrbHVrAeLfUmygBhg1Enuqb5ZPZ_Q?e=vuUbps
+root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bc00d6d66b_3_0#slide=id.g3bc00d6d66b_3_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0126 2 Styles Creative Studio/0126 攝影兩宮格
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Please use all uploaded photos as the only source of characters in the image. Preserve every person’s real face, facial features, bone structure, skin tone, hairstyle, clothing, and overall identity exactly as shown in their original photos. Do not beautify faces, smooth skin, stylize features, alter proportions, change age, or modify identity in any way. No additional people may appear. Each uploaded person must appear only once in the final image, with no duplication, cloning, or repeated faces.
-
-      Create a vertically oriented image divided clearly into two stacked horizontal frames, resembling a casual photo exchange between friends. The overall mood should feel natural, playful, and nostalgic, inspired by a Japanese springtime aesthetic. The setting should feel like a green park in early spring, with soft sunlight, fresh greenery, trees, and a relaxed outdoor atmosphere. The color tone should be light, airy, and slightly warm, emphasizing fresh greens and gentle daylight. The two stacked frames must be seamlessly stitched together with no white borders, gaps, margins, or visible separators of any kind. The transition between the upper and lower frames should be clean and continuous, forming a single unified image.
-
-      [Upper Frame: The Photographer] In the upper frame, randomly select one single person from the uploaded users to act as the photographer. This person must appear alone in the upper frame. The character should be posing with a compact camera or film camera, gently and naturally holding it near their face rather than actively taking a photo. The camera should rest casually against the face, covering only one eye, while the other eye remains clearly visible. Both eyes must be open, relaxed, and clearly visible with no blinking. The upper frame must be shot from a clear low-angle (upward-looking) perspective. The background should be dominated by sky, treetops, or bright open air, with no visible ground. The pose should feel calm, casual, and intentional. The photographer must be fully intact within the upper frame with no cut-off limbs or rendering errors.
-
-      [Lower Frame: The Viewfinder Scene] In the lower frame, depict all remaining uploaded users together, excluding the person used in the upper frame. This represents the scene being photographed. The camera viewpoint is from above (high-angle), looking downward toward the group sitting on a picnic blanket on the grass. The background consists entirely of grass and the picnic blanket, with no horizon line. Characters should be interacting casually, sitting close together with lively, genuine expressions (peace signs, leaning in, laughing).
-
-      [Crucial: Viewfinder Overlay Construction] The lower frame must feature a strict and absolute "Edge-to-Edge Viewfinder" overlay, exactly matching the style and placement of the solid black frame in image_3.png.
-
-      The Border: The entire lower frame must be enclosed by a single, thick, solid black rectangular bezel that acts as the absolute physical limit of the image. This black line must be perfectly flush with and become the outermost edge of the entire lower canvas. There must be ZERO padding, ZERO margins, and absolutely NO white space between the black line and the actual edge of the image file. The black line is the final, hard boundary.
-
-      Closed Loop: The black border must be a complete, unbroken, four-sided closed rectangle. Do not use disconnected corner brackets ( ｢ ｣ ) or broken lines. It must be a solid connected box that hugs the very edge of the image boundary, containing the entire scene.
-
-      UI Elements: Inside this black perimeter, overlay minimal white camera UI elements: a small "REC" indicator (top left corner) and a battery icon (top right corner). These icons must sit inside the image, close to the black border.
-
-      No Other Guides: Absolutely NO grid lines, NO rule-of-thirds lines, NO focus squares in the middle, and NO face-detection boxes. Keep the center of the image completely clean.
-
-      [Atmosphere] Both frames share consistent lighting: soft daylight, gentle shadows, springtime warmth. The final image should clearly read as a "Photographer (Top) vs. What They See (Bottom)" narrative, with accurate identities and a clean, edge-to-edge viewfinder graphic in the bottom half.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    use_deterministic_random: false
-    min_images: 2
-    max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0126 2 Styles Creative Studio/0126 拍貼系列-Style3:2020S
+  - folder: ../Media Files/Nano Banana/0128 拍貼系列-Style3 2020S
     model: gemini-3-pro-image-preview
     resolution: "1K"
     aspect_ratio: "3:4"
     prompt: |
-      Prompt
-
       Use all uploaded photos as the only subjects. Their real identities must remain recognizable and consistent.
       Preserve the subjects’ facial features, identity, skin tone, hairstyle, and body proportions EXACTLY as in the uploaded photos.
 
-      Adding the same person repeatedly or adding people who haven't uploaded photos is strictly prohibited. A maximum of 4 people can be displayed in the frame; duplicates are absolutely forbidden.
+      The input consists of 2 to 4 different people (all unique individuals).
 
+      GLOBAL IDENTITY & COUNT RULES (CRITICAL):
+      – Each uploaded person may appear multiple times across different frames
+      – BUT the same person must NEVER appear twice within the SAME frame
+      – No frame may contain duplicated faces or cloned identities
+      – No hallucinated or extra people are allowed
+
+      FRAME POPULATION RULES (VERY IMPORTANT):
+      – Each frame must contain either:
+        • exactly 2 people
+        • exactly 3 people
+        • or all 4 people together
+      – A frame with ONLY 1 person is STRICTLY FORBIDDEN
+      – The exact number of people per frame may vary randomly
+      – Not all frames need to contain the same number of people
+
+      Adding the same person repeatedly within a single frame
+      or adding people who haven't uploaded photos
+      is strictly prohibited.
+
+      ────────────────────────
+      PURPOSE & STYLE:
+      ────────────────────────
       This is a photographic purikura-style filter application inspired by CURRENT Japanese purikura trends (FJK / SJK / LJK),
       NOT a realistic portrait and NOT a modern beauty editorial.
 
-      Identity preservation rules
-
+      ────────────────────────
+      IDENTITY PRESERVATION RULES:
+      ────────────────────────
       – The same people must remain clearly identifiable
       – Facial structure, face shape, and hairstyle must remain consistent
       – Do NOT replace faces
+      – Do NOT merge faces
       – Do NOT turn subjects into illustrations, anime, or dolls
 
-      Facial treatment (EYES ARE CRITICAL – CURRENT PURIKURA STYLE)
-
+      ────────────────────────
+      FACIAL TREATMENT (EYES ARE CRITICAL – CURRENT PURIKURA STYLE):
+      ────────────────────────
       – Eyes must appear about 25–30% larger than the original image, achieved through facial proportion refinement, NOT exaggerated scaling
       – Slightly taller eye shape with soft rounded corners
       – Clean, soft upper eyelid line (no harsh eyeliner, no cat-eye)
@@ -83,10 +74,11 @@ tasks:
       – Overall face slightly more compact and centralized (very subtle)
       – Mild jawline softening only
       – Skin retouching light, clean, and purikura-like
-      – No plastic skin, no heavy whitening, no editorial beauty look.
+      – No plastic skin, no heavy whitening, no editorial beauty look
 
-      Style & booth identity
-
+      ────────────────────────
+      STYLE & BOOTH IDENTITY:
+      ────────────────────────
       Create a playful four-frame photo-booth collage styled like a CURRENT Japanese purikura booth popular among FJK / SJK / LJK.
 
       Overall vibe:
@@ -98,19 +90,21 @@ tasks:
       – Instagram-ready
       – unmistakably modern Japanese purikura aesthetic
 
-      Layout
-
+      ────────────────────────
+      LAYOUT:
+      ────────────────────────
       – Perfect 2×2 four-frame grid
       – Equal-sized panels
       – Seamlessly stitched edge-to-edge
       – NO borders, margins, dividers, or white lines
       – One unified purikura output (not separated images)
 
-      Subjects & poses (REFERENCE-ALIGNED)
-
+      ────────────────────────
+      SUBJECTS & POSES (REFERENCE-ALIGNED):
+      ────────────────────────
       – Relative positions and scale remain consistent across frames
       – Each frame must feature a DIFFERENT pose
-      – Poses must closely imitate the reference purikura poses, including:
+      – Poses must closely imitate reference purikura poses, including:
         • peace signs close to the face or eyes
         • cheek-touch pose
         • finger-heart near chin
@@ -121,8 +115,9 @@ tasks:
       – Avoid exaggerated comedy poses or large spacing between subjects
       – Clothing must remain unchanged
 
-      Head accessories
-
+      ────────────────────────
+      HEAD ACCESSORIES:
+      ────────────────────────
       – Add bows or headbands to SOME subjects only
       – Accessories appear in RANDOM 1–2 frames only
       – At most TWO frames may contain head accessories
@@ -136,7 +131,7 @@ tasks:
       – Slightly oversized but controlled
       – Clearly readable at thumbnail size
 
-      Color direction :
+      Color direction:
       – High-saturation candy colors:
         hot pink, vivid baby pink, cherry red, bright mint green
       – Must stand out clearly from hair and background
@@ -151,58 +146,43 @@ tasks:
       – Do NOT use cosplay or luxury accessories
       – Do NOT overload accessories
 
-      Background & lighting
-
+      ────────────────────────
+      BACKGROUND & LIGHTING:
+      ────────────────────────
       – Simple, clean purikura booth background
       – Soft pastel tones only (pink / white / light purple)
       – Flat, friendly booth lighting
       – Soft glow without haze
       – No detailed environments
 
-      Decorations (CRITICAL UPDATE – HEARTS ONLY, NON-NEON, REF-MATCHED)
-
-      – DO NOT add ANY text, letters, numbers, words, or typography of any kind
+      ────────────────────────
+      DECORATIONS (CRITICAL UPDATE – HEARTS ONLY):
+      ────────────────────────
+      – DO NOT add ANY text, letters, numbers, words, or typography
       – DO NOT add speech bubbles, stars, sparkles, stickers, outlines, glow effects, or neon effects
       – Add ONLY hand-drawn heart doodles
 
-      Heart appearance (STRICTLY MATCH REFERENCE – NOT NEON):
-
-      – Hand-drawn pen / marker style (like writing directly on purikura print)
+      Heart appearance:
+      – Hand-drawn pen / marker style
       – Flat color fill or simple outline ONLY
-      – NO glow, NO neon, NO light emission, NO gradient
+      – NO glow, NO neon, NO gradient
       – Uneven, imperfect stroke thickness
-      – Slight wobble, casual asymmetry
-      – Organic, human-drawn feeling
-      – NOT vector, NOT sticker-like, NOT digital icon style
+      – Casual, human-drawn feeling
 
       Heart color palette ONLY:
       – hot pink
       – bright red
       – vivid pastel pink
-      – matte or flat ink appearance (no shine)
 
-      Heart distribution rules (VERY IMPORTANT):
+      Heart distribution rules:
       – ONLY 2 out of the 4 frames may contain hearts
-      – The remaining 2 frames must have ZERO decorations
-      – Do NOT distribute hearts evenly across frames
-      – Heart quantity must be limited and intentional (a few hearts per frame)
+      – Remaining frames must have ZERO decorations
+      – Do NOT distribute evenly
+      – Never overlap eyes, eyebrows, nose, or mouth
 
-      Placement:
-      – Floating loosely around faces, cheeks, or hands
-      – Near gestures (peace signs, finger-heart)
-      – Never overlapping eyes, eyebrows, nose, or mouth
-      – Must float clearly ON TOP of the photo layer
-
-      STRICTLY FORBIDDEN:
-      – Neon-style hearts
-      – Glowing or luminous hearts
-      – Gradient or outlined neon hearts
-      – Hearts in all four frames
-      – Any symbols other than hearts
-      – Decorative overload
-
-      Mood & intent
-
+      ────────────────────────
+      MOOD & INTENT:
+      ────────────────────────
       Cute, intimate friendship memories captured in a CURRENT Japanese purikura booth.
       The final image should feel:
       – pastel

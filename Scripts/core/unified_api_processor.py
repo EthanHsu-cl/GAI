@@ -639,13 +639,11 @@ class UnifiedAPIProcessor:
             source_folder = folder / "Source"
             source_folder.mkdir(exist_ok=True)
 
-            if not source_folder.exists():
-                return None, []
-
             # Get and validate images
             image_files = self._get_files_by_type(source_folder, 'image')
 
             if not image_files:
+                self.logger.warning(f"⚠️ No images found in: {source_folder}")
                 return None, []
 
             # Validate images

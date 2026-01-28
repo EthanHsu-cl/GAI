@@ -11,375 +11,11 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAMcubmfrLSRIuKTXLI897WAQQUPEeVG1J-t6NLgXo0JPM?e=6w2PuK
-root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bbd2c01681_0_2#slide=id.g3bbd2c01681_0_2
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBRC9TlF-U0SKH7Eb2raCHUAZ9n5huc3c3o2qhsWnDPkr0?e=Bnk052
+root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bbd2c01681_0_227#slide=id.g3bbd2c01681_0_227
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0127 4 Styles CNY/0127 好
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:5" 
-    prompt: |
-      MODEL: Gemini 3 / Banana Pro
-
-      ==================================================
-      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME)
-      ==================================================
-
-      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the person’s face.
-
-      The generated face must be the SAME REAL PERSON as in the input photo,
-      copied directly from the input, NOT reconstructed, NOT reinterpreted.
-
-      Do NOT beautify, optimize, stylize, idealize, or normalize the face in any way.
-      Do NOT adjust facial proportions, features, symmetry, skin texture, or age.
-
-      Do NOT change ethnicity, race, or regional facial characteristics.
-
-      The facial expression must remain natural and consistent with the input photo.
-      Do NOT modify or enhance expression.
-
-      If the face does not immediately look identical to the input person,
-      the result is INVALID and must be regenerated.
-      The face must be directly copied from the input photo at the pixel-structure level, not re-generated or averaged.
-      ==================================================
-      SUBJECT & SOURCE IMAGE RULES
-      ==================================================
-
-      Use the uploaded user photos as the ONLY human sources.
-
-      - The number of people in the final image must EXACTLY match the number of uploaded photos (1–4 only)
-      - No extra people
-      - No duplicated faces
-      - No merged identities
-      - No face swapping
-
-      All facial features must come ONLY from the input photos.
-      Input photos override all stylistic, aesthetic, or generative tendencies.
-
-      ==================================================
-      SCENE & BACKGROUND
-      ==================================================
-
-      Professional studio photoshoot.
-      Clean, seamless light grey to off-white background.
-      Plain, smooth, minimal.
-      No texture, no gradients, no patterns.
-
-      ==================================================
-      OUTFITS (STRICT COLOR CONTROL)
-      ==================================================
-
-      - All subjects wear solid red knit sweaters
-        - No logos
-        - No patterns
-      - Bottoms are pure white only:
-        - Adults: white trousers or white skirts
-        - Children: white skirts or white shorts
-      - Shoes: white or red only
-
-      No other colors allowed on clothing.
-
-      ==================================================
-      POSE & MOOD
-      ==================================================
-
-      Avoid stiff or posed standing positions.
-
-      Subjects should appear natural and relaxed:
-      - Slight leaning toward each other
-      - Relaxed arms
-      - Natural body angles
-      - Warm, casual family interaction
-
-      Mood should feel joyful, festive, and candid.
-      Do NOT exaggerate expressions.
-      Preserve the natural expression from the input photos.
-
-      ==================================================
-      PROP — CHINESE CHARACTER「好」(MANDATORY)
-      ==================================================
-
-      All subjects hold ONE oversized Chinese character「好」with the following REQUIRED properties:
-
-      FORM & MATERIAL
-      - Must be a physical hand-cut paper or cardboard prop
-      - The paper is CUT ALONG THE CHARACTER OUTLINE
-      - The outer edge follows the brush strokes of 「好」
-
-      PROHIBITED:
-      - Rectangular boards
-      - Square cards
-      - Any geometric base with a character printed on it
-
-      COLOR & EDGE
-      - Main character color: festive red
-      - A clearly visible white border outlines the character
-      - The white border follows the brushstroke silhouette
-      - Border thickness is natural and hand-cut, not vector-perfect
-
-      TYPOGRAPHY STYLE
-      - Traditional calligraphy similar to 凝書體
-      - Thick, rounded brush strokes
-      - Handcrafted, organic feeling
-      - Slight natural imperfections
-
-      NOT allowed:
-      - Geometric forms
-      - Modern fonts
-      - Sharp edges
-      - Digital or vector typography
-
-      ==================================================
-      HAND-DRAWN DECORATIONS
-      ==================================================
-
-      Add subtle hand-drawn doodles:
-
-      - Handwritten “Happy New Year”
-      - Small hand-drawn flowers
-      - Simple festive icons
-
-      Style:
-      - Childlike
-      - Playful
-      - Hand-sketched
-
-      Decorations must NOT cover faces or distort bodies.
-
-      ==================================================
-      LIGHTING & CAMERA
-      ==================================================
-
-      Soft, even studio lighting.
-      No harsh shadows.
-      Eye-level camera.
-      High resolution.
-      Sharp focus.
-      Clean commercial photography.
-
-      ==================================================
-      FINAL IDENTITY VERIFICATION (MANDATORY)
-      ==================================================
-
-      Before finalizing, verify:
-
-      - Faces immediately and clearly match the uploaded photos
-      - Ethnicity and regional facial characteristics are unchanged
-      - Facial structure and natural expression are preserved
-
-      If ANY check fails, the result is INVALID and must be regenerated.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0127 4 Styles CNY/0127 米色全家福V2
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:3"
-    prompt: |
-      MODEL: Gemini 3 / Banana Pro
-
-      ==================================================
-      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME)
-      ==================================================
-
-      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the person’s face.
-
-      The generated face must be the SAME REAL PERSON as in the input photo,
-      copied directly from the input, NOT reconstructed, NOT reinterpreted.
-
-      Do NOT beautify, optimize, stylize, idealize, or normalize the face in any way.
-      Do NOT adjust facial proportions, features, symmetry, skin texture, or age.
-
-      Do NOT change ethnicity, race, or regional facial characteristics.
-
-      The facial expression must remain natural and consistent with the input photo.
-      Do NOT modify or enhance expression.
-
-      If the face does not immediately look identical to the input person,
-      the result is INVALID and must be regenerated.
-
-      The face must be directly copied from the input photo at the pixel-structure level,
-      not re-generated or averaged.
-
-      ==================================================
-      SUBJECT & SOURCE IMAGE RULES
-      ==================================================
-
-      Use the uploaded user photos as the ONLY human sources.
-
-      - The number of people in the final image must EXACTLY match the number of uploaded photos (1–4 only)
-      - No extra people
-      - No duplicated faces
-      - No merged identities
-      - No face swapping
-
-      All facial features must come ONLY from the input photos.
-      Input photos override all stylistic, aesthetic, or generative tendencies.
-
-      ==================================================
-      SCENE & BACKGROUND
-      ==================================================
-
-      A professional studio photoshoot.
-
-      Background color: soft beige / light cream tone.
-      Clean, seamless background.
-      No texture, no patterns, no gradients.
-
-      ==================================================
-      CENTER SETUP
-      ==================================================
-
-      At the center of the scene is a large, round, upholstered chair or ottoman.
-
-      - Shape: round
-      - Material: upholstered, soft fabric
-      - Color: beige or cream
-
-      Under the chair and extending outward is a rectangular red carpet,
-      similar to traditional Lunar New Year studio setups.
-
-      - The carpet should feel soft, festive, and ceremonial
-      - The carpet is placed flat on the floor, not floating
-
-      ==================================================
-      OUTFITS (STRICT COLOR PALETTE)
-      ==================================================
-
-      - Clothing colors limited to red, beige, cream, and off-white only
-      - Knit sweaters, scarves, or soft winter fabrics
-      - No logos
-      - No text
-      - No patterns
-
-      Bottoms:
-      - White, beige, or cream only
-
-      Shoes and socks:
-      - Red, beige, or white only
-
-      No other colors allowed.
-
-      ==================================================
-      POSE & INTERACTION (FRIENDS MODE)
-      ==================================================
-
-      Subjects should appear as friends, NOT romantic partners.
-
-      ALLOWED:
-      - Sitting close together on or around the round chair
-      - Relaxed posture
-      - Casual leaning
-      - Friendly smiles
-      - Light shoulder proximity
-      - Natural group interaction
-
-      NOT ALLOWED:
-      - Hugging
-      - Holding hands
-      - Face-to-face intimacy
-      - Couple-like or romantic poses
-
-      Mood:
-      Warm, friendly, festive, and social.
-
-      ==================================================
-      PROPS & FESTIVE ELEMENTS
-      ==================================================
-
-      Some subjects may hold traditional red Spring Festival couplets (春聯).
-
-      Couplet requirements:
-      - The couplets MUST display the exact Chinese text: 「恭喜發財」
-      - No other characters or phrases allowed
-      - Traditional vertical red couplets
-      - Calligraphy in gold or dark red
-      - Physical paper couplets only (not digital text)
-
-      ==================================================
-      FLOOR DECORATIONS (STRICT COUNT)
-      ==================================================
-
-      On the floor, place the following physical decorations:
-
-      - Exactly ONE three-dimensional Chinese character 「福」
-      - Exactly ONE three-dimensional Chinese character 「春」
-
-      Rules:
-      - Solid physical props only
-      - Not floating text
-      - Not duplicated
-      - Not repeated
-
-      Additional decorations:
-      - Several traditional red lanterns placed around the chair and carpet
-
-      All floor decorations must frame the group
-      and must NOT block faces or bodies.
-
-      ==================================================
-      COLOR & TONE ADJUSTMENT
-      ==================================================
-
-      Overall image saturation should be slightly reduced.
-
-      Colors should feel warm but muted.
-      Avoid overly vivid or high-contrast reds.
-
-      ==================================================
-      LIGHTING & CAMERA
-      ==================================================
-
-      Soft, even studio lighting.
-      No harsh shadows.
-
-      Gentle shadows allowed only under:
-      - Chair
-      - Carpet
-      - Feet
-
-      Eye-level camera.
-      Single-frame composition.
-      High resolution.
-      Sharp focus.
-
-      ==================================================
-      OVERALL STYLE
-      ==================================================
-
-      Premium, calm, refined Lunar New Year group portrait.
-
-      Beige–red harmony with slightly lowered saturation.
-      Modern studio photography combined with traditional festive elements.
-
-      No watermarks.
-      No borders.
-      No UI elements.
-
-      ==================================================
-      FINAL FACE CHECK (MANDATORY)
-      ==================================================
-
-      Before finalizing:
-
-      - Verify all faces exactly match the uploaded photos
-      - Identity must be immediately recognizable
-      - Ethnicity and facial structure must remain unchanged
-
-      If not, regenerate until correct.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    min_images: 1
-    max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0127 4 Styles CNY/0127 馬上幸福全家福V2
+  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY/0128 馬上幸福全家福V3
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "9:16" 
@@ -406,8 +42,7 @@ tasks:
       If the face does not immediately look identical to the input person,
       the result is INVALID and must be regenerated.
 
-      The face must be directly copied from the input photo at the pixel-structure level,
-      not re-generated or averaged.
+      The face must be directly copied from the input photo,not re-generated or averaged.
 
       ==================================================
       SUBJECT & SOURCE IMAGE RULES
@@ -461,11 +96,9 @@ tasks:
       SPATIAL RULES:
       - Calligraphy exists physically on the BACKGROUND WALL
       - Text occupies the upper background area only
-      - Foreground subjects must PARTIALLY OVERLAP and obscure portions of the calligraphy
-      - Overlap must clearly indicate depth: text is behind people, not floating
-
-      Do NOT allow the text to sit fully in front of subjects.
-      Do NOT center the text like a poster headline.
+      - Calligraphy is clearly placed behind the subjects (background wall placement)
+      - Do NOT place calligraphy in front of subjects
+      - Do NOT center the text like a poster headline
 
       ==================================================
       TABLE & OBJECT COMPOSITION
@@ -545,11 +178,13 @@ tasks:
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
     min_images: 2
     max_images: 4
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0127 4 Styles CNY/0127 火鍋全家福V2
+  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY/0128 火鍋全家福V3
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "4:3" 
@@ -612,8 +247,8 @@ tasks:
       - Solid red seamless background
       - Red tablecloth
 
-      A traditional hot pot placed at the center of the table.
-      Dumplings and fruits arranged naturally around the hot pot.
+      A traditional hot pot placed at the center of the table,
+      with simple accompanying food items around it.
 
       ==================================================
       BACKGROUND DETAIL (IMPORTANT)
@@ -629,6 +264,10 @@ tasks:
       Calligraphy content:
       - Must clearly and correctly display the four Chinese characters: 「恭賀新禧」
       - Brush-style calligraphy only
+
+      Placement rule:
+      Calligraphy exists physically on the background wall,
+      clearly placed behind the subjects.
 
       PROHIBITED:
       - Vertical calligraphy
@@ -666,10 +305,9 @@ tasks:
       COMPOSITION
       ==================================================
 
-      All people gathered naturally around the hot pot,
-      actively eating and interacting during the reunion dinner.
+      All people are gathered naturally around the hot pot
+      during the reunion dinner.
 
-      - Natural dining gestures allowed (holding bowls, chopsticks)
       - Balanced group composition
       - All faces clearly visible
       - No one cropped
@@ -680,7 +318,7 @@ tasks:
       EMOTIONS & INTERACTION
       ==================================================
 
-      Warm, joyful, natural group interaction while eating hot pot.
+      Warm, joyful, natural group interaction.
 
       Expressions should feel:
       - Relaxed
@@ -734,8 +372,602 @@ tasks:
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
     min_images: 2
     max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY/0128 賀年斗方情境圖V2
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "4:5" 
+    prompt: |
+      Create ONE single photorealistic Lunar New Year “斗方” using the uploaded image (any subject type: person, baby, pet, or group photo).
+
+      The result must look like a real New Year photograph, NOT an illustration, collage, graphic mockup, or digital composite.
+
+      ==================================================
+      ASPECT RATIO
+      ==================================================
+
+      Final image must be vertical 4:5.
+
+      ==================================================
+      MANDATORY SUBJECT INCLUSION (CRITICAL – NO EXCEPTIONS)
+      ==================================================
+
+      ALL people and/or pets present in the uploaded image MUST be included in the final design.
+
+      No person or pet may be omitted, removed, cropped out, replaced, or substituted.
+
+      If the uploaded image contains multiple people and/or pets:
+      - Every individual must appear together within the SAME single 斗方.
+      - Partial inclusion is strictly prohibited.
+
+      Do NOT generate additional people or animals.
+      Do NOT replace any subject with illustrations, symbols, silhouettes, or decorative substitutes.
+
+      All subjects must remain recognizable and clearly identifiable, preserving their key features and identity.
+
+      Any result that fails to include ALL people and/or pets is INVALID and must be regenerated.
+
+      ==================================================
+      STRICT COMPOSITION RULES
+      ==================================================
+
+      The image must contain ONLY ONE 斗方.
+      Do NOT generate multiple 斗方.
+
+      The 斗方 must be slightly smaller than typical center decorations, leaving visible surrounding space.
+      The 斗方 must be centered but not oversized or edge-to-edge.
+
+      ==================================================
+      PLACEMENT SCENE (CHOOSE ONE ONLY)
+      ==================================================
+
+      Choose ONE scene only:
+      - A traditional or modern dark wooden door
+      - A clean white wall
+
+      If placed on a wooden door:
+      - The 斗方 is centered on the door.
+      - Hang traditional Lunar New Year firecracker decorations (鞭炮串) vertically on BOTH the left and right sides of the door.
+      - Firecrackers must be festive, red-dominant, and clearly visible.
+      - Firecrackers must NOT overlap, cover, or block the 斗方.
+
+      ==================================================
+      DESIGN & COLOR REQUIREMENTS
+      ==================================================
+
+      The 斗方 must be square (1:1) and rotated 45 degrees (diamond orientation).
+
+      Base color must be predominantly RED.
+      Gold is accent color only (text, patterns, highlights).
+
+      Avoid pale, beige, pink, pastel, or non-festive base colors.
+
+      ==================================================
+      CONTENT REQUIREMENTS
+      ==================================================
+
+      Preserve the identity and key features of ALL uploaded subjects.
+
+      Include ONE main Chinese New Year character or phrase (e.g. 福, 春, 財).
+
+      The year “2026” may appear optionally.
+
+      Randomly include several Lunar New Year decorative elements:
+      - pineapple
+      - peanuts
+      - gold ingots
+      - 财神
+      - festive clouds
+      - coins
+      - firecrackers
+
+      Decorative elements must support the design and must NOT dominate, replace, or obscure the main subject or the 斗方.
+
+      ==================================================
+      REALISM REQUIREMENTS
+      ==================================================
+
+      The final image must look like a real, professionally photographed Lunar New Year scene.
+
+      The 斗方 must look like real printed paper:
+      - Subtle paper texture
+      - Clean, natural edges
+      - No artificial glow or graphic effects
+
+      Lighting must match the door or wall environment naturally.
+      No collage look, no floating objects, no surreal or illustrated effects.
+
+      ==================================================
+      PHYSICAL INTEGRATION & LIGHTING REALISM (CRITICAL)
+      ==================================================
+
+      The 斗方 must be physically integrated into the environment as a real, rigid paper decoration,
+      NOT a graphic overlay, sticker, or post-production pasted element.
+
+      The 斗方 must interact naturally with the surrounding environmental light:
+      - It must receive the SAME light direction, intensity, color temperature, and shadow behavior as the door or wall surface.
+      - Highlights, midtones, and shadows on the 斗方 must match the ambient and directional lighting of the scene.
+      - The paper must show subtle light falloff and soft contact shadows where it meets the wall or door.
+
+      The 斗方 must NOT appear flat, glowing, floating, uniformly lit, or digitally composited.
+
+      ==================================================
+      PAPER MATERIAL CONSTRAINTS (STRICT)
+      ==================================================
+
+      The 斗方 must be made of rigid, flat printed paper:
+      - The paper surface must remain smooth and planar.
+      - NO wrinkles, creases, folds, bends, waves, curls, or fabric-like behavior.
+      - The paper must NOT sag, ripple, deform, or behave like cloth.
+      - The edges must remain crisp and clean, consistent with freshly printed New Year paper.
+
+      The 斗方 must clearly read as printed paper stock,
+      NOT fabric, banner, scroll, textile, or flexible material.
+
+      ==================================================
+      FINAL VALIDATION RULE
+      ==================================================
+
+      Any result where the 斗方 appears as a flat digital overlay, sticker, collage element,
+      or post-processed pasted graphic is INVALID and must be regenerated.
+
+      ==================================================
+      FINAL GOAL
+      ==================================================
+
+      A realistic vertical 3:4 Lunar New Year photograph showing ONE single, slightly smaller red-based 斗方,
+      naturally pasted on a door or wall, with ALL uploaded people and/or pets fully included,
+      balanced festive decorations, physically correct lighting, and a joyful traditional atmosphere.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 1
+    max_images: 3
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY/0128 斗方印刷圖V2
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Create ONE single Lunar New Year 斗方 using the uploaded image.
+
+      OUTPUT & FORMAT
+
+      Final image: vertical 3:4
+
+      Background: pure clean white
+
+      Centered ONE diamond-shaped 斗方 (square rotated 45°)
+
+      Generous white space around the artwork
+
+      CUTTING GUIDE (REQUIRED)
+
+      Add a thin dashed diamond cutting guide outside the 斗方
+
+      Place a small scissor icon near one corner of the guide
+
+      Cutting guide and icon must exist ONLY on the white background
+
+      Must never touch the 斗方 artwork
+
+      OUTER 斗方 (PRINT-FLAT)
+
+      The 斗方 must be perfectly flat and print-ready:
+
+      NO folds, creases, shadows, or paper texture
+
+      Treated as a flat printed graphic
+
+      SUBJECT INCLUSION (ABSOLUTE)
+
+      ALL people and/or pets from the uploaded image MUST appear.
+
+      No omissions
+
+      No replacements
+
+      If space is limited, shrink or rearrange subjects
+
+      Never crop out a subject
+
+      INNER STYLE — FESTIVE ILLUSTRATED PORTRAIT
+
+      Inside the 斗方:
+
+      Render subjects as semi-illustrated portraits
+
+      Preserve facial identity and recognizability
+
+      Smooth edges, simplified shading
+
+      No cartoon, no chibi, no sticker style
+
+      Subjects should feel:
+
+      Warm
+
+      Festive
+
+      Slightly stylized but still realistic
+
+      NEW YEAR VISUAL ELEMENTS (CONTROLLED)
+
+      Add 2–3 festive elements only, such as:
+
+      Auspicious clouds
+
+      Soft fireworks
+
+      Gold ingots or coins
+
+      Rules:
+
+      All decorative elements must be flat illustration style
+
+      Placed behind or around subjects, never covering faces
+
+      Used as atmosphere, not focal points
+
+      COLOR & TEXT
+
+      Base color: rich Lunar New Year red
+
+      Gold accents only
+
+      Include ONE main character (e.g. 福)
+
+      Optional small “2026” if space allows
+
+      FINAL GOAL
+
+      A print-ready Lunar New Year 斗方 with:
+
+      Clear cutting guide + scissor icon
+
+      Festive illustrated atmosphere
+
+      Preserved identities
+
+      More visual interest than simple photo cutouts
+
+      Stable generation without timeouts
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 1
+    max_images: 3
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY/0128 時尚港風全家福v2
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "5:4" 
+    prompt: |
+      Generate ONE single horizontal image with a strict 5:4 aspect ratio.
+      Photorealistic editorial photography only (no illustration, no painterly rendering).
+
+      CORE CONCEPT:
+      A cinematic Lunar New Year family portrait with a subtle Hong Kong vintage atmosphere.
+      The image should feel intimate, elegant, and nostalgic, with controlled darkness and warm emotional focus.
+
+      SUBJECT INPUT & FACE ID (STRICT):
+      The user will upload 1 to 3 real portrait photos.
+      Use EXACTLY the same number of people (1–3 only).
+      Strictly preserve face identity:
+      - facial structure, proportions, eyes, nose, mouth, jawline must match exactly
+      - no beautifying, no idealization, no face reinterpretation
+      - maintain natural skin texture and age appearance
+      Face ID accuracy is more important than artistic stylization.
+
+      SCENE SETTING (LOCKED):
+      Vintage dining room interior at night.
+      Walls: beige vertical pinstripe wallpaper.
+      Left wall: ONE large framed traditional Chinese floral painting.
+      - The painting must occupy roughly 50% of the visible wall height.
+      - Dark wooden frame, classic floral subject.
+
+      Right side:
+      - sheer white curtains covering a window
+      - a tall vintage floor lamp with a cream-colored scalloped fabric lampshade
+
+      FURNITURE & COMPOSITION:
+      A dark wooden rectangular dining table centered in the frame.
+      Classic wooden chairs around the table.
+
+      Seat placement:
+      - 1 person → center-back seat (facing camera)
+      - 2 people → left + center-back seats
+      - 3 people → left + center-back + right seats
+
+      Camera:
+      - eye-level
+      - straight-on
+      - stable, symmetrical framing
+      - table edge visible in the foreground
+
+      TABLE OBJECTS (MINIMAL):
+      - Blue-and-white porcelain teapot or lidded jar near center-left
+      - Small structured handbag near center-right
+      Clean, uncluttered table surface.
+
+      WARDROBE (SATURATED RED):
+      All subjects wear Lunar New Year clothing in vivid, saturated red tones.
+      - qipao / cheongsam or Hong Kong vintage-inspired attire
+      - reds should appear bright, festive, and clean
+      Avoid muted maroon or brownish reds.
+
+      LIGHTING (FACE-PRIORITY, ADJUSTED):
+      Overall exposure remains slightly dark and cinematic.
+
+      Primary key light:
+      - warm yellow tungsten tone
+      - soft but intentionally controlled on faces
+      - faces and upper bodies must appear clearly brighter than the background
+      - facial features must be fully readable, well-exposed, and crisp
+      - avoid overexposure or hotspot highlights on skin
+
+      Lighting behavior:
+      - faces are the brightest elements in the frame, but remain natural and balanced
+      - smooth falloff toward the background
+      - no harsh shadows across eyes or facial contours
+
+      The floor lamp:
+      - emits soft ambient light only
+      - acts as a secondary practical light
+      - must NOT compete with the key light
+
+      COLOR GRADING:
+      Apply a subtle purple-red cinematic tint across the image.
+      - gentle magenta undertones
+      - warm reds and deep browns
+      Avoid yellow-green casts or overly neutral grading.
+
+      EXPRESSION:
+      All subjects display gentle, natural smiles.
+      Warm, calm, and composed.
+
+      TYPOGRAPHY (FINAL, FIXED):
+      Add text at the bottom center:
+      Text content: " Lunar New Year"
+
+      Typography rules:
+      - Google Font: Raleway
+      - Font weight: Black 900
+      - pure white color only
+      - NO outline
+      - NO shadow
+      - NO glow
+      - NO distortion or proportion changes
+      Clean, modern, editorial presentation.
+
+      TEXT SCALE (EDITORIAL EMPHASIS):
+      - Increase the text size significantly compared to standard caption scale.
+      - The text should appear approximately 30% larger than a typical editorial title.
+      - The text should feel bold, dominant, and confident, occupying a strong visual presence in the lower portion of the frame.
+      - The text may span a large horizontal width and visually anchor the composition.
+
+      TEXT BEHAVIOR (GRAPHIC OVERLAY — CRITICAL):
+      - The text is a foreground graphic layer, not part of the physical scene.
+      - The text ignores all occlusion, safety, and avoidance rules.
+      - The text is allowed to overlap any object, including the table, hands, arms, or furniture.
+      - The text may touch or press directly against the bottom edge of the frame.
+      - No bottom margin or safe area is required.
+      - The overlap must feel intentional and confident, like a high-fashion editorial layout.
+      - The text must remain fully readable and must not be cropped.
+
+      RESTRICTIONS:
+      - One single image only
+      - No collage, no borders
+      - No extra text
+      - No modern decor
+      - No ceiling lights
+
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 1
+    max_images: 3
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY/0128 可印製紅包V3
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4" 
+    prompt: |
+      Create a flat, print-ready, UNFOLDED traditional Chinese red envelope dieline layout.
+
+      The final output image MUST be in an exact 3:4 aspect ratio.
+
+      IMPORTANT:
+      The unfolded red envelope dieline MUST extend to and TOUCH the canvas edges.
+      The outer boundary of the red envelope IS the canvas boundary.
+      No background area should be visible outside the envelope.
+      The image must be treated as a flat graphic layout, NOT an object placed in a scene.
+
+
+      ────────────────────────
+      ENVELOPE TYPE
+      ────────────────────────
+      Traditional flat Chinese red envelope (side-glued).
+
+
+      ────────────────────────
+      OVERALL PROPORTION INTENT (CRITICAL)
+      ────────────────────────
+      The red envelope must have a vertically elongated proportion.
+
+      - The envelope should feel tall and slim rather than short or square.
+      - The vertical dimension is increased to ensure banknotes fit comfortably.
+      - The horizontal width of the envelope must remain unchanged and must NOT be increased.
+      - Any increase in overall size must favor HEIGHT ONLY, never width.
+
+
+      ────────────────────────
+      DIELINE STRUCTURE (ABSOLUTELY LOCKED)
+      ────────────────────────
+      The unfolded dieline MUST clearly include:
+
+      - One BACK panel on the left
+      - One FRONT panel immediately to its right
+      - One RIGHT-SIDE glue flap attached to the outer edge of the FRONT panel
+      - One TOP closure flap extending upward across BOTH panels
+      - One BOTTOM flap extending downward across BOTH panels
+
+      The BACK and FRONT panels must remain visually distinct but structurally continuous.
+
+
+      ────────────────────────
+      PROPORTIONAL CONSTRAINTS (CRITICAL — MUST BE PRESERVED)
+      ────────────────────────
+      - The height of the TOP closure flap must be approximately 1.5 times the width of the RIGHT-SIDE glue flap.
+      - The height of the BOTTOM flap must be equal to the width of the RIGHT-SIDE glue flap.
+      - These proportional relationships are fixed and must NOT be altered.
+
+
+      ────────────────────────
+      HEIGHT DISTRIBUTION RULE (CRITICAL — NEW)
+      ────────────────────────
+      - Any vertical elongation must be applied primarily to the BACK and FRONT panels.
+      - The BACK and FRONT panels define the main capacity of the envelope.
+      - TOP and BOTTOM flaps must remain functional and visually secondary.
+      - TOP and BOTTOM flaps must NOT absorb excess vertical elongation.
+      - The TOP closure flap must never appear oversized, dominant, or disproportionately tall relative to the FRONT panel.
+
+
+      ────────────────────────
+      BACK PANEL RESTRICTIONS (STRICT)
+      ────────────────────────
+      - The BACK panel design must NOT contain any structural lines.
+      - Do NOT show fold lines, pocket lines, crease marks, or construction indicators.
+      - The BACK panel must appear as one clean, uninterrupted decorative surface.
+
+
+      ────────────────────────
+      CANVAS & EDGE RULES (CRITICAL)
+      ────────────────────────
+      - The red envelope dieline must fully occupy the canvas.
+      - No white margin, padding, or background may remain.
+      - The envelope outer edge must align exactly with the image edge.
+      - Treat the image as a full-bleed print layout.
+      - Do NOT center the dieline with margins.
+      - Do NOT shrink the envelope to fit inside the canvas.
+
+
+      ────────────────────────
+      LINE & STRUCTURE RULES
+      ────────────────────────
+      - Show clean outer dieline outlines only.
+      - Do NOT warp, stretch, rotate, mirror, or reinterpret the structure.
+      - Do NOT include numeric dimensions, arrows, units, or measurement text.
+      - Do NOT include any cutting guides or auxiliary marks.
+
+
+      ────────────────────────
+      ABSOLUTE PROHIBITION — LABELS & MARKERS
+      ────────────────────────
+      Do NOT generate under any circumstances:
+      - “FRONT”, “BACK”, “TOP”, “BOTTOM”, “LEFT”, “RIGHT”
+      - “GLUE FLAP” or any similar instructional text
+      - Any engineering, instructional, or explanatory labels
+
+      The layout must rely on structure only, not text labels.
+
+
+      ────────────────────────
+      USER IMAGE HANDLING (ILLUSTRATED MODE — NATURAL LIKENESS)
+      ────────────────────────
+      ALL user-uploaded images MUST be used as visual reference.
+
+      Render all people as ILLUSTRATED PORTRAITS, not photorealistic photos.
+
+      Likeness rules:
+      - Use uploaded photos to guide overall likeness, facial structure, proportions, and personal characteristics.
+      - Preserve distinguishing features and natural asymmetry.
+      - Avoid idealization, beautification, or facial optimization.
+      - Do NOT slim faces, enlarge eyes, smooth features excessively, or correct proportions.
+
+      Illustration style:
+      - Natural, observational illustration style.
+      - Hand-drawn or painted feel.
+      - Visible but subtle texture.
+      - Simplified shading without airbrushed perfection.
+      - Not photorealistic.
+      - Not cartoon, chibi, sticker, or cute style.
+
+      Lighting & expression:
+      - Soft, neutral lighting.
+      - Natural facial expressions.
+      - Avoid exaggerated smiles or posed expressions.
+
+      Festive attire requirements:
+      - Characters wear Lunar New Year–appropriate clothing.
+      - Modern or traditional New Year outfits are acceptable.
+      - Clothing should feel natural and worn, not fashion-editorial or stylized.
+
+      All people and/or pets must appear ONLY on the FRONT panel.
+
+
+      ────────────────────────
+      DESIGN CONTENT & STYLE
+      ────────────────────────
+      - Rich Lunar New Year red base.
+      - Gold as primary accent.
+      - Traditional Chinese motifs (clouds, lanterns, florals, geometric patterns).
+      - Gold-foil, embossed, or stamped visual effects.
+
+      Tone:
+      - Festive
+      - Refined
+      - Traditional
+      - Elegant
+
+      NOT allowed:
+      - Cute, cartoonish, childish styles.
+      - Overly polished or idealized illustration styles.
+
+      Visual emphasis must remain on the FRONT panel.
+
+
+      ────────────────────────
+      TEXT ELEMENTS
+      ────────────────────────
+      Only celebratory New Year text is allowed, such as:
+      「新年快樂」
+      「2026」
+      「恭喜發財」
+
+      No functional or structural text is permitted.
+
+
+      ────────────────────────
+      OUTPUT REQUIREMENT (FINAL)
+      ────────────────────────
+      Single unfolded dieline image.
+      Edge-to-edge composition.
+      No background.
+      No labels.
+      No mockups.
+      No perspective distortion.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 1
+    max_images: 3
     num_iterations: 50
 
 
