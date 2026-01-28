@@ -11,71 +11,126 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgALBBPb8_4ARa7UfSF6xgCbAZLnM1--I1CFUSeEMOVoCyk?e=eyFKRt
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bacbb59b85_10_65#slide=id.g3bacbb59b85_10_65
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBok3o3RRLcQ64_3_JItDYpAazuH5mVPFeNtkZlSAjUjt4?e=7ao69h
+root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bbd2c01681_0_188#slide=id.g3bbd2c01681_0_188
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0122 Pixel Food
+  - folder: ../Media Files/Nano Banana/0127 Pixel FoodV2
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: 
     prompt: |
-      Use the uploaded photo as the only reference and subject.
+      Use the uploaded photo as the ONLY reference and the ONLY human subject.
       The person’s real identity must be strictly preserved.
+
       Do NOT alter the face, facial features, face shape, eyes, nose, mouth, skin tone, expression, hairstyle, age appearance, body proportions, pose, or camera angle in any way.
       No beautification, stylization, cartoonization, or facial reinterpretation is allowed.
 
-      Output format (STRICT):
+      Output format (ABSOLUTE)
 
-      The final image must keep exactly the same aspect ratio as the user’s uploaded photo.
+      The final image must keep EXACTLY the same aspect ratio as the user’s uploaded photo.
 
-      Do NOT crop, extend, pad, stretch, or reframe the image.
+      Do NOT crop, extend, pad, stretch, zoom, or reframe the image.
 
       The original framing, field of view, and composition must remain unchanged.
 
-      Target transformation (objects only):
+      Target transformation — FOOD OBJECTS ONLY (MANDATORY, GLOBAL)
 
-      If the person is holding food, transform only the food into pixel art.
+      All visible food items in the image MUST be transformed into pixel art.
 
-      If no food is present, transform only visible hand-held items or accessories (such as drinks, bags, tools, props, or small objects) into pixel art instead.
+      This includes ALL of the following without exception:
 
-      If multiple eligible objects exist, select one primary object only and leave all others unchanged.
+      Food held in the left hand
 
-      Pixel art style requirements (STRICT):
+      Food held in the right hand
 
-      Pixel objects must be rendered as 32-bit style pixel art using clearly visible chunky square pixels (approximately 32px blocks).
+      Food placed on forks, spoons, chopsticks, knives
 
-      Use flat, solid color blocks only on pixel objects.
+      Food placed on plates, bowls, trays, or table surfaces
 
-      No blur, no gradients, no outlines, no anti-aliasing, no painterly effects on pixel elements.
+      Food currently being bitten, lifted, or partially eaten
 
-      Pixel objects should resemble simplified retro game sprites, not illustrations.
+      Partial or selective transformation is NOT allowed.
+      If food appears in multiple locations, ALL instances must be pixelized.
 
-      Integration & realism:
+      Do NOT select a single primary food object.
+      Food transformation must be global and exhaustive across the entire image.
 
-      Pixel objects must remain in the exact original position, scale, orientation, and perspective.
+      Pixel art style requirements (OBJECT-ONLY, STRICT)
 
-      Maintain original composition, framing, depth, and camera angle.
+      All food items must be rendered as 32-bit style pixel art
 
-      Pixel objects must be physically integrated into the real scene, including:
+      Clearly visible chunky square pixels (approximately 32px blocks)
 
-      Correct lighting direction
+      Flat, solid color blocks ONLY
 
-      Appropriate shadows cast onto real surfaces
+      NO blur
 
-      Consistent reflections or occlusion when applicable
+      NO gradients
 
-      All humans, skin, face, hair, clothing, background, furniture, and environment must remain 100% photorealistic.
+      NO outlines
 
-      Hard prohibitions:
+      NO anti-aliasing
 
-      Do NOT pixelate or stylize the person, face, hands, body, clothing, or background.
+      NO glow, haze, translucency, or painterly effects
 
-      Do NOT introduce new objects or remove existing ones.
+      Pixel food must resemble simplified retro game sprites, NOT illustrations or filters.
 
-      Do NOT alter facial expression or identity under any circumstance.
+      Shape preservation (CRITICAL)
 
-      The final image should look like a realistic photograph where only one selected object has been replaced by clean, retro pixel art, seamlessly embedded into the real world, with the original photo’s aspect ratio perfectly preserved.
+      Preserve the original food shape, volume, silhouette, and structure EXACTLY
+
+      Do NOT redesign, simplify, exaggerate, round, or reinterpret food forms
+
+      Pixelization must follow the exact contours and proportions of the source food
+
+      Pixel art is a resolution translation, NOT a redesign
+
+      Integration & realism (SHADOW & OCCLUSION CONTROL)
+
+      Pixel food must remain in the exact original position, scale, orientation, and perspective
+
+      Maintain original composition, depth, and camera angle
+
+      Lighting and shadow rules:
+
+      Pixel food may cast shadows ONLY if they are hard-edged and fully opaque
+
+      NO semi-transparent shadows
+
+      NO soft or feathered shadows
+
+      Shadow direction and footprint must match the original lighting
+
+      Pixel objects must appear physically embedded into the real scene.
+
+      Photorealism lock (NON-NEGOTIABLE)
+
+      All non-food elements must remain 100% photorealistic and untouched, including:
+
+      Human face, skin, hands, body
+
+      Clothing and accessories
+
+      Tableware (plates, bowls, cups, utensils themselves)
+
+      Furniture, background, and environment
+
+      Hard prohibitions
+
+      Do NOT pixelate hands, fingers, utensils, plates, bowls, or containers
+
+      Do NOT pixelate clothing, face, hair, or background
+
+      Do NOT introduce new objects
+
+      Do NOT remove existing objects
+
+      Do NOT alter facial expression or identity under any circumstance
+
+      Final validation rule
+
+      The final image must look like a realistic photograph in which EVERY visible food item has been fully replaced with clean, opaque, retro pixel art, while ALL other elements remain untouched and photorealistic, and the original photo’s aspect ratio is perfectly preserved.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false

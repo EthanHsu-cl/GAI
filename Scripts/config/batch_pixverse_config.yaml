@@ -1,4 +1,4 @@
-base_folder: ../Media Files/Pixverse/1215 2 Styles
+base_folder: ../Media Files/Pixverse/0128 1 Style Valentine
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 template_path: templates/I2V templates.pptx
 testbed: http://192.168.31.161:8000/video_effect/
@@ -18,15 +18,11 @@ default_settings:
   thinking_type: auto
 
 tasks:
-- effect: 毛孩子的圣诞装扮
+- effect: 我等的那句 Yes
   prompt: ''
-  custom_effect_id: '374215802058553'
+  custom_effect_id: '381463884835264'
   negative_prompt: ''
 
-- effect: 萌宠变身圣诞树
-  prompt: ''
-  custom_effect_id: '374219698130728'
-  negative_prompt: ''
 
 comments:
   base_folder: Root folder containing effect subfolders. Each effect folder should have 'Source', 'Generated_Video', and 'Metadata'

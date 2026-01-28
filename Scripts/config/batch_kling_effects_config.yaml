@@ -10,16 +10,16 @@ duration: 5
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 2
+  group_tasks_by: 3
 
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: ../Media Files/Kling Effects/0119 6 Effects
+base_folder: ../Media Files/Kling Effects/0128 9 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=2134584856#gid=2134584856
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCyRMdjD-yuQ4vRzqBPrWLVAWB8NPHv1hXIQ-1TUIkxlDE?e=bP018j
+source_video_link: 
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,22 +28,31 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'bouquet_drop'
+    custom_effect: 'new_year_greeting'
 
   - effect:
-    custom_effect: 'bullet_time_360'
+    custom_effect: 'great_success'
 
   - effect:
-    custom_effect: 'overdrive'
+    custom_effect: 'prosperity'
 
   - effect: 
-    custom_effect: 'swing_swing'
+    custom_effect: 'lantern_glow'
 
   - effect:
-    custom_effect: 'poping'
+    custom_effect: 'lion_dance_pet'
 
   - effect:
-    custom_effect: 'subject_3_dance'
+    custom_effect: 'horse_year_firework'
+
+  - effect:
+    custom_effect: 'lion_dance'
+
+  - effect:
+    custom_effect: 'crystal_horse'
+
+  - effect:
+    custom_effect: 'lucky_red_packet'
 
 comments:
   base_folder: >

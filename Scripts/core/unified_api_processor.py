@@ -1718,14 +1718,16 @@ class UnifiedAPIProcessor:
         def process_task(task):
             effect_name = task.get("effect", "")
             task_folder = base_folder / effect_name
-            source_dir = task_folder / "Source"
             
-            if not source_dir.exists():
-                return None, []
+            # Auto-create task folder and Source subfolder if they don't exist
+            task_folder.mkdir(parents=True, exist_ok=True)
+            source_dir = task_folder / "Source"
+            source_dir.mkdir(exist_ok=True)
             
             image_files = self._get_files_by_type(source_dir, 'image')
             
             if not image_files:
+                self.logger.warning(f"⚠️ No images found in: {source_dir}")
                 return None, []
             
             invalid_for_task = []
@@ -1745,6 +1747,7 @@ class UnifiedAPIProcessor:
             if valid_count == 0:
                 return None, invalid_for_task
             
+            # Create output directories
             (task_folder / "Generated_Video").mkdir(exist_ok=True)
             (task_folder / "Metadata").mkdir(exist_ok=True)
             
@@ -1756,7 +1759,7 @@ class UnifiedAPIProcessor:
                 "metadata_dir": str(task_folder / "Metadata")
             })
             
-            self.logger.info(f"{effect_name}: {valid_count}/{len(image_files)} valid images")
+            self.logger.info(f"✓ {effect_name}: {valid_count}/{len(image_files)} valid images")
             return enhanced_task, invalid_for_task
         
         if self.api_definitions.get("parallel_validation", False):

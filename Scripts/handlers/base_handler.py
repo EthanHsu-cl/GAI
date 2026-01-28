@@ -224,6 +224,10 @@ class BaseAPIHandler:
             output_folder = self._get_output_folder(folder)
             metadata_folder = folder / "Metadata"
         
+        # Ensure output and metadata folders exist
+        output_folder.mkdir(parents=True, exist_ok=True)
+        metadata_folder.mkdir(parents=True, exist_ok=True)
+        
         task_name = task.get('effect', folder.name)
         self.logger.info(f"📁 Task {task_num}/{total_tasks}: {task_name}")
         
