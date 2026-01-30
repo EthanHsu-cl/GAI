@@ -77,6 +77,24 @@ class GAILauncherApp:
         "Report Only": "report",
     }
 
+    # Default config files for each platform
+    CONFIG_MAPPING = {
+        "kling": "config/batch_kling_config.yaml",
+        "klingfx": "config/batch_kling_effects_config.yaml",
+        "kling_effects": "config/batch_kling_effects_config.yaml",
+        "kling_endframe": "config/batch_kling_endframe_config.yaml",
+        "kling_ttv": "config/batch_kling_ttv_config.yaml",
+        "vidu": "config/batch_vidu_effects_config.yaml",
+        "viduref": "config/batch_vidu_reference_config.yaml",
+        "nano": "config/batch_nano_banana_config.yaml",
+        "runway": "config/batch_runway_config.yaml",
+        "genvideo": "config/batch_genvideo_config.yaml",
+        "pixverse": "config/batch_pixverse_config.yaml",
+        "wan": "config/batch_wan_config.yaml",
+        "veo": "config/batch_veo_config.yaml",
+        "veoitv": "config/batch_veo_itv_config.yaml",
+    }
+
     def __init__(self, root: tk.Tk):
         """
         Initialize the GAI Launcher application.
@@ -137,6 +155,7 @@ class GAILauncherApp:
             width=35
         )
         platform_combo.pack(side=tk.LEFT, padx=(5, 0))
+        platform_combo.bind("<<ComboboxSelected>>", self._on_platform_changed)
 
         # Action selection
         action_frame = ttk.Frame(settings_frame)
@@ -159,14 +178,17 @@ class GAILauncherApp:
 
         ttk.Label(config_frame, text="Config File:", width=12).pack(side=tk.LEFT)
         self.config_var = tk.StringVar(value="")
-        self.config_entry = ttk.Entry(config_frame, textvariable=self.config_var, width=30)
+        self.config_entry = ttk.Entry(config_frame, textvariable=self.config_var, width=40)
         self.config_entry.pack(side=tk.LEFT, padx=(5, 5))
+
+        # Set initial default config
+        self._update_default_config()
 
         browse_btn = ttk.Button(config_frame, text="Browse...", command=self._browse_config)
         browse_btn.pack(side=tk.LEFT)
 
-        clear_btn = ttk.Button(config_frame, text="Clear", command=self._clear_config)
-        clear_btn.pack(side=tk.LEFT, padx=(5, 0))
+        reset_btn = ttk.Button(config_frame, text="Reset", command=self._clear_config)
+        reset_btn.pack(side=tk.LEFT, padx=(5, 0))
 
         # Options frame
         options_frame = ttk.Frame(settings_frame)
@@ -262,8 +284,25 @@ class GAILauncherApp:
             self.config_var.set(filepath)
 
     def _clear_config(self) -> None:
-        """Clear the custom config file selection."""
-        self.config_var.set("")
+        """Reset to the default config file for the current platform."""
+        self._update_default_config()
+
+    def _on_platform_changed(self, event=None) -> None:
+        """Handle platform selection change by updating the default config."""
+        self._update_default_config()
+
+    def _update_default_config(self) -> None:
+        """Update the config field with the default config for the selected platform."""
+        platform_display = self.platform_var.get()
+        platform = self.PLATFORMS.get(platform_display, "")
+
+        if platform in self.CONFIG_MAPPING:
+            config_path = SCRIPT_DIR / self.CONFIG_MAPPING[platform]
+            self.config_var.set(str(config_path))
+        elif platform == "all":
+            self.config_var.set("(uses default config for each platform)")
+        else:
+            self.config_var.set("")
 
     def _clear_log(self) -> None:
         """Clear the output log."""
