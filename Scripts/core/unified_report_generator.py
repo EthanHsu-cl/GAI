@@ -2089,8 +2089,9 @@ class UnifiedReportGenerator:
         else:
             # Effect names are the actual content description
             effect_str = ', '.join(effect_names) if effect_names else 'Test'
-            if len(effect_str) > 20:
-                effect_str = effect_str[:47] + '...'
+            # Only truncate very long effect strings (not short concatenations)
+            if len(effect_str) > 60:
+                effect_str = effect_str[:60] + '...'
         
         # Build API line (date + model)
         api_parts = [f"[{d}]"]

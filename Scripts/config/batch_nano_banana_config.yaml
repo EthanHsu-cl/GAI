@@ -10,120 +10,89 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAOCgQ9ut7KR7PVlw8-XohFAbP-2iBId77aVuPC41p7ApY?e=CbCUNw
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3be08482908_0_0#slide=id.g3be08482908_0_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgD9epMS6gcGR4JyyVwYQWW5ARWgjTjbcYZWc-WKm8nagac?e=W2CXxS
+root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bbd2c01681_0_591#slide=id.g3bbd2c01681_0_591
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0123 2 Styles Creative Studio 2/0123 Collage - Film Strip
+  - folder: ../Media Files/Nano Banana/0129 Pixel FoodV3
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "9:16"
+    aspect_ratio:
     prompt: |
-      **Role:** Professional Graphic Designer & Editorial Layout Expert.
+      Use the uploaded photo as the ONLY reference and the ONLY human subject.
+      The person’s real identity must be strictly preserved.
 
-      **Task:** Create a vertical poster composition using the uploaded reference images.
+      IDENTITY & PHOTOREALISM LOCK
 
-      **Design Layout & Composition (Fixed Structure):**
-      1.  **Split Composition:** Divide the visual field. The layout must be strictly 2D flat graphic design, NO 3D perspective distortion.
-      2.  **Left Column (The Film Strip):**
-          -   Create a **perfectly straight, strictly vertical**, solid black film strip running from the absolute top to the bottom of the left edge. **Constraint:** It must be parallel to the canvas edge with absolutely **NO tilt, slant, or rotation**.
-          -   **Constraint:** The film strip must have **NO sprocket holes**. It should appear as a solid black rectangular container.
-          -   **Film Border Details:** Add subtle, understated film-style markings onto the solid black border areas between and around the stacked photos.
-          -   **Image Allocation Logic:** Prioritize placing the user's uploaded photos here. Count the total number of unique provided photos (e.g., if 3 photos are provided, stack 3; if 4 are provided, stack 4). Vertically stack **exactly that number of unique photos**.
-          -   **CRITICAL - ZERO DROP & NO REPEAT:** It is **mandatory** that **every single** unique uploaded photo is included in the film strip. The count in the strip must match the input count. **Constraint:** Do not repeat the same photo within the strip.
-          -   **ULTIMATE ASPECT RATIO PRESERVATION PROTOCOL (NON-NEGOTIABLE):** The original aspect ratio of every single input photo must be preserved with **pixel-perfect accuracy**.
-              -   **Constraint:** Under **NO CIRCUMSTANCES** shall an image be stretched, squashed, warped, or subjected to any form of non-uniform scaling to fit the film strip container.
-              -   **Constraint:** If the image dimensions do not perfectly match the film strip slot, you **MUST** use a central crop (center-weighted cropping) to fill the width. **Distortion is defined as a critical failure and is absolutely prohibited.** The subjects inside the photos must remain perfectly proportioned as they were in the originals.
-      3.  **Background Layer:**
-          -   **Atmosphere Analysis & Primary Generation Goal:** Analyze the background elements, lighting, and general "vibe" of the user-uploaded photos. The primary goal is to generate a new scenic background that reflects the style and location context of these inputs.
-          -   **CRITICAL CONDITIONAL FALLBACK (Person Avoidance Protocol):** The final background **MUST remain completely free of visible people** to serve as a neutral backdrop.
-              -   *Condition 1:* If a person-free scenic background can be generated derived directly from the input photos' style, do so.
-              -   *Condition 2 (Fallback):* If deriving the background style inevitably introduces human figures, **automatically shift** to generating a purely atmospheric, broader landscape scene (e.g., vast sky, distant horizon, blurred nature texture) that captures the *mood* but guarantees **zero human presence**.
-          -   **CRITICAL BACKGROUND SELECTION PRIORITY:** It is **ACCEPTABLE** to use a copy or a crop of one of the provided source images as the background layer, **EVEN IF** that image is also used in the Film Strip. **HOWEVER, THE ABSOLUTE PRIORITY IS THE "NO PERSON" RULE.** You may only reuse a photo if the area used for the background contains **ABSOLUTELY NO VISIBLE PEOPLE**. If the only available photos have people, you must crop them out completely or fall back to generating a new, person-free atmospheric background.
-          -   The background image should be positioned *behind* the left film strip and fill the entire canvas (full bleed).
+      Do NOT alter the face, facial features, facial expression, hairstyle,
+      age appearance, body proportions, pose, or camera angle.
+      No beautification, stylization, cartoonization, or facial reinterpretation.
 
-      **Aesthetic & Style (The "Vintage" Filter):**
-      -   **Texture:** Apply heavy analog film grain and noise across the entire image.
-      -   **Color Grading:** Warm, nostalgic retro tones (Kodak Portra style). Slightly faded blacks and warm highlights.
-      -   **Negative Content Constraint:** Ensure the final image is completely free of any visible commercial trademarks, logos, brand names, or watermarks. Additionally, the background scenery must be free of any **legible signage text, billboards, advertisements, or street signs**.
+      All non-food elements must remain fully photorealistic and untouched.
 
-      **Text Elements (Strict Typography & Content Control):**
-      *All text must be purely typographical with no added graphic effects.*
-      1.  **Color Requirement:** All text must be rendered in **pure, solid red fill** (Vintage Red/Crimson) only. **Constraint:** Absolutely NO outlines, NO drop shadows, NO gradients, and NO background color boxes.
-      2.  **Main Title Generation:**
-          -   **Content:** Analyze the visual elements of the generated background. **Randomly generate** a short, impactful 2-3 word phrase related to travel/adventure.
-          -   **Font Style:** Bold, Condensed Sans-Serif (like Impact). Large, dominant size.
-      3.  **Body Text Generation:**
-          -   **Content:** **Randomly generate** a very concise short paragraph (approx. 10-13 words).
-          -   **Font Style:** Clean, standard Sans-Serif. Much smaller size than the title.
-      4.  **Layout & Density:**
-          -   Position the title in the upper-right or center-right area, with the body text block directly below it.
-          -   **Density Match:** The overall visual weight and line breaks should closely approximate the reference.
 
-      **Output Requirement:**
-      -   Treat the user's uploaded photos as the primary assets for the film strip.
-      -   Output a high-resolution flat graphic image with clean, solid red typography.
+      OUTPUT & COMPOSITION LOCK (ABSOLUTE)
+
+      The final image must keep EXACTLY the same aspect ratio, framing,
+      field of view, composition, depth, and camera angle as the original photo.
+
+      Do NOT crop, extend, pad, stretch, zoom, reframe, or reposition anything.
+
+
+      TARGET TRANSFORMATION — FOOD OBJECTS ONLY
+
+      Transform ALL clearly identifiable food items into pixel art.
+
+      Food may include items held, placed on utensils or plates,
+      or being bitten or lifted.
+
+      Do NOT pixelate hands, utensils, plates, bowls, containers,
+      or any non-food elements.
+
+      If a food item cannot be cleanly separated from non-food elements,
+      leave ONLY that specific item unpixelized and continue the task.
+
+
+      PIXEL ART STYLE — RETRO SPRITE WITH OUTLINE (STRICT)
+
+      Pixelized food must appear as hand-crafted retro game pixel sprites:
+
+      - Large, intentional square pixels (not mosaic or blur-based pixelation)
+      - Flat, solid colors only (no gradients, blur, or anti-aliasing)
+      - A solid black outline defining the outer silhouette of the food object
+      - Outline applies to the object as a whole, not individual pixels
+
+      Preserve the original food shape, silhouette, scale, position,
+      orientation, and perspective exactly.
+
+      Pixel food may cast hard-edged, fully opaque shadows only,
+      matching the original lighting direction.
+
+
+      ABSOLUTE PROHIBITIONS
+
+      Do NOT modify or pixelate:
+      - Human face, skin, hands, or body
+      - Clothing and accessories
+      - Utensils, plates, bowls, cups, or containers
+      - Furniture, background, or environment
+
+      Do NOT add or remove objects.
+      Do NOT alter identity or facial expression.
+
+
+      FINAL VALIDATION
+
+      The result must look like a realistic photograph where all eligible food
+      has been replaced by outlined retro pixel sprite art,
+      with all other elements untouched and the original composition preserved.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: true
-    use_deterministic_random: true
+    use_random_source_selection: false
+    use_deterministic_random: false
     random_seed: 42
     min_images: 3
     max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0123 2 Styles Creative Studio 2/0123 Collage - Photo Strip
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
-    prompt: |
-      Generate a clean and modern “Photo Strip” composition. The user will upload between one and three photos only, and these original photos must not be altered, stylized, recolored, enhanced, or regenerated in any way. Each uploaded photo should visually occupy approximately 50%–60% of the total canvas width, ensuring a strong presence while maintaining balanced negative space.The original aspect ratio of each user-uploaded photo must be preserved exactly; no cropping, stretching, squashing, or proportional alteration is allowed under any circumstances.Place a vertical photo strip centered on the canvas, featuring a solid white frame that resembles a classic photo booth strip. The uploaded photos should appear inside the strip in their original quality and order. For the background, generate a full-bleed landscape image that visually echoes and harmonizes with the user’s uploaded photo (e.g., similar setting, mood, colors, or environmental elements), and crop and scale it proportionally to fill the entire canvas. Do not combine multiple uploaded photos to form the background under any circumstances. Remove any light leak, film burn, or vintage exposure effects so the overall aesthetic remains crisp, bright, and contemporary. Add small, decorative, randomly generated text elements on the white photo strip only; these texts should be inspired by the photo content or atmosphere, such as casual phrases, place-related words, or abstract design labels, and should function purely as visual decoration. Maintain a strong visual hierarchy with the centered photo strip as the primary focal point, balanced spacing, and a refined editorial layout aligned with modern lifestyle and design lab aesthetics, while strictly preserving the integrity of all user-uploaded photos.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    use_deterministic_random: true
-    random_seed: 42
-    min_images: 2
-    max_images: 3
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0123 Collage - Highlight Series
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "9:16"
-    prompt: |
-      ### [Global Logic & Layout]
-      - Image Usage: Use every uploaded photo exactly once. Strictly NO duplicates or distortions.
-      - Image Preservation: Absolute fidelity to original subjects. STRICTLY PROHIBITED to alter facial features, expressions, poses, or gaze. Pixel-perfect preservation required.
-      - Background: Single uniform color with subtle fine-grain noise texture; tactile matte finish, no patterns.
-      - Vertical Zones: Top 30% for Typography; Bottom 70% for Visuals.
-
-      ### [Layer 1: Foreground Subject]
-      - Selection: Prioritize standing professional portraits; strictly NO selfies.
-      - Composition: Half-body cut-out (no borders/outlines), centered, anchored to bottom edge.
-      - Scale: Exactly 50% of canvas height. Must be visually dominant over film strips.
-      - Padding: Maintain a significant vertical void between the subject's head and the typography.
-
-      ### [Layer 2: Minimalist Film Strips]
-      - Structure: Two identical, parallel diagonal strips at the bottom. Must bleed off-canvas.
-      - Frame Specs: 10% canvas area per frame; clean rectangular borders with subtle film markings.
-      - Distribution Rule (All frames except Bottom-Center): Use INPUT IMAGES ONLY.
-        - Lateral Frames: Position photos with prominent people here (left/right ends).
-        - Top Strip Center: Use an input image containing NO people. If unavailable, use the input image with the smallest human-to-background ratio.
-      - Fixed Fill Rule (Bottom Strip Center ONLY): Use a photorealistic generated Conditional Fill (background/scenery aesthetic from inputs, strictly NO people).
-      - Layering: Positioned behind the Foreground Subject.
-
-      ### [Typography & Aesthetic]
-      - Placement: Uppermost area of the top 30% zone.
-      - Content: Elegant serif headline + subtext. Strictly NO years, dates, or numerical markers.
-      - Style: High-end fashion editorial; zero UI elements or AI artifacts.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
-    use_deterministic_random: true
-    random_seed: 42
-    min_images: 6
-    max_images: 6
     num_iterations: 50
 
 

@@ -10,7 +10,7 @@ duration: 5
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3
+  group_tasks_by: 2
 
 schedule:
   start_time: ''
@@ -19,7 +19,7 @@ schedule:
 base_folder: ../Media Files/Kling Effects/0128 9 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=2134584856#gid=2134584856
-source_video_link: 
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDo84UY_MjUT6Byd8WWtlxmAX_6c4HmnyRSoObWcAmPbIk?e=ZYMtAg
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -29,9 +29,6 @@ source_video_link:
 tasks:
   - effect:
     custom_effect: 'new_year_greeting'
-
-  - effect:
-    custom_effect: 'great_success'
 
   - effect:
     custom_effect: 'prosperity'

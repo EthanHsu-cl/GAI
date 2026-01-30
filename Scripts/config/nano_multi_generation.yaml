@@ -11,129 +11,146 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBok3o3RRLcQ64_3_JItDYpAazuH5mVPFeNtkZlSAjUjt4?e=7ao69h
-root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bbd2c01681_0_188#slide=id.g3bbd2c01681_0_188
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgA9lZmef8KcQKZPnW1r-vDkAbR2oujenJ-j79GpogXHHSY?e=VCNGi4
+root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bbd2c01681_0_349#slide=id.g3bbd2c01681_0_349
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0127 Pixel FoodV2
+  - folder: ../Media Files/Nano Banana/0129 賀年斗方情境圖V3
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: 
+    aspect_ratio: "4:5"
     prompt: |
-      Use the uploaded photo as the ONLY reference and the ONLY human subject.
-      The person’s real identity must be strictly preserved.
+      Create ONE single photorealistic Lunar New Year “斗方” using the uploaded image
+      (any subject type: person, baby, pet, or group photo).
 
-      Do NOT alter the face, facial features, face shape, eyes, nose, mouth, skin tone, expression, hairstyle, age appearance, body proportions, pose, or camera angle in any way.
-      No beautification, stylization, cartoonization, or facial reinterpretation is allowed.
+      The result must look like a real New Year photograph,
+      NOT an illustration, collage, or graphic mockup.
 
-      Output format (ABSOLUTE)
+      ==================================================
+      ASPECT RATIO
+      ==================================================
 
-      The final image must keep EXACTLY the same aspect ratio as the user’s uploaded photo.
+      Final image must be vertical 4:5.
 
-      Do NOT crop, extend, pad, stretch, zoom, or reframe the image.
+      ==================================================
+      MANDATORY SUBJECT INCLUSION (CRITICAL – NO EXCEPTIONS)
+      ==================================================
 
-      The original framing, field of view, and composition must remain unchanged.
+      ALL people and/or pets present in the uploaded image MUST be included in the final design.
 
-      Target transformation — FOOD OBJECTS ONLY (MANDATORY, GLOBAL)
+      No person or pet may be omitted, removed, cropped out, replaced, or substituted.
 
-      All visible food items in the image MUST be transformed into pixel art.
+      If the uploaded image contains multiple people and/or pets:
+      - Every individual must appear together within the SAME single 斗方.
+      - Partial inclusion is strictly prohibited.
 
-      This includes ALL of the following without exception:
+      Do NOT generate additional people or animals.
 
-      Food held in the left hand
+      All subjects must remain recognizable and clearly identifiable,
+      preserving their key features and identity.
 
-      Food held in the right hand
+      ==================================================
+      STRICT COMPOSITION RULES
+      ==================================================
 
-      Food placed on forks, spoons, chopsticks, knives
+      The image must contain ONLY ONE 斗方.
 
-      Food placed on plates, bowls, trays, or table surfaces
+      The 斗方 must be slightly smaller than typical center decorations,
+      leaving visible surrounding space.
 
-      Food currently being bitten, lifted, or partially eaten
+      The 斗方 must be centered but not oversized or edge-to-edge.
 
-      Partial or selective transformation is NOT allowed.
-      If food appears in multiple locations, ALL instances must be pixelized.
+      ==================================================
+      PLACEMENT SCENE
+      ==================================================
 
-      Do NOT select a single primary food object.
-      Food transformation must be global and exhaustive across the entire image.
+      Choose ONE scene only:
+      - A traditional or modern dark wooden door
+      - A clean white wall
 
-      Pixel art style requirements (OBJECT-ONLY, STRICT)
+      If placed on a wooden door:
+      - The 斗方 is centered on the door.
+      - Hang traditional Lunar New Year firecracker decorations (鞭炮串)
+        vertically on BOTH the left and right sides of the door.
+      - Firecrackers must be festive, red-dominant, and clearly visible.
+      - Firecrackers must NOT overlap, cover, or block the 斗方.
 
-      All food items must be rendered as 32-bit style pixel art
+      ==================================================
+      DESIGN, COLOR & ILLUSTRATION STYLE (DOUFANG ONLY)
+      ==================================================
 
-      Clearly visible chunky square pixels (approximately 32px blocks)
+      The 斗方 must be square (1:1) and rotated 45 degrees (diamond orientation).
 
-      Flat, solid color blocks ONLY
+      Base color must be predominantly RED.
+      Gold is accent color only (text, patterns, highlights).
 
-      NO blur
+      Avoid pale, beige, pink, or non-festive base colors.
 
-      NO gradients
+      The CONTENT inside the 斗方 must be rendered in an illustration style:
+      - Flat to softly shaded illustration
+      - Clean edges and stylized linework
+      - No photorealistic textures within the printed artwork
 
-      NO outlines
+      ==================================================
+      CONTENT
+      ==================================================
 
-      NO anti-aliasing
+      Preserve the identity and key features of ALL uploaded subjects.
 
-      NO glow, haze, translucency, or painterly effects
+      Include ONE main Chinese New Year character or phrase (e.g. 福, 春, 財).
+      The year “2026” must appear.
 
-      Pixel food must resemble simplified retro game sprites, NOT illustrations or filters.
+      Include several Lunar New Year decorative elements such as:
+      pineapple, gold ingots, 财神, festive clouds, coins, or firecrackers.
 
-      Shape preservation (CRITICAL)
+      Decorative elements must support the design,
+      and must NOT dominate, replace, or obscure the 斗方 or the subjects.
 
-      Preserve the original food shape, volume, silhouette, and structure EXACTLY
+      ==================================================
+      PHYSICAL PAPER & REALISM (CRITICAL)
+      ==================================================
 
-      Do NOT redesign, simplify, exaggerate, round, or reinterpret food forms
+      The 斗方 must appear as real printed paper physically pasted onto the surface,
+      even though the printed artwork itself is illustrated.
 
-      Pixelization must follow the exact contours and proportions of the source food
+      - The paper must be completely flat and firmly attached.
+      - NO lifted corners, peeling edges, curling, folds, wrinkles, waves, or deformation.
+      - The surface must remain smooth, rigid, and planar.
 
-      Pixel art is a resolution translation, NOT a redesign
+      The 斗方 must NOT appear as a digital overlay, sticker,
+      or post-processed pasted element.
 
-      Integration & realism (SHADOW & OCCLUSION CONTROL)
+      ==================================================
+      LIGHTING & ENVIRONMENT INTEGRATION
+      ==================================================
 
-      Pixel food must remain in the exact original position, scale, orientation, and perspective
+      The 斗方 must naturally integrate with the surrounding environment lighting.
 
-      Maintain original composition, depth, and camera angle
+      - It must receive the SAME light direction, intensity, and color temperature
+        as the door or wall.
+      - Shadows, highlights, and midtones on the paper
+        must match the ambient lighting of the scene.
+      - Subtle contact shadows must appear where the paper meets the surface.
 
-      Lighting and shadow rules:
+      The 斗方 must NOT look glowing, floating,
+      or separately lit from the environment.
 
-      Pixel food may cast shadows ONLY if they are hard-edged and fully opaque
+      ==================================================
+      FINAL GOAL
+      ==================================================
 
-      NO semi-transparent shadows
-
-      NO soft or feathered shadows
-
-      Shadow direction and footprint must match the original lighting
-
-      Pixel objects must appear physically embedded into the real scene.
-
-      Photorealism lock (NON-NEGOTIABLE)
-
-      All non-food elements must remain 100% photorealistic and untouched, including:
-
-      Human face, skin, hands, body
-
-      Clothing and accessories
-
-      Tableware (plates, bowls, cups, utensils themselves)
-
-      Furniture, background, and environment
-
-      Hard prohibitions
-
-      Do NOT pixelate hands, fingers, utensils, plates, bowls, or containers
-
-      Do NOT pixelate clothing, face, hair, or background
-
-      Do NOT introduce new objects
-
-      Do NOT remove existing objects
-
-      Do NOT alter facial expression or identity under any circumstance
-
-      Final validation rule
-
-      The final image must look like a realistic photograph in which EVERY visible food item has been fully replaced with clean, opaque, retro pixel art, while ALL other elements remain untouched and photorealistic, and the original photo’s aspect ratio is perfectly preserved.
+      A realistic vertical 4:5 Lunar New Year photograph showing
+      ONE single red-based illustrated 斗方,
+      naturally and flatly pasted onto a door or wall,
+      with ALL uploaded people and/or pets fully included,
+      balanced festive decorations,
+      correct lighting integration,
+      and a joyful, traditional atmosphere.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: false
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
     min_images: 1
     max_images: 3
     num_iterations: 50

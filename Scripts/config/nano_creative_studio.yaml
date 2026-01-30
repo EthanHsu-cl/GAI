@@ -5,195 +5,111 @@ testbed: http://192.168.31.161:8000/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 2
+  group_tasks_by: 3
 
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB6N2KiLg4tSqPkt1vrbHVrAeLfUmygBhg1Enuqb5ZPZ_Q?e=vuUbps
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDABI81-vCRTKqNcqeQWSTmAeucT4iO5rTLomoT2Panwjw?e=hkCc9c
 root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bc00d6d66b_3_0#slide=id.g3bc00d6d66b_3_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0128 拍貼系列-Style3 2020S
+  - folder: ../Media Files/Nano Banana/0129 3 Styles/0129 電梯仰頭自拍
     model: gemini-3-pro-image-preview
-    resolution: "1K"
+    resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
-      Use all uploaded photos as the only subjects. Their real identities must remain recognizable and consistent.
-      Preserve the subjects’ facial features, identity, skin tone, hairstyle, and body proportions EXACTLY as in the uploaded photos.
+      Use the two uploaded people as the only subjects. Their faces, facial features, identities, hairstyles, expressions, and clothing must remain exactly the same as in the uploaded photos. Do not beautify, stylize, or alter their appearance, and do not add any extra people.
 
-      The input consists of 2 to 4 different people (all unique individuals).
+      Create a playful four-frame photo-booth collage styled like CCTV cameras inside an elevator. Each frame should look like it was captured by a corner-mounted security camera positioned high in the upper corner of a shiny metal elevator, creating a downward diagonal view. The overall viewpoint must feel like a real corner CCTV camera looking down toward the subjects rather than a centered ceiling camera.
 
-      GLOBAL IDENTITY & COUNT RULES (CRITICAL):
-      – Each uploaded person may appear multiple times across different frames
-      – BUT the same person must NEVER appear twice within the SAME frame
-      – No frame may contain duplicated faces or cloned identities
-      – No hallucinated or extra people are allowed
+      The two subjects must appear together in all four frames, wearing exactly the same clothes as shown in the uploaded photos. Their body proportions and heights must stay realistic and consistent in every frame. The entire collage should feel unified and shot in the same physical elevator environment.
 
-      FRAME POPULATION RULES (VERY IMPORTANT):
-      – Each frame must contain either:
-        • exactly 2 people
-        • exactly 3 people
-        • or all 4 people together
-      – A frame with ONLY 1 person is STRICTLY FORBIDDEN
-      – The exact number of people per frame may vary randomly
-      – Not all frames need to contain the same number of people
+      The visual style should present a high-angle overhead CCTV perspective within a 2×2 four-frame collage. Each frame should include subtle labels such as “CAMERA 1,” “CAMERA 2,” “CAMERA 3,” and “CAMERA 4,” along with a small red “REC” icon. A light fisheye distortion should be visible to mimic elevator surveillance lenses. The elevator interior must feature metallic walls and accurate reflections that remain consistent across all four images, but the lighting and overall atmosphere should feel soft, bright, clean, and pastel-tinted—similar to a Korean-style photo booth—while still maintaining the CCTV framing and angle.
 
-      Adding the same person repeatedly within a single frame
-      or adding people who haven't uploaded photos
-      is strictly prohibited.
+      The subjects’ poses and interactions should feel playful and casual, such as making peace signs, leaning into each other, hugging, making cute expressions, or pointing toward the camera. The mood should remain fun and natural, similar to a Korean-style photo booth but presented as CCTV footage. Identity preservation is critical—faces must remain exactly the same as in the uploaded photos, with no stylization, no added accessories unless already present in the images, and no changes to makeup, lighting on the face, or skin texture. No beauty filters or face-editing effects should be applied.
 
-      ────────────────────────
-      PURPOSE & STYLE:
-      ────────────────────────
-      This is a photographic purikura-style filter application inspired by CURRENT Japanese purikura trends (FJK / SJK / LJK),
-      NOT a realistic portrait and NOT a modern beauty editorial.
-
-      ────────────────────────
-      IDENTITY PRESERVATION RULES:
-      ────────────────────────
-      – The same people must remain clearly identifiable
-      – Facial structure, face shape, and hairstyle must remain consistent
-      – Do NOT replace faces
-      – Do NOT merge faces
-      – Do NOT turn subjects into illustrations, anime, or dolls
-
-      ────────────────────────
-      FACIAL TREATMENT (EYES ARE CRITICAL – CURRENT PURIKURA STYLE):
-      ────────────────────────
-      – Eyes must appear about 25–30% larger than the original image, achieved through facial proportion refinement, NOT exaggerated scaling
-      – Slightly taller eye shape with soft rounded corners
-      – Clean, soft upper eyelid line (no harsh eyeliner, no cat-eye)
-      – Subtle lower eyelid fullness (natural aegyo-sal impression, not drawn)
-      – Iris size and color remain realistic (no glow, no anime shine)
-      – Eye whites clean and bright but NOT over-whitened
-      – Eyes must feel soft, friendly, and human, never cartoonish or doll-like
-
-      Face & skin:
-      – Overall face slightly more compact and centralized (very subtle)
-      – Mild jawline softening only
-      – Skin retouching light, clean, and purikura-like
-      – No plastic skin, no heavy whitening, no editorial beauty look
-
-      ────────────────────────
-      STYLE & BOOTH IDENTITY:
-      ────────────────────────
-      Create a playful four-frame photo-booth collage styled like a CURRENT Japanese purikura booth popular among FJK / SJK / LJK.
-
-      Overall vibe:
-      – cute
-      – trendy
-      – clean
-      – soft
-      – girly
-      – Instagram-ready
-      – unmistakably modern Japanese purikura aesthetic
-
-      ────────────────────────
-      LAYOUT:
-      ────────────────────────
-      – Perfect 2×2 four-frame grid
-      – Equal-sized panels
-      – Seamlessly stitched edge-to-edge
-      – NO borders, margins, dividers, or white lines
-      – One unified purikura output (not separated images)
-
-      ────────────────────────
-      SUBJECTS & POSES (REFERENCE-ALIGNED):
-      ────────────────────────
-      – Relative positions and scale remain consistent across frames
-      – Each frame must feature a DIFFERENT pose
-      – Poses must closely imitate reference purikura poses, including:
-        • peace signs close to the face or eyes
-        • cheek-touch pose
-        • finger-heart near chin
-        • slight head tilt with close shoulder distance
-        • leaning together for intimacy
-      – Expressions should be soft, cute, and natural:
-        gentle smile / shy smile / light pout
-      – Avoid exaggerated comedy poses or large spacing between subjects
-      – Clothing must remain unchanged
-
-      ────────────────────────
-      HEAD ACCESSORIES:
-      ────────────────────────
-      – Add bows or headbands to SOME subjects only
-      – Accessories appear in RANDOM 1–2 frames only
-      – At most TWO frames may contain head accessories
-      – Never appear in all four frames
-
-      – Sequined pink ribbon headband
-      – Lace plush headband (soft, fluffy texture)
-      – Kitty-style pink glitter bow headband (purikura booth rental feel)
-
-      – Accessories should feel playful, bold, and slightly exaggerated
-      – Slightly oversized but controlled
-      – Clearly readable at thumbnail size
-
-      Color direction:
-      – High-saturation candy colors:
-        hot pink, vivid baby pink, cherry red, bright mint green
-      – Must stand out clearly from hair and background
-      – Avoid muted or dusty tones
-
-      Placement rules:
-      – On top of the head or slightly off-center
-      – Do NOT obscure bangs, eyes, eyebrows, or facial features
-
-      Restrictions:
-      – Do NOT use animal ears
-      – Do NOT use cosplay or luxury accessories
-      – Do NOT overload accessories
-
-      ────────────────────────
-      BACKGROUND & LIGHTING:
-      ────────────────────────
-      – Simple, clean purikura booth background
-      – Soft pastel tones only (pink / white / light purple)
-      – Flat, friendly booth lighting
-      – Soft glow without haze
-      – No detailed environments
-
-      ────────────────────────
-      DECORATIONS (CRITICAL UPDATE – HEARTS ONLY):
-      ────────────────────────
-      – DO NOT add ANY text, letters, numbers, words, or typography
-      – DO NOT add speech bubbles, stars, sparkles, stickers, outlines, glow effects, or neon effects
-      – Add ONLY hand-drawn heart doodles
-
-      Heart appearance:
-      – Hand-drawn pen / marker style
-      – Flat color fill or simple outline ONLY
-      – NO glow, NO neon, NO gradient
-      – Uneven, imperfect stroke thickness
-      – Casual, human-drawn feeling
-
-      Heart color palette ONLY:
-      – hot pink
-      – bright red
-      – vivid pastel pink
-
-      Heart distribution rules:
-      – ONLY 2 out of the 4 frames may contain hearts
-      – Remaining frames must have ZERO decorations
-      – Do NOT distribute evenly
-      – Never overlap eyes, eyebrows, nose, or mouth
-
-      ────────────────────────
-      MOOD & INTENT:
-      ────────────────────────
-      Cute, intimate friendship memories captured in a CURRENT Japanese purikura booth.
-      The final image should feel:
-      – pastel
-      – bubbly
-      – clean
-      – softly retouched
-      – trendy
-      – unmistakably modern Japanese purikura.
+      The final output should be a realistic four-frame elevator CCTV-style collage featuring the two uploaded subjects from a corner-mounted surveillance angle, showing playful poses, consistent clothing, accurate proportions, and perfectly preserved facial identity.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: true
+    use_random_source_selection: false
+    use_deterministic_random: false
+    min_images: 2
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0129 3 Styles/0129 鐵達尼號
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the two uploaded people as the only subjects, preserving their real identities exactly as in the uploaded photos. Their faces, facial features, bone structure, hairstyles, skin tone, and expressions must remain unchanged. The system must not modify their proportions, makeup style, jawline, nose, or eyes, and must not apply beautification, aging, stylization, smoothing, or add any additional people.
+
+      Clothing follows a strict identity rule:
+      If the uploaded pair is one male and one female, the male must wear Jack’s outfit—an off-white collarless shirt with a black vintage suit jacket in early-1900s Titanic style—and the female must wear Rose’s outfit—a white lace corset-style top with a black outer shawl and a vintage floral silk scarf draped loosely over both forearms, hanging freely and flowing outward just like in the original Titanic movie poster (the scarf must NOT be tied around the neck).
+      If both uploaded people are male, they must both wear Jack’s outfit.
+      If both uploaded people are female, they must both wear Rose’s outfit with the same forearm-draped, flowing silk scarf placement, never around the neck.
+
+      Pose assignment rule:
+      If the pair is one male and one female, the female wearing Rose’s outfit must stand in front and be embraced from behind by the male wearing Jack’s outfit.
+      If the uploaded people are the same gender, the front/back positions must be assigned randomly, but still follow the same intimate Titanic-style embrace.
+
+      Create a realistic Titanic-style movie poster that recreates the emotional intimacy of the original 1997 promotional imagery. The subject standing behind wraps their arms gently around the waist of the subject in front. Both lean slightly toward each other with soft, intimate body language and gaze deeply into each other’s eyes rather than looking at the camera. Their faces must feel close, romantic, and emotionally connected, echoing the iconic Titanic embrace.
+
+      Recreate the cinematic atmosphere of the Titanic ship deck with soft golden-hour light on their faces, a faint halo-like backlight behind their heads, and blurred hints of ship railings and heavy ropes in the background. No modern elements or additional people may appear. The overall color styling must match the warm vintage Titanic film aesthetic with golden-brown highlights, gentle film-like contrast, subtle haze, soft glow, fine grain, and deep, romantic tones without harsh saturation.
+
+      At the bottom center of the poster, include the title “ETERNIA” in a large serif typeface with a metallic gold-white gradient and wide letter spacing. Above the title,  include the director credit “A LOVE BEYOND TIME” in the same elegant serif style. The title must visually integrate into the composition with thin decorative horizontal lines above and below the word “ETERNIA,” matching the authentic movie poster layout.
+
+      The final poster must feel emotional, cinematic, warm, elegant, and consistent with a high-budget Titanic romance poster, maintaining perfect identity preservation of the two uploaded subjects, with no distortions, incorrect limbs, or extra reflections or figures.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    use_deterministic_random: false
+    min_images: 2
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0129 3 Styles/0129 花束般的戀愛
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Use the two uploaded people as the only subjects. Their real identities must remain perfectly accurate to the uploaded photos. Do not alter their faces, facial features, bone structure, skin tone, expressions, makeup style, hairstyle, or proportions. Do not beautify, stylize, smooth, age, or replace them with any other person. No additional people may appear.
+
+      Create a movie poster inspired by the Japanese film “We Made a Beautiful Bouquet,” capturing an intimate, warm, extremely close-up moment between the two subjects. The framing must be very close to their faces, focusing on their eyes and expressions.
+
+      Clothing assignment (very important):
+      • Any male subject must wear a white inner shirt with a soft blue knitted cardigan on top, matching the gentle, casual tone of the reference film.
+      • Any female subject must wear an orange-pink knitted sweater, and she must hold a bouquet of flowers in her arms.
+      • The female subject must also hold a piece of bread in her hand, feeding it gently to the other subject.
+
+      Scene direction:
+      Create a warm, romantic, natural-feeling moment between the two subjects. The female subject looks at the other person with a soft, happy expression full of affection. The feeding gesture must look natural, delicate, and intimate. The other subject leans slightly toward her, receiving the bread gently. Their faces must be close, with soft sunlight illuminating their skin.
+
+      Lighting & atmosphere:
+      Use bright, soft Japanese-style daylight with a dreamy emotional tone. The edges of the frame should feel slightly hazy with strong depth-of-field separation: sharp focus on their eyes and faces, smooth transitions upward and outward. The bouquet should appear airy and bright, blending beautifully with the soft lighting.
+      Apply a Japanese-style cool, blue-leaning color palette throughout the scene—a gentle cold-tone film look, clean, soft, slightly desaturated, and emotionally subtle—while maintaining the original cinematic softness.
+
+      Typography (critical):
+      At the bottom of the poster, transition into a subtle, reduced-height white area with gentle, minimal wave-like edges—not too tall, not too dramatic, just enough to host the title cleanly.
+
+      Inside this white section, place the main title:
+
+      恋をしている日々
+
+      The title must use a typeface matching the original film poster—an elegant, delicate, lightly handwritten-style serif font with soft curves. The characters 「恋」 and 「日」 must appear slightly larger than 「をしている」 and 「々」, following the hierarchy of the original design.
+      The entire title must be rendered in a deep brown color.
+
+      Directly beneath the title, add two thin, hand-drawn-style decorative straight lines of equal thickness, also in deep brown.
+
+      Styling notes:
+      The poster must look like an authentic romantic Japanese film poster—emotional, tender, soft daylight, cinematic, and close-up on love and expression. No parody, no harsh contrast, no heavy filters. Keep it gentle, natural, and film-like, with the newly applied cool-toned Japanese blue palette.
+
+      The final image must preserve perfect facial identity, intimate emotion, soft lighting, soft bokeh, correct clothing, correct bouquet + bread interaction, and a clean, readable Japanese title in the gently waved white area with uniform title color and the two intersecting hand-drawn decorative lines at the far right.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
     use_deterministic_random: false
     min_images: 2
     max_images: 4

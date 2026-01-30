@@ -13,7 +13,7 @@ default_settings:
   motion_mode: normal
   quality: 720p
   style: none
-  generate_audio: false
+  generate_audio: true
   generate_multi_clip: false
   thinking_type: auto
 

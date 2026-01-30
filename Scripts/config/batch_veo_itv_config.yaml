@@ -14,7 +14,7 @@ output:
 
 # Global generation count - how many videos to generate per source image
 # Can be overridden per task
-generation_count: 1
+generation_count: 5
 
 # Root folder containing all style subfolders
 root_folder: ../Media Files/Veo_ITV
@@ -29,10 +29,10 @@ root_design_link: https://docs.google.com/presentation/d/1kF8imHlU9i6uJtCOL8JWkx
 # Each task represents a style folder under the root_folder
 # The folder should contain a 'Source' subfolder with the source images
 tasks:
-  - style_name: Dog_Run_To_Owner
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/01_DogRun/
+  - style_name: Street Rap
+    folder: ../Media Files/Veo_ITV/0130 6 Styles/Street Rap
     prompt: |
-      A dog is happily running toward its owner with excitement
+      Cinematic music video opening shot, urban noir aesthetic, core subject is a young African American male rapper with short dreadlocks, wearing a high-gloss black shiny puffer jacket over a black tee, adorned with heavy layered diamond Cuban link chains and a large iced-out pendant, diamond rings and watch, confident rapping performance with mouth open, right hand raised in a rhythmic gesture, set in a narrow brick alleyway covered in graffiti, lighting provided by ambient cyan, pink, and purple neon signs scattered in the background mid-ground, casting diffused colored light onto the scene but specifically avoiding direct backlighting or rim lighting behind the subject's head, environmental details include wet pavement with strong ray-tracing reflections, subtle atmospheric haze and light wisps of smoke drifting gently from the left side, shot on Arri Alexa Mini LF with a 50mm Anamorphic lens, f/1.8 aperture, cinematic shallow depth of field with creamy bokeh, sharp focus on subject, cool color palette with high contrast, 8k ultra-realistic texture.
     negative_prompt: ''
     model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
@@ -44,10 +44,10 @@ tasks:
     generate_audio: true
     person_generation: allow_all
 
-  - style_name: Capybara_Onsen_Closeup
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/02_CapyOnsen/
+  - style_name: Eyes Zoom-in
+    folder: ../Media Files/Veo_ITV/0130 6 Styles/Eyes Zoom-in
     prompt: |
-      A close up capybara bathe in a white smoky hot spring, looking around, smoke on the water surface, foggy, blurred mountain background in Japan, bright environment
+      Cinematic music video aesthetic, consistent slow-motion flow, hyper-realistic textures. The sequence begins with an extreme macro close-up of an azure iris, the camera executes an uninterrupted, ultra-smooth unidirectional Dolly In, gliding directly into the pupil functioning as an infinite forward-moving dark tunnel, maintaining constant forward velocity with absolutely no regression, seamlessly emerging from the void into a dazzling surreal fantasy garden filled with giant dewy flowers rhythmically swaying in the wind, populated by numerous colorful butterflies exhibiting complex, autonomous flight trajectories, engaging in natural swarming behaviors and erratic, individualistic interactions with the flora, distinct from mere ornamentation, physically accurate wing aerodynamics with motion blur, the entire space pulsating with dynamic life and motion, bathed in ethereal warm God Rays and golden-hour volumetric lighting, soft diffused warm ambient lighting, pastel tones, creamy bokeh, 1/4 Black Pro-Mist filter aesthetic, 8k resolution, cinematic fluidity, high-fidelity transition.
     negative_prompt: ''
     model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
@@ -59,25 +59,10 @@ tasks:
     generate_audio: true
     person_generation: allow_all
 
-  - style_name: Cherry_Soda_Condensation
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/03_CherrySoda/
+  - style_name: Running in the field
+    folder: ../Media Files/Veo_ITV/0130 6 Styles/Running in the field
     prompt: |
-      A chilled glass bottle of cherry soda with condsation, surrounded by fresh, juicy cherries. The background is a blend of soft pink and red gradients, Splashes of soda fizz and bubbles are dynamically captured around the bottle
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '9:16'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
-
-  - style_name: Coral_Reef_Camera_Move
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/04_CoralReef/
-    prompt: |
-      A thriving coral reef ecosystem in pristine condition, colorful corals in rich detail, tropical fish swimming in harmony, sunlight streaming through clear blue ocean water, Camera Movement
+      Cinematic music video aesthetic, Phantom Flex high-speed cinematography rendering hyper-real viscous slow motion, refined 35mm film stock with subtle and minimal grain structure, tracking shot following a woman with long blonde hair running through a golden wheat field towards a distant pylon, camera moves gently forward as she decelerates and executes a fluid anatomically synchronized 180-degree monolithic body pivot where head shoulders and torso rotate as a single unified structure at a constant angular velocity to fully face the lens strictly preventing head-body rotational lag, camera continues to push in seamlessly while she gently turns her head laterally transitioning into an intimate Extreme Close-Up profile shot of her face with an enigmatic smile, rich sunset atmosphere, final frame composition strictly enforces clear spatial separation with the character's profile positioned in the left-center-third preventing any physical overlap with the visible sunset orb anchored firmly within the right half, intense solar bloom and heavy halation radiating from frame-right, directional low-angle key light sculpting the profile edge, soft diffused warm fill light from the front-left illuminating facial features against powerful backlight, balanced exposure, pastel tones, creamy bokeh, 1/4 Black Pro-Mist filter aesthetic, warm and tender atmospheric haze
     negative_prompt: ''
     model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
@@ -89,10 +74,10 @@ tasks:
     generate_audio: true
     person_generation: allow_all
 
-  - style_name: Fresh_Salad_Camera_Move
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/05_Salad/
+  - style_name: Girl with Pearl Earrings
+    folder: ../Media Files/Veo_ITV/0130 6 Styles/Girl with Pearl Earrings
     prompt: |
-      Fresh salad in a bowl, with vibrant greens and vegetables, camera movement
+      Style Anchor: Cinematic Moving Oil Painting, Vermeer Aesthetic, continuous heavy impasto texture visible throughout; Optical Specs: 50mm Prime Lens, shallow depth of field, 8k resolution; Dynamic Camera Encoding: Fixed Mid-Shot composition maintaining absolute framing integrity with no camera movement; Visual Subject: The Girl with a Pearl Earring matching reference images, features strictly limited to exactly one single visible pearl earring on the visible earlobe, no second earring exists; Action Trajectory: The subject's left hand ascends gracefully and slowly from the lower frame to execute a delicate, elegant surface-only fingertip graze upon the fixed pearl earring attached to her earlobe, synchronized with a natural, gentle eye blink; Physical Details: Spatial Lock [The single pearl remains physically anchored to the ear], Chiaroscuro lighting, slow fluid motion
     negative_prompt: ''
     model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
@@ -104,10 +89,10 @@ tasks:
     generate_audio: true
     person_generation: allow_all
 
-  - style_name: Polar_Bear_Beer_Cheers
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/06_PolarBeer/
+  - style_name: ASMR hamburger
+    folder: ../Media Files/Veo_ITV/0130 6 Styles/ASMR hamburger
     prompt: |
-      A close-up of a polar bear holding a bottle of beer and shaking it, cheering with the viewer
+      Cinematic Commercial ASMR, Static Side Profile Close-Up, shot on ARRI Alexa 35 with 100mm Macro lens. Subject: Woman with voluminous curly red hair, glowing under intense Golden Hour backlighting with sharp rim light. Action: She holds a large, golden-brown fried chicken drumstick with both hands, manicured dark blue nails, mouth engaged in a deliberate, high-pressure bite. Visual Synesthesia for Audio: Focus strictly on the solid mechanics of the crunch; the sharp, crystalline fracturing of the deep-fried batter, the rigid fragmentation of the irregular crispy skin clearly separating from the meat under tooth pressure, and the clean tear of the dense chicken fibers without any moisture mist. Constraint: Zero steam, no heat waves, no atmospheric haze; maintaining absolute optical sterility. Subject's face, skin, and lips remain impeccably clean, free of grease or crumbs. Lighting: Vacuum-level clarity, high contrast texture rendering. Background: Creamy heavy optical bokeh of a cafe interior. 8K resolution.
     negative_prompt: ''
     model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
@@ -119,10 +104,10 @@ tasks:
     generate_audio: true
     person_generation: allow_all
 
-  - style_name: Diamond_Ring_Rotation
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/07_Ring/
+  - style_name: Violin
+    folder: ../Media Files/Veo_ITV/0130 6 Styles/Violin
     prompt: |
-      Diamond ring placed on a velvet cloth, creating dazzling reflections, with the camera slowly rotating around it under a spotlight
+      Based on the visual benchmark of image_8.png, cinematic realism style captured with a 50mm prime lens. The woman with wavy blonde hair in the black dress performs a highly dynamic violin performance with extremely large-amplitude, expressive bowing movements. Her entire body executes a slow, continuous fluid rotation (pirouette) while playing. A stable Steadicam tracking orbit shot synchronizes perfectly with her rotation speed, encircling her to capture the constantly shifting body postures and intense kinetic energy. The dramatic side Rembrandt lighting and warm golden rim light established in image_8.png rapidly flow and shift across her face, hair, and the violin body as she turns. The atmosphere is ultra-pristine and crystal clear, explicitly characterized by the complete absence of any floating dust, rosin particles, or volumetric fog against the deep pitch-black background.
     negative_prompt: ''
     model_id: veo-3.1-fast-generate-preview
     duration_seconds: 6
@@ -134,125 +119,6 @@ tasks:
     generate_audio: true
     person_generation: allow_all
 
-  - style_name: Pancakes_Syrup_Drizzle
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/08_Pancakes/
-    prompt: |
-      A stack of fluffy Japanese pancakes topped with whipped cream and strawberries is being drizzled with golden syrup from a pitcher, set on a wooden plate
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '16:9'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
-
-  - style_name: Skincare_Floating_Platform
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/09_Skincare/
-    prompt: |
-      Skincare products displayed on a floating circular stone platform. The background features soft lighting, fluffy white clouds, large circular abstract shapes, and tropical leaves as accents. The entire scene reflects on a calm water surface with subtle ripples
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '16:9'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
-
-  - style_name: Tropical_Beach_Waves
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/10_Beach/
-    prompt: |
-      Crystal clear turquoise sea waves gently washing over soft white sand on a sunny tropical beach, fine texture of sand, calm and serene atmosphere, Camera Movement
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '16:9'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
-
-  - style_name: Forest_River_Camera_Move
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/11_Forest/
-    prompt: |
-      A photo of serene forest with crystal-clear river flowing through, surrounded by lush green trees and wildflowers, under a bright blue sky, an eco-friendly atmosphere, vibrant colors, clean and fresh environment, Camera Movement
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '16:9'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
-
-  - style_name: Steam_Cloud_Pan
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/12_Steam/
-    prompt: |
-      The steam gently rising from cup like fluffy white clouds , natural motion, continuously flowing without interruption. The camera smoothly moves in a slow cinematic pan
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '9:16'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
-
-  - style_name: Desert_Door_To_Oasis
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/13_Door/
-    prompt: |
-      A glowing door stands alone in the middle of a desert under a star-filled night sky. When the door opens from one side, it reveals a lush green oasis with palm trees, shimmering water, and bright sunlight, contrasting with the surrounding dark desert, Camera Movement
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '9:16'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
-
-  - style_name: Grilled_Steak_Smoke
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/14_Steak/
-    prompt: |
-      A juicy perfectly grilled steak on a wire grid, causing a smoky
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '16:9'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
-
-  - style_name: Whiskey_Condensation_Fire
-    folder: ../Media Files/Veo_ITV/1226 15 Styles/15_Whiskey/
-    prompt: |
-      A bottle of premium whiskey stands with tiny water droplets covering its surface, showcasing a condensation effect, emanating from blazing fires. The backlight accentuates the bottle's silhouette and transparent texture.camera movement
-    negative_prompt: ''
-    model_id: veo-3.1-fast-generate-preview
-    duration_seconds: 6
-    aspect_ratio: '9:16'
-    resolution: 1080p
-    compression_quality: optimized
-    seed:
-    enhance_prompt: true
-    generate_audio: true
-    person_generation: allow_all
 
 # To add more styles, copy the task block above and modify:
 # - style_name: Name of the style (used in logging)

@@ -89,6 +89,23 @@ class UnifiedAPIProcessor:
 
         # Load API definitions
         self.load_api_definitions()
+        
+        # Cache file extensions after loading API definitions
+        self._cache_file_extensions()
+    
+    def _cache_file_extensions(self):
+        """Cache file extension lists for performance."""
+        file_types = self.api_definitions.get('file_types', [])
+        if isinstance(file_types, dict):
+            self._image_exts = file_types.get('image', ['.jpg', '.jpeg', '.png'])
+            self._video_exts = file_types.get('video', ['.mp4', '.mov', '.avi'])
+        else:
+            self._image_exts = file_types if file_types else ['.jpg', '.jpeg', '.png']
+            self._video_exts = ['.mp4', '.mov', '.avi']
+        
+        # All image extensions including unsupported formats
+        self._all_image_exts = self._image_exts + ['.avif', '.webp', '.heic', '.heif', '.bmp', '.tiff', '.tif']
+        self._ref_image_exts = ['.jpg', '.jpeg', '.png', '.bmp']
 
     def load_api_definitions(self):
         """Load API-specific configurations from JSON file."""
@@ -246,12 +263,19 @@ class UnifiedAPIProcessor:
                 unsupported_formats = {'AVIF', 'WEBP', 'HEIC', 'HEIF', 'BMP', 'TIFF', 'MPO', 'SVG'}
                 unsupported_extensions = {'.avif', '.webp', '.heic', '.heif', '.bmp', '.tiff', '.tif', '.svg'}
                 
+                # Skip conversion if already valid JPEG format
+                if img.format == 'JPEG' and image_path.suffix.lower() in {'.jpg', '.jpeg'}:
+                    return image_path
+                
                 needs_conversion = (
                     img.format in unsupported_formats or 
                     image_path.suffix.lower() in unsupported_extensions
                 )
                 
                 if needs_conversion:
+                    # Store original format for logging
+                    original_format = img.format or image_path.suffix.upper()
+                    
                     # For files already named .jpg/.jpeg, save in place (overwrite)
                     # For other extensions, create new .jpg file
                     if image_path.suffix.lower() in {'.jpg', '.jpeg'}:
@@ -272,7 +296,7 @@ class UnifiedAPIProcessor:
                     # Save as JPG with high quality
                     rgb_img.save(new_path, 'JPEG', quality=95, optimize=True)
                     
-                    self.logger.info(f" 🔄 Converted {img.format or image_path.suffix} → JPG: {image_path.name}")
+                    self.logger.info(f" 🔄 Converted {original_format} → JPEG: {image_path.name}")
                     
                     # Remove original file only if it's a different path
                     if new_path != image_path and image_path.exists():
@@ -298,32 +322,29 @@ class UnifiedAPIProcessor:
         Returns:
             List of Path objects matching the file type
         """
-        folder = Path(folder)
-        if not folder.exists():
+        # Cache Path conversion
+        folder_path = folder if isinstance(folder, Path) else Path(folder)
+        if not folder_path.exists():
             return []
         
+        # Use cached extension lists
         if file_type == 'video':
-            # For runway and similar APIs with video support
-            file_types = self.api_definitions.get('file_types', {}).get('video', [])
+            file_exts = self._video_exts
         elif file_type == 'reference_image':
-            # For runway reference images
-            file_types = ['.jpg', '.jpeg', '.png', '.bmp']
+            file_exts = self._ref_image_exts
         else:
-            # Default to image file types
-            file_types = self.api_definitions.get('file_types', [])
-            if isinstance(file_types, dict):
-                file_types = file_types.get('image', [])
-        
-        # Collect all image files (including unsupported formats)
-        all_image_exts = file_types + ['.avif', '.webp', '.heic', '.heif', '.bmp', '.tiff', '.tif']
+            file_exts = self._all_image_exts
         
         if file_type in ['image', 'reference_image']:
-            # Get all image files
-            files = [f for f in folder.iterdir() if f.is_file() and f.suffix.lower() in all_image_exts]
+            # Combine filtering and sorting in one pass - sort as we filter
+            files = sorted(
+                (f for f in folder_path.iterdir() if f.is_file() and f.suffix.lower() in file_exts),
+                key=lambda x: x.name.lower()
+            )
             
             # Convert unsupported formats to JPG and resize oversized images
-            processed_files = []
             max_dim = self.api_definitions.get('validation', {}).get('max_dimension')
+            processed_files = []
             
             for file_path in files:
                 # First convert format if needed
@@ -335,13 +356,13 @@ class UnifiedAPIProcessor:
                 
                 processed_files.append(converted_path)
             
-            files = processed_files
+            return processed_files
         else:
-            # Video files - no conversion needed
-            files = [f for f in folder.iterdir() if f.is_file() and f.suffix.lower() in file_types]
-        
-        # Sort files by name for deterministic ordering across runs
-        return sorted(files, key=lambda x: x.name.lower())
+            # Video files - combine filtering and sorting in one pass
+            return sorted(
+                (f for f in folder_path.iterdir() if f.is_file() and f.suffix.lower() in file_exts),
+                key=lambda x: x.name.lower()
+            )
 
     def validate_file(self, file_path, file_type='image'):
         """Enhanced file validation with API-specific optimizations"""
@@ -350,7 +371,9 @@ class UnifiedAPIProcessor:
 
             if file_type == 'video':
                 # Enhanced video validation for Runway
-                file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
+                # Optimization: Use single stat() call
+                file_path_obj = file_path if isinstance(file_path, Path) else Path(file_path)
+                file_size_mb = file_path_obj.stat().st_size / (1024 * 1024)
                 video_rules = validation_rules.get('video', {})
 
                 if file_size_mb > video_rules.get('max_size_mb', 500):
@@ -371,65 +394,51 @@ class UnifiedAPIProcessor:
                 return True, f"{info['width']}x{info['height']}, {info['duration']:.1f}s, {info['size_mb']:.1f}MB"
 
             else:
+                # Optimization: Cache path conversion and get file size once
+                file_path_obj = file_path if isinstance(file_path, Path) else Path(file_path)
+                file_size_mb = file_path_obj.stat().st_size / (1024 * 1024)
+                
                 min_dimensions = validation_rules.get('min_dimension', 300)
                 aspect_ratio_range = validation_rules.get('aspect_ratio', [0.4, 2.5])
-                # Enhanced image validation
-                if self.api_name == "kling":
-                    # Kling specific validation (matching working processor)
-                    file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
-                    if file_size_mb >= validation_rules.get('max_size_mb', 32):  # 32MB limit
-                        return False, "Size > 32MB"
-
-                    with Image.open(file_path) as img:
-                        w, h = img.size
+                
+                # Optimization: Open image once and cache dimensions
+                with Image.open(file_path) as img:
+                    w, h = img.size
+                    
+                    # Enhanced image validation by API
+                    if self.api_name == "kling":
+                        # Kling specific validation
+                        if file_size_mb >= validation_rules.get('max_size_mb', 32):
+                            return False, "Size > 32MB"
                         if w <= min_dimensions or h <= min_dimensions:
                             return False, f"Dims {w}x{h} too small"
-
                         ratio = w / h
                         if not (aspect_ratio_range[0] <= ratio <= aspect_ratio_range[1]):
                             return False, f"Ratio {ratio:.2f} invalid"
-
                         return True, f"{w}x{h}, {ratio:.2f}"
 
-                elif self.api_name == "runway":
-                    # Runway reference image validation
-                    file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
-                    if file_size_mb >= validation_rules.get('max_size_mb', 32):
-                        return False, "Reference image > 32MB"
-
-                    with Image.open(file_path) as img:
-                        w, h = img.size
+                    elif self.api_name == "runway":
+                        # Runway reference image validation
+                        if file_size_mb >= validation_rules.get('max_size_mb', 32):
+                            return False, "Reference image > 32MB"
                         if w < min_dimensions or h < min_dimensions:
                             return False, f"Reference image {w}x{h} too small"
                         return True, f"Reference: {w}x{h}"
 
-                elif self.api_name == "nano_banana":
-                    # Nano banana specific validation (matching working processor)
-                    file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
-                    if file_size_mb >= validation_rules.get('max_size_mb', 32):
-                        return False, "Size > 32MB"
-
-                    with Image.open(file_path) as img:
-                        w, h = img.size
+                    elif self.api_name == "nano_banana":
+                        # Nano banana specific validation
+                        if file_size_mb >= validation_rules.get('max_size_mb', 32):
+                            return False, "Size > 32MB"
                         if w <= min_dimensions or h <= min_dimensions:
                             return False, f"Dims {w}x{h} too small"
                         return True, f"{w}x{h}"
 
-                else:
-                    # Standard image validation for vidu APIs
-                    fast_validation = self.api_definitions.get('fast_validation', False)
-
-                    if fast_validation and isinstance(file_path, Path):
-                        file_size_mb = file_path.stat().st_size / (1024 * 1024)
                     else:
-                        file_size_mb = os.path.getsize(file_path) / (1024 * 1024)
+                        # Standard image validation for vidu APIs
+                        max_size = validation_rules.get('max_size_mb', 50)
+                        if file_size_mb >= max_size:
+                            return False, f"Size > {max_size}MB"
 
-                    max_size = validation_rules.get('max_size_mb', 50)
-                    if file_size_mb >= max_size:
-                        return False, f"Size > {max_size}MB"
-
-                    with Image.open(file_path) as img:
-                        w, h = img.size
                         min_dim = validation_rules.get('min_dimension', 128)
                         if w < min_dim or h < min_dim:
                             return False, f"Dims {w}x{h} too small"
@@ -492,6 +501,9 @@ class UnifiedAPIProcessor:
 
     def validate_and_prepare(self):
         """Enhanced validation with parallel processing support"""
+        # Optimization: Cache config tasks list to avoid repeated dict lookups
+        self._tasks_cache = self.config.get('tasks', [])
+        
         if self.api_name == "kling":
             return self._validate_kling_structure()
         elif self.api_name == "kling_effects":
@@ -524,7 +536,8 @@ class UnifiedAPIProcessor:
     def _validate_kling_structure(self):
         """Enhanced Kling validation using base template."""
         valid_tasks, invalid_images = [], []
-        for i, task in enumerate(self.config.get('tasks', [])):
+        # Optimization: Use cached tasks list
+        for i, task in enumerate(self._tasks_cache):
             result = self._validate_task_folder_structure(task, invalid_images)
             if result:
                 valid_tasks.append(result[0])
@@ -539,10 +552,11 @@ class UnifiedAPIProcessor:
         valid_tasks = []
         invalid_images = []
         
-        for i, task in enumerate(self.config.get('tasks', []), 1):
+        # Optimization: Use cached tasks list
+        for i, task in enumerate(self._tasks_cache, 1):
             folder = Path(task['folder'])
             
-            # Auto-create task folder and Source subfolder if they don't exist
+            # Optimization: mkdir with exist_ok=True handles existence check
             folder.mkdir(parents=True, exist_ok=True)
             source_folder = folder / "Source"
             source_folder.mkdir(exist_ok=True)
@@ -670,11 +684,12 @@ class UnifiedAPIProcessor:
             return None, invalid_for_task
 
         # Process tasks in parallel if enabled
+        # Optimization: Use cached tasks list
         if self.api_definitions.get('parallel_validation', False):
             with ThreadPoolExecutor(max_workers=4) as executor:
-                results = list(executor.map(process_task, self.config.get('tasks', [])))
+                results = list(executor.map(process_task, self._tasks_cache))
         else:
-            results = [process_task(task) for task in self.config.get('tasks', [])]
+            results = [process_task(task) for task in self._tasks_cache]
 
         # Collect results
         for task, invalid_for_task in results:
@@ -693,10 +708,11 @@ class UnifiedAPIProcessor:
         valid_tasks = []
         invalid_videos = []
         
-        for i, task in enumerate(self.config.get('tasks', []), 1):
+        # Optimization: Use cached tasks list
+        for i, task in enumerate(self._tasks_cache, 1):
             folder = Path(task['folder'])
             
-            # Auto-create task folder and Source subfolder if they don't exist
+            # Optimization: mkdir with exist_ok=True handles existence check
             folder.mkdir(parents=True, exist_ok=True)
             source_folder = folder / "Source"
             source_folder.mkdir(exist_ok=True)
@@ -780,7 +796,8 @@ class UnifiedAPIProcessor:
         invalid_images = []
         invalid_videos = []
         
-        for i, task in enumerate(self.config.get('tasks', []), 1):
+        # Optimization: Use cached tasks list
+        for i, task in enumerate(self._tasks_cache, 1):
             folder = Path(task['folder'])
             
             # Auto-create task folder and Source subfolders if they don't exist
@@ -868,7 +885,8 @@ class UnifiedAPIProcessor:
         """
         valid_tasks = []
         
-        for i, task in enumerate(self.config.get('tasks', []), 1):
+        # Optimization: Use cached tasks list
+        for i, task in enumerate(self._tasks_cache, 1):
             # Validate required fields
             if not task.get('prompt'):
                 self.logger.warning(f"⚠️ Task {i}: Missing prompt")
@@ -908,7 +926,8 @@ class UnifiedAPIProcessor:
         valid_tasks = []
         invalid_images = []
         
-        for i, task in enumerate(self.config.get('tasks', []), 1):
+        # Optimization: Use cached tasks list
+        for i, task in enumerate(self._tasks_cache, 1):
             # Validate required fields
             if not task.get('prompt'):
                 self.logger.warning(f"⚠️ Task {i}: Missing prompt")
@@ -997,7 +1016,8 @@ class UnifiedAPIProcessor:
         """
         valid_tasks = []
         
-        for i, task in enumerate(self.config.get('tasks', []), 1):
+        # Optimization: Use cached tasks list
+        for i, task in enumerate(self._tasks_cache, 1):
             # Validate required fields
             if not task.get('prompt'):
                 self.logger.warning(f"⚠️ Task {i}: Missing prompt")
@@ -1096,7 +1116,8 @@ class UnifiedAPIProcessor:
             return None, invalid_for_task
 
         # Process tasks
-        results = [process_task(task) for task in self.config.get('tasks', [])]
+        # Optimization: Use cached tasks list
+        results = [process_task(task) for task in self._tasks_cache]
 
         # Collect results
         for task, invalid_for_task in results:
@@ -1169,11 +1190,12 @@ class UnifiedAPIProcessor:
             return None, invalid_for_task
 
         # Use parallel processing if enabled
+        # Optimization: Use cached tasks list
         if self.api_definitions.get('parallel_validation', False):
             with ThreadPoolExecutor(max_workers=4) as executor:
-                results = list(executor.map(process_task, self.config.get('tasks', [])))
+                results = list(executor.map(process_task, self._tasks_cache))
         else:
-            results = [process_task(task) for task in self.config.get('tasks', [])]
+            results = [process_task(task) for task in self._tasks_cache]
 
         # Collect results
         for task, invalid_for_task in results:
@@ -1192,15 +1214,17 @@ class UnifiedAPIProcessor:
         base_folder = Path(self.config.get('base_folder', ''))
         base_folder.mkdir(parents=True, exist_ok=True)
 
-        configured_tasks = {t['effect']: t for t in self.config.get('tasks', [])}
+        # Optimization: Use cached tasks list and cache configured_tasks dict
+        configured_tasks = {t['effect']: t for t in self._tasks_cache}
         valid_tasks = []
         errors = []
 
         # First, auto-create folders for configured tasks
-        for task in self.config.get('tasks', []):
+        for task in self._tasks_cache:
             effect_name = task.get('effect', '')
             if effect_name:
                 task_folder = base_folder / effect_name
+                # Optimization: mkdir with exist_ok=True handles all checks
                 task_folder.mkdir(parents=True, exist_ok=True)
                 (task_folder / 'Source').mkdir(exist_ok=True)
                 (task_folder / 'Reference').mkdir(exist_ok=True)
@@ -1695,7 +1719,8 @@ class UnifiedAPIProcessor:
     def validate_genvideo_structure(self):
         """Validate genvideo folder structure using base template."""
         valid_tasks, invalid_images = [], []
-        for i, task in enumerate(self.config.get('tasks', []), 1):
+        # Optimization: Use cached tasks list
+        for i, task in enumerate(self._tasks_cache, 1):
             result = self._validate_task_folder_structure(task, invalid_images)
             if result:
                 valid_tasks.append(result[0])
@@ -1760,11 +1785,12 @@ class UnifiedAPIProcessor:
             self.logger.info(f"✓ {effect_name}: {valid_count}/{len(image_files)} valid images")
             return enhanced_task, invalid_for_task
         
+        # Optimization: Use cached tasks list
         if self.api_definitions.get("parallel_validation", False):
             with ThreadPoolExecutor(max_workers=4) as executor:
-                results = list(executor.map(process_task, self.config.get("tasks", [])))
+                results = list(executor.map(process_task, self._tasks_cache))
         else:
-            results = [process_task(task) for task in self.config.get("tasks", [])]
+            results = [process_task(task) for task in self._tasks_cache]
         
         for task, invalid_for_task in results:
             if task:
