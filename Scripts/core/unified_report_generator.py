@@ -473,9 +473,11 @@ class UnifiedReportGenerator:
     def _sort_pairs(self, pairs: List[MediaPair]) -> List[MediaPair]:
         """Sort pairs based on API type
         
-        For combination APIs (Wan, Runway): Group by video/reference, then sort by source filename
-        For nano_banana with random_source_selection: Sort by number of source images used (min to max)
-        For other APIs: Sort by source filename only
+        Failed slides are always placed first within each section.
+        Then:
+        - For combination APIs (Wan, Runway): Group by video/reference, then sort by source filename
+        - For nano_banana with random_source_selection: Sort by number of source images used (min to max)
+        - For other APIs: Sort by source filename only
         """
         if not pairs:
             return pairs
@@ -487,39 +489,46 @@ class UnifiedReportGenerator:
                 p.metadata.get('random_source_selection') for p in pairs
             )
             if has_random_selection:
-                # Sort by number of source images used (min to max),
+                # Sort by failed status first (failed slides at start),
+                # then by number of source images used (min to max),
                 # then by iteration index for stable ordering within same count
                 def get_sort_key(pair):
-                    # Primary: number of all_images_used
+                    # Primary: failed status (not failed so True=failed comes first)
+                    failed_priority = not pair.failed
+                    
+                    # Secondary: number of all_images_used
                     all_images = pair.metadata.get('all_images_used', [])
                     num_images = len(all_images) if all_images else len(pair.additional_source_paths)
                     
-                    # Secondary: iteration index for stable ordering
+                    # Tertiary: iteration index for stable ordering
                     iteration_idx = pair.metadata.get('_iteration_index', 0)
                     
-                    return (num_images, iteration_idx)
+                    return (failed_priority, num_images, iteration_idx)
                 
                 return sorted(pairs, key=get_sort_key)
         
         if self.api_name in ['wan', 'runway']:
-            # Combination APIs: Group by source video, then sort within groups by source file
-            # This groups all variations of the same video together
+            # Combination APIs: Failed slides first, then group by source video,
+            # then sort within groups by source file
             def get_sort_key(pair):
-                # Primary key: source video name (or source file if no video)
+                # Primary key: failed status (not failed so True=failed comes first)
+                failed_priority = not pair.failed
+                
+                # Secondary key: source video name (or source file if no video)
                 if pair.source_video_path:
                     video_name = pair.source_video_path.name
                 else:
                     video_name = ""
                 
-                # Secondary key: source file name
+                # Tertiary key: source file name
                 source_name = pair.source_file or ""
                 
-                return (video_name, source_name)
+                return (failed_priority, video_name, source_name)
             
             return sorted(pairs, key=get_sort_key)
         else:
-            # Other APIs: Simple sort by source filename
-            return sorted(pairs, key=lambda p: p.source_file or "")
+            # Other APIs: Failed slides first, then sort by source filename
+            return sorted(pairs, key=lambda p: (not p.failed, p.source_file or ""))
     
     # ================== UNIFIED MEDIA SYSTEM ==================
     

@@ -2,7 +2,45 @@
 
 A Python automation framework for batch processing images/videos through 12+ AI APIs with automated PowerPoint report generation.
 
-## 🚀 Quick Start
+## �️ GUI Launcher (Recommended for Non-Technical Users)
+
+For users who prefer not to use the command line, a GUI application is available:
+
+### **Download Pre-built Executable**
+
+Download the latest release from [GitHub Releases](../../releases):
+- **Windows**: `GAI_Launcher_Windows.zip`
+- **macOS**: `GAI_Launcher_macOS.zip`
+
+### **Using the GUI**
+
+1. Extract the downloaded zip file
+2. Run `GAI_Launcher.exe` (Windows) or `GAI_Launcher.app` (macOS)
+3. Select a platform from the dropdown menu
+4. Choose an action (Auto, Process Only, or Report Only)
+5. Optionally browse for a custom config file
+6. Click **Run** to start processing
+
+### **Running GUI from Source**
+
+```bash
+cd Scripts
+python gui_launcher.py
+```
+
+### **Building the Executable Locally**
+
+```bash
+cd Scripts
+pip install pyinstaller
+python build_exe.py
+```
+
+The executable will be created in `Scripts/dist/GAI_Launcher_Release/`.
+
+---
+
+## 🚀 Quick Start (Command Line)
 
 ### **Basic Usage**
 
