@@ -21,8 +21,32 @@ from pathlib import Path
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+
+def _is_frozen() -> bool:
+    """Check if running as a PyInstaller bundle."""
+    return getattr(sys, 'frozen', False)
+
+
+def _get_script_dir() -> Path:
+    """
+    Get the script directory, handling both development and bundled modes.
+    
+    Returns:
+        Path to the script directory (or equivalent in bundled app).
+    """
+    if _is_frozen():
+        # Running in a PyInstaller bundle
+        if hasattr(sys, '_MEIPASS'):
+            return Path(sys._MEIPASS)
+        else:
+            return Path(sys.executable).parent
+    else:
+        # Running in normal Python environment
+        return Path(__file__).parent
+
+
 # Ensure we can import from core directory
-script_dir = Path(__file__).parent
+script_dir = _get_script_dir()
 core_dir = script_dir / "core"
 sys.path.insert(0, str(core_dir))
 
@@ -361,12 +385,29 @@ class AutomationGUI:
         self._main_canvas.itemconfig(self._canvas_window, width=event.width)
     
     def _bind_mousewheel(self) -> None:
-        """Bind mousewheel events for scrolling."""
-        # macOS
+        """Bind mousewheel events for scrolling on all platforms."""
+        # macOS - bind to both MouseWheel and trackpad/mouse scroll events
         self._main_canvas.bind_all("<MouseWheel>", self._on_mousewheel)
-        # Linux
-        self._main_canvas.bind_all("<Button-4>", lambda e: self._main_canvas.yview_scroll(-1, "units"))
-        self._main_canvas.bind_all("<Button-5>", lambda e: self._main_canvas.yview_scroll(1, "units"))
+        # macOS two-finger scroll / external mouse scroll
+        self._main_canvas.bind_all("<Button-4>", lambda e: self._main_canvas.yview_scroll(-3, "units"))
+        self._main_canvas.bind_all("<Button-5>", lambda e: self._main_canvas.yview_scroll(3, "units"))
+        
+        # Also bind to the canvas and scrollable frame directly for better macOS support
+        self._main_canvas.bind("<Enter>", self._bind_canvas_scroll)
+        self._main_canvas.bind("<Leave>", self._unbind_canvas_scroll)
+        self._scrollable_main.bind("<Enter>", self._bind_canvas_scroll)
+        self._scrollable_main.bind("<Leave>", self._unbind_canvas_scroll)
+    
+    def _bind_canvas_scroll(self, event=None) -> None:
+        """Bind scroll events when mouse enters the canvas area."""
+        self._main_canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+        # macOS-specific scroll binding
+        self._main_canvas.bind_all("<Shift-MouseWheel>", self._on_mousewheel)
+    
+    def _unbind_canvas_scroll(self, event=None) -> None:
+        """Unbind scroll events when mouse leaves the canvas area."""
+        # Don't unbind - keep scroll active everywhere
+        pass
 
     def _create_header(self, parent: ttk.Frame) -> None:
         """Create the header section."""
@@ -460,8 +501,14 @@ class AutomationGUI:
 
         self._working_dir_var = tk.StringVar()
         
-        # Default to the parent of Scripts folder (the GAI folder)
-        default_working_dir = str(script_dir.parent)
+        # Determine default working directory
+        if _is_frozen():
+            # When running as a bundled app, use the user's home directory
+            # since the bundle's internal paths won't match config file relative paths
+            default_working_dir = str(Path.home())
+        else:
+            # In development, default to the parent of Scripts folder (the GAI folder)
+            default_working_dir = str(script_dir.parent)
         self._working_dir_var.set(default_working_dir)
         
         self._working_dir_entry = ttk.Entry(frame, textvariable=self._working_dir_var, width=60)
@@ -474,11 +521,20 @@ class AutomationGUI:
         )
         browse_btn.pack(side=tk.LEFT, padx=5)
 
-        ttk.Label(
-            frame,
-            text="📁 Relative paths in config are resolved from here",
-            foreground='gray',
-            font=('Helvetica', 9)
+        # Add a warning label for bundled app
+        if _is_frozen():
+            ttk.Label(
+                frame,
+                text="⚠️ Set to your project folder where config paths resolve correctly",
+                foreground='orange',
+                font=('Helvetica', 9)
+            ).pack(side=tk.LEFT, padx=5)
+        else:
+            ttk.Label(
+                frame,
+                text="📁 Relative paths in config are resolved from here",
+                foreground='gray',
+                font=('Helvetica', 9)
         ).pack(side=tk.LEFT, padx=5)
 
     def _create_folder_section(self, parent: ttk.Frame) -> None:
@@ -582,7 +638,25 @@ class AutomationGUI:
         
     def _on_mousewheel(self, event) -> None:
         """Handle mousewheel scrolling for the main canvas."""
-        self._main_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        # macOS returns delta in different units than Windows/Linux
+        import platform
+        if platform.system() == 'Darwin':
+            # macOS: delta is typically 1 or -1 for each scroll tick
+            # External mice may report larger values
+            delta = event.delta
+            if abs(delta) < 10:
+                # Trackpad or mice reporting small deltas
+                scroll_amount = -1 * delta
+            else:
+                # External mice reporting larger deltas (like 120)
+                scroll_amount = int(-1 * (delta / 120))
+            # Ensure minimum scroll of 1 unit
+            if scroll_amount == 0:
+                scroll_amount = -1 if delta > 0 else 1
+            self._main_canvas.yview_scroll(scroll_amount, "units")
+        else:
+            # Windows/Linux
+            self._main_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
     def _add_task_entry(self) -> None:
         """Add a new task entry based on the current platform."""
@@ -931,7 +1005,13 @@ class AutomationGUI:
 
     def _browse_working_dir(self) -> None:
         """Open folder dialog to select a working directory."""
-        initial_dir = self._working_dir_var.get() or str(script_dir.parent)
+        current_val = self._working_dir_var.get()
+        if current_val and Path(current_val).exists():
+            initial_dir = current_val
+        elif _is_frozen():
+            initial_dir = str(Path.home())
+        else:
+            initial_dir = str(script_dir.parent)
         folderpath = filedialog.askdirectory(
             title="Select Working Directory (Base for Relative Paths)",
             initialdir=initial_dir
