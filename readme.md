@@ -364,6 +364,7 @@ tasks:
 ```
 
 **Folder Structure:**
+
 ```bash
 root_folder/
 ├── Style 11_Statue Selfie/
@@ -394,7 +395,7 @@ brew install ffmpeg  # macOS (required for video processing)
 ## 📈 File Requirements
 
 | API | Max Size | Min Dimensions | Formats |
-|-----|----------|----------------|---------|
+| ----- | ---------- | ---------------- | --------- |
 | Kling | 10MB | 300px | JPG, PNG, WebP |
 | Pixverse | 20MB | 128px | JPG, PNG |
 | Nano Banana | 32MB | 100px | JPG, PNG, WebP |
@@ -405,7 +406,7 @@ brew install ffmpeg  # macOS (required for video processing)
 ## 🎯 API Features Summary
 
 | API | Type | Key Features |
-|-----|------|--------------|
+| ----- | ------ | -------------- |
 | Kling 2.1 | I2V | Streaming downloads, v2.1 model, negative prompts |
 | Kling Effects | I2V | 100+ preset effects, custom effects |
 | Kling Endframe | I2V | A→B transitions, pairing modes |
@@ -425,7 +426,7 @@ brew install ffmpeg  # macOS (required for video processing)
 ## 📝 Output Naming
 
 | API | Output Pattern |
-|-----|----------------|
+| ----- | ---------------- |
 | Kling | `{filename}_generated.mp4` |
 | Kling Effects | `{filename}_{effect}_effect.mp4` |
 | Kling Endframe | `{filename}_generated_{n}.mp4` |
