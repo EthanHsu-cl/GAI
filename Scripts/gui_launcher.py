@@ -418,7 +418,8 @@ class GAILauncherApp:
             os.chdir(str(CORE_DIR))
 
             # Import and run the main logic
-            from runall import (
+            # Note: runall is in core/ directory, added to sys.path at module load
+            from runall import (  # type: ignore[import-not-found]
                 API_MAPPING,
                 CONFIG_MAPPING,
                 run_processor,
