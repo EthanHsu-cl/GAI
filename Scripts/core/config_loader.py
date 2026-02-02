@@ -1,0 +1,373 @@
+"""
+Configuration Loader Module.
+
+This module provides utilities for loading YAML/JSON configuration files
+and applying runtime overrides without modifying files on disk.
+"""
+
+import copy
+import json
+import logging
+import os
+import re
+import sys
+from pathlib import Path
+from typing import Any, Dict, Optional, Union
+
+import yaml
+
+logger = logging.getLogger(__name__)
+
+
+def get_app_base_path() -> Path:
+    """
+    Get the base path for application resources.
+    
+    Handles both development mode and PyInstaller frozen executables.
+    
+    Returns:
+        Path to the application base directory.
+    """
+    if getattr(sys, 'frozen', False):
+        # Running in a PyInstaller bundle
+        # The _MEIPASS attribute points to the temp folder for onefile,
+        # or the bundle directory for onedir
+        if hasattr(sys, '_MEIPASS'):
+            return Path(sys._MEIPASS)
+        else:
+            return Path(sys.executable).parent
+    else:
+        # Running in normal Python environment
+        return Path(__file__).parent.parent
+
+
+def get_resource_path(relative_path: str) -> Path:
+    """
+    Get the absolute path to a resource file.
+    
+    Works both in development and when packaged with PyInstaller.
+    
+    Args:
+        relative_path: Path relative to the Scripts directory.
+        
+    Returns:
+        Absolute path to the resource.
+    """
+    base = get_app_base_path()
+    return base / relative_path
+
+
+def get_core_path(filename: str) -> Path:
+    """
+    Get the path to a file in the core directory.
+    
+    Args:
+        filename: Name of the file in the core directory.
+        
+    Returns:
+        Absolute path to the file.
+    """
+    return get_resource_path(f"core/{filename}")
+
+
+class ConfigLoader:
+    """
+    Loads and manages configuration for API processing.
+    
+    Supports loading from YAML or JSON files, applying runtime overrides,
+    and parsing dot-notation key paths for nested value updates.
+    """
+
+    def __init__(self, config_path: Optional[str] = None):
+        """
+        Initialize the ConfigLoader.
+        
+        Args:
+            config_path: Optional path to the configuration file.
+        """
+        self.config_path = config_path
+        self._config: Dict[str, Any] = {}
+
+    def load(self) -> Dict[str, Any]:
+        """
+        Load configuration from the specified file.
+        
+        Returns:
+            Dictionary containing the loaded configuration.
+        
+        Raises:
+            FileNotFoundError: If config file does not exist.
+            ValueError: If config file format is invalid.
+        """
+        if not self.config_path:
+            logger.warning("No config path specified, returning empty config")
+            return {}
+
+        config_path = Path(self.config_path)
+        
+        if not config_path.exists():
+            raise FileNotFoundError(f"Configuration file not found: {self.config_path}")
+
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                if config_path.suffix.lower() in ['.yaml', '.yml']:
+                    self._config = yaml.safe_load(f) or {}
+                    logger.info(f"✓ Loaded YAML config: {config_path.name}")
+                else:
+                    self._config = json.load(f)
+                    logger.info(f"✓ Loaded JSON config: {config_path.name}")
+                return copy.deepcopy(self._config)
+        except yaml.YAMLError as e:
+            raise ValueError(f"Invalid YAML in config file: {e}")
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON in config file: {e}")
+
+    def get_config(self) -> Dict[str, Any]:
+        """
+        Get a deep copy of the current configuration.
+        
+        Returns:
+            Deep copy of the configuration dictionary.
+        """
+        return copy.deepcopy(self._config)
+
+    @staticmethod
+    def deep_merge(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Recursively merge override dictionary into base dictionary.
+        
+        For nested dictionaries, merges recursively. For lists and other types,
+        override replaces base value completely.
+        
+        Args:
+            base: Base dictionary to merge into.
+            override: Dictionary with values to override.
+        
+        Returns:
+            New dictionary with merged values.
+        """
+        result = copy.deepcopy(base)
+        
+        for key, value in override.items():
+            if (
+                key in result
+                and isinstance(result[key], dict)
+                and isinstance(value, dict)
+            ):
+                result[key] = ConfigLoader.deep_merge(result[key], value)
+            else:
+                result[key] = copy.deepcopy(value)
+        
+        return result
+
+    @staticmethod
+    def apply_dot_notation_overrides(
+        config: Dict[str, Any],
+        overrides: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Apply overrides using dot notation for nested keys.
+        
+        Supports keys like:
+        - "prompt" -> config["prompt"]
+        - "tasks.0.prompt" -> config["tasks"][0]["prompt"]
+        - "model_version" -> config["model_version"]
+        
+        Args:
+            config: Base configuration dictionary.
+            overrides: Dictionary with dot-notation keys and values.
+        
+        Returns:
+            New dictionary with overrides applied.
+        """
+        result = copy.deepcopy(config)
+        
+        for key_path, value in overrides.items():
+            ConfigLoader._set_nested_value(result, key_path, value)
+        
+        return result
+
+    @staticmethod
+    def _set_nested_value(
+        config: Dict[str, Any],
+        key_path: str,
+        value: Any
+    ) -> None:
+        """
+        Set a nested value in the config using dot notation.
+        
+        Args:
+            config: Configuration dictionary to modify in place.
+            key_path: Dot-separated path to the key (e.g., "tasks.0.prompt").
+            value: Value to set at the specified path.
+        """
+        keys = key_path.split('.')
+        current = config
+        
+        for i, key in enumerate(keys[:-1]):
+            if key.isdigit():
+                key = int(key)
+                if isinstance(current, list) and key < len(current):
+                    current = current[key]
+                else:
+                    logger.warning(f"Invalid index {key} in path '{key_path}'")
+                    return
+            else:
+                if key not in current:
+                    current[key] = {}
+                current = current[key]
+        
+        final_key = keys[-1]
+        if final_key.isdigit():
+            final_key = int(final_key)
+            if isinstance(current, list) and final_key < len(current):
+                current[final_key] = value
+            else:
+                logger.warning(f"Cannot set index {final_key} in path '{key_path}'")
+        else:
+            current[final_key] = value
+
+    @staticmethod
+    def parse_override_text(text: str) -> Dict[str, Any]:
+        """
+        Parse override text from the GUI advanced section.
+        
+        Supports formats:
+        - key = value
+        - key=value
+        - key: value
+        
+        Automatically converts string values to appropriate types
+        (int, float, bool, or str).
+        
+        Args:
+            text: Multi-line text containing key-value pairs.
+        
+        Returns:
+            Dictionary with parsed key-value pairs.
+        """
+        overrides = {}
+        
+        if not text or not text.strip():
+            return overrides
+        
+        for line in text.strip().split('\n'):
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            
+            match = re.match(r'^([a-zA-Z0-9_.]+)\s*[:=]\s*(.+)$', line)
+            if match:
+                key = match.group(1).strip()
+                value_str = match.group(2).strip()
+                
+                value_str = value_str.strip('"\'')
+                
+                value = ConfigLoader._parse_value(value_str)
+                overrides[key] = value
+            else:
+                logger.warning(f"Could not parse override line: {line}")
+        
+        return overrides
+
+    @staticmethod
+    def _parse_value(value_str: str) -> Any:
+        """
+        Parse a string value to the appropriate Python type.
+        
+        Args:
+            value_str: String representation of the value.
+        
+        Returns:
+            Parsed value as int, float, bool, or str.
+        """
+        if value_str.lower() == 'true':
+            return True
+        if value_str.lower() == 'false':
+            return False
+        if value_str.lower() == 'none' or value_str.lower() == 'null':
+            return None
+        
+        try:
+            return int(value_str)
+        except ValueError:
+            pass
+        
+        try:
+            return float(value_str)
+        except ValueError:
+            pass
+        
+        return value_str
+
+
+def load_and_merge_config(
+    config_path: Optional[str] = None,
+    runtime_overrides: Optional[Dict[str, Any]] = None
+) -> Dict[str, Any]:
+    """
+    Load configuration and apply runtime overrides.
+    
+    This is the main entry point for loading configs with GUI overrides.
+    Overrides are applied without modifying the file on disk.
+    
+    Args:
+        config_path: Path to the YAML or JSON configuration file.
+        runtime_overrides: Dictionary of overrides to apply. Can use
+            dot notation for nested keys (e.g., "tasks.0.prompt").
+    
+    Returns:
+        Merged configuration dictionary.
+    
+    Raises:
+        FileNotFoundError: If config file does not exist.
+        ValueError: If config file format is invalid.
+    """
+    loader = ConfigLoader(config_path)
+    config = loader.load()
+    
+    if runtime_overrides:
+        dot_notation_overrides = {}
+        dict_overrides = {}
+        
+        for key, value in runtime_overrides.items():
+            if '.' in key:
+                dot_notation_overrides[key] = value
+            elif isinstance(value, dict):
+                dict_overrides[key] = value
+            else:
+                dot_notation_overrides[key] = value
+        
+        if dict_overrides:
+            config = ConfigLoader.deep_merge(config, dict_overrides)
+        
+        if dot_notation_overrides:
+            config = ConfigLoader.apply_dot_notation_overrides(
+                config, dot_notation_overrides
+            )
+    
+    return config
+
+
+def get_default_config_path(api_name: str) -> Optional[str]:
+    """
+    Get the default config file path for an API.
+    
+    Args:
+        api_name: Internal API name (e.g., "kling", "nano_banana").
+    
+    Returns:
+        Path to the default config file, or None if not found.
+    """
+    script_dir = Path(__file__).parent.parent
+    config_dir = script_dir / "config"
+    
+    yaml_path = config_dir / f"batch_{api_name}_config.yaml"
+    if yaml_path.exists():
+        return str(yaml_path)
+    
+    json_path = config_dir / f"batch_{api_name}_config.json"
+    if json_path.exists():
+        return str(json_path)
+    
+    return None

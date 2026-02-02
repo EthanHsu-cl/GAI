@@ -1,10 +1,12 @@
 import sys
 import logging
 from pathlib import Path
+from typing import Dict, Optional, Any
 
 # Import unified processors and report generators
 from unified_api_processor import create_processor, ValidationError
 from unified_report_generator import create_report_generator
+from config_loader import load_and_merge_config, get_default_config_path
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 logger = logging.getLogger(__name__)
@@ -43,6 +45,391 @@ CONFIG_MAPPING = {
     'veo': 'config/batch_veo_config.yaml',
     'veo_itv': 'config/batch_veo_itv_config.yaml'
 }
+
+
+def run_automation(
+    platform: str,
+    action: str = "auto",
+    config_path: Optional[str] = None,
+    parallel: bool = False,
+    verbose: bool = False,
+    runtime_overrides: Optional[Dict[str, Any]] = None,
+    working_dir: Optional[str] = None,
+    progress_callback: Optional[callable] = None,
+) -> int:
+    """
+    Run a single automation job programmatically.
+    
+    This is the main entry point for the GUI and other programmatic usage.
+    Accepts runtime_overrides that are applied on top of the loaded YAML
+    config without modifying files on disk.
+    
+    Args:
+        platform: Platform short name (kling, klingfx, nano, etc.) or 'all'.
+        action: Action to perform - 'process', 'report', or 'auto'.
+        config_path: Optional path to config file. Uses default if not provided.
+        parallel: Whether to run platforms in parallel (only for 'all').
+        verbose: Enable verbose/debug logging.
+        runtime_overrides: Dictionary of config overrides. Supports dot notation
+            for nested keys (e.g., "tasks.0.prompt"). Applied in memory only.
+        working_dir: Base directory for resolving relative paths in config.
+            If not provided, uses the parent of the Scripts directory.
+        progress_callback: Optional callback function for progress updates.
+            Called with (message: str, level: str) where level is 'info',
+            'warning', or 'error'.
+    
+    Returns:
+        Exit code: 0 for success, 1 for failure.
+    """
+    # Set working directory for relative path resolution
+    if working_dir:
+        import os
+        os.chdir(working_dir)
+        logger.info(f"📂 Working directory: {working_dir}")
+    
+    if verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+        logger.info("🔍 Verbose logging enabled")
+
+    valid_platforms = list(API_MAPPING.keys()) + ['all']
+    valid_actions = ['process', 'report', 'auto']
+
+    if platform.lower() not in valid_platforms:
+        msg = f"Invalid platform: {platform}. Valid: {', '.join(valid_platforms)}"
+        logger.error(msg)
+        if progress_callback:
+            progress_callback(msg, 'error')
+        return 1
+
+    if action.lower() not in valid_actions:
+        msg = f"Invalid action: {action}. Valid: {', '.join(valid_actions)}"
+        logger.error(msg)
+        if progress_callback:
+            progress_callback(msg, 'error')
+        return 1
+
+    platform = platform.lower()
+    action = action.lower()
+
+    platforms_to_run = get_platforms_to_run(platform)
+
+    logger.info(f"🚀 Starting execution")
+    logger.info(f"Platforms: {', '.join(platforms_to_run)}")
+    logger.info(f"Action: {action}")
+
+    if progress_callback:
+        progress_callback(f"Starting: {', '.join(platforms_to_run)} ({action})", 'info')
+
+    if len(platforms_to_run) > 1 and parallel:
+        all_results = _run_parallel_with_overrides(
+            platforms_to_run, action, config_path, runtime_overrides, progress_callback
+        )
+    else:
+        all_results = _run_sequential_with_overrides(
+            platforms_to_run, action, config_path, runtime_overrides, progress_callback
+        )
+
+    success = _print_summary(all_results, action)
+
+    logger.info("🏁 Execution completed")
+    if progress_callback:
+        status = "completed successfully" if success else "completed with errors"
+        progress_callback(f"Execution {status}", 'info' if success else 'warning')
+
+    return 0 if success else 1
+
+
+def _run_sequential_with_overrides(
+    platforms: list,
+    action: str,
+    config_path: Optional[str],
+    runtime_overrides: Optional[Dict[str, Any]],
+    progress_callback: Optional[callable] = None,
+) -> Dict[str, Dict[str, bool]]:
+    """
+    Run platforms sequentially with runtime override support.
+    
+    Args:
+        platforms: List of platform short names to run.
+        action: Action to perform.
+        config_path: Optional config file path override.
+        runtime_overrides: Runtime config overrides.
+        progress_callback: Optional progress callback.
+    
+    Returns:
+        Dictionary mapping platform names to their results.
+    """
+    all_results = {}
+
+    for i, platform in enumerate(platforms, 1):
+        logger.info("=" * 60)
+        logger.info(f"PLATFORM {i}/{len(platforms)}: {platform.upper()}")
+        logger.info("=" * 60)
+
+        if progress_callback:
+            progress_callback(f"Processing {platform} ({i}/{len(platforms)})", 'info')
+
+        results = _run_platform_with_overrides(
+            platform, action, config_path, runtime_overrides
+        )
+        all_results[platform] = results
+
+    return all_results
+
+
+def _run_parallel_with_overrides(
+    platforms: list,
+    action: str,
+    config_path: Optional[str],
+    runtime_overrides: Optional[Dict[str, Any]],
+    progress_callback: Optional[callable] = None,
+) -> Dict[str, Dict[str, bool]]:
+    """
+    Run platforms in parallel with runtime override support.
+    
+    Args:
+        platforms: List of platform short names to run.
+        action: Action to perform.
+        config_path: Optional config file path override.
+        runtime_overrides: Runtime config overrides.
+        progress_callback: Optional progress callback.
+    
+    Returns:
+        Dictionary mapping platform names to their results.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+
+    logger.info(f"🚀 Running {len(platforms)} platforms in parallel")
+    if progress_callback:
+        progress_callback(f"Running {len(platforms)} platforms in parallel", 'info')
+
+    all_results = {}
+
+    with ThreadPoolExecutor(max_workers=min(4, len(platforms))) as executor:
+        futures = {}
+        for platform in platforms:
+            future = executor.submit(
+                _run_platform_with_overrides,
+                platform, action, config_path, runtime_overrides
+            )
+            futures[future] = platform
+
+        for future in futures:
+            platform = futures[future]
+            try:
+                results = future.result()
+                all_results[platform] = results
+            except Exception as e:
+                logger.error(f"❌ {platform} failed with exception: {e}")
+                all_results[platform] = {'processing': False, 'reporting': False}
+
+    return all_results
+
+
+def _run_platform_with_overrides(
+    platform: str,
+    action: str,
+    config_path: Optional[str],
+    runtime_overrides: Optional[Dict[str, Any]],
+) -> Dict[str, bool]:
+    """
+    Run processing and/or reporting for a single platform with overrides.
+    
+    Args:
+        platform: Platform short name.
+        action: Action to perform.
+        config_path: Optional config file path override.
+        runtime_overrides: Runtime config overrides.
+    
+    Returns:
+        Results dictionary with 'processing' and/or 'reporting' keys.
+    """
+    api_name = API_MAPPING[platform]
+
+    if not config_path:
+        config_path = CONFIG_MAPPING.get(api_name)
+        if config_path:
+            script_dir = Path(__file__).parent.parent
+            full_path = script_dir / config_path
+            if full_path.exists():
+                config_path = str(full_path)
+            elif not Path(config_path).exists():
+                logger.warning(f"⚠️ Config file not found: {config_path}")
+                config_path = None
+
+    merged_config = None
+    if config_path or runtime_overrides:
+        try:
+            merged_config = load_and_merge_config(config_path, runtime_overrides)
+        except FileNotFoundError:
+            logger.warning(f"⚠️ Config file not found: {config_path}")
+            merged_config = runtime_overrides.copy() if runtime_overrides else {}
+        except Exception as e:
+            logger.error(f"❌ Error loading config: {e}")
+            merged_config = runtime_overrides.copy() if runtime_overrides else {}
+
+    results = {}
+    skip_report = False
+
+    if action in ['process', 'auto']:
+        processing_success, skip_report = _run_processor_with_config(
+            api_name, config_path, merged_config
+        )
+        results['processing'] = processing_success
+
+    if action in ['report', 'auto']:
+        if skip_report:
+            logger.warning(
+                f"⏭️ Skipping report generation for {platform} due to validation errors"
+            )
+            results['reporting'] = False
+        else:
+            results['reporting'] = _run_report_with_config(
+                api_name, config_path, merged_config
+            )
+
+    return results
+
+
+def _run_processor_with_config(
+    api_name: str,
+    config_file: Optional[str],
+    merged_config: Optional[Dict[str, Any]],
+) -> tuple:
+    """
+    Run API processor with pre-merged configuration.
+    
+    Args:
+        api_name: Internal API name.
+        config_file: Config file path (for processor reference).
+        merged_config: Pre-merged configuration dictionary.
+    
+    Returns:
+        Tuple of (success: bool, skip_report: bool).
+    """
+    try:
+        logger.info(f"🔄 Processing: {api_name.replace('_', ' ').title()}")
+
+        processor = create_processor(api_name, config_file)
+        
+        if merged_config:
+            processor.set_config(merged_config)
+
+        success = processor.run()
+
+        if success:
+            logger.info(f"✅ {api_name} processing completed successfully")
+        else:
+            logger.error(f"❌ {api_name} processing failed")
+
+        return success, False
+
+    except ValidationError as e:
+        logger.error(f"❌ {api_name} validation failed: {e}")
+        logger.warning("⚠️ Skipping report generation due to validation errors")
+        return False, True
+
+    except Exception as e:
+        logger.error(f"❌ {api_name} processing error: {e}")
+        return False, False
+
+
+def _run_report_with_config(
+    api_name: str,
+    config_file: Optional[str],
+    merged_config: Optional[Dict[str, Any]],
+) -> bool:
+    """
+    Run report generator with pre-merged configuration.
+    
+    Args:
+        api_name: Internal API name.
+        config_file: Config file path (for generator reference).
+        merged_config: Pre-merged configuration dictionary.
+    
+    Returns:
+        True if report generation succeeded, False otherwise.
+    """
+    try:
+        logger.info(f"📊 Generating report: {api_name.replace('_', ' ').title()}")
+
+        generator = create_report_generator(api_name, config_file)
+        
+        if merged_config:
+            generator.set_config(merged_config)
+
+        success = generator.run()
+
+        if success:
+            logger.info(f"✅ {api_name} report generated successfully")
+        else:
+            logger.error(f"❌ {api_name} report generation failed")
+
+        return success
+
+    except Exception as e:
+        logger.error(f"❌ {api_name} report generation error: {e}")
+        return False
+
+
+def _print_summary(all_results: Dict[str, Dict[str, bool]], action: str) -> bool:
+    """
+    Print execution summary and return overall success status.
+    
+    Args:
+        all_results: Dictionary of platform results.
+        action: Action that was performed.
+    
+    Returns:
+        True if at least one operation succeeded, False otherwise.
+    """
+    logger.info("=" * 60)
+    logger.info("EXECUTION SUMMARY")
+    logger.info("=" * 60)
+
+    total_platforms = len(all_results)
+
+    if action in ['process', 'auto']:
+        processing_success = sum(
+            1 for results in all_results.values()
+            if results.get('processing', False)
+        )
+        logger.info(f"📊 Processing: {processing_success}/{total_platforms} successful")
+
+        for platform, results in all_results.items():
+            status = "✅ SUCCESS" if results.get('processing', False) else "❌ FAILED"
+            logger.info(f"   {platform:10} → {status}")
+
+    if action in ['report', 'auto']:
+        reporting_success = sum(
+            1 for results in all_results.values()
+            if results.get('reporting', False)
+        )
+        logger.info(f"📈 Reporting: {reporting_success}/{total_platforms} successful")
+
+        for platform, results in all_results.items():
+            status = "✅ GENERATED" if results.get('reporting', False) else "❌ FAILED"
+            logger.info(f"   {platform:10} → {status}")
+
+    total_operations = 0
+    successful_operations = 0
+
+    for results in all_results.values():
+        for success in results.values():
+            total_operations += 1
+            if success:
+                successful_operations += 1
+
+    success_rate = (
+        (successful_operations / total_operations * 100)
+        if total_operations > 0 else 0
+    )
+    logger.info(
+        f"🎯 Overall Success Rate: {successful_operations}/{total_operations} "
+        f"({success_rate:.1f}%)"
+    )
+
+    return successful_operations > 0
 
 def show_usage():
     """Display usage information"""
@@ -327,38 +714,20 @@ def print_summary(all_results, action):
     return successful_operations > 0
 
 def main():
-    """Main execution function"""
-    # Parse arguments
+    """Main execution function for CLI usage."""
     args = parse_arguments()
 
-    # Set verbose logging if requested
-    if args['verbose']:
-        logging.getLogger().setLevel(logging.DEBUG)
-        logger.info("🔍 Verbose logging enabled")
+    exit_code = run_automation(
+        platform=args['platform'],
+        action=args['action'],
+        config_path=args['config'],
+        parallel=args['parallel'],
+        verbose=args['verbose'],
+        runtime_overrides=None,
+    )
 
-    # Validate arguments
-    if not validate_arguments(args):
-        sys.exit(1)
+    return exit_code == 0
 
-    # Get platforms to run
-    platforms = get_platforms_to_run(args['platform'])
-    action = args['action']
-
-    logger.info(f"🚀 Starting execution")
-    logger.info(f"Platforms: {', '.join(platforms)}")
-    logger.info(f"Action: {action}")
-
-    # Run platforms
-    if len(platforms) > 1 and args['parallel']:
-        all_results = run_parallel(platforms, action, args)
-    else:
-        all_results = run_sequential(platforms, action, args)
-
-    # Print summary
-    success = print_summary(all_results, action)
-
-    logger.info(f"🏁 Execution completed")
-    return success
 
 if __name__ == "__main__":
     try:

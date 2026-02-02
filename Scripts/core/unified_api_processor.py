@@ -15,6 +15,8 @@ from concurrent.futures import ThreadPoolExecutor
 import logging
 import sys
 
+from config_loader import get_app_base_path, get_resource_path, get_core_path
+
 # Register HEIC/HEIF format support for Pillow
 try:
     import pillow_heif
@@ -109,9 +111,13 @@ class UnifiedAPIProcessor:
 
     def load_api_definitions(self):
         """Load API-specific configurations from JSON file."""
-        # Try to find api_definitions.json
-        script_dir = Path(__file__).parent
-        api_def_path = script_dir / "api_definitions.json"
+        # Use the path helper to find api_definitions.json
+        api_def_path = get_core_path("api_definitions.json")
+        
+        # Also try relative path as fallback
+        if not api_def_path.exists():
+            script_dir = Path(__file__).parent
+            api_def_path = script_dir / "api_definitions.json"
         
         try:
             with open(api_def_path, 'r', encoding='utf-8') as f:
@@ -120,7 +126,7 @@ class UnifiedAPIProcessor:
                 if not self.api_definitions:
                     self.logger.warning(f"⚠️ No API definition found for '{self.api_name}'")
                 else:
-                    self.logger.info(f"✓ API definitions loaded for {self.api_name}")
+                    self.logger.info(f"✓ API definitions loaded from: {api_def_path}")
         except FileNotFoundError:
             self.logger.error(f"❌ API definitions file not found at: {api_def_path}")
             raise
@@ -130,6 +136,11 @@ class UnifiedAPIProcessor:
 
     def load_config(self):
         """Load and validate configuration from YAML or JSON"""
+        # Skip loading if config was already set programmatically
+        if self.config:
+            self.logger.info("✓ Using pre-set configuration (runtime overrides applied)")
+            return True
+        
         config_path = Path(self.config_file)
         
         try:
@@ -148,6 +159,20 @@ class UnifiedAPIProcessor:
         except (json.JSONDecodeError, yaml.YAMLError) as e:
             self.logger.error(f"❌ Config parse error: {e}")
             return False
+
+    def set_config(self, config: dict) -> None:
+        """
+        Set configuration directly, bypassing file loading.
+        
+        This method allows the GUI and programmatic callers to inject
+        a pre-merged configuration dictionary (with runtime overrides applied)
+        without reading from a file.
+        
+        Args:
+            config: Configuration dictionary to use for processing.
+        """
+        self.config = config
+        self.logger.debug("Configuration set programmatically")
 
     def _get_video_info(self, video_path):
         """Get video information using ffprobe (from runway processor)"""

@@ -10,6 +10,8 @@ from pptx.dml.color import RGBColor
 from pptx.util import Cm, Inches, Pt
 from pptx.enum.text import PP_ALIGN
 
+from config_loader import get_app_base_path, get_resource_path, get_core_path
+
 try:
     import cv2
 except ImportError:
@@ -1945,6 +1947,11 @@ class UnifiedReportGenerator:
     
     def load_config(self):
         """Load API-specific configuration from YAML or JSON"""
+        # Skip loading if config was already set programmatically
+        if self.config:
+            logger.info("✓ Using pre-set configuration (runtime overrides applied)")
+            return
+        
         config_path = Path(self.config_file)
         try:
             with open(config_path, 'r', encoding='utf-8') as f:
@@ -1958,6 +1965,23 @@ class UnifiedReportGenerator:
         except Exception as e:
             logger.error(f"✗ Config error: {e}")
             sys.exit(1)
+
+    def set_config(self, config: dict) -> None:
+        """
+        Set configuration directly, bypassing file loading.
+        
+        This method allows the GUI and programmatic callers to inject
+        a pre-merged configuration dictionary (with runtime overrides applied)
+        without reading from a file.
+        
+        Args:
+            config: Configuration dictionary to use for report generation.
+        """
+        self.config = config
+        
+        # Update Kling display name if applicable
+        if self.api_name in ['kling', 'kling_endframe', 'kling_ttv']:
+            self._update_kling_display_name()
     
     def _update_kling_display_name(self):
         """Update Kling display name based on model in config"""
@@ -2018,6 +2042,20 @@ class UnifiedReportGenerator:
     
     def load_report_definitions(self):
         """Load report definitions from api_definitions.json"""
+        # First try using the path helper (works for PyInstaller bundles)
+        api_def_path = get_core_path("api_definitions.json")
+        
+        if api_def_path.exists():
+            try:
+                with open(api_def_path, 'r', encoding='utf-8') as f:
+                    all_definitions = json.load(f)
+                self.report_definitions = all_definitions.get(self.api_name, {}).get('report', {})
+                logger.info(f"✓ API definitions loaded from: {api_def_path}")
+                return
+            except Exception as e:
+                logger.warning(f"⚠ Error loading API definitions: {e}")
+        
+        # Fallback to relative paths
         definition_paths = [
             "core/api_definitions.json",
             "api_definitions.json",
@@ -2472,6 +2510,14 @@ class UnifiedReportGenerator:
         template_path = (self.config.get(template_key) or
                         self.report_definitions.get(template_key,
                         'templates/I2V Comparison Template.pptx' if use_comparison else 'templates/I2V templates.pptx'))
+        
+        # Resolve template path - check if it exists, if not try using resource path
+        template_path_obj = Path(template_path)
+        if not template_path_obj.exists():
+            # Try using the app base path for bundled resources
+            resource_template = get_resource_path(template_path)
+            if resource_template.exists():
+                template_path = str(resource_template)
         
         try:
             ppt = Presentation(template_path) if Path(template_path).exists() else Presentation()
