@@ -94,12 +94,33 @@ tasks.0.prompt = Override the first task's prompt
 4. Click **"▶ Run"**
 5. Videos will be saved to `Generated_Video/` in each style folder
 
+### **API-Specific Advanced Options**
+
+When you select a platform, the Advanced Options section shows API-specific fields that can be configured:
+
+| API | Available Options |
+| :-- | :-- |
+| **Kling** | Duration (5/10s), CFG Scale (0.0-1.0) |
+| **Kling Effects** | Duration, CFG, Pairing Mode, Generation Count |
+| **Kling Endframe** | Duration, CFG, Generation Count |
+| **Kling TTV** | Duration, CFG Scale |
+| **Nano Banana** | Iterations, Deterministic Random, Seed |
+| **Veo / Veo ITV** | Model, Duration, Aspect Ratio, Resolution, Person Generation |
+| **Pixverse** | Model, Duration, Quality, Generate Audio |
+| **Runway** | Model, Aspect Ratio, Pairing Strategy |
+| **Wan** | Animation Mode, Num Outputs, Seed, Embed |
+| **Vidu Effects** | Category, Model |
+| **Vidu Reference** | Model, Duration, Resolution, Movement |
+
+These options override the corresponding values in the config file for the current run.
+
 ### **Important Notes**
 
 - **Runtime overrides are temporary** — they only apply to the current run and do NOT modify your YAML config files
 - **FFmpeg required** — video processing requires FFmpeg to be installed on your system
 - **Network required** — the app connects to API servers defined in your config files
 - **Reports saved to** `Report/` folder with date-prefixed filenames
+- **Bundled app working directory** — when running the packaged `.app`, the working directory defaults to your home folder; use absolute paths or the folder picker for config paths
 
 ## �📋 Platform Commands
 

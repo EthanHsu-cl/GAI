@@ -76,22 +76,36 @@ API_FIELD_SCHEMAS = {
              'options': ['', '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'],
              'default': '', 'help': 'Leave empty to auto-detect from source'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 6, 'required': True},
-            {'key': 'use_random_source_selection', 'label': 'Random Source Selection', 'type': 'checkbox', 'default': False},
-            {'key': 'min_images', 'label': 'Min Images', 'type': 'number', 'default': 1},
-            {'key': 'max_images', 'label': 'Max Images', 'type': 'number', 'default': 4},
-            {'key': 'num_iterations', 'label': 'Iterations', 'type': 'number', 'default': 50},
+            {'key': 'use_random_source_selection', 'label': 'Random Source Selection', 'type': 'checkbox', 'default': False,
+             'help': 'Select N random images from Source folder per API call'},
+            {'key': 'use_deterministic_random', 'label': 'Deterministic Random', 'type': 'checkbox', 'default': True,
+             'help': 'Same folder = same selections every run (reproducible)'},
+            {'key': 'random_seed', 'label': 'Random Seed', 'type': 'number', 'default': 42,
+             'help': 'Seed for reproducible random selection'},
+            {'key': 'min_images', 'label': 'Min Images', 'type': 'number', 'default': 1,
+             'help': 'Minimum images per API call'},
+            {'key': 'max_images', 'label': 'Max Images', 'type': 'number', 'default': 4,
+             'help': 'Maximum images per API call (flash: 3, pro: 14)'},
+            {'key': 'num_iterations', 'label': 'Iterations', 'type': 'number', 'default': 0,
+             'help': 'Number of API calls (0 = use source file count)'},
         ]
     },
     'kling': {
-        'name': 'Kling 2.1 (Image-to-Video)',
+        'name': 'Kling (Image-to-Video)',
         'fields': [
-            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True},
+            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True,
+             'help': 'Folder with Source subfolder containing images'},
             {'key': 'mode', 'label': 'Mode', 'type': 'dropdown',
              'options': ['std', 'pro'], 'default': 'std'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 4, 'required': True},
             {'key': 'negative_prompt', 'label': 'Negative Prompt', 'type': 'multiline', 'height': 2},
+            {'key': 'duration', 'label': 'Duration (sec)', 'type': 'dropdown',
+             'options': ['5', '10'], 'default': '5'},
+            {'key': 'cfg', 'label': 'CFG Scale', 'type': 'number', 'default': 0.5,
+             'help': 'Guidance scale (0.0-1.0)'},
             {'key': 'use_comparison_template', 'label': 'Use Comparison Template', 'type': 'checkbox', 'default': False},
-            {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder'},
+            {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder',
+             'help': 'Optional folder for comparison report'},
         ]
     },
     'kling_effects': {
@@ -102,40 +116,58 @@ API_FIELD_SCHEMAS = {
             {'key': 'effect', 'label': 'Preset Effect', 'type': 'dropdown',
              'options': ['', '3d_cartoon_1', '3d_cartoon_2', 'a_list_look', 'american_comics', 
                         'angel_wing', 'anime_figure', 'celebration', 'dark_wing', 'day_to_night',
-                        'demon_transform', 'disappear', 'dollar_rain', 'emoji', 'expansion'],
+                        'demon_transform', 'disappear', 'dollar_rain', 'emoji', 'expansion',
+                        'new_year_greeting', 'prosperity', 'lantern_glow', 'lion_dance'],
              'default': '', 'help': 'Or choose a preset effect'},
+            {'key': 'duration', 'label': 'Duration (sec)', 'type': 'dropdown',
+             'options': ['5', '10'], 'default': '5'},
         ]
     },
     'kling_endframe': {
         'name': 'Kling Endframe (A→B Transitions)',
         'fields': [
             {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True,
-             'help': 'Folder with Source_A and Source_B subfolders'},
+             'help': 'Folder with Source subfolder (use A/B naming: Name_A.jpg, Name_B.jpg)'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 3},
             {'key': 'negative_prompt', 'label': 'Negative Prompt', 'type': 'multiline', 'height': 2},
             {'key': 'mode', 'label': 'Mode', 'type': 'dropdown',
-             'options': ['std', 'pro'], 'default': 'std'},
+             'options': ['std', 'pro'], 'default': 'pro'},
+            {'key': 'duration', 'label': 'Duration (sec)', 'type': 'dropdown',
+             'options': ['5', '10'], 'default': '5'},
+            {'key': 'cfg', 'label': 'CFG Scale', 'type': 'number', 'default': 0.5,
+             'help': 'Guidance scale (0.0-1.0)'},
+            {'key': 'generation_count', 'label': 'Generation Count', 'type': 'number', 'default': 1,
+             'help': 'Number of videos per image pair'},
+            {'key': 'pairing_mode', 'label': 'Pairing Mode', 'type': 'dropdown',
+             'options': ['ab_naming', 'sequential'], 'default': 'ab_naming',
+             'help': 'ab_naming: Name_A/Name_B pairs | sequential: first half → second half'},
         ]
     },
     'kling_ttv': {
         'name': 'Kling TTV (Text-to-Video)',
         'fields': [
-            {'key': 'style_name', 'label': 'Style Name', 'type': 'text', 'required': True},
+            {'key': 'style_name', 'label': 'Style Name', 'type': 'text', 'required': True,
+             'help': 'Name for the output video'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 4, 'required': True},
             {'key': 'neg_prompt', 'label': 'Negative Prompt', 'type': 'multiline', 'height': 2},
             {'key': 'mode', 'label': 'Mode', 'type': 'dropdown',
              'options': ['std', 'pro'], 'default': 'pro'},
-            {'key': 'duration', 'label': 'Duration (sec)', 'type': 'number', 'default': 5},
+            {'key': 'duration', 'label': 'Duration (sec)', 'type': 'dropdown',
+             'options': ['5', '10'], 'default': '5'},
             {'key': 'ratio', 'label': 'Aspect Ratio', 'type': 'dropdown',
              'options': ['1:1', '16:9', '9:16', '4:3', '3:4'], 'default': '1:1'},
-            {'key': 'cfg', 'label': 'CFG Scale', 'type': 'number', 'default': 0.5},
+            {'key': 'cfg', 'label': 'CFG Scale', 'type': 'number', 'default': 0.5,
+             'help': 'Guidance scale (0.0-1.0)'},
+            {'key': 'generation_count', 'label': 'Generation Count', 'type': 'number', 'default': 1,
+             'help': 'Number of videos to generate'},
             {'key': 'sound_enabled', 'label': 'Enable Sound', 'type': 'checkbox', 'default': True},
         ]
     },
     'veo': {
         'name': 'Veo (Text-to-Video)',
         'fields': [
-            {'key': 'style_name', 'label': 'Style Name', 'type': 'text', 'required': True},
+            {'key': 'style_name', 'label': 'Style Name', 'type': 'text', 'required': True,
+             'help': 'Name for the output video'},
             {'key': 'output_folder', 'label': 'Output Folder', 'type': 'folder', 'required': True},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 4, 'required': True},
             {'key': 'negative_prompt', 'label': 'Negative Prompt', 'type': 'multiline', 'height': 2},
@@ -150,12 +182,15 @@ API_FIELD_SCHEMAS = {
              'options': ['720p', '1080p'], 'default': '1080p'},
             {'key': 'enhance_prompt', 'label': 'Enhance Prompt', 'type': 'checkbox', 'default': True},
             {'key': 'generate_audio', 'label': 'Generate Audio', 'type': 'checkbox', 'default': True},
+            {'key': 'person_generation', 'label': 'Person Generation', 'type': 'dropdown',
+             'options': ['allow_all', 'allow_adult', 'dont_allow'], 'default': 'allow_all'},
         ]
     },
     'veo_itv': {
         'name': 'Veo ITV (Image-to-Video)',
         'fields': [
-            {'key': 'style_name', 'label': 'Style Name', 'type': 'text', 'required': True},
+            {'key': 'style_name', 'label': 'Style Name', 'type': 'text', 'required': True,
+             'help': 'Name for the effect/style'},
             {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True,
              'help': 'Folder with Source subfolder'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 4, 'required': True},
@@ -163,11 +198,16 @@ API_FIELD_SCHEMAS = {
             {'key': 'model_id', 'label': 'Model', 'type': 'dropdown',
              'options': ['veo-3.1-generate-001', 'veo-3.0-generate-001'],
              'default': 'veo-3.1-generate-001'},
-            {'key': 'duration_seconds', 'label': 'Duration (sec)', 'type': 'number', 'default': 8},
+            {'key': 'duration_seconds', 'label': 'Duration (sec)', 'type': 'dropdown',
+             'options': ['5', '6', '7', '8'], 'default': '8'},
             {'key': 'aspect_ratio', 'label': 'Aspect Ratio', 'type': 'dropdown',
              'options': ['16:9', '9:16', '1:1'], 'default': '16:9'},
+            {'key': 'resolution', 'label': 'Resolution', 'type': 'dropdown',
+             'options': ['720p', '1080p'], 'default': '1080p'},
             {'key': 'enhance_prompt', 'label': 'Enhance Prompt', 'type': 'checkbox', 'default': True},
             {'key': 'generate_audio', 'label': 'Generate Audio', 'type': 'checkbox', 'default': True},
+            {'key': 'person_generation', 'label': 'Person Generation', 'type': 'dropdown',
+             'options': ['allow_all', 'allow_adult', 'dont_allow'], 'default': 'allow_all'},
         ]
     },
     'pixverse': {
@@ -176,30 +216,46 @@ API_FIELD_SCHEMAS = {
             {'key': 'effect', 'label': 'Effect Name', 'type': 'text', 'required': True,
              'help': 'Effect name (used as subfolder name)'},
             {'key': 'custom_effect_id', 'label': 'Custom Effect ID', 'type': 'text',
-             'help': 'Optional: Custom effect ID from Pixverse'},
+             'help': 'Effect ID from Pixverse platform'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 2},
             {'key': 'negative_prompt', 'label': 'Negative Prompt', 'type': 'multiline', 'height': 2},
+            {'key': 'model', 'label': 'Model', 'type': 'dropdown',
+             'options': ['v5.5', 'v4', 'v3.5'], 'default': 'v5.5'},
+            {'key': 'duration', 'label': 'Duration', 'type': 'dropdown',
+             'options': ['5s', '8s'], 'default': '5s'},
+            {'key': 'quality', 'label': 'Quality', 'type': 'dropdown',
+             'options': ['540p', '720p', '1080p'], 'default': '720p'},
+            {'key': 'generate_audio', 'label': 'Generate Audio', 'type': 'checkbox', 'default': True},
         ]
     },
     'genvideo': {
         'name': 'GenVideo (Image Generation)',
         'fields': [
-            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True},
+            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True,
+             'help': 'Folder with Source subfolder containing images'},
             {'key': 'img_prompt', 'label': 'Image Prompt', 'type': 'multiline', 'height': 4, 'required': True},
             {'key': 'model', 'label': 'Model', 'type': 'dropdown',
              'options': ['gpt-image-1'], 'default': 'gpt-image-1'},
             {'key': 'quality', 'label': 'Quality', 'type': 'dropdown',
              'options': ['low', 'medium', 'high'], 'default': 'medium'},
             {'key': 'use_comparison_template', 'label': 'Use Comparison Template', 'type': 'checkbox', 'default': False},
+            {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder',
+             'help': 'Optional folder for comparison report'},
         ]
     },
     'runway': {
         'name': 'Runway Gen4',
         'fields': [
-            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True},
+            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True,
+             'help': 'Folder with Source Image and Source Video subfolders'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 3, 'required': True},
+            {'key': 'model', 'label': 'Model', 'type': 'dropdown',
+             'options': ['gen4_aleph', 'gen3a_turbo'], 'default': 'gen4_aleph'},
+            {'key': 'ratio', 'label': 'Aspect Ratio', 'type': 'dropdown',
+             'options': ['1280:720', '720:1280', '1024:1024'], 'default': '1280:720'},
             {'key': 'pairing_strategy', 'label': 'Pairing Strategy', 'type': 'dropdown',
-             'options': ['one_to_one', 'all_combinations'], 'default': 'all_combinations'},
+             'options': ['one_to_one', 'all_combinations'], 'default': 'all_combinations',
+             'help': 'one_to_one: pair by index | all_combinations: every image × video'},
             {'key': 'use_comparison_template', 'label': 'Use Comparison Template', 'type': 'checkbox', 'default': False},
             {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder'},
         ]
@@ -212,26 +268,42 @@ API_FIELD_SCHEMAS = {
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 3},
             {'key': 'animation_mode', 'label': 'Animation Mode', 'type': 'dropdown',
              'options': ['move', 'mix'], 'default': 'move'},
-            {'key': 'num_outputs', 'label': 'Num Outputs', 'type': 'number', 'default': 2},
+            {'key': 'num_outputs', 'label': 'Num Outputs', 'type': 'number', 'default': 2,
+             'help': 'Number of output variations'},
             {'key': 'seed', 'label': 'Seed', 'type': 'text', 'default': '-1',
              'help': '-1 for random seed'},
+            {'key': 'embed', 'label': 'Embed', 'type': 'text', 'default': '',
+             'help': 'Embedding parameter for the API'},
             {'key': 'use_comparison_template', 'label': 'Use Comparison Template', 'type': 'checkbox', 'default': False},
+            {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder'},
         ]
     },
     'vidu_effects': {
         'name': 'Vidu Effects',
         'fields': [
-            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True},
+            {'key': 'category', 'label': 'Category', 'type': 'text', 'default': 'Product',
+             'help': 'Effect category (e.g., Product, Portrait)'},
+            {'key': 'effect', 'label': 'Effect Name', 'type': 'text', 'required': True,
+             'help': 'Effect name (must match subfolder name)'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 3},
-            {'key': 'effect', 'label': 'Effect', 'type': 'text'},
+            {'key': 'model', 'label': 'Model', 'type': 'dropdown',
+             'options': ['viduq2-pro', 'viduq1'], 'default': 'viduq2-pro'},
         ]
     },
     'vidu_reference': {
         'name': 'Vidu Reference',
         'fields': [
-            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True},
+            {'key': 'effect', 'label': 'Effect/Style Name', 'type': 'text', 'required': True,
+             'help': 'Effect name (must match subfolder name)'},
             {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 3},
-            {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder'},
+            {'key': 'model', 'label': 'Model', 'type': 'dropdown',
+             'options': ['viduq1', 'viduq2-pro'], 'default': 'viduq1'},
+            {'key': 'duration', 'label': 'Duration (sec)', 'type': 'dropdown',
+             'options': ['4', '5', '8'], 'default': '5'},
+            {'key': 'resolution', 'label': 'Resolution', 'type': 'dropdown',
+             'options': ['720p', '1080p'], 'default': '1080p'},
+            {'key': 'movement', 'label': 'Movement', 'type': 'dropdown',
+             'options': ['auto', 'slow', 'normal', 'fast'], 'default': 'auto'},
         ]
     },
 }
@@ -1073,11 +1145,19 @@ class AutomationGUI:
                     
                     value = self._get_widget_value(widget, field_type)
                     
-                    # Only include non-empty values
-                    if value is not None and value != '' and value != field.get('default', ''):
+                    # Include all non-empty values (don't skip defaults - they're needed)
+                    # For checkboxes, always include the value
+                    # For numbers, include if not None
+                    # For text/dropdown/folder, include if not empty string
+                    if field_type == 'checkbox':
+                        task_data[key] = value
+                    elif field_type == 'number':
+                        if value is not None:
+                            task_data[key] = value
+                    elif value is not None and value != '':
                         task_data[key] = value
                     elif field.get('required') and (value is None or value == ''):
-                        # Skip tasks with missing required fields
+                        # Required field is empty - mark task as incomplete
                         pass
             
             if task_data:

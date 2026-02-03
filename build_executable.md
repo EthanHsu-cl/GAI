@@ -267,7 +267,8 @@ pyinstaller `
    - **macOS**: Double-click `AI Video Suite.app` or run `open "AI Video Suite.app"`
    - **Windows**: Double-click `AI Video Suite.exe`
 3. Verify all platforms appear in the dropdown
-4. Test with a simple job (e.g., Report Only on an existing folder)
+4. Expand "Advanced Options" and verify API-specific fields appear when switching platforms
+5. Test with a simple job (e.g., Report Only on an existing folder with absolute paths)
 
 ## File Structure After Build
 
@@ -366,6 +367,24 @@ pip install pillow --force-reinstall
 
 Ensure the bundled app has network access. Firewall/antivirus may block it.
 
+#### 8. "Regular group has no valid pairs" or missing files
+
+This occurs when relative paths in config files (e.g., `../Media Files/...`) cannot be resolved from the bundled app's working directory.
+
+**Solutions:**
+- Use absolute paths in your config files
+- Use the folder picker in the GUI to select folders
+- Set the working directory before launching the app:
+  ```bash
+  cd /path/to/GAI && open Scripts/dist/AI\ Video\ Suite.app
+  ```
+
+**Note:** The bundled app automatically resolves relative paths based on the current working directory, and warns if paths cannot be found.
+
+#### 9. Mouse scroll not working (macOS)
+
+If using an external mouse and scroll doesn't work in the GUI, this has been fixed in recent builds. Rebuild the app to get the fix.
+
 ### Creating a PyInstaller Spec File
 
 For complex builds, generate and customize a spec file:
@@ -404,6 +423,20 @@ The application connects to external API servers (configured in YAML files). Ens
 1. Network connectivity is available
 2. API server URLs in config files are correct
 3. Any VPN or proxy settings are configured
+
+### Working Directory (Bundled App)
+
+When running as a bundled `.app` on macOS:
+
+- The app detects it is running in frozen/bundled mode
+- Working directory defaults to user's home folder (`~`)
+- Relative paths in config files are resolved from the current working directory
+- The app validates that resolved paths exist and shows warnings if not found
+
+**Best Practice:** Use absolute paths in config files, or launch the app from the project directory:
+```bash
+cd /path/to/GAI && open Scripts/dist/AI\ Video\ Suite.app
+```
 
 ## Updating the Application
 
