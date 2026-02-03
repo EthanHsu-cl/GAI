@@ -52,18 +52,43 @@ tasks:
     custom_effect: 'lucky_red_packet'
 
 comments:
-  base_folder: >
+  base_folder: |
     Root folder containing effect subfolders. Each effect folder should have 
     'Source', 'Generated_Video', and 'Metadata' subfolders.
     Folder names should match the effect or custom_effect name.
-  effect: >
-    Preset effect from the available options. Used as folder name if custom_effect is empty.
-  custom_effect: >
+  effect: |
+    Preset effect from the available options (see effect_options list).
+    Used as folder name if custom_effect is empty.
+  custom_effect: |
     Custom effect name that takes priority over the preset 'effect' option.
     Also used as the folder name when specified.
-  output_group_tasks_by: >
+    Use for new/unreleased effects or custom named effects.
+  duration: |
+    Video duration in seconds.
+    Options: 5, 10
+    Default: 5 (global setting)
+  output_group_tasks_by: |
     Set to 0 (or omit) to create individual reports per task. 
     Set to N to group N tasks into one combined report.
+  design_link: |
+    URL to design reference document or effect list.
+    Used for report generation.
+  source_video_link: |
+    URL to source files location (e.g., OneDrive folder).
+    Used for report generation.
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.
+  folder_structure: |
+    Expected structure:
+    base_folder/
+    ├── effect_name_1/
+    │   ├── Source/
+    │   │   └── image.jpg
+    │   ├── Generated_Video/  (created automatically)
+    │   └── Metadata/  (created automatically)
+    └── effect_name_2/
+        └── ...
 
 # Available preset effects (use with 'effect' field):
 effect_options:

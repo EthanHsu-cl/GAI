@@ -227,9 +227,52 @@ tasks:
     generation_count: 1
     sound_enabled: true
 
-# API Parameters Reference:
-# model: "v1.6", "v2.0-master", "v2.1-master", "v2.5-turbo"
-# mode: "pro" (standard), "pro" (professional)
-# duration: 5 (5 seconds), "10" (10 seconds)
-# ratio: "1:1" (square), "9:16" (portrait), "16:9" (landscape)
-# cfg: 0.0 - 1.0 (creativity/guidance scale)
+# Configuration Reference
+comments:
+  model: |
+    Model version for text-to-video generation.
+    Options: 'v1.6', 'v2.0-master', 'v2.1-master', 'v2.5-turbo'
+    Default: 'v1.6'. Set globally or per-task (task overrides global).
+  mode: |
+    Generation mode for video quality.
+    Options: 'std' (standard, faster) or 'pro' (professional, higher quality)
+    Default: 'std'
+  duration: |
+    Video duration in seconds.
+    Options: 5, 10
+    Default: 5
+  ratio: |
+    Video aspect ratio.
+    Options: '1:1' (square), '9:16' (portrait), '16:9' (landscape)
+    Default: '9:16'
+  cfg: |
+    CFG scale (Classifier Free Guidance).
+    Range: 0.0 - 1.0
+    Higher values = more adherence to prompt, less creative freedom.
+    Default: 0.5
+  neg_prompt: |
+    Negative prompt - elements to avoid in the generated video.
+    Helps prevent unwanted artifacts or style elements.
+  sound_enabled: |
+    Enable or disable audio generation for the video.
+    Options: true, false
+    Default: false (when available for the model version)
+  style_name: |
+    Name/label for the style. Used for output file naming and logging.
+    Should be unique per task.
+  generation_count: |
+    Number of videos to generate per prompt.
+    Can be set globally or per-task (task overrides global).
+    Default: 1
+  output_folder: |
+    Root folder where generated videos will be saved.
+    Metadata folder will be created automatically alongside Generated_Video.
+  design_link: |
+    URL to design reference document (e.g., Google Slides).
+    Used for report generation.
+  source_video_link: |
+    URL to source files location (e.g., OneDrive folder).
+    Used for report generation.
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.

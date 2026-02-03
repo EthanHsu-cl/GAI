@@ -28,8 +28,61 @@ tasks:
 
 
 comments:
-  base_folder: Root folder containing effect subfolders. Each effect folder should have 'Source', 'Generated_Video', and 'Metadata'
-    subfolders.
-  output_group_tasks_by: 'Set to 0 (or omit) to create one report with all effects. Set to N (e.g., 3) to group N effects
-    into one combined report. Example: with 5 effects and group_tasks_by=2, creates 3 reports (2+2+1).'
-  tasks: Each task represents a Vidu Reference effect. The effect name must match the subfolder name in base_folder.
+  base_folder: |
+    Root folder containing effect subfolders. Each effect folder should have 
+    'Source', 'Reference', 'Generated_Video', and 'Metadata' subfolders.
+  output_group_tasks_by: |
+    Set to 0 (or omit) to create one report with all effects. 
+    Set to N (e.g., 3) to group N effects into one combined report. 
+    Example: with 5 effects and group_tasks_by=2, creates 3 reports (2+2+1).
+  tasks: |
+    Each task represents a Vidu Reference effect. 
+    The effect name must match the subfolder name in base_folder.
+  effect: |
+    Effect/style name. Used for folder matching and output naming.
+  prompt: |
+    Text prompt guiding the video generation with reference images.
+  model: |
+    Model version for video generation.
+    Options: 'viduq1', 'viduq2-pro'
+    Default: 'viduq1'
+  duration: |
+    Video duration in seconds.
+    Options: 5, 8
+    Default: 5
+  resolution: |
+    Output video resolution.
+    Options: '720p', '1080p'
+    Default: '1080p'
+  movement: |
+    Movement control for the generated video.
+    Options: 'auto', 'slow', 'medium', 'fast'
+    Default: 'auto'
+  default_prompt: |
+    Global default prompt used when task-level prompt is empty.
+  root_design_link: |
+    URL to design reference document (e.g., Google Slides).
+    Used for report generation.
+  source_video_link: |
+    URL to source files location (e.g., OneDrive folder).
+    Used for report generation.
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.
+  folder_structure: |
+    Expected structure:
+    base_folder/
+    ├── Style Name 1/
+    │   ├── Source/
+    │   │   └── main_subject.jpg
+    │   ├── Reference/
+    │   │   ├── ref1.jpg
+    │   │   └── ref2.jpg
+    │   ├── Generated_Video/  (created automatically)
+    │   └── Metadata/  (created automatically)
+    └── Style Name 2/
+        └── ...
+  multi_image_support: |
+    Vidu Reference supports multiple reference images per source image.
+    Source images are automatically paired with all reference images in the Reference folder.
+    The aspect ratio is detected from the first source image.

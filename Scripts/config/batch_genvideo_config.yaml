@@ -22,3 +22,50 @@ tasks:
   source_video_link: ''
   reference_folder: ''
   use_comparison_template: false
+
+# Configuration Reference
+comments:
+  model: |
+    AI model for image generation.
+    Options: 'gpt-image-1', 'gemini-2.5-flash-image-preview'
+    Default: 'gpt-image-1'
+  img_prompt: |
+    Text prompt describing the desired image transformation.
+    Should detail the style, preservation requirements, and any negative prompts.
+  quality: |
+    Output image quality level.
+    Options: 'low', 'medium', 'high'
+    Default: 'low'
+    Note: Higher quality takes longer and may cost more.
+  folder: |
+    Path to task folder. Should contain 'Source' subfolder with input images.
+    Output goes to 'Generated_Image' subfolder (created automatically).
+  design_link: |
+    URL to design reference document (e.g., Google Slides, Figma).
+    Used for report generation.
+  source_video_link: |
+    URL to source files location (e.g., OneDrive folder).
+    Used for report generation.
+  reference_folder: |
+    Optional path to folder containing reference images for comparison.
+  use_comparison_template: |
+    Set to true to use comparison_template_path (3 placeholders: source, reference, output).
+    Set to false to use template_path (2 placeholders: source, output).
+  output_directory: |
+    Global output directory for all generated PPTX report files.
+    Default is current directory.
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.
+  folder_structure: |
+    Expected structure:
+    task_folder/
+    ├── Source/
+    │   ├── image1.jpg
+    │   └── image2.png
+    ├── Generated_Image/  (created automatically)
+    │   ├── image1_generated.png
+    │   └── image2_generated.png
+    └── Metadata/  (created automatically)
+        ├── image1_metadata.json
+        └── image2_metadata.json

@@ -35,9 +35,45 @@ tasks:
   effect: Zoom In
   prompt: ''
 comments:
-  base_folder: Root folder containing effect subfolders. Each effect folder should have 'Source', 'Generated_Video', and 'Metadata'
-    subfolders.
-  output_group_tasks_by: 'Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 5) to group N tasks (effects)
-    into one combined report. Example: with 5 effects and group_tasks_by=5, creates 1 report; with 10 effects, creates 2 reports.'
-  tasks: Each task represents a Vidu effect with category and effect name. The effect name must match the subfolder name in
-    base_folder.
+  base_folder: |
+    Root folder containing effect subfolders. Each effect folder should have 
+    'Source', 'Generated_Video', and 'Metadata' subfolders.
+  output_group_tasks_by: |
+    Set to 0 (or omit) to create individual reports per task. 
+    Set to N (e.g., 5) to group N tasks (effects) into one combined report. 
+    Example: with 5 effects and group_tasks_by=5, creates 1 report; with 10 effects, creates 2 reports.
+  tasks: |
+    Each task represents a Vidu effect with category and effect name. 
+    The effect name must match the subfolder name in base_folder.
+  category: |
+    Effect category for organization and metadata.
+    Examples: 'Product', 'Portrait', 'Landscape'
+  effect: |
+    Effect name to apply. Must match an available Vidu effect.
+    The effect name is also used as the subfolder name.
+  prompt: |
+    Optional text prompt to guide the effect generation.
+    Leave empty to use the effect's default behavior.
+  model_version: |
+    Model version for video generation.
+    Options: 'viduq1', 'viduq2-pro'
+    Default: 'viduq2-pro'
+  design_link: |
+    URL to Vidu effect documentation or reference.
+    Used for report generation.
+  source_video_link: |
+    URL to source files location (e.g., OneDrive folder).
+    Used for report generation.
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.
+  folder_structure: |
+    Expected structure:
+    base_folder/
+    ├── Effect Name 1/
+    │   ├── Source/
+    │   │   └── image.jpg
+    │   ├── Generated_Video/  (created automatically)
+    │   └── Metadata/  (created automatically)
+    └── Effect Name 2/
+        └── ...

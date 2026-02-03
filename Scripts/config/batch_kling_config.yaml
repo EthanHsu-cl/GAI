@@ -13,6 +13,56 @@ schedule:
 group_tasks_by: 4
 
 tasks:
+# Available configuration options reference
+comments:
+  model_version: |
+    Model version to use for video generation.
+    Options: 'v1.6', 'v2.1', 'v2.5-turbo'
+    Default: 'v2.1' if not specified.
+    Can be set globally or per-task.
+  mode: |
+    Generation mode for video quality.
+    Options: 'std' (standard, faster) or 'pro' (professional, higher quality)
+    Default: 'std'
+  duration: |
+    Video duration in seconds.
+    Options: 5, 10
+    Default: 5
+  cfg: |
+    CFG scale (Classifier Free Guidance).
+    Range: 0.0 - 1.0
+    Higher values = more adherence to prompt, less creative freedom.
+    Default: 0.5
+  prompt: |
+    Text description of desired video motion and content.
+    Should describe the action, movement, and visual style.
+  negative_prompt: |
+    Elements to avoid in the generated video.
+    Helps prevent unwanted artifacts or style elements.
+  design_link: |
+    URL to design reference document (e.g., Google Slides, Figma).
+    Used for report generation and reference.
+  source_video_link: |
+    URL to source video files (e.g., OneDrive, Google Drive).
+    Used for report generation and reference.
+  reference_folder: |
+    Path to folder containing reference images for comparison.
+    Optional - used when use_comparison_template is true.
+  use_comparison_template: |
+    Set to true to use comparison_template_path (3 placeholders: source, reference, output).
+    Set to false to use template_path (2 placeholders: source, output).
+  group_tasks_by: |
+    Set to 0 (or omit) to create individual reports per task.
+    Set to N to group N tasks into one combined report.
+    Example: with 8 tasks and group_tasks_by=4, creates 2 reports.
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.
+  folder_structure: |
+    Each task folder should have 'Source', 'Generated_Video', and 'Metadata' subfolders.
+    Source folder contains input images to be animated.
+
+tasks:
 - mode: std
   folder: ../Media Files/Kling 2.5/1226 Send flower v2
   prompt: |

@@ -20,3 +20,59 @@ tasks:
   source_video_link: ''
   reference_folder: ''
   use_comparison_template: true
+
+# Configuration Reference
+comments:
+  model: |
+    Runway generation model.
+    Options: 'gen4_aleph'
+    Default: 'gen4_aleph'
+  ratio: |
+    Output video aspect ratio.
+    Options: '1280:720', '720:1280', '1104:832', '960:960', '832:1104', '1584:672', '848:480', '640:480'
+    Default: '1280:720'
+    Note: Auto-detected from source video if not specified.
+  public_figure_moderation: |
+    Public figure moderation level.
+    Options: 'low', 'medium', 'high'
+    Default: 'low'
+  pairing_strategy: |
+    How to pair source videos with reference images.
+    Options: 
+      - 'one_to_one': Pair by index (first video with first reference, etc.)
+      - 'all_combinations': Every video paired with every reference image
+    Default: 'one_to_one'
+  prompt: |
+    Text prompt describing the desired transformation or generation.
+  folder: |
+    Path to task folder. Should contain 'Source' subfolder with videos,
+    and optionally 'Reference' subfolder with reference images.
+  reference_folder: |
+    Optional override for reference images location.
+    If empty, uses 'Reference' subfolder in task folder.
+  design_link: |
+    URL to design reference document (e.g., PowerPoint, Google Slides).
+    Used for report generation.
+  source_video_link: |
+    URL to source files location (e.g., OneDrive folder).
+    Used for report generation.
+  use_comparison_template: |
+    Set to true to use comparison_template_path (3 placeholders: source, reference, output).
+    Set to false to use template_path (2 placeholders: source, output).
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.
+  output_directory: |
+    Global output directory for all generated PPTX report files.
+    Default is current directory.
+  folder_structure: |
+    Expected structure:
+    task_folder/
+    ├── Source/
+    │   ├── video1.mp4
+    │   └── video2.mp4
+    ├── Reference/  (optional)
+    │   ├── ref1.jpg
+    │   └── ref2.jpg
+    ├── Generated_Video/  (created automatically)
+    └── Metadata/  (created automatically)

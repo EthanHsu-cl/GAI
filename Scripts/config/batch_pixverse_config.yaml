@@ -25,8 +25,77 @@ tasks:
 
 
 comments:
-  base_folder: Root folder containing effect subfolders. Each effect folder should have 'Source', 'Generated_Video', and 'Metadata'
-    subfolders.
-  output_group_tasks_by: 'Set to 0 (or omit) to create one report with all effects. Set to N (e.g., 4) to group N effects
-    into one combined report. Example: with 8 effects and group_tasks_by=3, creates 3 reports (3+3+2).'
-  tasks: Each task represents a Pixverse effect. The effect name must match the subfolder name in base_folder.
+  base_folder: |
+    Root folder containing effect subfolders. Each effect folder should have 
+    'Source', 'Generated_Video', and 'Metadata' subfolders.
+  output_group_tasks_by: |
+    Set to 0 (or omit) to create one report with all effects. 
+    Set to N (e.g., 4) to group N effects into one combined report. 
+    Example: with 8 effects and group_tasks_by=3, creates 3 reports (3+3+2).
+  tasks: |
+    Each task represents a Pixverse effect. 
+    The effect name must match the subfolder name in base_folder.
+  effect: |
+    Preset effect name from Pixverse effect list.
+    The effect name is also used as the subfolder name.
+  custom_effect_id: |
+    Custom effect ID for user-created or special effects.
+    Takes priority over the 'effect' field when specified.
+    Obtain from Pixverse platform.
+  prompt: |
+    Optional text prompt to guide video generation.
+    Leave empty to use effect's default behavior.
+  negative_prompt: |
+    Elements to avoid in the generated video.
+    Helps prevent unwanted artifacts or style elements.
+  default_settings: |
+    Global default settings applied to all tasks.
+    Can be overridden per task.
+  model: |
+    Pixverse model version.
+    Options: 'v4.5', 'v5.5'
+    Default: 'v5.5'
+  duration: |
+    Video duration.
+    Options: '5s', '8s'
+    Default: '5s'
+  motion_mode: |
+    Motion intensity for the video.
+    Options: 'normal', 'slow', 'fast'
+    Default: 'normal'
+  quality: |
+    Output video quality/resolution.
+    Options: '720p', '1080p'
+    Default: '720p'
+  style: |
+    Visual style preset.
+    Options: 'none', 'anime', 'realistic', etc.
+    Default: 'none'
+  generate_audio: |
+    Whether to generate audio for the video.
+    Options: true, false
+    Default: true
+  generate_multi_clip: |
+    Whether to generate multiple video clips.
+    Options: true, false
+    Default: false
+  thinking_type: |
+    AI reasoning mode.
+    Options: 'auto', 'fast', 'detailed'
+    Default: 'auto'
+  design_link: |
+    URL to Pixverse effect list or design reference.
+    Used for report generation.
+  source_video_link: |
+    URL to source files location (e.g., OneDrive folder).
+    Used for report generation.
+  folder_structure: |
+    Expected structure:
+    base_folder/
+    ├── Effect Name 1/
+    │   ├── Source/
+    │   │   └── image.jpg
+    │   ├── Generated_Video/  (created automatically)
+    │   └── Metadata/  (created automatically)
+    └── Effect Name 2/
+        └── ...

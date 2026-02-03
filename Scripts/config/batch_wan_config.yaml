@@ -31,13 +31,68 @@ tasks:
 
 
 comments:
-  folder_structure: Each task folder should have 'Source Image' and 'Source Video' subfolders. All images will be cross-matched
-    with all videos (e.g., 4 images × 5 videos = 20 total generations).
-  animation_mode: Either 'move' or 'mix'. Controls the animation generation mode.
-  num_outputs: Number of output variations to generate (typically 2).
-  seed: Random seed for generation. Use '-1' for random seed.
-  embed: Embedding parameter for the API (typically 'Hello!!').
-  cross_matching: The system automatically cross-matches all images in 'Source Image' folder with all videos in 'Source Video'
-    folder.
-  output_group_tasks_by: 'Set to 0 (or omit) to create one report with all tasks. Set to N (e.g., 3) to group N tasks into
-    one combined report. Example: with 5 tasks and group_tasks_by=2, creates 3 reports (2+2+1).'
+  folder_structure: |
+    Each task folder should have 'Source Image' and 'Source Video' subfolders. 
+    All images will be cross-matched with all videos 
+    (e.g., 4 images × 5 videos = 20 total generations).
+  animation_mode: |
+    Animation generation mode.
+    Options: 'move' (standard motion), 'mix' (blend styles)
+    Default: 'move'
+  num_outputs: |
+    Number of output variations to generate per combination.
+    Default: 2
+  seed: |
+    Random seed for generation reproducibility.
+    Use '-1' for random seed each time.
+  embed: |
+    Embedding/watermark text parameter for the API.
+    Default: '' (empty)
+  prompt: |
+    Text prompt describing the desired animation motion.
+    Example: 'The person is dancing, realistic video.'
+  cross_matching: |
+    The system automatically cross-matches all images in 'Source Image' folder 
+    with all videos in 'Source Video' folder, creating all possible combinations.
+  output_group_tasks_by: |
+    Set to 0 (or omit) to create one report with all tasks. 
+    Set to N (e.g., 3) to group N tasks into one combined report. 
+    Example: with 5 tasks and group_tasks_by=2, creates 3 reports (2+2+1).
+  folder: |
+    Path to task folder containing Source Image and Source Video subfolders.
+  design_link: |
+    URL to design reference document (e.g., Google Spreadsheet).
+    Used for report generation.
+  source_video_link: |
+    URL to source files location (e.g., OneDrive folder).
+    Used for report generation.
+  reference_folder: |
+    Optional path to folder containing reference images for comparison.
+  use_comparison_template: |
+    Set to true to use comparison_template_path (3 placeholders).
+    Set to false to use template_path (2 placeholders).
+  default_params: |
+    Global default parameters applied to all tasks.
+    Includes: prompt, embed, num_outputs, seed, animation_mode
+    Can be overridden per task.
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.
+  expected_folder_structure: |
+    task_folder/
+    ├── Source Image/
+    │   ├── person1.jpg
+    │   └── person2.jpg
+    ├── Source Video/
+    │   ├── dance1.mp4
+    │   └── dance2.mp4
+    ├── Generated_Video/  (created automatically)
+    │   ├── person1_dance1_output.mp4
+    │   ├── person1_dance2_output.mp4
+    │   ├── person2_dance1_output.mp4
+    │   └── person2_dance2_output.mp4
+    └── Metadata/  (created automatically)
+  workflow: |
+    Two-step process:
+    1. Crop image to match video aspect ratio (automatic)
+    2. Generate animation using cropped image and source video
