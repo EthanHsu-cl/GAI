@@ -21,7 +21,7 @@ python core/runall.py all auto        # All APIs at once
 --verbose     # Debug logging
 ```
 
-## �️ Desktop GUI Usage
+## 🖥️ Desktop GUI Usage
 
 For non-technical users, a graphical desktop application is available that provides all the same functionality without using the command line.
 
@@ -50,13 +50,15 @@ Or run the packaged executable (see [build_executable.md](build_executable.md) f
 Click "▶ Advanced Options" to expand the override section. Here you can temporarily change config values **without editing the YAML file on disk**.
 
 **Override Format:**
-```
+
+```bash
 key = value
 key: value
 ```
 
 **Examples:**
-```
+
+```bash
 prompt = A cat dancing in the rain
 duration = 10
 model_version = v2.5-turbo
@@ -81,9 +83,11 @@ tasks.0.prompt = Override the first task's prompt
 2. Select **Action**: "Auto"
 3. The default config `batch_nano_banana_config.yaml` is auto-selected
 4. Expand **Advanced Options** and enter:
-   ```
+
+   ```bash
    prompt = Generate a magical forest scene
    ```
+
 5. Click **"▶ Run"**
 
 #### Example 3: Veo ITV (Image-to-Video)
@@ -122,7 +126,7 @@ These options override the corresponding values in the config file for the curre
 - **Reports saved to** `Report/` folder with date-prefixed filenames
 - **Bundled app working directory** — when running the packaged `.app`, the working directory defaults to your home folder; use absolute paths or the folder picker for config paths
 
-## �📋 Platform Commands
+## 📋 Platform Commands
 
 | Short Name | Full Name | Description |
 | :-- | :-- | :-- |
@@ -140,13 +144,6 @@ These options override the corresponding values in the config file for the curre
 | `veo` | Google Veo | Text-to-video generation with AI models |
 | `veoitv` | Google Veo ITV | Image-to-video generation with AI models |
 | `all` | All Platforms | Process all APIs sequentially or in parallel |
-
-## Video Download Command Example
-
-```bash
-# File download command example:
-yt-dlp -f "bv*[vcodec~='^(h264|avc)']+ba[acodec~='^(mp?4a|aac)']" "link" --cookies-from-browser chrome -o "%(title)s.%(ext)s"
-```
 
 ## 📁 Project Structure
 
@@ -493,6 +490,30 @@ brew install ffmpeg  # macOS (required for video processing)
 
 **Requirements:** Python 3.8+, FFmpeg, 8GB+ RAM
 
+**Key Dependencies:**
+
+- `ruamel.yaml` - Round-trip YAML parsing that preserves formatting when saving config files
+- `gradio_client` - API client for AI services
+- `python-pptx` - PowerPoint report generation
+- `opencv-python` - Video/image processing
+
+## 📦 Building the Desktop App
+
+To package the application as a standalone executable for distribution:
+
+```bash
+cd Scripts
+pip install pyinstaller
+pyinstaller --name "AI Video Suite" --onedir --windowed \
+    --add-data "config:config" --add-data "templates:templates" \
+    --add-data "core:core" --add-data "handlers:handlers" \
+    --hidden-import ruamel.yaml --collect-data gradio_client gui_app.py
+```
+
+The app bundle will be created at `Scripts/dist/AI Video Suite.app` (macOS) or `Scripts/dist/AI Video Suite.exe` (Windows).
+
+**For detailed instructions** including troubleshooting, distribution, and platform-specific options, see [build_executable.md](build_executable.md).
+
 ## 📈 File Requirements
 
 | API | Max Size | Min Dimensions | Formats |
@@ -543,26 +564,15 @@ brew install ffmpeg  # macOS (required for video processing)
 
 ## 🔧 Architecture
 
-### **Handler System**
+The framework uses an auto-discovery handler system:
 
-Auto-discovery handler system in `handlers/` directory:
-
-- **`HandlerRegistry`** - Auto-discovers and registers handlers
+- **`HandlerRegistry`** - Auto-discovers and registers API handlers
 - **`BaseAPIHandler`** - Common processing logic (validation, metadata, retries)
-- **API Handlers** - Override `_make_api_call()` and `_handle_result()` only
+- **`UnifiedAPIProcessor`** - Image conversion, video extraction, optimal ratio matching
+- **`UnifiedReportGenerator`** - PowerPoint generation with parallel metadata loading
 
-**13 handlers:** `KlingHandler`, `KlingEffectsHandler`, `KlingEndframeHandler`, `KlingTTVHandler`, `PixverseHandler`, `GenvideoHandler`, `NanoBananaHandler`, `ViduEffectsHandler`, `ViduReferenceHandler`, `RunwayHandler`, `WanHandler`, `VeoHandler`, `VeoItvHandler`
+**13 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, Pixverse, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, Veo, VeoItv
 
-### **Core Components**
+---
 
-```python
-# Create processor/generator
-from core.unified_api_processor import create_processor
-from core.unified_report_generator import create_report_generator
-
-processor = create_processor("nano_banana", "config/custom.yaml")
-generator = create_report_generator("kling", "config/custom.yaml")
-```
-
-**UnifiedAPIProcessor:** Auto image conversion, video info extraction, endframe pairing, optimal ratio matching
-**UnifiedReportGenerator:** MediaPair dataclass, parallel metadata loading, batch aspect ratio, format conversion
+> **Tip:** Download videos with: `yt-dlp -f "bv*[vcodec~='^(h264|avc)']+ba[acodec~='^(mp?4a|aac)']" "URL" -o "%(title)s.%(ext)s"`

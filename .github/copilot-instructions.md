@@ -37,3 +37,4 @@ They define the expected tone, structure, and behavior for Copilot-generated res
 ## Function Documentation Policy
 - When a new function is added, documentation **must be included** in the `README.md` located in the root project directory.
 - **Do not** create separate documentation files for individual functions or utilities.
+- The `README.md` should follow markdownlint standards and include clear sections for each function added. Formatting should be consistent with existing documentation style.

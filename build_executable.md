@@ -2,6 +2,113 @@
 
 This guide explains how to package the AI Video Processing Suite as a standalone executable for Windows and macOS.
 
+---
+
+## Using the Application
+
+There are two ways to use this application depending on what you have:
+
+### Option 1: Executable Only (Recommended for End Users)
+
+If you received only the `AI Video Suite.app` (macOS) or `AI Video Suite.exe` (Windows):
+
+**What you have:**
+
+- The standalone application bundle
+- No Python or source code required
+
+**Setup:**
+
+1. **Install FFmpeg** (required for video processing):
+   - **macOS**: `brew install ffmpeg`
+   - **Windows**: Download from [ffmpeg.org](https://ffmpeg.org/download.html) and add to PATH
+
+2. **Create a working folder** with your media files:
+
+   ```bash
+   MyProject/
+   ├── config/
+   │   └── my_config.yaml      # Your configuration file
+   └── Media Files/
+       └── TaskFolder/
+           ├── Source/          # Input images/videos
+           └── Generated_Video/ # Outputs (auto-created)
+   ```
+
+3. **Launch the app** and use the GUI:
+   - Select your platform (Kling, Nano Banana, etc.)
+   - Click "Browse" to select your config file
+   - Use **absolute paths** in your config file, or launch from your project folder:
+
+     ```bash
+     cd /path/to/MyProject && open /path/to/AI\ Video\ Suite.app
+     ```
+
+**Limitations:**
+
+- Must use absolute paths in config files (relative paths resolve from app's working directory)
+- No command-line interface
+- Cannot modify core processing logic
+
+---
+
+### Option 2: Full Source Code (Recommended for Developers)
+
+If you have the complete `GAI/` project folder:
+
+**What you have:**
+
+- Complete source code
+- Configuration files and templates
+- Command-line tools and GUI
+
+**Setup:**
+
+1. **Install Python 3.8+** and create environment:
+
+   ```bash
+   cd /path/to/GAI
+   conda create -n myenv python=3.11
+   conda activate myenv
+   pip install -r Scripts/requirements.txt
+   ```
+
+2. **Install FFmpeg**:
+   - **macOS**: `brew install ffmpeg`
+   - **Windows**: Download and add to PATH
+
+3. **Run via command line or GUI**:
+
+   ```bash
+   cd Scripts
+   
+   # Command line
+   python core/runall.py kling auto
+   python core/runall.py nano process --config config/my_config.yaml
+   
+   # GUI
+   python gui_app.py
+   ```
+
+**Advantages:**
+
+- Use relative paths in config files (e.g., `../Media Files/...`)
+- Full command-line interface with all options
+- Can modify handlers, add new APIs, customize reports
+- Can build your own executable for distribution
+
+---
+
+### Quick Reference: Config Path Differences
+
+| Scenario | Config Path Style | Example |
+| ---------- | ------------------- | -------- |
+| **Full source** (run from Scripts/) | Relative | `folder: ../Media Files/Kling/Task1` |
+| **Executable only** | Absolute | `folder: /Users/me/Projects/Media Files/Kling/Task1` |
+| **Executable** (launched from project dir) | Relative | Works if you `cd` to project folder first |
+
+---
+
 ## Prerequisites
 
 - Python 3.8 or higher
@@ -63,41 +170,32 @@ pip install pyinstaller
 
 ## Step 2: Build the Executable
 
-### Quick Build (macOS with Conda)
+### Common Build Options
 
-For a quick build using conda without activating the environment:
+All builds use these shared options:
+
+| Option | Purpose |
+| ---------- | --------- |
+| `--add-data "config:config"` | Bundle config files |
+| `--add-data "templates:templates"` | Bundle template files |
+| `--add-data "core:core"` | Bundle core modules |
+| `--add-data "handlers:handlers"` | Bundle API handlers |
+| `--hidden-import ...` | PIL, yaml, gradio_client, cv2, pillow_heif, wakepy, pptx, ruamel.yaml |
+| `--collect-data gradio_client` | Include gradio_client data files |
+
+> **Note**: macOS uses `:` as path separator, Windows uses `;`
+
+---
+
+### macOS Build
+
+> **Note**: macOS app bundles require `--onedir` mode. The `--onefile` option is deprecated for windowed macOS apps.
 
 ```bash
 cd Scripts
 rm -rf build dist
-conda run -n myenv pyinstaller \
-    --name "AI Video Suite" \
-    --onedir \
-    --windowed \
-    --add-data "config:config" \
-    --add-data "templates:templates" \
-    --add-data "core:core" \
-    --add-data "handlers:handlers" \
-    --hidden-import PIL \
-    --hidden-import PIL.Image \
-    --hidden-import yaml \
-    --hidden-import gradio_client \
-    --hidden-import cv2 \
-    --hidden-import pillow_heif \
-    --hidden-import wakepy \
-    --hidden-import pptx \
-    --collect-data gradio_client \
-    gui_app.py
-```
 
-### macOS - App Bundle (Recommended)
-
-> **Note**: macOS app bundles require `--onedir` mode. The `--onefile` option is
-> deprecated for windowed macOS apps and will become an error in PyInstaller v7.0.
-
-```bash
-cd Scripts
-
+# Standard build
 pyinstaller \
     --name "AI Video Suite" \
     --onedir \
@@ -114,44 +212,26 @@ pyinstaller \
     --hidden-import pillow_heif \
     --hidden-import wakepy \
     --hidden-import pptx \
+    --hidden-import ruamel.yaml \
     --collect-data gradio_client \
     gui_app.py
 
-# Optional: Add a custom icon if you have one:
-#   --icon path/to/your/icon.icns
+# Optional flags:
+#   --icon path/to/icon.icns                           # Custom icon
+#   --osx-bundle-identifier com.company.aivideosuite   # For distribution
 ```
 
-The app bundle will be created in `Scripts/dist/AI Video Suite.app`.
+**Output:** `Scripts/dist/AI Video Suite.app`
 
-### macOS - With Bundle Identifier (for Distribution)
-
-For distributing outside your organization, add a bundle identifier:
+**Quick build with conda** (without activating environment):
 
 ```bash
-cd Scripts
-
-pyinstaller \
-    --name "AI Video Suite" \
-    --onedir \
-    --windowed \
-    --add-data "config:config" \
-    --add-data "templates:templates" \
-    --add-data "core:core" \
-    --add-data "handlers:handlers" \
-    --hidden-import PIL \
-    --hidden-import PIL.Image \
-    --hidden-import yaml \
-    --hidden-import gradio_client \
-    --hidden-import cv2 \
-    --hidden-import pillow_heif \
-    --hidden-import wakepy \
-    --hidden-import pptx \
-    --collect-data gradio_client \
-    --osx-bundle-identifier com.company.aivideosuite \
-    gui_app.py
+conda run -n myenv pyinstaller [options above] gui_app.py
 ```
 
-### Windows - Single Executable
+---
+
+### Windows Build
 
 ```powershell
 cd Scripts
@@ -172,53 +252,39 @@ pyinstaller `
     --hidden-import pillow_heif `
     --hidden-import wakepy `
     --hidden-import pptx `
+    --hidden-import ruamel.yaml `
     --collect-data gradio_client `
     gui_app.py
 
-# Optional: Add a custom icon if you have one:
-#   --icon path\to\your\icon.ico
+# Optional flags:
+#   --icon path\to\icon.ico   # Custom icon
+#   --onedir                  # Faster startup (use instead of --onefile)
 ```
 
-The executable will be created at `Scripts\dist\AI Video Suite.exe`.
-
-### Windows - Directory Bundle (Faster Startup)
-
-```powershell
-cd Scripts
-
-pyinstaller `
-    --name "AI Video Suite" `
-    --onedir `
-    --windowed `
-    --add-data "config;config" `
-    --add-data "templates;templates" `
-    --add-data "core;core" `
-    --add-data "handlers;handlers" `
-    --hidden-import PIL `
-    --hidden-import PIL.Image `
-    --hidden-import yaml `
-    --hidden-import gradio_client `
-    --hidden-import cv2 `
-    --hidden-import pillow_heif `
-    --hidden-import wakepy `
-    --hidden-import pptx `
-    --collect-data gradio_client `
-    gui_app.py
-```
+**Output:** `Scripts\dist\AI Video Suite.exe`
 
 ## Step 3: Verify the Build
 
-1. Navigate to `Scripts/dist/`
-2. Run the application:
-   - **macOS**: Double-click `AI Video Suite.app` or run `open "AI Video Suite.app"`
-   - **Windows**: Double-click `AI Video Suite.exe`
-3. Verify all platforms appear in the dropdown
-4. Expand "Advanced Options" and verify API-specific fields appear when switching platforms
-5. Test with a simple job (e.g., Report Only on an existing folder with absolute paths)
+1. Run the application:
+   - **macOS**: `open "dist/AI Video Suite.app"` or double-click
+   - **Windows**: Double-click `dist\AI Video Suite.exe`
+2. Verify all platforms appear in the dropdown
+3. Expand "Advanced Options" and check API-specific fields
+4. Test with a simple job (e.g., Report Only with absolute paths)
+
+**Debug from terminal** (to see errors):
+
+```bash
+# macOS
+./dist/AI\ Video\ Suite.app/Contents/MacOS/AI\ Video\ Suite
+
+# Windows
+.\dist\AI Video Suite.exe
+```
 
 ## File Structure After Build
 
-```
+```bash
 Scripts/
 ├── dist/
 │   ├── AI Video Suite.app/    # macOS app bundle (or .exe for Windows)
@@ -234,6 +300,7 @@ Scripts/
 For distribution to other macOS users:
 
 1. **Notarization (Recommended)**: Apple requires notarization for apps distributed outside the App Store
+
    ```bash
    # Create a zip for notarization
    ditto -c -k --keepParent "dist/AI Video Suite.app" "AI Video Suite.zip"
@@ -252,151 +319,64 @@ For distribution to other macOS users:
 
 ## Troubleshooting
 
-### Common Issues
-
-#### 1. "Module not found" errors
-
-Add the missing module to `--hidden-import`:
-```bash
-pyinstaller ... --hidden-import missing_module
-```
-
-#### 2. tkinter not found (Linux only)
-
-Install tkinter separately:
-```bash
-# Ubuntu/Debian
-sudo apt-get install python3-tk
-
-# Fedora
-sudo dnf install python3-tkinter
-```
-
-#### 3. Application crashes on startup
-
-Run from terminal to see error messages:
-```bash
-# macOS
-./dist/AI\ Video\ Suite.app/Contents/MacOS/AI\ Video\ Suite
-
-# Windows
-.\dist\AI Video Suite.exe
-```
-
-#### 4. Config/template files not found
-
-Ensure `--add-data` paths are correct:
-- macOS/Linux: Use `:` as separator (`source:dest`)
-- Windows: Use `;` as separator (`source;dest`)
-
-#### 5. FFmpeg not working
-
-FFmpeg must be installed system-wide - it is **not bundled** with the app.
-
-**macOS**:
-```bash
-brew install ffmpeg
-```
-
-**Windows**:
-1. Download from https://ffmpeg.org/download.html
-2. Add to System PATH
-
-#### 6. PIL/Pillow import errors
-
-```bash
-pip uninstall pillow
-pip install pillow --force-reinstall
-```
-
-#### 7. gradio_client connection errors
-
-Ensure the bundled app has network access. Firewall/antivirus may block it.
-
-#### 8. "Regular group has no valid pairs" or missing files
-
-This occurs when relative paths in config files (e.g., `../Media Files/...`) cannot be resolved from the bundled app's working directory.
-
-**Solutions:**
-- Use absolute paths in your config files
-- Use the folder picker in the GUI to select folders
-- Set the working directory before launching the app:
-  ```bash
-  cd /path/to/GAI && open Scripts/dist/AI\ Video\ Suite.app
-  ```
-
-**Note:** The bundled app automatically resolves relative paths based on the current working directory, and warns if paths cannot be found.
-
-#### 9. Mouse scroll not working (macOS)
-
-If using an external mouse and scroll doesn't work in the GUI, this has been fixed in recent builds. Rebuild the app to get the fix.
-
-### Creating a PyInstaller Spec File
-
-For complex builds, generate and customize a spec file:
-
-```bash
-pyi-makespec --windowed --onefile gui_app.py
-```
-
-Then edit `gui_app.spec` and build with:
-```bash
-pyinstaller gui_app.spec
-```
+| Issue | Solution |
+| ---------- | ----------- |
+| Module not found | Add `--hidden-import missing_module` to build command |
+| tkinter not found (Linux) | `sudo apt-get install python3-tk` |
+| Config/template not found | Check `--add-data` separator (`:` for macOS, `;` for Windows) |
+| FFmpeg not working | Install system-wide: `brew install ffmpeg` (macOS) or add to PATH (Windows) |
+| PIL/Pillow errors | `pip install pillow --force-reinstall` |
+| gradio_client errors | Check network/firewall; bundled app needs internet access |
+| "No valid pairs" | Use absolute paths in config, or `cd` to project dir before launching |
+| Scroll not working (macOS) | Rebuild the app (fixed in recent builds) |
 
 ### Debug Build
 
-For troubleshooting, create a console build:
+For troubleshooting, create a console build to see stdout/stderr:
+
 ```bash
 pyinstaller --onefile --console gui_app.py
 ```
 
-This shows stdout/stderr in a terminal window.
+### Custom Spec File
 
-## Notes on Dependencies
+For complex builds:
+
+```bash
+pyi-makespec --windowed --onefile gui_app.py
+# Edit gui_app.spec, then:
+pyinstaller gui_app.spec
+```
+
+## Notes
 
 ### FFmpeg
 
-FFmpeg is required for video processing but is **not bundled** with the application. Users must install FFmpeg separately:
+FFmpeg is **not bundled** - users must install separately:
 
 - **macOS**: `brew install ffmpeg`
 - **Windows**: Download from ffmpeg.org and add to PATH
-- **Linux**: `sudo apt install ffmpeg` or equivalent
 
-### API Server
+### Working Directory
 
-The application connects to external API servers (configured in YAML files). Ensure:
-1. Network connectivity is available
-2. API server URLs in config files are correct
-3. Any VPN or proxy settings are configured
+When running as a bundled app:
 
-### Working Directory (Bundled App)
+- Working directory defaults to user's home folder
+- Relative config paths resolve from current working directory
+- **Best practice:** Use absolute paths, or launch from project dir:
 
-When running as a bundled `.app` on macOS:
+  ```bash
+  cd /path/to/project && open AI\ Video\ Suite.app
+  ```
 
-- The app detects it is running in frozen/bundled mode
-- Working directory defaults to user's home folder (`~`)
-- Relative paths in config files are resolved from the current working directory
-- The app validates that resolved paths exist and shows warnings if not found
+### Updating the App
 
-**Best Practice:** Use absolute paths in config files, or launch the app from the project directory:
 ```bash
-cd /path/to/GAI && open Scripts/dist/AI\ Video\ Suite.app
+rm -rf build/ dist/
+# Re-run PyInstaller command
 ```
 
-## Updating the Application
-
-When updating the source code:
-
-1. Delete the `build/` and `dist/` directories
-2. Re-run the PyInstaller command
-3. Test the new build before distribution
-
-## Icon Files
-
-Create icon files for professional appearance:
+### Icon Files
 
 - **macOS**: `icon.icns` (use `iconutil` or online converters)
 - **Windows**: `icon.ico` (use ImageMagick or online converters)
-
-Place in `assets/` directory at project root.

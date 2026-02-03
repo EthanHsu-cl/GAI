@@ -11,6 +11,7 @@ Uses tkinter (built-in) for cross-platform compatibility.
 """
 
 import copy
+import json
 import logging
 import os
 import queue
@@ -20,6 +21,10 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 from typing import Any, Callable, Dict, List, Optional, Tuple
+
+import yaml
+from ruamel.yaml import YAML
+from ruamel.yaml.scalarstring import LiteralScalarString, DoubleQuotedScalarString
 
 
 def _is_frozen() -> bool:
@@ -52,6 +57,9 @@ sys.path.insert(0, str(core_dir))
 
 from core.runall import run_automation, API_MAPPING, CONFIG_MAPPING
 from core.config_loader import ConfigLoader, get_default_config_path
+
+# Logger for this module
+logger = logging.getLogger(__name__)
 
 
 # =============================================================================
@@ -692,10 +700,29 @@ class AutomationGUI:
         )
         self._clear_tasks_btn.pack(side=tk.LEFT, padx=5)
         
+        # Separator
+        ttk.Separator(btn_frame, orient='vertical').pack(side=tk.LEFT, padx=10, fill='y')
+        
+        # Reload from config button
+        self._reload_config_btn = ttk.Button(
+            btn_frame,
+            text="🔄 Reload Config",
+            command=self._load_config_into_fields
+        )
+        self._reload_config_btn.pack(side=tk.LEFT, padx=5)
+        
+        # Save to config button
+        self._save_config_btn = ttk.Button(
+            btn_frame,
+            text="💾 Save to Config",
+            command=self._save_config_to_file
+        )
+        self._save_config_btn.pack(side=tk.LEFT, padx=5)
+        
         # Help text
         ttk.Label(
             btn_frame,
-            text="💡 Overrides apply IN MEMORY only",
+            text="💡 Changes are temporary unless saved",
             foreground='gray',
             font=('Helvetica', 9)
         ).pack(side=tk.RIGHT, padx=5)
@@ -1035,6 +1062,8 @@ class AutomationGUI:
                                       after=self._advanced_toggle.master)
             self._advanced_toggle.config(text="▼ Advanced Options (Task Overrides)")
             self._advanced_visible.set(True)
+            # Load current config values into fields
+            self._load_config_into_fields()
 
     def _on_platform_change(self, event=None) -> None:
         """Handle platform selection change."""
@@ -1043,11 +1072,10 @@ class AutomationGUI:
         self._platform_label.config(text=display)
         self._use_default_config()
         
-        # Rebuild task fields if advanced section is visible
+        # Rebuild task fields and load config if advanced section is visible
         if self._advanced_visible.get():
             self._rebuild_task_fields_for_platform()
-        self._platform_label.config(text=display)
-        self._use_default_config()
+            self._load_config_into_fields()
 
     def _browse_config(self) -> None:
         """Open file dialog to select a config file."""
@@ -1066,6 +1094,9 @@ class AutomationGUI:
         )
         if filepath:
             self._config_var.set(filepath)
+            # Load config values into fields if advanced section is visible
+            if self._advanced_visible.get():
+                self._load_config_into_fields()
 
     def _browse_folder(self) -> None:
         """Open folder dialog to select a task folder."""
@@ -1106,6 +1137,10 @@ class AutomationGUI:
                 self._config_var.set(str(full_path))
             else:
                 self._config_var.set('')
+        
+        # Load config values into fields if advanced section is visible
+        if hasattr(self, '_advanced_visible') and self._advanced_visible.get():
+            self._load_config_into_fields()
 
     def _get_runtime_overrides(self) -> Optional[Dict[str, Any]]:
         """
@@ -1209,6 +1244,291 @@ class AutomationGUI:
                 return value if value else None
         except Exception:
             return None
+
+    def _set_widget_value(self, widget: Any, field_type: str, value: Any) -> None:
+        """
+        Set the value of a widget based on its type.
+        
+        Args:
+            widget: The widget to set value on.
+            field_type: The type of the field.
+            value: The value to set.
+        """
+        if value is None:
+            return
+            
+        try:
+            if field_type == 'multiline':
+                widget.delete('1.0', tk.END)
+                widget.insert('1.0', str(value))
+            elif field_type == 'checkbox':
+                widget.var.set(bool(value))
+            elif field_type == 'number':
+                widget.var.set(str(value))
+            else:
+                # text, dropdown, folder
+                widget.var.set(str(value))
+        except Exception as e:
+            logger.debug(f"Failed to set widget value: {e}")
+
+    def _load_config_into_fields(self) -> None:
+        """
+        Load the current config file into the advanced options fields.
+        
+        This populates the task entries with values from the config file,
+        making it easy to see and modify current settings.
+        """
+        config_path = self._config_var.get().strip()
+        if not config_path or not Path(config_path).exists():
+            return
+        
+        platform = self._platform_var.get()
+        api_name = API_MAPPING.get(platform, platform)
+        schema = API_FIELD_SCHEMAS.get(api_name)
+        if not schema:
+            return
+        
+        try:
+            # Load the config file directly (no overrides, no path resolution)
+            with open(config_path, 'r', encoding='utf-8') as f:
+                if config_path.endswith('.json'):
+                    config = json.load(f)
+                else:
+                    config = yaml.safe_load(f) or {}
+            
+            # Get tasks from config
+            tasks = config.get('tasks', [])
+            if not tasks:
+                # For some APIs, the config might have a single task structure
+                # Try to create one task from top-level fields
+                tasks = [config]
+            
+            # Clear existing task entries
+            self._clear_all_tasks()
+            
+            # Create task entries for each task in config
+            for task_data in tasks:
+                self._add_task_entry()
+                
+                # Get the just-added task entry
+                if not self._task_entries:
+                    continue
+                task_entry = self._task_entries[-1]
+                widgets = task_entry['widgets']
+                
+                # Populate widgets with config values
+                for key, widget_info in widgets.items():
+                    if key == '_generic':
+                        continue
+                    
+                    widget = widget_info['widget']
+                    field = widget_info['field']
+                    field_type = field.get('type', 'text')
+                    
+                    # Get value from task data or top-level config
+                    value = task_data.get(key)
+                    if value is None:
+                        value = config.get(key)
+                    
+                    if value is not None:
+                        self._set_widget_value(widget, field_type, value)
+            
+            # If no tasks were in config, add one empty entry for user to fill
+            if not self._task_entries:
+                self._add_task_entry()
+                # Still populate with top-level config values
+                task_entry = self._task_entries[-1]
+                widgets = task_entry['widgets']
+                for key, widget_info in widgets.items():
+                    if key == '_generic':
+                        continue
+                    widget = widget_info['widget']
+                    field = widget_info['field']
+                    field_type = field.get('type', 'text')
+                    value = config.get(key)
+                    if value is not None:
+                        self._set_widget_value(widget, field_type, value)
+            
+            self._log_message(f"Loaded config values from: {Path(config_path).name}", 'info')
+            
+        except Exception as e:
+            logger.debug(f"Failed to load config into fields: {e}")
+            # Don't show error to user, just log it - config might be for different API
+
+    def _save_config_to_file(self) -> None:
+        """
+        Save the current advanced options values to the config file.
+        
+        This writes the task entries back to the YAML config file,
+        allowing users to persist their changes.
+        """
+        config_path = self._config_var.get().strip()
+        if not config_path:
+            messagebox.showwarning("No Config File", "Please select a configuration file first.")
+            return
+        
+        config_path_obj = Path(config_path)
+        if not config_path_obj.exists():
+            messagebox.showwarning("File Not Found", f"Config file not found:\n{config_path}")
+            return
+        
+        # Check if there are any task entries
+        if not self._task_entries:
+            messagebox.showwarning("No Tasks", "No task entries to save. Add at least one task first.")
+            return
+        
+        try:
+            # Load the existing config to preserve structure and comments
+            with open(config_path, 'r', encoding='utf-8') as f:
+                if config_path.endswith('.json'):
+                    config = json.load(f)
+                else:
+                    config = yaml.safe_load(f) or {}
+            
+            # Build tasks list from GUI entries
+            new_tasks = []
+            
+            for task_entry in self._task_entries:
+                if not task_entry['frame'].winfo_exists():
+                    continue
+                
+                task_data = {}
+                widgets = task_entry['widgets']
+                
+                if '_generic' in widgets:
+                    # Generic text entry - parse it
+                    widget = widgets['_generic']['widget']
+                    text = widget.get('1.0', tk.END).strip()
+                    if text:
+                        try:
+                            task_data = ConfigLoader.parse_override_text(text)
+                        except Exception:
+                            pass
+                else:
+                    # Collect values from structured fields
+                    for key, info in widgets.items():
+                        widget = info['widget']
+                        field = info['field']
+                        field_type = field.get('type', 'text')
+                        
+                        value = self._get_widget_value(widget, field_type)
+                        
+                        # Include all values, even empty strings
+                        if value is not None:
+                            task_data[key] = value
+                        elif field_type in ('text', 'multiline', 'dropdown'):
+                            # For text fields, include empty string if empty
+                            task_data[key] = ''
+                
+                if task_data:
+                    new_tasks.append(task_data)
+            
+            if not new_tasks:
+                messagebox.showwarning("No Data", "No task data to save.")
+                return
+            
+            # Update config with new tasks
+            config['tasks'] = new_tasks
+            
+            # Also update top-level fields that might be shared across tasks
+            # (take from first task if present)
+            first_task = new_tasks[0]
+            platform = self._platform_var.get()
+            api_name = API_MAPPING.get(platform, platform)
+            schema = API_FIELD_SCHEMAS.get(api_name, {})
+            
+            # Some fields are typically top-level in config
+            top_level_keys = ['model', 'model_version', 'mode', 'resolution', 
+                             'aspect_ratio', 'duration', 'cfg', 'testbed']
+            for key in top_level_keys:
+                if key in first_task and key in config:
+                    config[key] = first_task[key]
+            
+            # Write back to file
+            with open(config_path, 'w', encoding='utf-8') as f:
+                if config_path.endswith('.json'):
+                    json.dump(config, f, indent=2)
+                else:
+                    # Use ruamel.yaml for proper formatting preservation
+                    ruamel_yaml = YAML()
+                    ruamel_yaml.default_flow_style = False
+                    ruamel_yaml.preserve_quotes = True
+                    ruamel_yaml.indent(mapping=2, sequence=4, offset=2)
+                    ruamel_yaml.width = 1000  # Prevent line wrapping
+                    
+                    # Convert config to ruamel format with proper string styles
+                    formatted_config = self._format_config_for_yaml(config)
+                    ruamel_yaml.dump(formatted_config, f)
+            
+            self._log_message(f"✅ Saved config to: {config_path_obj.name}", 'info')
+            messagebox.showinfo("Config Saved", f"Configuration saved to:\n{config_path_obj.name}")
+            
+        except Exception as e:
+            error_msg = f"Failed to save config: {e}"
+            self._log_message(error_msg, 'error')
+            messagebox.showerror("Save Failed", error_msg)
+
+    def _format_config_for_yaml(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Format config dictionary for ruamel.yaml output with proper string styles.
+        
+        Uses LiteralScalarString for multiline prompts and DoubleQuotedScalarString
+        for values that should be quoted (like aspect ratios, resolutions).
+        
+        Args:
+            config: The configuration dictionary to format.
+            
+        Returns:
+            Formatted configuration with proper ruamel.yaml string types.
+        """
+        from ruamel.yaml.comments import CommentedMap, CommentedSeq
+        
+        # Keys that should use double quotes
+        quoted_keys = {'resolution', 'aspect_ratio', 'start_time', 'comment'}
+        
+        def format_value(key: str, value: Any) -> Any:
+            """Format a single value with appropriate string style."""
+            if isinstance(value, str):
+                if '\n' in value:
+                    # Use literal block style for multiline strings
+                    return LiteralScalarString(value)
+                elif key in quoted_keys:
+                    # Use double quotes for specific keys
+                    return DoubleQuotedScalarString(value)
+                return value
+            elif isinstance(value, dict):
+                return format_dict(value)
+            elif isinstance(value, list):
+                return format_list(value, is_tasks=(key == 'tasks'))
+            return value
+        
+        def format_dict(d: Dict[str, Any]) -> CommentedMap:
+            """Format a dictionary with proper string styles."""
+            result = CommentedMap()
+            for k, v in d.items():
+                result[k] = format_value(k, v)
+            
+            # Add blank line before 'comments' section
+            if 'comments' in result:
+                result.yaml_set_comment_before_after_key('comments', before='\n')
+            return result
+        
+        def format_list(lst: List[Any], is_tasks: bool = False) -> CommentedSeq:
+            """Format a list with proper string styles."""
+            result = CommentedSeq()
+            for idx, item in enumerate(lst):
+                if isinstance(item, dict):
+                    result.append(format_dict(item))
+                else:
+                    result.append(item)
+            
+            # Add blank lines between tasks (after all items are appended)
+            if is_tasks and len(result) > 1:
+                for idx in range(1, len(result)):
+                    result.yaml_set_comment_before_after_key(idx, before='\n')
+            return result
+        
+        return format_dict(config)
 
     def _run_job(self) -> None:
         """Start the automation job in a background thread."""

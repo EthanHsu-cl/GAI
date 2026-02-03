@@ -5,5 +5,6 @@ pillow-heif>=1.1.0
 python-pptx>=1.0.0
 PyYAML>=6.0.2
 requests>=2.32.0
+ruamel.yaml>=0.18.0
 tqdm>=4.67.0
 wakepy>=0.10.2
