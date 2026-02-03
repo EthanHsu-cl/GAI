@@ -21,7 +21,108 @@ python core/runall.py all auto        # All APIs at once
 --verbose     # Debug logging
 ```
 
-## 📋 Platform Commands
+## �️ Desktop GUI Usage
+
+For non-technical users, a graphical desktop application is available that provides all the same functionality without using the command line.
+
+### **Launching the GUI**
+
+```bash
+cd Scripts
+python gui_app.py
+```
+
+Or run the packaged executable (see [build_executable.md](build_executable.md) for packaging instructions).
+
+### **GUI Controls**
+
+| Control | Description |
+| :-- | :-- |
+| **Platform** | Select which AI API to use (Kling, Nano Banana, Veo, etc.) |
+| **Action** | Choose what to do: Process + Report (Auto), Process Only, or Report Only |
+| **Configuration File** | The YAML file containing settings for this job. Click "Use Default" to auto-select the standard config for the chosen platform |
+| **Task Folder** | (Optional) Override the folder path in the config file for this run |
+| **Run in Parallel** | When running "All Platforms", process multiple APIs simultaneously |
+| **Verbose Logging** | Show detailed debug messages in the log console |
+
+### **Advanced Options**
+
+Click "▶ Advanced Options" to expand the override section. Here you can temporarily change config values **without editing the YAML file on disk**.
+
+**Override Format:**
+```
+key = value
+key: value
+```
+
+**Examples:**
+```
+prompt = A cat dancing in the rain
+duration = 10
+model_version = v2.5-turbo
+tasks.0.prompt = Override the first task's prompt
+```
+
+### **Workflow Examples**
+
+#### Example 1: Kling Image-to-Video
+
+1. Select **Platform**: "kling" (Kling 2.1)
+2. Select **Action**: "Auto (Process + Report)"
+3. Click **"Use Default"** for config (loads `batch_kling_config.yaml`)
+4. (Optional) Enter a **Task Folder** to override the folder in config
+5. Click **"▶ Run"**
+6. Watch progress in the log console
+7. When complete, click **"📂 Open Report Folder"** to view the generated PowerPoint
+
+#### Example 2: Nano Banana Multi-Image
+
+1. Select **Platform**: "nano" (Nano Banana / Google Flash)
+2. Select **Action**: "Auto"
+3. The default config `batch_nano_banana_config.yaml` is auto-selected
+4. Expand **Advanced Options** and enter:
+   ```
+   prompt = Generate a magical forest scene
+   ```
+5. Click **"▶ Run"**
+
+#### Example 3: Veo ITV (Image-to-Video)
+
+1. Select **Platform**: "veoitv" (Veo ITV)
+2. Select **Action**: "Process Only" (generate videos without report)
+3. Click **Browse...** and select your custom YAML config
+4. Click **"▶ Run"**
+5. Videos will be saved to `Generated_Video/` in each style folder
+
+### **API-Specific Advanced Options**
+
+When you select a platform, the Advanced Options section shows API-specific fields that can be configured:
+
+| API | Available Options |
+| :-- | :-- |
+| **Kling** | Duration (5/10s), CFG Scale (0.0-1.0) |
+| **Kling Effects** | Duration, CFG, Pairing Mode, Generation Count |
+| **Kling Endframe** | Duration, CFG, Generation Count |
+| **Kling TTV** | Duration, CFG Scale |
+| **Nano Banana** | Iterations, Deterministic Random, Seed |
+| **Veo / Veo ITV** | Model, Duration, Aspect Ratio, Resolution, Person Generation |
+| **Pixverse** | Model, Duration, Quality, Generate Audio |
+| **Runway** | Model, Aspect Ratio, Pairing Strategy |
+| **Wan** | Animation Mode, Num Outputs, Seed, Embed |
+| **Vidu Effects** | Category, Model |
+| **Vidu Reference** | Model, Duration, Resolution, Movement |
+
+These options override the corresponding values in the config file for the current run.
+
+### **Important Notes**
+
+- **Runtime overrides are temporary** — they only apply to the current run and do NOT modify your YAML config files
+- **FFmpeg required** — video processing requires FFmpeg to be installed on your system
+- **Network required** — the app connects to API servers defined in your config files
+- **Reports saved to** `Report/` folder with date-prefixed filenames
+- **Bundled app working directory** — when running the packaged `.app`, the working directory defaults to your home folder; use absolute paths or the folder picker for config paths
+
+## �📋 Platform Commands
 
 | Short Name | Full Name | Description |
 | :-- | :-- | :-- |
