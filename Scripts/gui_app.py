@@ -429,13 +429,13 @@ class AutomationGUI:
         # Configure canvas scrolling
         self._scrollable_main.bind(
             "<Configure>",
-            lambda e: self._main_canvas.configure(scrollregion=self._main_canvas.bbox("all"))
+            lambda e: self._update_scroll_region()
         )
         
         self._canvas_window = self._main_canvas.create_window((0, 0), window=self._scrollable_main, anchor="nw")
-        self._main_canvas.configure(yscrollcommand=self._main_scrollbar.set)
+        self._main_canvas.configure(yscrollcommand=self._on_scroll_set)
         
-        # Bind canvas resize to adjust inner frame width
+        # Bind canvas resize to adjust inner frame width and scroll state
         self._main_canvas.bind('<Configure>', self._on_canvas_configure)
         
         # Pack scrollbar and canvas
@@ -453,7 +453,6 @@ class AutomationGUI:
         self._create_action_section(main_frame)
         self._create_config_section(main_frame)
         self._create_working_dir_section(main_frame)
-        self._create_folder_section(main_frame)
         self._create_options_section(main_frame)
         self._create_advanced_section(main_frame)
         self._create_control_buttons(main_frame)
@@ -461,22 +460,63 @@ class AutomationGUI:
         self._create_status_bar(main_frame)
 
     def _on_canvas_configure(self, event) -> None:
-        """Resize the inner frame to match the canvas width."""
+        """Resize the inner frame to match the canvas width and update scroll state."""
         self._main_canvas.itemconfig(self._canvas_window, width=event.width)
+        self._update_scroll_region()
+    
+    def _update_scroll_region(self) -> None:
+        """Update the scroll region and show/hide scrollbar based on content size."""
+        self._main_canvas.configure(scrollregion=self._main_canvas.bbox("all"))
+        self._check_scrollbar_needed()
+    
+    def _on_scroll_set(self, first: str, last: str) -> None:
+        """Handle scroll position updates and show/hide scrollbar as needed."""
+        self._main_scrollbar.set(first, last)
+        self._check_scrollbar_needed()
+    
+    def _check_scrollbar_needed(self) -> None:
+        """Show scrollbar only when content exceeds visible area."""
+        # Get the scroll region bounds
+        bbox = self._main_canvas.bbox("all")
+        if not bbox:
+            return
+        
+        content_height = bbox[3] - bbox[1]
+        canvas_height = self._main_canvas.winfo_height()
+        
+        # Show scrollbar only if content is taller than canvas
+        if content_height > canvas_height:
+            if not self._main_scrollbar.winfo_ismapped():
+                self._main_scrollbar.pack(side=tk.RIGHT, fill=tk.Y, before=self._main_canvas)
+        else:
+            if self._main_scrollbar.winfo_ismapped():
+                self._main_scrollbar.pack_forget()
+            # Reset scroll position to top when content fits
+            self._main_canvas.yview_moveto(0)
     
     def _bind_mousewheel(self) -> None:
         """Bind mousewheel events for scrolling on all platforms."""
         # macOS - bind to both MouseWheel and trackpad/mouse scroll events
         self._main_canvas.bind_all("<MouseWheel>", self._on_mousewheel)
         # macOS two-finger scroll / external mouse scroll
-        self._main_canvas.bind_all("<Button-4>", lambda e: self._main_canvas.yview_scroll(-3, "units"))
-        self._main_canvas.bind_all("<Button-5>", lambda e: self._main_canvas.yview_scroll(3, "units"))
+        self._main_canvas.bind_all("<Button-4>", self._on_scroll_button)
+        self._main_canvas.bind_all("<Button-5>", self._on_scroll_button)
         
         # Also bind to the canvas and scrollable frame directly for better macOS support
         self._main_canvas.bind("<Enter>", self._bind_canvas_scroll)
         self._main_canvas.bind("<Leave>", self._unbind_canvas_scroll)
         self._scrollable_main.bind("<Enter>", self._bind_canvas_scroll)
         self._scrollable_main.bind("<Leave>", self._unbind_canvas_scroll)
+    
+    def _on_scroll_button(self, event) -> None:
+        """Handle Button-4/Button-5 scroll events (Linux/some external mice)."""
+        # Only scroll if scrollbar is visible (content exceeds canvas)
+        if not self._main_scrollbar.winfo_ismapped():
+            return
+        if event.num == 4:
+            self._main_canvas.yview_scroll(-3, "units")
+        elif event.num == 5:
+            self._main_canvas.yview_scroll(3, "units")
     
     def _bind_canvas_scroll(self, event=None) -> None:
         """Bind scroll events when mouse enters the canvas area."""
@@ -501,7 +541,7 @@ class AutomationGUI:
         desc = ttk.Label(
             parent,
             text="Process images/videos through AI APIs and generate PowerPoint reports",
-            foreground='gray'
+            foreground='#a0a0a0'
         )
         desc.pack(pady=(0, 15))
 
@@ -528,7 +568,7 @@ class AutomationGUI:
         self._platform_label = ttk.Label(
             frame,
             text=PLATFORM_DISPLAY_NAMES.get('kling', ''),
-            foreground='gray'
+            foreground='#a0a0a0'
         )
         self._platform_label.pack(side=tk.LEFT, padx=10)
 
@@ -591,54 +631,35 @@ class AutomationGUI:
             default_working_dir = str(script_dir.parent)
         self._working_dir_var.set(default_working_dir)
         
-        self._working_dir_entry = ttk.Entry(frame, textvariable=self._working_dir_var, width=60)
+        # Row 1: Entry and browse button
+        controls_frame = ttk.Frame(frame)
+        controls_frame.pack(fill=tk.X)
+        
+        self._working_dir_entry = ttk.Entry(controls_frame, textvariable=self._working_dir_var, width=60)
         self._working_dir_entry.pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
         
         browse_btn = ttk.Button(
-            frame,
+            controls_frame,
             text="Browse...",
             command=self._browse_working_dir
         )
         browse_btn.pack(side=tk.LEFT, padx=5)
 
-        # Add a warning label for bundled app
+        # Row 2: Help text on its own line
         if _is_frozen():
             ttk.Label(
                 frame,
                 text="⚠️ Set to your project folder where config paths resolve correctly",
-                foreground='orange',
+                foreground='#ffb347',
                 font=('Helvetica', 9)
-            ).pack(side=tk.LEFT, padx=5)
+            ).pack(anchor=tk.W, padx=5, pady=(3, 0))
         else:
             ttk.Label(
                 frame,
                 text="📁 Relative paths in config are resolved from here",
-                foreground='gray',
+                foreground='#a0a0a0',
                 font=('Helvetica', 9)
-        ).pack(side=tk.LEFT, padx=5)
-
-    def _create_folder_section(self, parent: ttk.Frame) -> None:
-        """Create the task folder selection section."""
-        frame = ttk.LabelFrame(parent, text="Task Folder (Optional)", padding="5")
-        frame.pack(fill=tk.X, pady=5)
-
-        self._folder_var = tk.StringVar()
-        
-        self._folder_entry = ttk.Entry(frame, textvariable=self._folder_var, width=60)
-        self._folder_entry.pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
-        
-        browse_btn = ttk.Button(
-            frame,
-            text="Browse...",
-            command=self._browse_folder
-        )
-        browse_btn.pack(side=tk.LEFT, padx=5)
-
-        ttk.Label(
-            frame,
-            text="Override task folder from config",
-            foreground='gray'
-        ).pack(side=tk.LEFT, padx=5)
+            ).pack(anchor=tk.W, padx=5, pady=(3, 0))
 
     def _create_options_section(self, parent: ttk.Frame) -> None:
         """Create the options checkboxes section."""
@@ -723,7 +744,7 @@ class AutomationGUI:
         ttk.Label(
             btn_frame,
             text="💡 Changes are temporary unless saved",
-            foreground='gray',
+            foreground='#a0a0a0',
             font=('Helvetica', 9)
         ).pack(side=tk.RIGHT, padx=5)
         
@@ -737,6 +758,10 @@ class AutomationGUI:
         
     def _on_mousewheel(self, event) -> None:
         """Handle mousewheel scrolling for the main canvas."""
+        # Only scroll if scrollbar is visible (content exceeds canvas)
+        if not self._main_scrollbar.winfo_ismapped():
+            return
+        
         # macOS returns delta in different units than Windows/Linux
         import platform
         if platform.system() == 'Darwin':
@@ -780,7 +805,7 @@ class AutomationGUI:
         header_frame = ttk.Frame(task_frame)
         header_frame.pack(fill=tk.X)
         
-        ttk.Label(header_frame, text=schema['name'], foreground='blue').pack(side=tk.LEFT)
+        ttk.Label(header_frame, text=schema['name'], foreground='#87ceeb').pack(side=tk.LEFT)
         
         remove_btn = ttk.Button(
             header_frame,
@@ -794,8 +819,13 @@ class AutomationGUI:
         field_widgets = {}
         
         for field in schema['fields']:
-            field_frame = ttk.Frame(task_frame)
-            field_frame.pack(fill=tk.X, pady=2)
+            # Container for the entire field (label + widget + help)
+            field_container = ttk.Frame(task_frame)
+            field_container.pack(fill=tk.X, pady=2)
+            
+            # Row 1: Label and widget
+            field_frame = ttk.Frame(field_container)
+            field_frame.pack(fill=tk.X)
             
             # Label with required indicator
             label_text = field['label']
@@ -809,11 +839,16 @@ class AutomationGUI:
             widget = self._create_field_widget(field_frame, field)
             field_widgets[field['key']] = {'widget': widget, 'field': field}
             
-            # Help text
+            # Row 2: Help text on its own line (indented to align with widget)
             if field.get('help'):
-                help_label = ttk.Label(field_frame, text=f"({field['help']})", 
-                                       foreground='gray', font=('Helvetica', 8))
-                help_label.pack(side=tk.LEFT, padx=5)
+                help_label = ttk.Label(
+                    field_container, 
+                    text=f"💡 {field['help']}", 
+                    foreground='#a0a0a0', 
+                    font=('Helvetica', 9)
+                )
+                # Indent to align with widget (20 chars label width ≈ 140px + padding)
+                help_label.pack(anchor=tk.W, padx=(145, 5), pady=(1, 0))
         
         self._task_entries.append({
             'frame': task_frame,
@@ -933,7 +968,7 @@ class AutomationGUI:
         ttk.Label(
             task_frame,
             text="Enter key=value pairs (one per line):",
-            foreground='gray'
+            foreground='#a0a0a0'
         ).pack(anchor=tk.W)
         
         text_widget = tk.Text(task_frame, height=4, width=60, font=('Courier', 9))
@@ -1072,6 +1107,10 @@ class AutomationGUI:
         self._platform_label.config(text=display)
         self._use_default_config()
         
+        # Clear the log when switching platforms to avoid confusion
+        self._clear_log()
+        self._status_var.set("Ready")
+        
         # Rebuild task fields and load config if advanced section is visible
         if self._advanced_visible.get():
             self._rebuild_task_fields_for_platform()
@@ -1079,9 +1118,14 @@ class AutomationGUI:
 
     def _browse_config(self) -> None:
         """Open file dialog to select a config file."""
-        initial_dir = script_dir / "config"
-        if not initial_dir.exists():
-            initial_dir = script_dir
+        # Use working directory if set and different from default
+        working_dir = self._working_dir_var.get().strip()
+        if working_dir and Path(working_dir).exists():
+            initial_dir = Path(working_dir)
+        else:
+            initial_dir = script_dir / "config"
+            if not initial_dir.exists():
+                initial_dir = script_dir
         
         filepath = filedialog.askopenfilename(
             title="Select Configuration File",
@@ -1097,14 +1141,6 @@ class AutomationGUI:
             # Load config values into fields if advanced section is visible
             if self._advanced_visible.get():
                 self._load_config_into_fields()
-
-    def _browse_folder(self) -> None:
-        """Open folder dialog to select a task folder."""
-        folderpath = filedialog.askdirectory(
-            title="Select Task Folder"
-        )
-        if folderpath:
-            self._folder_var.set(folderpath)
 
     def _browse_working_dir(self) -> None:
         """Open folder dialog to select a working directory."""
@@ -1200,14 +1236,6 @@ class AutomationGUI:
         
         if tasks_override:
             overrides['tasks'] = tasks_override
-        
-        # Add folder override from the folder section
-        folder = self._folder_var.get().strip()
-        if folder:
-            if 'tasks' not in overrides:
-                overrides['tasks'] = [{}]
-            if overrides['tasks']:
-                overrides['tasks'][0]['folder'] = folder
         
         return overrides if overrides else None
 

@@ -23,11 +23,15 @@ class ViduReferenceHandler(BaseAPIHandler):
         for i, image_set in enumerate(task['image_sets'], 1):
             source_image = image_set['source_image']
             
-            # Check if file was already successfully processed
-            if self._is_file_processed(source_image, metadata_dir):
-                self.logger.info(f" ⏭️ {i}/{total_sets}: {source_image.name} (already processed)")
+            # Check if file was already processed (success or failed with exhausted retries)
+            is_complete, status = self._get_processing_status(source_image, metadata_dir)
+            if is_complete:
+                if status == 'success':
+                    self.logger.info(f" ⏭️ {i}/{total_sets}: {source_image.name} (already processed)")
+                    successful += 1
+                else:  # failed_exhausted
+                    self.logger.info(f" ⏭️ {i}/{total_sets}: {source_image.name} (failed - max retries reached)")
                 skipped += 1
-                successful += 1
                 continue
             
             self.logger.info(f" 🖼️ {i}/{total_sets}: {source_image.name} + {image_set['reference_count']} refs")

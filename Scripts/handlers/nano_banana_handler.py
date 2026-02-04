@@ -679,11 +679,15 @@ class NanoBananaHandler(BaseAPIHandler):
                     image_names = image_names[:147] + "..."
                 base_name = f"iter{iteration_idx:03d}_{image_names}"
             
-            # Check if already processed
-            if self._is_iteration_processed(base_name, metadata_folder):
-                self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (already processed)")
+            # Check if already processed (success or failed with exhausted retries)
+            is_complete, status = self._get_iteration_status(base_name, metadata_folder)
+            if is_complete:
+                if status == 'success':
+                    self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (already processed)")
+                    successful += 1
+                else:  # failed_exhausted
+                    self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (failed - max retries reached)")
                 skipped += 1
-                successful += 1
                 continue
             
             self.logger.info(f" 🎲 {iteration_idx+1}/{num_iterations}: Processing iteration {iteration_idx}")
@@ -722,8 +726,18 @@ class NanoBananaHandler(BaseAPIHandler):
             f"✓ Task {task_num}: {successful}/{num_iterations} successful ({skipped} skipped)"
         )
     
-    def _is_iteration_processed(self, base_name, metadata_folder):
-        """Check if an iteration has already been successfully processed."""
+    def _get_iteration_status(self, base_name, metadata_folder):
+        """Get detailed processing status for an iteration.
+        
+        Args:
+            base_name: Base name for the iteration.
+            metadata_folder: Path to the metadata folder.
+        
+        Returns:
+            tuple: (is_complete, status_reason) where:
+                - is_complete: True if iteration should be skipped
+                - status_reason: 'success', 'failed_exhausted', or None if not complete
+        """
         import json
         metadata_file = Path(metadata_folder) / f"{base_name}_metadata.json"
         
@@ -731,10 +745,31 @@ class NanoBananaHandler(BaseAPIHandler):
             try:
                 with open(metadata_file, 'r') as f:
                     metadata = json.load(f)
-                return metadata.get('success', False)
+                
+                # Skip if previous processing was successful
+                if metadata.get('success', False):
+                    return True, 'success'
+                
+                # Also skip if failed and exhausted all retries
+                max_retries = self.api_defs.get('max_retries', 3)
+                attempts = metadata.get('attempts', 0)
+                if not metadata.get('success', False) and attempts >= max_retries:
+                    return True, 'failed_exhausted'
+                
+                return False, None
             except (json.JSONDecodeError, IOError):
-                return False
-        return False
+                return False, None
+        return False, None
+    
+    def _is_iteration_processed(self, base_name, metadata_folder):
+        """Check if an iteration has already been processed (success or exhausted retries).
+        
+        An iteration is considered processed if:
+        - It was successfully processed (success: True), OR
+        - It failed but has exhausted all retry attempts (success: False, attempts >= max_retries)
+        """
+        is_complete, _ = self._get_iteration_status(base_name, metadata_folder)
+        return is_complete
     
     def _get_aspect_ratio(self, file_path, task_config):
         """Determine aspect ratio from config or use 'auto' as default.

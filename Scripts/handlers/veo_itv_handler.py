@@ -128,9 +128,9 @@ class VeoItvHandler(BaseAPIHandler):
         
         return video_saved
     
-    def _is_generation_processed(self, base_name, gen_num, metadata_folder):
+    def _get_generation_status(self, base_name, gen_num, metadata_folder):
         """
-        Check if a specific generation has already been processed.
+        Get detailed processing status for a specific generation.
         
         Args:
             base_name: Base name of the source file.
@@ -138,7 +138,9 @@ class VeoItvHandler(BaseAPIHandler):
             metadata_folder: Path to the metadata folder.
         
         Returns:
-            bool: True if generation was successful, False otherwise.
+            tuple: (is_complete, status_reason) where:
+                - is_complete: True if generation should be skipped
+                - status_reason: 'success', 'failed_exhausted', or None if not complete
         """
         gen_base_name = f"{base_name}_{gen_num}"
         metadata_file = Path(metadata_folder) / f"{gen_base_name}_metadata.json"
@@ -148,10 +150,40 @@ class VeoItvHandler(BaseAPIHandler):
                 import json
                 with open(metadata_file, 'r') as f:
                     metadata = json.load(f)
-                return metadata.get('success', False)
+                
+                # Skip if previous processing was successful
+                if metadata.get('success', False):
+                    return True, 'success'
+                
+                # Also skip if failed and exhausted all retries
+                max_retries = self.api_defs.get('max_retries', 3)
+                attempts = metadata.get('attempts', 0)
+                if not metadata.get('success', False) and attempts >= max_retries:
+                    return True, 'failed_exhausted'
+                
+                return False, None
             except (json.JSONDecodeError, IOError):
-                return False
-        return False
+                return False, None
+        return False, None
+    
+    def _is_generation_processed(self, base_name, gen_num, metadata_folder):
+        """
+        Check if a specific generation has already been processed.
+        
+        A generation is considered processed if:
+        - It was successfully processed (success: True), OR
+        - It failed but has exhausted all retry attempts (success: False, attempts >= max_retries)
+        
+        Args:
+            base_name: Base name of the source file.
+            gen_num: Generation number.
+            metadata_folder: Path to the metadata folder.
+        
+        Returns:
+            bool: True if generation was processed, False otherwise.
+        """
+        is_complete, _ = self._get_generation_status(base_name, gen_num, metadata_folder)
+        return is_complete
     
     def process_task(self, task, task_num, total_tasks):
         """
@@ -212,11 +244,15 @@ class VeoItvHandler(BaseAPIHandler):
             for gen_num in range(1, generation_count + 1):
                 current += 1
                 
-                # Check if this generation was already processed
-                if self._is_generation_processed(base_name, gen_num, metadata_folder):
-                    self.logger.info(f" ⏭️ {current}/{total_generations}: {base_name}_{gen_num} (already processed)")
+                # Check if this generation was already processed (success or failed with exhausted retries)
+                is_complete, status = self._get_generation_status(base_name, gen_num, metadata_folder)
+                if is_complete:
+                    if status == 'success':
+                        self.logger.info(f" ⏭️ {current}/{total_generations}: {base_name}_{gen_num} (already processed)")
+                        successful += 1
+                    else:  # failed_exhausted
+                        self.logger.info(f" ⏭️ {current}/{total_generations}: {base_name}_{gen_num} (failed - max retries reached)")
                     skipped += 1
-                    successful += 1
                     continue
                 
                 self.logger.info(f" 🎬 {current}/{total_generations}: {file_name} → {base_name}_{gen_num}.mp4")

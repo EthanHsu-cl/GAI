@@ -32,11 +32,15 @@ class RunwayHandler(BaseAPIHandler):
                 for i, (video_file, ref_image) in enumerate(
                     [(v, r) for v in video_files for r in reference_images], 1):
                     
-                    # Check if already processed
-                    if self._is_file_processed(video_file, metadata_folder):
-                        self.logger.info(f" ⏭️ {i}/{total}: {video_file.name} (already processed)")
+                    # Check if already processed (success or failed with exhausted retries)
+                    is_complete, status = self._get_processing_status(video_file, metadata_folder)
+                    if is_complete:
+                        if status == 'success':
+                            self.logger.info(f" ⏭️ {i}/{total}: {video_file.name} (already processed)")
+                            successful += 1
+                        else:  # failed_exhausted
+                            self.logger.info(f" ⏭️ {i}/{total}: {video_file.name} (failed - max retries reached)")
                         skipped += 1
-                        successful += 1
                         continue
                     
                     self.logger.info(f"{i}/{total}: {video_file.name} + {ref_image.name}")
@@ -51,11 +55,15 @@ class RunwayHandler(BaseAPIHandler):
             else:  # one_to_one
                 pairs = list(zip(video_files, reference_images))
                 for i, (video_file, ref_image) in enumerate(pairs, 1):
-                    # Check if already processed
-                    if self._is_file_processed(video_file, metadata_folder):
-                        self.logger.info(f" ⏭️ {i}/{len(pairs)}: {video_file.name} (already processed)")
+                    # Check if already processed (success or failed with exhausted retries)
+                    is_complete, status = self._get_processing_status(video_file, metadata_folder)
+                    if is_complete:
+                        if status == 'success':
+                            self.logger.info(f" ⏭️ {i}/{len(pairs)}: {video_file.name} (already processed)")
+                            successful += 1
+                        else:  # failed_exhausted
+                            self.logger.info(f" ⏭️ {i}/{len(pairs)}: {video_file.name} (failed - max retries reached)")
                         skipped += 1
-                        successful += 1
                         continue
                     
                     self.logger.info(f"{i}/{len(pairs)}: {video_file.name} + {ref_image.name}")
@@ -70,11 +78,15 @@ class RunwayHandler(BaseAPIHandler):
         else:
             # Text-to-video without reference
             for i, video_file in enumerate(video_files, 1):
-                # Check if already processed
-                if self._is_file_processed(video_file, metadata_folder):
-                    self.logger.info(f" ⏭️ {i}/{len(video_files)}: {video_file.name} (already processed)")
+                # Check if already processed (success or failed with exhausted retries)
+                is_complete, status = self._get_processing_status(video_file, metadata_folder)
+                if is_complete:
+                    if status == 'success':
+                        self.logger.info(f" ⏭️ {i}/{len(video_files)}: {video_file.name} (already processed)")
+                        successful += 1
+                    else:  # failed_exhausted
+                        self.logger.info(f" ⏭️ {i}/{len(video_files)}: {video_file.name} (failed - max retries reached)")
                     skipped += 1
-                    successful += 1
                     continue
                 
                 self.logger.info(f"{i}/{len(video_files)}: {video_file.name} (text-to-video)")

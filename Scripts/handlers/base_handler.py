@@ -186,15 +186,17 @@ class BaseAPIHandler:
         """Get appropriate source field name based on API."""
         return "source_video" if self.api_name == "runway" else "source_image"
     
-    def _is_file_processed(self, file_path, metadata_folder):
-        """Check if a file has already been successfully processed.
+    def _get_processing_status(self, file_path, metadata_folder):
+        """Get detailed processing status for a file.
         
         Args:
             file_path: Path to the source file.
             metadata_folder: Path to the metadata folder.
         
         Returns:
-            bool: True if file has successful metadata, False otherwise.
+            tuple: (is_complete, status_reason) where:
+                - is_complete: True if file should be skipped
+                - status_reason: 'success', 'failed_exhausted', or None if not complete
         """
         base_name = Path(file_path).stem
         metadata_file = Path(metadata_folder) / f"{base_name}_metadata.json"
@@ -204,11 +206,38 @@ class BaseAPIHandler:
                 import json
                 with open(metadata_file, 'r') as f:
                     metadata = json.load(f)
-                # Only skip if previous processing was successful
-                return metadata.get('success', False)
+                
+                # Skip if previous processing was successful
+                if metadata.get('success', False):
+                    return True, 'success'
+                
+                # Also skip if failed and exhausted all retries
+                max_retries = self.api_defs.get('max_retries', 3)
+                attempts = metadata.get('attempts', 0)
+                if not metadata.get('success', False) and attempts >= max_retries:
+                    return True, 'failed_exhausted'
+                
+                return False, None
             except (json.JSONDecodeError, IOError):
-                return False
-        return False
+                return False, None
+        return False, None
+    
+    def _is_file_processed(self, file_path, metadata_folder):
+        """Check if a file has already been processed (success or exhausted retries).
+        
+        A file is considered processed if:
+        - It was successfully processed (success: True), OR
+        - It failed but has exhausted all retry attempts (success: False, attempts >= max_retries)
+        
+        Args:
+            file_path: Path to the source file.
+            metadata_folder: Path to the metadata folder.
+        
+        Returns:
+            bool: True if file has been processed, False otherwise.
+        """
+        is_complete, _ = self._get_processing_status(file_path, metadata_folder)
+        return is_complete
     
     def process_task(self, task, task_num, total_tasks):
         """Process entire task - common structure for most APIs."""
@@ -238,11 +267,15 @@ class BaseAPIHandler:
         successful = 0
         skipped = 0
         for i, file_path in enumerate(files, 1):
-            # Check if file was already successfully processed
-            if self._is_file_processed(file_path, metadata_folder):
-                self.logger.info(f" ⏭️ {i}/{len(files)}: {file_path.name} (already processed)")
+            # Check if file was already processed (success or failed with exhausted retries)
+            is_complete, status = self._get_processing_status(file_path, metadata_folder)
+            if is_complete:
+                if status == 'success':
+                    self.logger.info(f" ⏭️ {i}/{len(files)}: {file_path.name} (already processed)")
+                    successful += 1
+                else:  # failed_exhausted
+                    self.logger.info(f" ⏭️ {i}/{len(files)}: {file_path.name} (failed - max retries reached)")
                 skipped += 1
-                successful += 1
                 continue
             
             self.logger.info(f" 🖼️ {i}/{len(files)}: {file_path.name}")

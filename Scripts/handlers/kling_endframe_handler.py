@@ -73,11 +73,15 @@ class KlingEndframeHandler(BaseAPIHandler):
         total_generations = len(image_pairs) * generation_count
         
         for pair_idx, (start_image, end_image) in enumerate(image_pairs, 1):
-            # Check if pair was already successfully processed
-            if self._is_file_processed(start_image, metadata_folder):
-                self.logger.info(f" ⏭️ Pair {pair_idx}/{len(image_pairs)}: {start_image.name} (already processed)")
+            # Check if pair was already processed (success or failed with exhausted retries)
+            is_complete, status = self._get_processing_status(start_image, metadata_folder)
+            if is_complete:
+                if status == 'success':
+                    self.logger.info(f" ⏭️ Pair {pair_idx}/{len(image_pairs)}: {start_image.name} (already processed)")
+                    successful += generation_count
+                else:  # failed_exhausted
+                    self.logger.info(f" ⏭️ Pair {pair_idx}/{len(image_pairs)}: {start_image.name} (failed - max retries reached)")
                 skipped += generation_count
-                successful += generation_count
                 continue
             
             self.logger.info(f" 🖼️  Pair {pair_idx}/{len(image_pairs)}: {start_image.name} → {end_image.name}")

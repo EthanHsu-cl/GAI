@@ -193,28 +193,7 @@ All builds use these shared options:
 
 ```bash
 cd Scripts
-rm -rf build dist
-
-# Standard build
-pyinstaller \
-    --name "AI Video Suite" \
-    --onedir \
-    --windowed \
-    --add-data "config:config" \
-    --add-data "templates:templates" \
-    --add-data "core:core" \
-    --add-data "handlers:handlers" \
-    --hidden-import PIL \
-    --hidden-import PIL.Image \
-    --hidden-import yaml \
-    --hidden-import gradio_client \
-    --hidden-import cv2 \
-    --hidden-import pillow_heif \
-    --hidden-import wakepy \
-    --hidden-import pptx \
-    --hidden-import ruamel.yaml \
-    --collect-data gradio_client \
-    gui_app.py
+rm -rf build dist && pyinstaller --name "AI Video Suite" --onedir --windowed --add-data "config:config" --add-data "templates:templates" --add-data "core:core" --add-data "handlers:handlers" --hidden-import PIL --hidden-import PIL.Image --hidden-import yaml --hidden-import gradio_client --hidden-import cv2 --hidden-import pillow_heif --hidden-import wakepy --hidden-import pptx --hidden-import ruamel.yaml --collect-data gradio_client gui_app.py
 
 # Optional flags:
 #   --icon path/to/icon.icns                           # Custom icon

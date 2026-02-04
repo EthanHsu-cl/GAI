@@ -49,6 +49,7 @@ class WanHandler(BaseAPIHandler):
         successful = 0
         skipped = 0
         combination_num = 0
+        max_retries = self.api_defs.get('max_retries', 3)
         
         for video_file in video_files:
             for image_file in image_files:
@@ -63,6 +64,7 @@ class WanHandler(BaseAPIHandler):
                         import json
                         with open(combo_metadata, 'r') as f:
                             meta = json.load(f)
+                        # Skip if successful OR if failed and exhausted all retries
                         if meta.get('success', False):
                             self.logger.info(
                                 f" ⏭️ {combination_num}/{total_combinations}: "
@@ -70,6 +72,14 @@ class WanHandler(BaseAPIHandler):
                             )
                             skipped += 1
                             successful += 1
+                            continue
+                        attempts = meta.get('attempts', 0)
+                        if not meta.get('success', False) and attempts >= max_retries:
+                            self.logger.info(
+                                f" ⏭️ {combination_num}/{total_combinations}: "
+                                f"{image_file.name} + {video_file.name} (failed - max retries reached)"
+                            )
+                            skipped += 1
                             continue
                     except (json.JSONDecodeError, IOError):
                         pass
