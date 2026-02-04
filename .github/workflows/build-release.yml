@@ -3,6 +3,9 @@ name: Build and Release
 on:
   release:
     types: [created]
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
@@ -16,8 +19,13 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
+          brew install libheif
+      
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
           pip install -r Scripts/requirements.txt
           pip install pyinstaller
       
@@ -64,32 +72,17 @@ jobs:
         with:
           python-version: '3.11'
       
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
+          pip install --upgrade pip
           pip install -r Scripts/requirements.txt
           pip install pyinstaller
       
       - name: Build Windows exe
         working-directory: Scripts
+        shell: cmd
         run: |
-          pyinstaller --name "AI Video Suite" `
-            --onefile `
-            --windowed `
-            --add-data "config;config" `
-            --add-data "templates;templates" `
-            --add-data "core;core" `
-            --add-data "handlers;handlers" `
-            --hidden-import PIL `
-            --hidden-import PIL.Image `
-            --hidden-import yaml `
-            --hidden-import gradio_client `
-            --hidden-import cv2 `
-            --hidden-import pillow_heif `
-            --hidden-import wakepy `
-            --hidden-import pptx `
-            --hidden-import ruamel.yaml `
-            --collect-data gradio_client `
-            gui_app.py
+          pyinstaller --name "AI Video Suite" --onefile --windowed --add-data "config;config" --add-data "templates;templates" --add-data "core;core" --add-data "handlers;handlers" --hidden-import PIL --hidden-import PIL.Image --hidden-import yaml --hidden-import gradio_client --hidden-import cv2 --hidden-import pillow_heif --hidden-import wakepy --hidden-import pptx --hidden-import ruamel.yaml --collect-data gradio_client gui_app.py
       
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
