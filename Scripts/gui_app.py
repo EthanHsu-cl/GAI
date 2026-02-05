@@ -10,6 +10,13 @@ non-technical users.
 Uses tkinter (built-in) for cross-platform compatibility.
 """
 
+import multiprocessing
+
+# CRITICAL: Must be called immediately when running as frozen executable
+# to prevent subprocess/multiprocessing from re-launching the GUI
+if __name__ == "__main__":
+    multiprocessing.freeze_support()
+
 import copy
 import json
 import logging
@@ -1704,8 +1711,24 @@ class AutomationGUI:
             os.system(f'xdg-open "{report_dir}"')
 
 
+# Global flag to prevent multiple GUI instances
+_gui_instance_running = False
+
+
 def main():
     """Main entry point for the GUI application."""
+    global _gui_instance_running
+    
+    # Prevent multiple instances when PyInstaller spawns subprocesses
+    if _gui_instance_running:
+        return
+    _gui_instance_running = True
+    
+    # Additional guard: check if we're being spawned as a subprocess
+    # by looking for multiprocessing indicators
+    if multiprocessing.current_process().name != 'MainProcess':
+        return
+    
     root = tk.Tk()
     
     if sys.platform == 'darwin':

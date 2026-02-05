@@ -1,138 +1,57 @@
-
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
 testbed: http://192.168.31.161:8000/image_generation/
-
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 3
-
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
-
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDABI81-vCRTKqNcqeQWSTmAeucT4iO5rTLomoT2Panwjw?e=hkCc9c
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3bc00d6d66b_3_0#slide=id.g3bc00d6d66b_3_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgD58gET6Z-KRb_jF9u5CYj0AWZ--_eorNe_YEi0v2qhsOc?e=hOUfWc
+root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3bcf5aa7397_1_0#slide=id.g3bcf5aa7397_1_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0129 3 Styles/0129 電梯仰頭自拍
+  - folder: ../Media Files/Nano Banana/0205 櫻花日和
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Use the two uploaded people as the only subjects. Their faces, facial features, identities, hairstyles, expressions, and clothing must remain exactly the same as in the uploaded photos. Do not beautify, stylize, or alter their appearance, and do not add any extra people.
+    aspect_ratio: "9:16"
+    prompt: |-
+      Use the uploaded photo as the only reference for the human subject. The person in the uploaded image must be the only human in the final result. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, facial expression, and body proportions exactly as shown in the uploaded photo. Do not beautify, stylize, replace, or reinterpret the face in any way.
 
-      Create a playful four-frame photo-booth collage styled like CCTV cameras inside an elevator. Each frame should look like it was captured by a corner-mounted security camera positioned high in the upper corner of a shiny metal elevator, creating a downward diagonal view. The overall viewpoint must feel like a real corner CCTV camera looking down toward the subjects rather than a centered ceiling camera.
+      Create a three-panel vertical photo composition arranged from top to bottom, resembling a springtime cherry blossom photoshoot. Each panel features the same subject in a different pose, all set within a cherry blossom park during full sakura bloom.
 
-      The two subjects must appear together in all four frames, wearing exactly the same clothes as shown in the uploaded photos. Their body proportions and heights must stay realistic and consistent in every frame. The entire collage should feel unified and shot in the same physical elevator environment.
+      The overall color tone is bright and clear with slightly increased saturation, ensuring cherry blossoms appear soft pink rather than white. Highlights remain luminous without washing out color, preserving a fresh sakura pink while maintaining a clean, neutral daylight balance. Neutral spring daylight reaches the subject’s face, creating subtle light-and-shadow contrast on the skin without warm coloration. The environment consists only of blooming cherry blossom trees, evoking purity, renewal, and quiet seasonal beauty.
 
-      The visual style should present a high-angle overhead CCTV perspective within a 2×2 four-frame collage. Each frame should include subtle labels such as “CAMERA 1,” “CAMERA 2,” “CAMERA 3,” and “CAMERA 4,” along with a small red “REC” icon. A light fisheye distortion should be visible to mimic elevator surveillance lenses. The elevator interior must feature metallic walls and accurate reflections that remain consistent across all four images, but the lighting and overall atmosphere should feel soft, bright, clean, and pastel-tinted—similar to a Korean-style photo booth—while still maintaining the CCTV framing and angle.
+      Clothing: If the subject is female: a flowing white long-sleeve one-piece LONG dress with a gently cinched waist, delicate ruffle details, and light, graceful fabric. If the subject is male: a white top layered with a cream knit cardigan, paired with dark brown wide-leg trousers, conveying a calm, refined spring aesthetic. Clothing must appear natural and realistic, with no dramatic styling.
+      If the subject is an animal, no clothing or accessories are worn.
 
-      The subjects’ poses and interactions should feel playful and casual, such as making peace signs, leaning into each other, hugging, making cute expressions, or pointing toward the camera. The mood should remain fun and natural, similar to a Korean-style photo booth but presented as CCTV footage. Identity preservation is critical—faces must remain exactly the same as in the uploaded photos, with no stylization, no added accessories unless already present in the images, and no changes to makeup, lighting on the face, or skin texture. No beauty filters or face-editing effects should be applied.
+      Image 1 — Medium Close-Up: The camera frames the subject from the chest upward only. The subject stands beneath blooming cherry blossom trees in a slight side-facing pose, gently tilting the head upward toward the sakura above. Neutral spring sunlight filters through the cherry blossoms and falls directly onto the subject’s face, creating visible but soft natural shadows across the facial contours while maintaining a clean, neutral tone without warm coloration. A small number of cherry blossom petals drift lightly through the scene, creating a soft sakura rain, with all petals remaining completely clear of the face at all times. The background is densely filled with cherry blossoms and branches, softly blurred with a shallow depth of field. One hand is gently raised to lightly touch or hold a nearby cherry blossom branch in a natural, delicate manner. The expression is calm and reflective.
 
-      The final output should be a realistic four-frame elevator CCTV-style collage featuring the two uploaded subjects from a corner-mounted surveillance angle, showing playful poses, consistent clothing, accurate proportions, and perfectly preserved facial identity.
-    reference_folder: ""
-    use_comparison_template: false
+      Image 2 — Long Shot: The camera frames the subject from the upper thighs upward only; legs below the thighs and all footwear are completely out of frame. The subject walks away from the camera along a petal-covered path, surrounded exclusively by rows of fully blooming cherry trees. While walking forward, the subject gently turns their head to look back over the shoulder toward the camera with a warm, spontaneous smile. The subject’s body orientation must be different from the other two panels, ensuring that each panel presents a distinct body-facing direction. The movement feels light and unposed, as if captured mid-step. The expression is bright, relaxed, and genuine, conveying joy and fleeting springtime warmth.
+
+      Image 3 — Close-Up: The camera frames the subject’s face and neck from a gentle side angle. The subject looks slightly away from the camera, not directly into the lens. Soft, neutral daylight filters through the cherry blossom canopy and illuminates the subject’s face, creating gentle highlights and natural shadow patterns across the skin to enhance depth, while strictly avoiding warm or yellow tones. A few cherry blossom petals drift lightly through the surrounding air, suggesting a sparse, gentle sakura fall, with all petals staying entirely outside the facial area and never obscuring facial features. The background is composed almost entirely of softly blurred cherry blossoms, forming an immersive pink floral backdrop. The eyes appear clear, peaceful, and quietly emotional, capturing an intimate moment of springtime stillness.
     use_random_source_selection: false
     use_deterministic_random: false
+    random_seed: 42
     min_images: 2
     max_images: 4
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0129 3 Styles/0129 鐵達尼號
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Use the two uploaded people as the only subjects, preserving their real identities exactly as in the uploaded photos. Their faces, facial features, bone structure, hairstyles, skin tone, and expressions must remain unchanged. The system must not modify their proportions, makeup style, jawline, nose, or eyes, and must not apply beautification, aging, stylization, smoothing, or add any additional people.
-
-      Clothing follows a strict identity rule:
-      If the uploaded pair is one male and one female, the male must wear Jack’s outfit—an off-white collarless shirt with a black vintage suit jacket in early-1900s Titanic style—and the female must wear Rose’s outfit—a white lace corset-style top with a black outer shawl and a vintage floral silk scarf draped loosely over both forearms, hanging freely and flowing outward just like in the original Titanic movie poster (the scarf must NOT be tied around the neck).
-      If both uploaded people are male, they must both wear Jack’s outfit.
-      If both uploaded people are female, they must both wear Rose’s outfit with the same forearm-draped, flowing silk scarf placement, never around the neck.
-
-      Pose assignment rule:
-      If the pair is one male and one female, the female wearing Rose’s outfit must stand in front and be embraced from behind by the male wearing Jack’s outfit.
-      If the uploaded people are the same gender, the front/back positions must be assigned randomly, but still follow the same intimate Titanic-style embrace.
-
-      Create a realistic Titanic-style movie poster that recreates the emotional intimacy of the original 1997 promotional imagery. The subject standing behind wraps their arms gently around the waist of the subject in front. Both lean slightly toward each other with soft, intimate body language and gaze deeply into each other’s eyes rather than looking at the camera. Their faces must feel close, romantic, and emotionally connected, echoing the iconic Titanic embrace.
-
-      Recreate the cinematic atmosphere of the Titanic ship deck with soft golden-hour light on their faces, a faint halo-like backlight behind their heads, and blurred hints of ship railings and heavy ropes in the background. No modern elements or additional people may appear. The overall color styling must match the warm vintage Titanic film aesthetic with golden-brown highlights, gentle film-like contrast, subtle haze, soft glow, fine grain, and deep, romantic tones without harsh saturation.
-
-      At the bottom center of the poster, include the title “ETERNIA” in a large serif typeface with a metallic gold-white gradient and wide letter spacing. Above the title,  include the director credit “A LOVE BEYOND TIME” in the same elegant serif style. The title must visually integrate into the composition with thin decorative horizontal lines above and below the word “ETERNIA,” matching the authentic movie poster layout.
-
-      The final poster must feel emotional, cinematic, warm, elegant, and consistent with a high-budget Titanic romance poster, maintaining perfect identity preservation of the two uploaded subjects, with no distortions, incorrect limbs, or extra reflections or figures.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    use_deterministic_random: false
-    min_images: 2
-    max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0129 3 Styles/0129 花束般的戀愛
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Use the two uploaded people as the only subjects. Their real identities must remain perfectly accurate to the uploaded photos. Do not alter their faces, facial features, bone structure, skin tone, expressions, makeup style, hairstyle, or proportions. Do not beautify, stylize, smooth, age, or replace them with any other person. No additional people may appear.
-
-      Create a movie poster inspired by the Japanese film “We Made a Beautiful Bouquet,” capturing an intimate, warm, extremely close-up moment between the two subjects. The framing must be very close to their faces, focusing on their eyes and expressions.
-
-      Clothing assignment (very important):
-      • Any male subject must wear a white inner shirt with a soft blue knitted cardigan on top, matching the gentle, casual tone of the reference film.
-      • Any female subject must wear an orange-pink knitted sweater, and she must hold a bouquet of flowers in her arms.
-      • The female subject must also hold a piece of bread in her hand, feeding it gently to the other subject.
-
-      Scene direction:
-      Create a warm, romantic, natural-feeling moment between the two subjects. The female subject looks at the other person with a soft, happy expression full of affection. The feeding gesture must look natural, delicate, and intimate. The other subject leans slightly toward her, receiving the bread gently. Their faces must be close, with soft sunlight illuminating their skin.
-
-      Lighting & atmosphere:
-      Use bright, soft Japanese-style daylight with a dreamy emotional tone. The edges of the frame should feel slightly hazy with strong depth-of-field separation: sharp focus on their eyes and faces, smooth transitions upward and outward. The bouquet should appear airy and bright, blending beautifully with the soft lighting.
-      Apply a Japanese-style cool, blue-leaning color palette throughout the scene—a gentle cold-tone film look, clean, soft, slightly desaturated, and emotionally subtle—while maintaining the original cinematic softness.
-
-      Typography (critical):
-      At the bottom of the poster, transition into a subtle, reduced-height white area with gentle, minimal wave-like edges—not too tall, not too dramatic, just enough to host the title cleanly.
-
-      Inside this white section, place the main title:
-
-      恋をしている日々
-
-      The title must use a typeface matching the original film poster—an elegant, delicate, lightly handwritten-style serif font with soft curves. The characters 「恋」 and 「日」 must appear slightly larger than 「をしている」 and 「々」, following the hierarchy of the original design.
-      The entire title must be rendered in a deep brown color.
-
-      Directly beneath the title, add two thin, hand-drawn-style decorative straight lines of equal thickness, also in deep brown.
-
-      Styling notes:
-      The poster must look like an authentic romantic Japanese film poster—emotional, tender, soft daylight, cinematic, and close-up on love and expression. No parody, no harsh contrast, no heavy filters. Keep it gentle, natural, and film-like, with the newly applied cool-toned Japanese blue palette.
-
-      The final image must preserve perfect facial identity, intimate emotion, soft lighting, soft bokeh, correct clothing, correct bouquet + bread interaction, and a clean, readable Japanese title in the gently waved white area with uniform title color and the two intersecting hand-drawn decorative lines at the far right.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    use_deterministic_random: false
-    min_images: 2
-    max_images: 4
-    num_iterations: 50
-
-
-# Comments and documentation
 comments:
-  folder_structure: "Each task folder should contain 'Source' and 'Generated_Output' subfolders. For multi-image tasks, also include 'Additional' subfolder."
-  reference_folder: "Optional: Path to folder containing third set of images for 3-way comparison"
-  template_usage: "use_comparison_template: true uses comparison_template_path (3 placeholders), false uses template_path (2 placeholders)"
-  model: "Gemini model to use for generation. 'gemini-2.5-flash-image' (max 3 images, faster), 'gemini-3-pro-image-preview' (max 14 images, better quality). Must be specified per task; defaults to 'gemini-2.5-flash-image' if omitted. Root-level model is ignored."
+  folder_structure: Each task folder should contain 'Source' and 'Generated_Output' subfolders. For multi-image tasks, also include 'Additional' subfolder.
+  reference_folder: 'Optional: Path to folder containing third set of images for 3-way comparison'
+  template_usage: 'use_comparison_template: true uses comparison_template_path (3 placeholders), false uses template_path (2 placeholders)'
+  model: Gemini model to use for generation. 'gemini-2.5-flash-image' (max 3 images, faster), 'gemini-3-pro-image-preview' (max 14 images, better quality). Must be specified per task; defaults to 'gemini-2.5-flash-image' if omitted. Root-level model is ignored.
   resolution: "Output resolution. Options: '1K' (default). Must be specified per task if non-default value is needed."
   aspect_ratio: "Output aspect ratio. Valid options: '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'. If omitted, auto-detects the closest ratio from source image dimensions."
-  use_multi_image: "Set to true to enable multi-image mode from Additional folder, false for single-image mode"
-  output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report. Example: with 4 tasks and group_tasks_by=4, creates 1 report; with 8 tasks, creates 2 reports."
-  
+  use_multi_image: Set to true to enable multi-image mode from Additional folder, false for single-image mode
+  output_group_tasks_by: 'Set to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks into one combined report. Example: with 4 tasks and group_tasks_by=4, creates 1 report; with 8 tasks, creates 2 reports.'
   random_source_selection:
-    description: "Mode for selecting N images from Source folder per API call (images can be reused)"
-    use_random_source_selection: "Set to true to enable random source selection mode"
-    min_images: "Minimum images per API call (default: 1)"
-    max_images: "Maximum images per API call (default: model max, e.g., 3 for flash, 14 for pro)"
-    num_iterations: "Number of API calls to make. Defaults to number of source files if omitted."
+    description: Mode for selecting N images from Source folder per API call (images can be reused)
+    use_random_source_selection: Set to true to enable random source selection mode
+    min_images: 'Minimum images per API call (default: 1)'
+    max_images: 'Maximum images per API call (default: model max, e.g., 3 for flash, 14 for pro)'
+    num_iterations: Number of API calls to make. Defaults to number of source files if omitted.
     notes: |
       - All images in 'Source' folder - no 'Additional' folder needed
       - num_iterations controls API call count (defaults to source file count)
@@ -148,12 +67,11 @@ comments:
       max_images: 5
       num_iterations: 50  # Optional: defaults to number of source files
       model: gemini-3-pro-image-preview
-  
   multi_image_config:
-    description: "Configuration for multi-image generation (Source + Additional folders mode)"
-    enabled: "Must be true to use multi-image features"
-    mode: "sequential: consistent reproducible pairing | random_pairing: randomly select from Additional folder"
-    folders: "Array of folder paths to select additional images from (typically ['../path/to/folder/Additional'])"
-    allow_duplicates: "true for sequential mode (recommended) | false: try to avoid repeating combinations in random mode"
+    description: Configuration for multi-image generation (Source + Additional folders mode)
+    enabled: Must be true to use multi-image features
+    mode: 'sequential: consistent reproducible pairing | random_pairing: randomly select from Additional folder'
+    folders: Array of folder paths to select additional images from (typically ['../path/to/folder/Additional'])
+    allow_duplicates: 'true for sequential mode (recommended) | false: try to avoid repeating combinations in random mode'
   multi_image_example_single: "Set 'use_multi_image': false to process only images from Source folder without additional images"
   multi_image_example_dual: "Set 'use_multi_image': true with multi_image_config to pair Source images with Additional folder images sequentially"
