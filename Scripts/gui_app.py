@@ -900,7 +900,7 @@ class AutomationGUI:
         elif field_type == 'dropdown':
             options = field.get('options', [])
             var = tk.StringVar(value=str(default) if default else '')
-            widget = ttk.Combobox(parent, textvariable=var, values=options, width=30)
+            widget = ttk.Combobox(parent, textvariable=var, values=options, width=30, state='readonly')
             widget.pack(side=tk.LEFT)
             widget.var = var
             return widget
