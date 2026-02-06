@@ -10,50 +10,185 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBdIK5iCTJOR556XLhNNiUBAU1TJedJ3oca6JxjiE0uFZ0?e=qORkEc
-root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3bcc9e38fcb_1_0#slide=id.g3bcc9e38fcb_1_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgD6m8Y-fQBwSYSijstzgeMhATEvve-slRUT1voUT60MpTI?e=4Krg3W
+root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3bd1975c808_0_154#slide=id.g3bd1975c808_0_154
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0204 4 Styles Creative Studio/0204 櫻花微夢
+  - folder: ../Media Files/Nano Banana/0206 3 Styles Creative Studio/0206 櫻花攝影
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
-      Theme: “Cherry Blossom Soft Dream (Wrapped in Sakura)”
+      Please use all uploaded photos as the only source of characters in the image. Preserve every person’s real face, facial features, bone structure, skin tone, hairstyle, clothing, and overall identity exactly as shown in their original photos. Do not beautify faces, smooth skin, stylize features, alter proportions, change age, or modify identity in any way. No additional people may appear. Each uploaded person must appear only once in the final image, with no duplication, cloning, or repeated faces.
 
-      The user will upload 1 to 4 reference photos, which may include humans and/or pets.
-      The total number of subjects in the final image must exactly match the number of uploaded photos.
+      Create a vertically oriented image divided clearly into two stacked horizontal frames, resembling a casual photo exchange between friends. The overall mood should feel natural, playful, and nostalgic, inspired by a Japanese springtime aesthetic. The setting should feel like a cherry-blossom-filled park in peak sakura season, with blooming cherry trees, soft sunlight, and a relaxed outdoor picnic atmosphere. The color tone should be light, airy, and slightly warm, emphasizing soft pinks, fresh spring light, and gentle daylight. The two stacked frames must be seamlessly stitched together with no white borders, gaps, margins, or visible separators of any kind. The transition between the upper and lower frames should be clean and continuous, forming a single unified image.
 
-      No additional people or animals may be generated. Only the individuals or pets provided by the user may appear in the final image.
+      [Upper Frame: The Photographer]
+      In the upper frame, randomly select one single person from the uploaded users to act as the photographer. This person must appear alone in the upper frame.The character should hold a small camera or film camera in both hands, naturally and gently bringing it close to their face, rather than actively taking a picture. The camera should rest casually against the face, covering only one eye, while the other eye remains clearly visible. Both eyes must be open, relaxed, and clearly visible with no blinking, squinting, or eye closure. The camera must not cover both eyes or obscure the entire face. The background is dominated by cherry blossom trees in full bloom, with small glimpses of soft blue sky visible between the branches and treetops. The pose should feel natural, casual, and intentional, as if capturing a candid spring moment. The photographer must be fully intact within the upper frame with no cut-off limbs or rendering errors.
 
-      Strict facial identity preservation is mandatory. Each human subject’s face must remain fully consistent with the uploaded photo and be immediately recognizable as the same person. Facial features must not be redesigned, stylized, or altered.
+      [Lower Frame: The Viewfinder Scene]
+      In the lower frame, depict all remaining uploaded users together, excluding the person used in the upper frame. This represents the scene being photographed. The picnic setting takes place on grass partially covered with fallen cherry blossom petals, with patches of fresh green grass still clearly visible rather than being fully covered. The picnic blanket is a light blue checkered picnic blanket. Tables are prohibited.Picnic food includes light spring snacks such as three-color dango, onigiri (rice balls), and Drinks or cups for Japanese picnicscute pink cherry-blossom-themed wagashi placedand  naturally on the blanket. The background consists entirely of the grass and the picnic blanket. Characters should be interacting casually, sitting close together with lively, genuine expressions (peace signs, leaning in, laughing).
 
-      Generate a soft top-down (overhead) composition with a closer camera distance, creating a more intimate framing than a wide overhead shot.
+      [Crucial: Viewfinder Overlay Construction]
+      The lower frame must feature a strict and absolute "Edge-to-Edge Viewfinder" overlay.
 
-      Natural pose variation requirement:
-      Subjects should appear relaxed and natural rather than stiff or posed. Hands and body posture may vary organically, such as gently holding a cherry blossom, resting on one side while supporting the body with an arm on the ground, or lying with hands softly crossed behind the head as a pillow. The pose should feel lively, casual, and comfortable.
+      The Border: The entire lower frame must be enclosed by a single, thick, solid black rectangular bezel that acts as the absolute physical limit of the image. This black border must be perfectly flush with ALL FOUR edges of the lower frame canvas, including the TOP EDGE. The top border line must align exactly with the upper boundary of the lower frame and must never float, drift, or appear lower inside the image. There must be ZERO padding, ZERO margins, and absolutely NO white space between the black line and the actual edge of the image file. The black line is the final, hard boundary.
 
-      Single-subject framing rule:
-      When only one subject is present, the head should occupy approximately 50% of the total image height, ensuring a closer, more immersive portrait while still clearly showing the subject lying on the sakura-covered ground.
+      Closed Loop: The black border must be a complete, unbroken, four-sided closed rectangle. Do not use disconnected corner brackets ( ｢ ｣ ) or broken lines. It must be a solid connected box that hugs the very edge of the image boundary, containing the entire scene.
 
-      Multi-subject framing rule:
-      When two to four subjects are present, maintain a balanced overhead composition that comfortably fits all subjects within the frame without excessive spacing, while preserving the lying-down perspective.
+      UI Elements: Inside this black perimeter, overlay minimal white camera UI elements: a small "REC" indicator (top left corner) and a battery icon (top right corner). These icons must sit inside the image, close to the black border.
 
-      All subjects should be lying on a grass field densely and heavily covered with cherry blossom petals, forming a thick, continuous layer. Green grass should be only faintly visible beneath the blossoms.
+      No Other Guides: Absolutely NO grid lines, NO rule-of-thirds lines, NO focus squares in the middle, and NO face-detection boxes. Keep the center of the image completely clean.
 
-      Cherry blossom color enforcement:
-      Even under soft lighting, petals must preserve a gentle blush tone, with no washed-out or colorless appearance.
+      [Atmosphere]
+      Both frames share consistent lighting: soft daylight, gentle shadows, springtime warmth. The final image should clearly read as a "Photographer (Top) vs. What They See (Bottom)" narrative, with accurate identities and a clean, edge-to-edge viewfinder graphic in the bottom half.
 
-      Large, softly blurred cherry petals should appear in the foreground, occupying a noticeable portion of the frame and enhancing depth.
+      [Clothing Update]
+      Replace all character outfits with natural spring outfits suitable for a cherry blossom picnic. Clothing colors should be soft and seasonal, such as white, pastel pink, light yellow, and light blue. Outfi, blouses, shirts, jeans, tailored trousers, or skirts. The overall styling should feel casual, clean, and appropriate for early spring, without dramatic fashion exaggeration. If the subject is an animal, the subject must not wear any clothing or accessories
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 2
+    max_images: 4
+    num_iterations: 50
 
-      A small number of petals should rest naturally on hair, clothing, or fur.
+  - folder: ../Media Files/Nano Banana/0206 3 Styles Creative Studio/0206 櫻花肖像照
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |
+      Using the uploaded person as the sole subject, keep their identity, facial features, skin tone, hairstyle, and proportions recognizable and consistent. Do not change the person’s identity. Only change the scene, lighting, and pose to match the spring cherry-blossom reference collage.
 
-      All human subjects must wear spring-inspired outfits, such as pastel coats, light scarves, or soft seasonal fabrics.
+      Strict negatives
+      No extra people, no duplicate faces, no face swapping, no stylization/anime, no gender cross-dressing, no feminization of male subjects, no heavy beauty retouch, no over-whitening, no text, no watermark, no stickers, no added accessories, no extra props beyond dango (TL) and sakura flower (BR, female only).
 
-      Lighting and atmosphere:
-      Introduce a subtle and gentle play of light and shadow across the scene. The lighting should be soft and minimal, adding slight dimensionality and warmth without overpowering the dreamy, delicate atmosphere.
+      Generate a perfect 2×2 four-panel collage (equal panels, seamless edge-to-edge, no borders / no dividers / no white lines).
 
-      The overall mood should remain romantic, evoking the feeling of being quietly wrapped in falling sakura petals.
+      All 4 panels must keep the same outfit.
+
+      If the subject is female: a white, semi-sheer chiffon blouse (soft drape, slightly translucent sleeves) paired with a light beige pleated skirt (fine vertical pleats).
+      If the subject is male: a plain white cotton top (opaque, non-sheer, non-translucent) paired with light beige long trousers.
+      Gender expression must strictly match biological sex.
+      Male subjects are strictly forbidden from wearing skirts, pleated skirts, chiffon, sheer fabrics, blouses, ribbons, bows, or any feminine-coded garments.
+      Do NOT feminize male clothing silhouettes.
+      No outfit variation across panels.
+
+      Overall look (match reference): bright, airy Japanese spring photo tone with Fuji-like clean colors, soft pastel pink sakura, and a stable, muted, low-saturation sky-blue that does not overpower the subject.
+      Natural daylight only (no studio look). Gentle high-key exposure, soft shadows, slight film-like clarity. Shallow depth of field with creamy bokeh.
+      No text, no stickers, no filters, no extra props besides the food/flower described.
+
+      Panel-by-panel composition (STRICT)
+
+      Top-left (TL) — “Eat dango” close-up, FIXED layered blue sky
+
+      A half-body-to-chest portrait (framing includes head + shoulders + upper chest; crop around mid-chest).
+      Pose & angle MUST match reference: the subject is in a 3/4 profile, face turned slightly to the left, chin slightly lifted.
+      Eyes must NOT look at the camera; gaze is forward-left or off-camera.
+      Hold a three-color dango skewer (pink/white/green) near the lips and gently bite/taste it WITHOUT showing teeth (lips softly closed on the dango, no open-mouth teeth).
+      Hand action: right hand holds the skewer; wrist relaxed; fingers naturally curved.
+
+      Background: a clear, layered spring sky-blue background occupying ~35–40% of the frame.
+      The sky must show natural tonal variation and depth, with subtle gradients from pale cyan to soft azure,
+      and faint, soft-edged white clouds to avoid any flat or solid-color appearance.
+      The sky must feel bright, transparent, and sunlit, never gray, misty, foggy, or desaturated.
+      Sakura branches may appear only as light framing elements near the edges and must NEVER dominate or cover the sky or face.
+
+      Lens/DOF: 85mm look, shallow depth; background clouds and blossoms softly blurred.
+
+      Top-right (TR) — Standing under sakura, hand shading eyes
+
+      A wider half-body portrait showing head to upper thighs for balanced proportions.
+      The figure stands under a dense cherry blossom tree; the right hand is raised above the forehead to shield the sunlight, elbow slightly outward.
+      Face turned slightly up-right with a soft smile.
+      Eyes must NOT look at the camera.
+      Background: cherry blossoms fill most of the frame (tree canopy), warm spring light. Minimal visible sky.
+
+      Bottom-left (BL) — Side profile reaching blossoms
+
+      A three-quarter / half-body side-profile shot, subject placed slightly left in frame.
+      Subject faces left, head tilted upward, one arm raised to lightly touch or reach a sakura branch above.
+      Face visibility rule: approximately 45% of the face is visible, with both eyes faintly visible through angle and depth.
+      Branches and blossoms must NOT block the face or eyes.
+      Background: dense sakura canopy with soft pink bokeh; dreamy, gentle glow.
+      Eyes must remain off-camera.
+
+      Bottom-right (BR) — Close-up, direct gaze, FIXED layered blue sky with depth
+
+      A tight close-up portrait (head + shoulders, minimal torso).
+      Pose MUST reference the sample: shoulders angled, one shoulder slightly closer to camera; one arm crosses or rests near the chest/shoulder to form a soft diagonal line.
+      This is the ONLY panel where the subject may look toward the camera, with a natural, unforced, slightly downward gaze.
+
+      Background: a bright, layered spring sky-blue background occupying ~35–40% of the frame,
+      with clear depth separation and natural atmospheric perspective.
+      The sky must display visible tonal layers (light-to-mid blue variation),
+      soft cloud presence, and subtle sunlight gradation to create dimensionality.
+      Absolutely NO flat color fields, NO gray haze, NO mist, NO milky fog, and NO low-contrast wash.
+      The overall feeling must be crisp, transparent, and sunlit, evoking a clear early-spring day.
+
+      Foreground bokeh (MANDATORY): softly out-of-focus sakura blossoms in the lower foreground,
+      never covering eyes, nose, or mouth.
+      A few sakura petals may drift gently in the air to enhance depth.
+
+      Lens/DOF: 85–105mm look, shallow depth, creamy bokeh.
+
+      Sakura distribution & sky consistency rules (IMPORTANT)
+
+      For BOTH Top-left (TL) and Bottom-right (BR), sky-blue backgrounds are mandatory and must remain visually consistent.
+      Sky-blue must never appear flat, gray, foggy, or studio-like.
+      TL & BR: sky-blue is clearly visible with layered depth and gentle contrast.
+      TR & BL: blossoms dominate; sky plays a secondary role.
+      Foreground blossoms are bokeh only; the subject’s face is always sharp and unobstructed.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    use_deterministic_random: false
+    random_seed: 42
+    min_images: 2
+    max_images: 4
+    num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0206 3 Styles Creative Studio/0206 棒球風網美照
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |
+      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME) :
+      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the SUBJECT’s face.
+      The generated face must be the SAME REAL SUBJECT as in the input photo, copied directly from the input, NOT reconstructed, NOT reinterpreted.
+      Do NOT beautify, optimize, stylize, idealize, or normalize the face in any way.
+      Do NOT adjust facial proportions, features, symmetry, skin texture, or age.
+      Do NOT change ethnicity, race, or regional facial characteristics.
+      If the face does not immediately look identical to the input SUBJECT, the result is INVALID and must be regenerated.
+      The face must be directly copied from the input photo at the pixel-structure level, not re-generated or averaged.
+
+      SUBJECT & SOURCE IMAGE RULES: 
+      Use the uploaded user photos as the ONLY visual sources for all SUBJECTS.
+      - The number of SUBJECTS in the final image must EXACTLY match the number of uploaded photos (1–4 only)
+      - No extra SUBJECTS
+      - No duplicated faces
+      - No merged identities
+      - No face swapping
+      All facial features must come ONLY from the input photos.
+
+      - MANDATORY STYLING ADJUSTMENT:
+      Refine and blend SUBJECT outfits into a mix of retro varsity aesthetic, 90s preppy style, and city-girl streetwear.
+
+      Tight, symmetrical cinematic fashion photography as a high-fashion magazine cover, with no text, no typography, no logos, and no graphic overlays.
+      The camera is positioned slightly above eye level with a gently tilted wide-angle view, creating mild downward compression and strong vertical depth; avoid fully side-on or pure profile viewpoints. The camera remains precisely aligned with the stadium seating lines, forming strong leading lines toward a clear vanishing point.
+
+      Subjects are casually dispersed across nearby rows of forest-green, American vintage-style stadium seats. While the seats themselves remain uniformly oriented in the same forward-facing direction with no variation or rotation—appearing clean and well-maintained—the subjects break this linear rigidity with dynamic, high-fashion poses, such as leaning asymmetrically on armrests or subtly tilting their torsos. 
+
+      Complementing this posture, most subjects are not looking directly at the camera, captured in candid, off-guard moments to enhance a natural, lived-in fashion atmosphere, while maintaining cool, detached, confident high-fashion editorial expressions.
+
+      Subjects may hold casual stadium snacks or cheering props in vintage packaging, featuring controlled red and yellow accents that add visual highlights without overpowering the overall color palette. No flags.
+
+      The background is minimalist and tightly cropped, showing only geometric forest-green plastic seats and the stadium’s metal roof structure features clean, revealing a clear blue sky with natural, realistic cloud formations. Ensure the roof follows a logical geometric grid with smooth, finished edges, avoiding any fragmented or jagged appearances.
+
+      Soft, diffused lighting creates a timeless editorial atmosphere with gentle contrast, restrained saturation, and subtle fine-grain texture, evoking an established fashion sensibility without referencing any specific era.
+
+      35mm lens style, clean composition, photorealistic 8k, sharp focus on all subjects.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
@@ -61,169 +196,6 @@ tasks:
     random_seed: 42
     min_images: 1
     max_images: 4
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0204 4 Styles Creative Studio/0204 春光微醺
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      A nostalgic, cinematic medium shot exactly mirroring the input subject's 100% identical face shape, specific facial features, and exact hairstyle; the subject maintains a serene, closed-mouth expression with no teeth showing. If the subject is a human, they wear the exact same delicate cream-colored eyelet lace blouse with a clearly defined, structured Cuban collar and intricate perforated patterns. If the subject is an animal, it must be depicted naturally without any clothing, maintaining its raw anatomical form while preserving the specific facial markers of the input.
-
-      In the foreground, scattered individual cherry blossoms and slender, delicate floral stems occupy the right mid-ground and immediate foreground, rendered with a soft-focus blur that creates a translucent, airy veil over the subject's left cheek and shoulder, avoiding any dense clusters. The sunlight, filtering through the sparse floral canopy, casts distinct, sharp lace-like shadows of individual petals and fine twigs across the lower-left portion of the subject's form (either the white blouse or the animal’s natural fur), with the shadows following the soft contours of the surface.
-
-      The aesthetic is strictly a vintage 35mm film style with a muted color palette and soft contrast. The sky is rendered in a pale, desaturated periwinkle, while the blossoms feature an interplay of pale shell-pink and dusty rose. The foliage is a deep, muted olive-charcoal. Captured during the golden hour, the subject's skin or fur glows with a translucent, waxy warmth. Shadows are lifted and tinged with a subtle warm amber hue, avoiding pure blacks. The image is characterized by a natural film grain and gentle lens softening, with the background dissolving into a creamy bokeh of muted green and hazy sunlight, perfectly replicating the textural soul of a vintage film photograph.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    use_deterministic_random: true
-    random_seed: 42
-    min_images: 1
-    max_images: 1
-    num_iterations: 100
-
-  - folder: ../Media Files/Nano Banana/0204 4 Styles Creative Studio/0204 夜櫻微光
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Cinematic night photography, 3/4 side profile of a subject gazing upward, wearing a school-inspired outfit: a white button-up shirt, a deep burgundy tie, and a dark navy blue knit sweater. The subject holds a clear transparent umbrella covered in glistening raindrops. A powerful, hazy warm-white backlight (3000K) originates from behind the umbrella, creating intense halation and soft-glow diffusion that blurs the subject's edges.
-      The frame is filled with a chaotic and dense arrangement of cherry blossoms: massive out-of-focus floral clusters in the extreme foreground, layered branches in the midground, and a continuous rain of falling petals with varied motion blur. Multiple translucent circular lens flares, rainbow-edged ghosting, and large soft bokeh discs are scattered asymmetrically, overlapping with the petals and the umbrella to create a messy, dreamlike depth.
-      The image is intentionally not over-sharpened, featuring 35mm film grain, subtle optical imperfections, and a soft-focus aesthetic. The background is a solid deep black void, emphasizing the contrast between the warm-white light spill and the dark navy clothing. High visual density, atmospheric mist, ethereal and fleeting. --ar 3:4 --stylize 300 --v 6.0
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    use_deterministic_random: false
-    random_seed: 42
-    min_images: 1
-    max_images: 1
-    num_iterations: 50
-
-  - folder: ../Media Files/Nano Banana/0204 4 Styles Creative Studio/0204 春日映瞳
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |
-      Ensure the subject’s facial features, proportions, and overall appearance closely match the provided input image.
-      In all three panels, eye contact with the camera is strictly forbidden.
-      The subject shows natural facial expression with subtle, nuanced emotion.
-
-      A seamless vertical triptych composed of three horizontal panels with no visible borders or separators.
-      Each panel uses a distinct camera distance to create cinematic hierarchy.
-      Ultra-realistic cinematic photography, natural optics, shallow depth of field.
-
-      Overall exposure slightly brighter (~10%) but with clearly increased contrast.
-      Lighting must produce strong separation between highlights and shadows,
-      avoiding flat or evenly distributed illumination.
-
-      Primary light is strong directional daylight.
-      Secondary light is soft backlit daylight, creating controlled highlight bloom and subtle halation through lens response.
-      No mist, no fog, no dreamy filters — atmosphere comes purely from real light interaction.
-
-      The scene contains a subtle pink-tinted ambient atmosphere,
-      as if spring light is diffused and reflected by cherry blossoms into the surrounding air.
-      Pink tone exists in the air and light, not as a color filter.
-
-      ---
-
-      Top panel (closest framing)
-
-      A very close-up portrait of the subject, framed tighter than the bottom panel.
-      Cherry blossom branches cross the foreground.
-
-      The body remains turned to the side while the head gently turns back, with the gaze drifting toward something behind, not forward.
-      The expression is calm and gentle, with no sense of sadness or melancholy.
-
-      Clear, direct spring sunlight visibly strikes the face,
-      creating strong highlights across the cheeks, nose bridge, and eyes.
-      The face must appear distinctly sunlit and luminous.
-      Shadows are present but pushed onto surrounding blossoms and background,
-      not flattening or dimming the face.
-
-      A light breeze moves multiple strands of hair,
-      with several fine hairs drifting freely across the face in mid-air.
-      Foreground petals remain softly out of focus.
-      Small openings between branches reveal soft blue sky in the background.
-
-      ---
-
-      Middle panel (visual anchor)
-
-      An extreme close-up of one eye.
-      The gaze is angled upward toward the light source above,
-      clearly not looking at the camera.
-
-      Only a very limited portion of the face is visible.
-      The framing must strictly exclude the nose, nostrils, and nose bridge.
-      Only the eye area and a small surrounding region of skin are revealed,
-      as if the eye is glimpsed through a narrow opening between blossoms.
-      The lower edge of the frame is cropped above the nose line,
-      ensuring no nasal features appear.
-
-      Cherry blossoms, petals, and thin branches densely occupy the foreground.
-      Only a small opening reveals part of one eye.
-      The nearest one or two blossoms are softly blurred due to shallow depth of field.
-
-      A powerful, focused beam of sunlight breaks through the blossoms
-      and lands directly on the eye area.
-      The light is noticeably bright and intense,
-      significantly brighter than the rest of the frame.
-
-
-      Petal and branch shadows are sharply defined,
-      clearly showing sunlight passing through layered blossoms
-      rather than diffused evenly.
-
-      The eye contains a strong, luminous highlight with slight flare.
-      The iris shows natural radial texture and tonal variation,
-      but remains realistic in scale and coloration.
-      Avoid exaggerated iris size, overly saturated colors,
-      or unnatural contrast commonly associated with AI-rendered eyes.
-
-      The iris should appear subtly translucent and layered,
-      with restrained contrast and believable depth.
-      The pupil remains crisp, deep, and clearly separated from the iris.
-
-      Surrounding skin remains darker by comparison,
-      preserving dramatic contrast and cinematic focus.
-      Natural skin texture is fully preserved with no smoothing.
-
-
-      ---
-
-      Bottom panel (more distant)
-
-      A medium side-profile shot of the subject, framed wider and farther than the top panel.
-      The head is turned slightly upward and away.
-      The subject does not look at the camera.
-
-      Cherry blossoms densely surround and envelop the subject.
-      Sunlight selectively illuminates parts of the face and hair,
-      while deeper shadows remain in surrounding foliage,
-      enhancing depth and contrast.
-
-      Out-of-focus green tones from nearby trees appear in the background,
-      contrasting naturally with the pink blossoms.
-
-      ---
-
-      Overall color & cinematic tone
-
-      High-contrast cinematic lighting with preserved shadow depth.
-      Warmth leans toward soft pink, peach, and warm-white tones — not yellow or amber.
-      Highlights remain crisp and luminous.
-      Shadows stay deep, warm, and dimensional, never gray or flat.
-
-      Avoid flat lighting, evenly lit faces, golden-hour yellow,
-      over-soft skin, glowing pupils, heavy bloom, haze, fog,
-      text, logos, or watermarks.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    use_deterministic_random: false
-    random_seed: 42
-    min_images: 1
-    max_images: 1
     num_iterations: 50
 
 
