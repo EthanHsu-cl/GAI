@@ -569,6 +569,7 @@ The framework uses an auto-discovery handler system:
 - **`HandlerRegistry`** - Auto-discovers and registers API handlers
 - **`BaseAPIHandler`** - Common processing logic (validation, metadata, retries)
 - **`UnifiedAPIProcessor`** - Image conversion, video extraction, optimal ratio matching
+  - **Sleep prevention** – On macOS, each processor instance spawns its own `caffeinate -di` subprocess tracked by PID. Cleanup is guaranteed via `finally`, `atexit`, and `SIGINT`/`SIGTERM` signal handlers so orphaned processes cannot block system sleep. Multiple concurrent script instances are safe; only the owning instance's `caffeinate` is terminated.
 - **`UnifiedReportGenerator`** - PowerPoint generation with parallel metadata loading
 
 **13 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, Pixverse, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, Veo, VeoItv

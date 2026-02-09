@@ -7,6 +7,8 @@ import requests
 import base64
 import subprocess
 import platform
+import atexit
+import signal
 from datetime import datetime
 from gradio_client import Client, handle_file
 from PIL import Image
@@ -84,6 +86,9 @@ class UnifiedAPIProcessor:
         self.client = None
         self.config = {}
         self.api_definitions = {}
+        self._caffeinate_process = None
+        self._original_sigint = None
+        self._original_sigterm = None
 
         # Setup logging
         logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -1870,39 +1875,108 @@ class UnifiedAPIProcessor:
             self.logger.warning("   macOS: caffeinate not found | Other: Install wakepy with: pip install wakepy")
             return self._execute_processing()
     
+    def _cleanup_caffeinate(self):
+        """
+        Terminate the caffeinate subprocess tracked by this processor instance.
+
+        Uses SIGTERM first, falling back to SIGKILL if the process does not
+        exit within 5 seconds.  Safe to call multiple times; subsequent calls
+        are no-ops once the process has been cleaned up.
+        """
+        proc = self._caffeinate_process
+        if proc is None:
+            return
+        try:
+            if proc.poll() is None:
+                proc.terminate()
+                try:
+                    proc.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    proc.kill()
+                    proc.wait(timeout=3)
+                self.logger.info("💤 System sleep prevention deactivated")
+        except OSError:
+            pass
+        finally:
+            self._caffeinate_process = None
+
+    def _caffeinate_signal_handler(self, signum, frame):
+        """
+        Signal handler that cleans up caffeinate before re-raising the signal.
+
+        Restores the original signal handler so the default behaviour
+        (e.g. KeyboardInterrupt for SIGINT) still occurs after cleanup.
+
+        Args:
+            signum: Signal number received.
+            frame: Current stack frame.
+        """
+        self._cleanup_caffeinate()
+        # Restore original handler and re-raise so normal behaviour occurs
+        if signum == signal.SIGINT and self._original_sigint:
+            signal.signal(signal.SIGINT, self._original_sigint)
+        elif signum == signal.SIGTERM and self._original_sigterm:
+            signal.signal(signal.SIGTERM, self._original_sigterm)
+        os.kill(os.getpid(), signum)
+
     def _run_with_caffeinate(self):
         """
         Run processing with macOS caffeinate to prevent sleep.
-        
+
         Caffeinate is macOS's native tool that reliably prevents system sleep.
-        Runs caffeinate as a subprocess that wraps the entire processing.
-        
+        The caffeinate PID is tracked on the instance so cleanup is scoped to
+        this processor only — other concurrent script instances are unaffected.
+
+        Safety nets against orphaned caffeinate processes:
+        - ``finally`` block for normal completion or exceptions.
+        - ``atexit`` handler for unexpected interpreter exit.
+        - ``SIGINT`` / ``SIGTERM`` signal handlers for Ctrl+C / kill.
+
         Returns:
-            bool: True if processing completed successfully, False otherwise
+            bool: True if processing completed successfully, False otherwise.
         """
         try:
-            # Start caffeinate process in background
-            caffeinate_process = subprocess.Popen(
+            self._caffeinate_process = subprocess.Popen(
                 ['caffeinate', '-di'],
                 stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
+                stderr=subprocess.DEVNULL,
             )
-            
+            self.logger.info(
+                f"☕ caffeinate started (PID {self._caffeinate_process.pid})"
+            )
+
+            # Register safety-net cleanup handlers
+            atexit.register(self._cleanup_caffeinate)
+            self._original_sigint = signal.getsignal(signal.SIGINT)
+            self._original_sigterm = signal.getsignal(signal.SIGTERM)
+            signal.signal(signal.SIGINT, self._caffeinate_signal_handler)
+            signal.signal(signal.SIGTERM, self._caffeinate_signal_handler)
+
             try:
-                # Run the actual processing
                 result = self._execute_processing()
                 return result
             finally:
-                # Always terminate caffeinate when done
-                caffeinate_process.terminate()
-                caffeinate_process.wait(timeout=5)
-                self.logger.info("💤 System sleep prevention deactivated")
+                self._cleanup_caffeinate()
+                # Restore original signal handlers
+                if self._original_sigint:
+                    signal.signal(signal.SIGINT, self._original_sigint)
+                    self._original_sigint = None
+                if self._original_sigterm:
+                    signal.signal(signal.SIGTERM, self._original_sigterm)
+                    self._original_sigterm = None
+                atexit.unregister(self._cleanup_caffeinate)
+
         except FileNotFoundError:
-            self.logger.warning("⚠️ caffeinate command not found - running without sleep prevention")
+            self.logger.warning(
+                "⚠️ caffeinate command not found - running without sleep prevention"
+            )
             return self._execute_processing()
         except Exception as e:
+            self._cleanup_caffeinate()
             self.logger.error(f"❌ Error running with caffeinate: {e}")
-            self.logger.warning("⚠️ Falling back to execution without sleep prevention")
+            self.logger.warning(
+                "⚠️ Falling back to execution without sleep prevention"
+            )
             return self._execute_processing()
     
     def _execute_processing(self):

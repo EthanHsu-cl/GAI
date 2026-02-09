@@ -2177,7 +2177,12 @@ class UnifiedReportGenerator:
             folder_names = grouped_task.get('_folder_names', [])
             
             # Extract date from first folder (prioritize folder date over current date)
-            d = self._extract_date_from_folder(folder_names[0]) if folder_names else datetime.now().strftime("%m%d")
+            # For veo_itv, use parent folder name (contains date like "0130 6 Styles")
+            if self.api_name == "veo_itv":
+                parent_folder = grouped_task.get('_parent_folder_name', '')
+                d = self._extract_date_from_folder(parent_folder) if parent_folder else datetime.now().strftime("%m%d")
+            else:
+                d = self._extract_date_from_folder(folder_names[0]) if folder_names else datetime.now().strftime("%m%d")
             
             # Build effect string - combine all unique effects
             # For APIs with many styles, show count instead of listing all names
@@ -2603,6 +2608,11 @@ class UnifiedReportGenerator:
             folder_name = task
         elif self.api_name in ["vidu_effects", "vidu_reference", "pixverse"]:
             folder_name = Path(self.config.get('base_folder', '')).name
+        elif self.api_name == "veo_itv":
+            # For veo_itv, get parent folder (e.g., "0130 6 Styles" from "0130 6 Styles/Street Rap")
+            # since the date prefix is in the parent, not the style folder
+            folder_path = Path(task.get('folder', ''))
+            folder_name = folder_path.parent.name
         else:
             folder_name = task.get('folder', Path(self.config.get('base_folder', '')).name)
             if isinstance(folder_name, str):
@@ -2759,6 +2769,13 @@ class UnifiedReportGenerator:
             # Generate filename
             if self.api_name in ["vidu_effects", "vidu_reference", "pixverse", "kling_effects"]:
                 folder_name = Path(self.config.get('base_folder', '')).name
+            elif self.api_name == "veo_itv":
+                # For veo_itv, use parent folder (contains date like "0130 6 Styles")
+                if task.get('_is_grouped'):
+                    folder_name = task
+                else:
+                    folder_path = Path(task.get('folder', ''))
+                    folder_name = folder_path.parent.name
             else:
                 # Handle grouped tasks
                 if task.get('_is_grouped'):
@@ -2980,13 +2997,18 @@ class UnifiedReportGenerator:
                 '_all_tasks': tasks
             }
         else:
-            # Folder-based API (nano_banana, kling, runway, genvideo)
+            # Folder-based API (nano_banana, kling, runway, genvideo, veo_itv)
             # Extract folder names for the combined title
             folder_names = []
+            parent_folder_name = None  # For veo_itv, store parent folder for date extraction
             for task in tasks:
                 folder = task.get('folder', '')
                 if isinstance(folder, str):
-                    folder_name = Path(folder).name
+                    folder_path = Path(folder)
+                    folder_name = folder_path.name
+                    # For veo_itv, capture parent folder name (contains date like "0130 6 Styles")
+                    if self.api_name == "veo_itv" and parent_folder_name is None:
+                        parent_folder_name = folder_path.parent.name
                 else:
                     folder_name = folder.name if hasattr(folder, 'name') else str(folder)
                 folder_names.append(folder_name)
@@ -2998,6 +3020,8 @@ class UnifiedReportGenerator:
             combined['_group_number'] = group_num
             combined['_total_groups'] = total_groups
             combined['_folder_names'] = folder_names
+            if parent_folder_name:
+                combined['_parent_folder_name'] = parent_folder_name
             combined['_all_tasks'] = tasks
         
         return combined
