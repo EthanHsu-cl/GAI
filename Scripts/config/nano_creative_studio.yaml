@@ -7,35 +7,220 @@ output:
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgD58gET6Z-KRb_jF9u5CYj0AWZ--_eorNe_YEi0v2qhsOc?e=hOUfWc
-root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3bcf5aa7397_1_0#slide=id.g3bcf5aa7397_1_0
+root_source_video_link: 
+root_design_link: https://docs.google.com/presentation/d/166d30yVLdqoxFLlsgWfY_pdHXoDOuoiffVEkAah__ng/edit?slide=id.g3bd7d618995_31_0#slide=id.g3bd7d618995_31_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0205 櫻花日和
+  - folder: ../Media Files/Nano Banana/0209 2 Styles Creative Studio/0209 春日映瞳V5
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "9:16"
+    aspect_ratio: "3:4"
     prompt: |-
-      Use the uploaded photo as the only reference for the human subject. The person in the uploaded image must be the only human in the final result. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, facial expression, and body proportions exactly as shown in the uploaded photo. Do not beautify, stylize, replace, or reinterpret the face in any way.
+      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME) :
+      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the SUBJECT’s face.
+      The generated face must be the SAME REAL SUBJECT as in the input photo, copied directly from the input, NOT reconstructed, NOT reinterpreted.
+      If the face does not immediately look identical to the input SUBJECT, the result is INVALID and must be regenerated.
+      The face must be directly copied from the input photo at the pixel-structure level, not re-generated or averaged.
 
-      Create a three-panel vertical photo composition arranged from top to bottom, resembling a springtime cherry blossom photoshoot. Each panel features the same subject in a different pose, all set within a cherry blossom park during full sakura bloom.
+      In all three panels, eye contact with the camera is strictly forbidden.
+      The subject shows natural facial expression with subtle, nuanced emotion.
+      If the input image shows the subject wearing glasses, the glasses must remain clearly visible in all panels. Do not add glasses if the subject is not wearing glasses in the input image.
 
-      The overall color tone is bright and clear with slightly increased saturation, ensuring cherry blossoms appear soft pink rather than white. Highlights remain luminous without washing out color, preserving a fresh sakura pink while maintaining a clean, neutral daylight balance. Neutral spring daylight reaches the subject’s face, creating subtle light-and-shadow contrast on the skin without warm coloration. The environment consists only of blooming cherry blossom trees, evoking purity, renewal, and quiet seasonal beauty.
+      A seamless vertical triptych composed of three horizontal panels with no visible borders or separators.
+      Each panel uses a distinct camera distance to create cinematic hierarchy.
+      Ultra-realistic cinematic photography, natural optics, shallow depth of field.
 
-      Clothing: If the subject is female: a flowing white long-sleeve one-piece LONG dress with a gently cinched waist, delicate ruffle details, and light, graceful fabric. If the subject is male: a white top layered with a cream knit cardigan, paired with dark brown wide-leg trousers, conveying a calm, refined spring aesthetic. Clothing must appear natural and realistic, with no dramatic styling.
-      If the subject is an animal, no clothing or accessories are worn.
+      Lighting must produce strong separation between highlights and shadows, avoiding flat or evenly distributed illumination.
 
-      Image 1 — Medium Close-Up: The camera frames the subject from the chest upward only. The subject stands beneath blooming cherry blossom trees in a slight side-facing pose, gently tilting the head upward toward the sakura above. Neutral spring sunlight filters through the cherry blossoms and falls directly onto the subject’s face, creating visible but soft natural shadows across the facial contours while maintaining a clean, neutral tone without warm coloration. A small number of cherry blossom petals drift lightly through the scene, creating a soft sakura rain, with all petals remaining completely clear of the face at all times. The background is densely filled with cherry blossoms and branches, softly blurred with a shallow depth of field. One hand is gently raised to lightly touch or hold a nearby cherry blossom branch in a natural, delicate manner. The expression is calm and reflective.
+      Primary light is strong directional daylight.
+      Secondary light is soft backlit daylight, creating controlled highlight bloom and subtle halation through lens response.
 
-      Image 2 — Long Shot: The camera frames the subject from the upper thighs upward only; legs below the thighs and all footwear are completely out of frame. The subject walks away from the camera along a petal-covered path, surrounded exclusively by rows of fully blooming cherry trees. While walking forward, the subject gently turns their head to look back over the shoulder toward the camera with a warm, spontaneous smile. The subject’s body orientation must be different from the other two panels, ensuring that each panel presents a distinct body-facing direction. The movement feels light and unposed, as if captured mid-step. The expression is bright, relaxed, and genuine, conveying joy and fleeting springtime warmth.
+      The scene contains a subtle pink-tinted ambient atmosphere,
+      Pink tone exists in the air and light, not as a color filter.
 
-      Image 3 — Close-Up: The camera frames the subject’s face and neck from a gentle side angle. The subject looks slightly away from the camera, not directly into the lens. Soft, neutral daylight filters through the cherry blossom canopy and illuminates the subject’s face, creating gentle highlights and natural shadow patterns across the skin to enhance depth, while strictly avoiding warm or yellow tones. A few cherry blossom petals drift lightly through the surrounding air, suggesting a sparse, gentle sakura fall, with all petals staying entirely outside the facial area and never obscuring facial features. The background is composed almost entirely of softly blurred cherry blossoms, forming an immersive pink floral backdrop. The eyes appear clear, peaceful, and quietly emotional, capturing an intimate moment of springtime stillness.
+      ---
+
+      Top panel (closest framing)
+
+      A very close-up portrait of the subject, framed tighter than the bottom panel.
+      Cherry blossom branches cross the foreground.
+
+      The body remains turned to the side while the head gently turns back, with the gaze drifting toward something behind, not forward.
+      The expression is calm and gentle, with no sense of sadness or melancholy.
+
+      Clear, direct spring sunlight visibly strikes the face,
+      creating strong highlights across the cheeks, nose bridge, and eyes.
+      The face must appear distinctly sunlit and luminous.
+      Shadows are present but pushed onto surrounding blossoms and background,
+      not flattening or dimming the face.
+
+      A light breeze moves multiple strands of hair, with several fine hairs drifting freely across the face in mid-air.
+      Foreground petals remain softly out of focus.
+      Small openings between branches reveal soft blue sky in the background.
+
+      ---
+
+      Middle panel (visual anchor)
+
+      An extreme close-up of one eye.
+      The gaze is angled upward toward the light source above, clearly not looking at the camera.
+
+      Only a very limited portion of the face is visible.
+      The framing must strictly exclude the nose, nostrils, and nose bridge.
+      Only the eye area and a small surrounding region of skin are revealed,
+      as if the eye is glimpsed through a narrow opening between blossoms.
+
+      Cherry blossoms, petals, and thin branches densely occupy the foreground.
+      The nearest one or two blossoms are softly blurred due to shallow depth of field.
+
+      A powerful, focused beam of sunlight breaks through the blossoms
+      and lands directly on the eye area.
+      The light is noticeably bright and intense, significantly brighter than the rest of the frame.
+      Petal and branch shadows are sharply defined, clearly showing sunlight passing through layered blossoms rather than diffused evenly.
+
+      The eye contains a strong, luminous highlight with slight flare.
+      The iris shows natural radial texture and tonal variation, but remains realistic in scale and coloration.
+      Avoid exaggerated iris size, overly saturated colors, or unnatural contrast commonly associated with AI-rendered eyes.
+
+      Natural skin texture is fully preserved with no smoothing.
+
+
+      ---
+
+      Bottom panel (more distant)
+
+      A medium side-profile shot of the subject, framed wider and farther than the top panel.
+      The head is turned slightly upward and away.
+      The subject does not look at the camera.
+
+      Cherry blossoms densely surround and envelop the subject.
+      Sunlight selectively illuminates parts of the face and hair,
+      while deeper shadows remain in surrounding foliage,
+      enhancing depth and contrast.
+
+      Out-of-focus green tones from nearby trees appear in the background, contrasting naturally with the pink blossoms.
+
+      ---
+
+      Overall color & cinematic tone
+
+      High-contrast cinematic lighting with preserved shadow depth.
+      Warmth leans toward soft pink, peach, and warm-white tones — not yellow or amber.
+      Highlights remain crisp and luminous.
+      Shadows stay deep, warm, and dimensional, never gray or flat.
+
+      Avoid flat lighting, evenly lit faces, golden-hour yellow, over-soft skin, glowing pupils, heavy bloom, haze, fog, text, logos, or watermarks.
     use_random_source_selection: false
     use_deterministic_random: false
     random_seed: 42
     min_images: 2
     max_images: 4
     num_iterations: 50
+
+  - folder: ../Media Files/Nano Banana/0209 2 Styles Creative Studio/0209 春日映瞳V4
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: |-
+      Ensure the subject’s facial features, proportions, and overall appearance closely match the provided input image. 
+      In all three panels, eye contact with the camera is strictly forbidden.
+      The subject shows natural facial expression with subtle, nuanced emotion.
+      If the input image shows the subject wearing glasses, the glasses must remain clearly visible in all panels.
+
+      A seamless vertical triptych composed of three horizontal panels with no visible borders or separators.
+      Each panel uses a distinct camera distance to create cinematic hierarchy.
+      Ultra-realistic cinematic photography, natural optics, shallow depth of field.
+
+      Overall exposure slightly brighter (~10%) but with clearly increased contrast.
+      Lighting must produce strong separation between highlights and shadows, avoiding flat or evenly distributed illumination.
+
+      Primary light is strong directional daylight.
+      Secondary light is soft backlit daylight, creating controlled highlight bloom and subtle halation through lens response.
+
+      The scene contains a subtle pink-tinted ambient atmosphere,
+      Pink tone exists in the air and light, not as a color filter.
+
+      ---
+
+      Top panel (closest framing)
+
+      A very close-up portrait of the subject, framed tighter than the bottom panel.
+      Cherry blossom branches cross the foreground.
+
+      The body remains turned to the side while the head gently turns back, with the gaze drifting toward something behind, not forward.
+      The expression is calm and gentle, with no sense of sadness or melancholy.
+
+      Clear, direct spring sunlight visibly strikes the face,
+      creating strong highlights across the cheeks, nose bridge, and eyes.
+      The face must appear distinctly sunlit and luminous.
+      Shadows are present but pushed onto surrounding blossoms and background,
+      not flattening or dimming the face.
+
+      A light breeze moves multiple strands of hair, with several fine hairs drifting freely across the face in mid-air.
+      Foreground petals remain softly out of focus.
+      Small openings between branches reveal soft blue sky in the background.
+
+      ---
+
+      Middle panel (visual anchor)
+
+      An extreme close-up of one eye.
+      The gaze is angled upward toward the light source above, clearly not looking at the camera.
+
+      Only a very limited portion of the face is visible.
+      The framing must strictly exclude the nose, nostrils, and nose bridge.
+      Only the eye area and a small surrounding region of skin are revealed,
+      as if the eye is glimpsed through a narrow opening between blossoms.
+
+      Cherry blossoms, petals, and thin branches densely occupy the foreground.
+      The nearest one or two blossoms are softly blurred due to shallow depth of field.
+
+      A powerful, focused beam of sunlight breaks through the blossoms
+      and lands directly on the eye area.
+      The light is noticeably bright and intense, significantly brighter than the rest of the frame.
+      Petal and branch shadows are sharply defined, clearly showing sunlight passing through layered blossoms rather than diffused evenly.
+
+      The eye contains a strong, luminous highlight with slight flare.
+      The iris shows natural radial texture and tonal variation, but remains realistic in scale and coloration.
+      Avoid exaggerated iris size, overly saturated colors, or unnatural contrast commonly associated with AI-rendered eyes.
+
+      Natural skin texture is fully preserved with no smoothing.
+
+
+      ---
+
+      Bottom panel (more distant)
+
+      A medium side-profile shot of the subject, framed wider and farther than the top panel.
+      The head is turned slightly upward and away.
+      The subject does not look at the camera.
+
+      Cherry blossoms densely surround and envelop the subject.
+      Sunlight selectively illuminates parts of the face and hair,
+      while deeper shadows remain in surrounding foliage,
+      enhancing depth and contrast.
+
+      Out-of-focus green tones from nearby trees appear in the background, contrasting naturally with the pink blossoms.
+
+      ---
+
+      Overall color & cinematic tone
+
+      High-contrast cinematic lighting with preserved shadow depth.
+      Warmth leans toward soft pink, peach, and warm-white tones — not yellow or amber.
+      Highlights remain crisp and luminous.
+      Shadows stay deep, warm, and dimensional, never gray or flat.
+
+      Avoid flat lighting, evenly lit faces, golden-hour yellow,
+      over-soft skin, glowing pupils, heavy bloom, haze, fog,
+      text, logos, or watermarks.
+    use_random_source_selection: false
+    use_deterministic_random: false
+    random_seed: 42
+    min_images: 2
+    max_images: 4
+    num_iterations: 50
+
 
 comments:
   folder_structure: Each task folder should contain 'Source' and 'Generated_Output' subfolders. For multi-image tasks, also include 'Additional' subfolder.
