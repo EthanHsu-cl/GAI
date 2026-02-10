@@ -50,6 +50,7 @@ class NanoBananaHandler(BaseAPIHandler):
         self._source_file_indices = {}  # Track source file index for sequential matching
         self._random_source_selections = {}  # Track random source selections for reproducibility
         self._source_image_cache = {}  # Cache source images per task
+        self._last_error_is_429 = False  # Track if last failure was a 429
     
     def _is_error_429(self, error_str):
         """Check if an error string indicates a 429 Resource Exhausted error.
@@ -680,6 +681,7 @@ class NanoBananaHandler(BaseAPIHandler):
         base_name = task_config.get('_base_name') or Path(file_path).stem
         file_name = Path(file_path).name
         start_time = time.time()
+        self._last_error_is_429 = False
         
         try:
             # Make API-specific call with connection retry wrapper
@@ -688,6 +690,24 @@ class NanoBananaHandler(BaseAPIHandler):
             # Parse and save result
             success = self._handle_result(result, file_path, task_config, output_folder,
                                          metadata_folder, base_name, file_name, start_time, attempt)
+            
+            # Retry loop for 429 Resource Exhausted errors (independent of max_retries)
+            max_429 = self.api_defs.get('max_retries_error429', 0)
+            while not success and self._last_error_is_429 and max_429 > 0:
+                count = self._read_error429_retries(base_name, metadata_folder)
+                if count >= max_429:
+                    self.logger.info(f" ⏭️ 429 retry limit reached ({count}/{max_429})")
+                    break
+                self.logger.info(f" ⏳ 429 retry {count}/{max_429} (waiting {30 * count}s)")
+                time.sleep(30 * count)
+                self._last_error_is_429 = False
+                start_time = time.time()
+                try:
+                    result = self._make_api_call_with_connection_retry(file_path, task_config, attempt)
+                    success = self._handle_result(result, file_path, task_config, output_folder,
+                                                 metadata_folder, base_name, file_name, start_time, attempt)
+                except Exception:
+                    break
             
             if not success and attempt < max_retries - 1:
                 time.sleep(5)
@@ -1107,6 +1127,7 @@ class NanoBananaHandler(BaseAPIHandler):
             # Track 429 error retries for cross-run persistence
             combined_errors = str(failure_reason or '') + ' '.join(str(e) for e in all_error_messages)
             if self._is_error_429(combined_errors):
+                self._last_error_is_429 = True
                 metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
             if use_random_source and all_imgs_info:
                 metadata['all_images_used'] = all_imgs_info
@@ -1160,6 +1181,7 @@ class NanoBananaHandler(BaseAPIHandler):
                 metadata['text_responses'] = text_responses
             # Track 429 error retries for cross-run persistence
             if self._is_error_429(error_reason):
+                self._last_error_is_429 = True
                 metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
             if use_random_source and all_imgs_info:
                 metadata['all_images_used'] = all_imgs_info
