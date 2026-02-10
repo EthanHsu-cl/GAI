@@ -359,3 +359,61 @@ rm -rf build/ dist/
 
 - **macOS**: `icon.icns` (use `iconutil` or online converters)
 - **Windows**: `icon.ico` (use ImageMagick or online converters)
+
+---
+
+## Creating a GitHub Release
+
+Pushing an annotated tag triggers GitHub Actions to automatically build macOS and Windows executables and create a GitHub Release with the tag message as release notes.
+
+### Step 1: Commit and Push All Changes
+
+```bash
+git add -A
+git commit -m "Description of changes"
+git push origin main
+```
+
+### Step 2: Create an Annotated Tag
+
+Use an annotated tag (`-a`) so the message becomes the release notes. The first line is the tag subject; subsequent lines become the release body.
+
+```bash
+git tag -a v1.0.5 -m "Release v1.0.5
+
+Summary of changes
+
+- **New:** Feature description
+- **Fix:** Bug fix description
+- **Improve:** Improvement description
+- **Update:** Config or doc update description"
+```
+
+### Step 3: Push the Tag
+
+```bash
+git push origin v1.0.5
+```
+
+This triggers the `build-release.yml` workflow which will:
+
+1. Build the macOS `.app` bundle and zip it
+2. Build the Windows `.exe`
+3. Create a GitHub Release titled `Release v1.0.5` with the tag message as notes
+4. Attach both binaries as release assets
+
+### Verify
+
+- Check the **Actions** tab on GitHub to monitor build progress
+- Once complete, the release appears under **Releases** with both assets attached
+
+### Quick Reference
+
+| Action | Command |
+| ------ | ------- |
+| Create tag | `git tag -a v1.0.X -m "Release v1.0.X..."` |
+| Push tag | `git push origin v1.0.X` |
+| List tags | `git tag -l` |
+| View tag message | `git tag -l --format='%(contents)' v1.0.X` |
+| Delete local tag | `git tag -d v1.0.X` |
+| Delete remote tag | `git push origin :refs/tags/v1.0.X` |
