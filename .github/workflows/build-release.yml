@@ -103,17 +103,27 @@ jobs:
         id: tag_info
         run: |
           TAG_NAME="${GITHUB_REF#refs/tags/}"
-          # Extract the annotated tag message (excludes the first line which is the tag name)
-          TAG_BODY=$(git tag -l --format='%(contents:body)' "$TAG_NAME")
-          if [ -z "$TAG_BODY" ]; then
-            # Fallback: use full tag message
-            TAG_BODY=$(git tag -l --format='%(contents)' "$TAG_NAME")
-          fi
           echo "tag_name=$TAG_NAME" >> "$GITHUB_OUTPUT"
+
+          # Fetch the tag explicitly to ensure annotated tag data is available
+          git fetch origin "refs/tags/$TAG_NAME:refs/tags/$TAG_NAME" --force
+
+          # Extract full annotated tag message, skip the subject (first line)
+          TAG_MESSAGE=$(git tag -l --format='%(contents)' "$TAG_NAME")
+          # Remove the first line (subject) to get just the body
+          TAG_BODY=$(echo "$TAG_MESSAGE" | tail -n +2 | sed '/^$/N;/^\n$/d;s/^\n//')
+
+          if [ -z "$TAG_BODY" ]; then
+            # Fallback: use the full tag message including subject
+            TAG_BODY="$TAG_MESSAGE"
+          fi
+
           # Use EOF delimiter for multi-line output
-          echo "tag_body<<EOF" >> "$GITHUB_OUTPUT"
-          echo "$TAG_BODY" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          {
+            echo "tag_body<<ENDOFTAGBODY"
+            echo "$TAG_BODY"
+            echo "ENDOFTAGBODY"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Download macOS artifact
         uses: actions/download-artifact@v4
@@ -133,6 +143,7 @@ jobs:
           tag_name: ${{ steps.tag_info.outputs.tag_name }}
           name: Release ${{ steps.tag_info.outputs.tag_name }}
           body: ${{ steps.tag_info.outputs.tag_body }}
+          generate_release_notes: false
           files: |
             ./artifacts/AI-Video-Suite-macOS.zip
             ./artifacts/AI Video Suite.exe
