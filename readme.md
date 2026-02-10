@@ -113,6 +113,7 @@ When you select a platform, the Advanced Options section shows API-specific fiel
 | **Pixverse** | Model, Duration, Quality, Generate Audio |
 | **Runway** | Model, Aspect Ratio, Pairing Strategy |
 | **Wan** | Animation Mode, Num Outputs, Seed, Embed |
+| **DreamActor** | Use Base64, Cut Switch, Video URL |
 | **Vidu Effects** | Category, Model |
 | **Vidu Reference** | Model, Duration, Resolution, Movement |
 
@@ -141,6 +142,7 @@ These options override the corresponding values in the config file for the curre
 | `viduref` | Vidu Reference | Multi-reference guided video generation |
 | `runway` | Runway Gen4 | Video processing with face swap and effects |
 | `wan` | Wan 2.2 | Image + video cross-matching with motion animation |
+| `dreamactor` | DreamActor | Image + video face reenactment via cross-matching |
 | `veo` | Google Veo | Text-to-video generation with AI models |
 | `veoitv` | Google Veo ITV | Image-to-video generation with AI models |
 | `all` | All Platforms | Process all APIs sequentially or in parallel |
@@ -162,6 +164,7 @@ GAI/                                    # Project root
     │   ├── batch_vidu_effects_config.yaml # Vidu Effects configuration
     │   ├── batch_vidu_reference_config.yaml # Vidu Reference configuration
     │   ├── batch_wan_config.yaml          # Wan 2.2 configuration
+    │   ├── batch_dreamactor_config.yaml    # DreamActor configuration
     │   ├── batch_veo_config.yaml          # Google Veo configuration
     │   └── batch_veo_itv_config.yaml      # Google Veo ITV configuration
     ├── core/                          # Core automation framework
@@ -202,6 +205,7 @@ TaskFolder/
 
 - Most APIs: `Source/`
 - Wan 2.2: `Source Image/` + `Source Video/` (cross-matched)
+- DreamActor: `Source Image/` + `Source Video/` (cross-matched)
 - Nano Banana multi-image: `Source/` + `Additional/`
 - Runway/Vidu Reference: `Source/` + `Reference/`
 
@@ -338,6 +342,14 @@ tasks:
 ```
 
 **Model limits:** `gemini-2.5-flash-image` (max 3 images), `gemini-3-pro-image-preview` (max 14 images)
+
+#### Error 429 (Resource Exhausted) Retry
+
+Nano Banana has built-in handling for Google API `429 RESOURCE_EXHAUSTED` errors. When this error occurs, the retry count is saved to the file's metadata and the file is retried on the next script run.
+
+- **`max_retries_error429`** (default: `3`) — Set in `api_definitions.json` under the `nano_banana` entry. Controls how many re-runs will retry a 429-failed file.
+- The count is persisted in each file's `_metadata.json` as `error429_retries` and increments on each 429 failure.
+- On re-run, files with 429 errors below the limit are retried; once the limit is reached they are skipped.
 
 ### **Vidu Effects Configuration** (`config/batch_vidu_effects_config.yaml`)
 

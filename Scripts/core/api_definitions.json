@@ -298,6 +298,7 @@
         "rate_limit": 12,
         "task_delay": 10,
         "max_retries": 1,
+        "max_retries_error429": 3,
         "special_handling": "base64_images",
         "config_structure": "task_folders",
         "report": {
@@ -861,6 +862,74 @@
             "dont_allow",
             "allow_all"
         ]
+    },
+    "dreamactor": {
+        "endpoint": "http://192.168.31.161:8000/video_effect/",
+        "api_name": "/process_dreamactor",
+        "file_types": {
+            "image": [
+                ".jpg",
+                ".jpeg",
+                ".png",
+                ".bmp",
+                ".tiff",
+                ".webp"
+            ],
+            "video": [
+                ".mp4",
+                ".mov",
+                ".avi",
+                ".mkv",
+                ".webm"
+            ]
+        },
+        "validation": {
+            "image": {
+                "max_size_mb": 50,
+                "min_dimension": 128
+            },
+            "video": {
+                "max_size_mb": 500,
+                "min_dimension": 320,
+                "duration": [
+                    1,
+                    300
+                ]
+            }
+        },
+        "folders": {
+            "source_image": "Source Image",
+            "source_video": "Source Video",
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 3,
+        "task_delay": 10,
+        "max_retries": 3,
+        "special_handling": "image_video_cross_match",
+        "config_structure": "task_folders",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "comparison_template_path": "templates/I2V Comparison Template.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": true
+        },
+        "task_fields": [
+            "folder",
+            "use_base64",
+            "video_url_direct",
+            "cut_switch",
+            "design_link",
+            "source_video_link",
+            "reference_folder",
+            "use_comparison_template"
+        ],
+        "api_params": {
+            "use_base64": true,
+            "video_url_direct": "",
+            "cut_switch": true
+        }
     },
     "kling_ttv": {
         "endpoint": "http://192.168.31.161:8000/kling/",

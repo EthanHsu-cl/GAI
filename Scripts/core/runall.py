@@ -27,6 +27,7 @@ API_MAPPING = {
     'wan': 'wan',
     'veo': 'veo',
     'veoitv': 'veo_itv',
+    'dreamactor': 'dreamactor',
 }
 
 # Config file mapping
@@ -43,7 +44,8 @@ CONFIG_MAPPING = {
     'pixverse': 'config/batch_pixverse_config.yaml',
     'wan': 'config/batch_wan_config.yaml',
     'veo': 'config/batch_veo_config.yaml',
-    'veo_itv': 'config/batch_veo_itv_config.yaml'
+    'veo_itv': 'config/batch_veo_itv_config.yaml',
+    'dreamactor': 'config/batch_dreamactor_config.yaml'
 }
 
 

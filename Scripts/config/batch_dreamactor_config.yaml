@@ -1,0 +1,43 @@
+testbed: http://192.168.31.161:8000/video_effect/
+output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+template_path: templates/I2V templates.pptx
+comparison_template_path: templates/I2V Comparison Template.pptx
+default_params:
+  use_base64: true
+  video_url_direct: ''
+  cut_switch: true
+output:
+  output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 0
+schedule:
+  start_time: ''
+  comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
+root_design_link: 
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBFHnbCEbI-Q50vepdJzTVlAaMFv4mesVzmBWHdcIV0jTc?e=GoeJOP
+
+tasks:
+- folder: ../Media Files/DreamActor/0209 9 Style
+  use_base64: true
+  video_url_direct: ''
+  cut_switch: true
+  design_link: ''
+  source_video_link: ''
+  reference_folder: ''
+  use_comparison_template: false
+
+
+comments:
+  folder_structure: |
+    Each task folder should have 'Source Image' and 'Source Video' subfolders.
+    All images will be cross-matched with all videos
+    (e.g., 3 images × 4 videos = 12 total generations).
+  use_base64: |
+    Whether to encode the source image as base64 before sending.
+    Default: true
+  video_url_direct: |
+    Optional direct URL to a driver video. When provided, overrides the
+    uploaded video file. Leave empty to use the local video file.
+  cut_switch: |
+    Crop approximately the first 1 second of the output video
+    (transition removal).
+    Default: true

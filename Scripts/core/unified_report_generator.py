@@ -108,6 +108,18 @@ class UnifiedReportGenerator:
         'positions': [(2.59, 3.26, 10, 10), (13, 3.26, 10, 10), (23.41, 3.26, 10, 10)],
         'metadata_position': (2.32, 15.24, 7.29, 3.06),
     }
+
+    # 3-Media Stacked Layout: Two sources stacked left, big generated right
+    # Heights are dynamically adjusted per-slide based on actual aspect ratios.
+    # These are the default fallback positions when aspect ratios are unavailable.
+    # Metadata uses same top-right position as LAYOUT_2_MEDIA for consistency.
+    LAYOUT_3_MEDIA_STACKED = {
+        'positions': [(0.42, 2.15, 16, 7), (0.42, 9.55, 16, 7), (17.44, 2.15, 16, 16)],
+        'metadata_position': (35, 0, 7.29, 3.06),
+        'metadata_reference_position': (35, 0, 7.29, 3.06),
+        'override_positions': True,
+        'media_labels': ['Source Image', 'Source Video', None],
+    }
     
     # File extension constants
     IMAGE_EXTS = {'.jpg', '.jpeg', '.png', '.webp'}
@@ -158,6 +170,7 @@ class UnifiedReportGenerator:
             'genvideo': 'GenVideo',
             'pixverse': 'Pixverse',
             'wan': 'Wan 2.2',
+            'dreamactor': 'DreamActor',
             'veo': 'Veo',
             'veo_itv': 'Veo ITV'
         }
@@ -183,7 +196,7 @@ class UnifiedReportGenerator:
             'runway': {
                 **base_config,
                 'media_types': ['source', 'source_video', 'generated'],
-                **self.LAYOUT_3_MEDIA,
+                **self.LAYOUT_3_MEDIA_STACKED,
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['prompt', 'reference_image', 'source_video', 'model', 'processing_time_seconds', 'success'],
                 'error_handling': 'video_fallback'
@@ -213,7 +226,8 @@ class UnifiedReportGenerator:
                 'media_types': ['source', 'generated'],
                 **self.LAYOUT_2_MEDIA,
                 'title_format': 'Generation {index}: {source_file}',
-                'metadata_fields': ['effect_name', 'category', 'task_id', 'processing_time_seconds', 'duration', 'success'],
+                'metadata_fields': ['effect_name', 'reference_count', 'task_id', 'processing_time_seconds', 'duration', 'success'],
+                'supports_multi_image': True,
             },
             'genvideo': {
                 **base_config,
@@ -245,17 +259,27 @@ class UnifiedReportGenerator:
             },
             'kling_endframe': {
                 **base_config,
-                'media_types': ['source', 'generated', 'reference'],
-                **self.LAYOUT_2_MEDIA,
+                'media_types': ['source', 'source_video', 'generated'],
+                **self.LAYOUT_3_MEDIA_STACKED,
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['start_image', 'end_image', 'generation_number', 'task_id', 'model', 'prompt', 'processing_time_seconds', 'success'],
+                'error_handling': 'video_fallback',
+                'media_labels': ['Start Frame', 'End Frame', None],
             },
             'wan': {
                 **base_config,
                 'media_types': ['source', 'source_video', 'generated'],
-                **self.LAYOUT_3_MEDIA,
+                **self.LAYOUT_3_MEDIA_STACKED,
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['source_image', 'source_video', 'animation_mode', 'prompt', 'processing_time_seconds', 'success'],
+                'error_handling': 'video_fallback'
+            },
+            'dreamactor': {
+                **base_config,
+                'media_types': ['source', 'source_video', 'generated'],
+                **self.LAYOUT_3_MEDIA_STACKED,
+                'title_format': 'Generation {index}: {source_file}',
+                'metadata_fields': ['source_image', 'source_video', 'task_id', 'time_taken', 'status_code', 'processing_time_seconds', 'success'],
                 'error_handling': 'video_fallback'
             },
             'veo': {
@@ -350,6 +374,69 @@ class UnifiedReportGenerator:
         
         return title_format.format(**format_kwargs)
     
+    def _compute_stacked_positions(self, pair, base_positions):
+        """Dynamically adjust stacked layout heights based on source aspect ratios.
+
+        Redistributes the vertical space between the two stacked source boxes
+        so each source fills its allocated area as much as possible, regardless
+        of whether sources are landscape, portrait, or square.
+
+        Args:
+            pair: MediaPair with source_path and source_video_path.
+            base_positions: List of 3 position tuples from LAYOUT_3_MEDIA_STACKED.
+
+        Returns:
+            List of 3 adjusted position tuples (x, y, w, h).
+        """
+        if len(base_positions) != 3:
+            return base_positions
+
+        source_path = pair.source_path
+        source_video_path = pair.source_video_path
+
+        # Get actual aspect ratios (width / height). Default landscape if unreadable.
+        ar1 = (self.get_aspect_ratio(source_path, False)
+               if source_path and source_path.exists() else 16 / 9)
+        is_second_video = (source_video_path.suffix.lower() in self.VIDEO_EXTS
+                           if source_video_path and source_video_path.exists() else True)
+        ar2 = (self.get_aspect_ratio(source_video_path, is_second_video)
+               if source_video_path and source_video_path.exists() else 16 / 9)
+
+        # Layout parameters derived from the base positions
+        x = base_positions[0][0]         # Left x (0.42)
+        y_start = base_positions[0][1]   # Top y (2.15)
+        w = base_positions[0][2]         # Box width (16)
+        total_h = base_positions[2][3]   # Match generated height (16)
+        gap = 0.4                        # Vertical gap between stacked items
+        min_h = 3.0                      # Minimum height for any source box
+
+        usable_h = total_h - gap
+
+        # For a box of width w, the height needed to display at full width is w/ar.
+        # Allocate proportionally so each source gets the height it "wants".
+        h1_ideal = w / ar1
+        h2_ideal = w / ar2
+        total_ideal = h1_ideal + h2_ideal
+
+        h1 = usable_h * (h1_ideal / total_ideal)
+        h2 = usable_h * (h2_ideal / total_ideal)
+
+        # Enforce minimum heights
+        if h1 < min_h:
+            h1 = min_h
+            h2 = usable_h - h1
+        elif h2 < min_h:
+            h2 = min_h
+            h1 = usable_h - h2
+
+        y2 = y_start + h1 + gap
+
+        return [
+            (x, y_start, w, round(h1, 2)),
+            (x, round(y2, 2), w, round(h2, 2)),
+            base_positions[2],  # Generated box stays unchanged
+        ]
+
     def handle_template_slide(self, slide, pair, index, use_comparison, slide_config):
         """Handle slide creation with template placeholders (optimized)"""
         # Update title placeholder
@@ -367,16 +454,46 @@ class UnifiedReportGenerator:
                 if pair.failed and title_ph.text_frame.paragraphs:
                     title_ph.text_frame.paragraphs[0].font.color.rgb = RGBColor(255, 0, 0)
         
-        # Handle media placeholders
-        phs = sorted([p for p in slide.placeholders 
-                     if p.placeholder_format.type in {6, 7, 8, 13, 18, 19}],
-                    key=lambda x: getattr(x, 'left', 0))
-        
-        media_types = slide_config.get('media_types', ['source', 'generated'])
-        
-        for i, (ph, media_type) in enumerate(zip(phs, media_types)):
-            media_path, is_video = self.get_media_path_and_type(pair, media_type)
-            self.add_media_universal(slide, ph, media_path, is_video, slide_config, pair, media_type)
+        if slide_config.get('override_positions', False):
+            # Stacked layout: remove template placeholders, use custom positions
+            for ph in list(slide.placeholders):
+                if ph.placeholder_format.type in {6, 7, 8, 13, 18, 19}:
+                    try:
+                        ph._element.getparent().remove(ph._element)
+                    except Exception:
+                        pass
+            
+            positions = self._compute_stacked_positions(
+                pair, slide_config.get('positions', [])
+            )
+            media_types = slide_config.get('media_types', ['source', 'generated'])
+            media_labels = slide_config.get('media_labels', [])
+            
+            for idx, (pos, media_type) in enumerate(zip(positions, media_types)):
+                # Add label above media item if specified
+                if idx < len(media_labels) and media_labels[idx]:
+                    label_y = max(pos[1] - 0.45, 0)
+                    label_box = slide.shapes.add_textbox(
+                        Cm(pos[0]), Cm(label_y), Cm(6), Cm(0.45)
+                    )
+                    label_box.text_frame.text = media_labels[idx]
+                    label_box.text_frame.paragraphs[0].font.size = Pt(8)
+                    label_box.text_frame.paragraphs[0].font.color.rgb = RGBColor(128, 128, 128)
+                    label_box.text_frame.paragraphs[0].font.bold = True
+                
+                media_path, is_video = self.get_media_path_and_type(pair, media_type)
+                self.add_media_universal(slide, pos, media_path, is_video, slide_config, pair, media_type)
+        else:
+            # Standard: use template placeholder positions
+            phs = sorted([p for p in slide.placeholders 
+                         if p.placeholder_format.type in {6, 7, 8, 13, 18, 19}],
+                        key=lambda x: getattr(x, 'left', 0))
+            
+            media_types = slide_config.get('media_types', ['source', 'generated'])
+            
+            for i, (ph, media_type) in enumerate(zip(phs, media_types)):
+                media_path, is_video = self.get_media_path_and_type(pair, media_type)
+                self.add_media_universal(slide, ph, media_path, is_video, slide_config, pair, media_type)
         
         # Add metadata
         self.add_metadata_universal(slide, pair, slide_config, use_comparison)
@@ -399,9 +516,23 @@ class UnifiedReportGenerator:
         
         # Add media using positions
         positions = slide_config.get('positions', [(2.59, 3.26, 12.5, 12.5), (18.78, 3.26, 12.5, 12.5)])
+        if slide_config.get('override_positions', False):
+            positions = self._compute_stacked_positions(pair, positions)
         media_types = slide_config.get('media_types', ['source', 'generated'])
+        media_labels = slide_config.get('media_labels', [])
         
-        for pos, media_type in zip(positions, media_types):
+        for idx, (pos, media_type) in enumerate(zip(positions, media_types)):
+            # Add label above media item if specified
+            if idx < len(media_labels) and media_labels[idx]:
+                label_y = max(pos[1] - 0.45, 0)
+                label_box = slide.shapes.add_textbox(
+                    Cm(pos[0]), Cm(label_y), Cm(6), Cm(0.45)
+                )
+                label_box.text_frame.text = media_labels[idx]
+                label_box.text_frame.paragraphs[0].font.size = Pt(8)
+                label_box.text_frame.paragraphs[0].font.color.rgb = RGBColor(128, 128, 128)
+                label_box.text_frame.paragraphs[0].font.bold = True
+            
             media_path, is_video = self.get_media_path_and_type(pair, media_type)
             self.add_media_universal(slide, pos, media_path, is_video, slide_config, pair, media_type)
         
@@ -415,10 +546,11 @@ class UnifiedReportGenerator:
         standard multi-image mode), creates a composite grid image for the 'source' media type
         when all additional sources are images.
         """
-        # For nano_banana multi-image: create composite from all source images
-        # This applies to both random_source_selection and standard multi-image mode
+        # For multi-image APIs: create composite from all source images
+        # nano_banana: source + additional images from Additional folder
+        # vidu_reference: source + reference images from Reference folder
         if (media_type == 'source' and 
-            self.api_name == 'nano_banana' and 
+            self.api_name in ('nano_banana', 'vidu_reference') and 
             pair.additional_source_paths):
             # Check if all additional sources are images (not videos)
             all_images = all(
@@ -509,7 +641,7 @@ class UnifiedReportGenerator:
                 
                 return sorted(pairs, key=get_sort_key)
         
-        if self.api_name in ['wan', 'runway']:
+        if self.api_name in ['wan', 'runway', 'dreamactor']:
             # Combination APIs: Failed slides first, then group by source video,
             # then sort within groups by source file
             def get_sort_key(pair):
@@ -980,11 +1112,15 @@ class UnifiedReportGenerator:
         """Process APIs with individual task folders"""
         folder = Path(task['folder'])
         ref_folder = Path(task.get('reference_folder', '')) if task.get('reference_folder') else None
-        use_comparison = task.get('use_comparison_template', False)
+        slide_config = self.get_slide_config()
+        if slide_config.get('override_positions', False):
+            use_comparison = False
+        else:
+            use_comparison = task.get('use_comparison_template', False)
         
         if self.api_name == 'runway':
             return self.create_runway_media_pairs(folder, ref_folder, task, use_comparison)
-        elif self.api_name == 'wan':
+        elif self.api_name in ('wan', 'dreamactor'):
             return self.create_wan_media_pairs(folder, ref_folder, task, use_comparison)
         else:
             return self.create_standard_media_pairs(folder, ref_folder, task, use_comparison)
@@ -1140,12 +1276,22 @@ class UnifiedReportGenerator:
                     gen_key = self.normalize_key(gen_path.stem)
                     md = metadata_cache.get(gen_key, {})
                     
+                    # Find end image (B frame) from metadata
+                    end_image_path = None
+                    end_image_name = md.get('end_image', '')
+                    if end_image_name:
+                        end_image_path = next(
+                            (p for p in src_imgs.values() if p.name == end_image_name),
+                            None
+                        )
+                    
                     pair = MediaPair(
                         source_file=src[b].name,
                         source_path=src[b],
                         api_type=self.api_name,
                         generated_paths=[gen_path],  # Single generated file per pair
                         reference_paths=ref_paths,
+                        source_video_path=end_image_path,
                         metadata=md,
                         failed=not md.get('success', False),
                         ref_failed=use_comparison and not ref_paths,
@@ -1174,6 +1320,16 @@ class UnifiedReportGenerator:
                             if img_path.exists():
                                 additional_source_paths.append(img_path)
 
+                # For kling_endframe: find end image (B frame) from metadata
+                end_image_path = None
+                if self.api_name == 'kling_endframe':
+                    end_image_name = md.get('end_image', '')
+                    if end_image_name:
+                        end_image_path = next(
+                            (p for p in src_imgs.values() if p.name == end_image_name),
+                            None
+                        )
+
                 pair = MediaPair(
                     source_file=src[b].name,
                     source_path=src[b],
@@ -1181,6 +1337,7 @@ class UnifiedReportGenerator:
                     generated_paths=gen_paths,
                     reference_paths=ref_paths,
                     additional_source_paths=additional_source_paths,
+                    source_video_path=end_image_path,
                     metadata=md,
                     failed=not gen_paths or not md.get('success', False),
                     ref_failed=use_comparison and not ref_paths,
@@ -1580,9 +1737,25 @@ class UnifiedReportGenerator:
                 if all_media:
                     self._compute_aspect_ratios_batch(all_media, are_videos={p: True for p in videos.values()})
                 
+                # Scan Reference folder for reference images
+                ref_folder = base_folder / effect / 'Reference'
+                ref_images_map, _, _ = self._scan_directory_once(ref_folder) if ref_folder.exists() else ({}, {}, {})
+                ref_image_list = sorted(ref_images_map.values(), key=lambda p: p.name.lower())
+                
                 # Create pairs
                 for key, img in images.items():
                     metadata = metadata_cache.get(key, {})
+                    
+                    # Resolve reference images: prefer metadata list, fall back to folder scan
+                    additional_source_paths = []
+                    ref_names = metadata.get('reference_images', [])
+                    if ref_names and ref_folder.exists():
+                        for ref_name in ref_names:
+                            ref_path = ref_folder / ref_name
+                            if ref_path.exists():
+                                additional_source_paths.append(ref_path)
+                    if not additional_source_paths and ref_image_list:
+                        additional_source_paths = list(ref_image_list)
                     
                     vid = videos.get(key)
                     pair = MediaPair(
@@ -1591,6 +1764,7 @@ class UnifiedReportGenerator:
                         api_type=self.api_name,
                         generated_paths=[vid] if vid else [],
                         reference_paths=[],
+                        additional_source_paths=additional_source_paths,
                         effect_name=effect,
                         category="Reference",
                         metadata=metadata,
@@ -2082,7 +2256,7 @@ class UnifiedReportGenerator:
             "template_path": "templates/I2V templates.pptx",
             "comparison_template_path": "templates/I2V Comparison Template.pptx",
             "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
-            "use_comparison": self.api_name in ["kling", "nano_banana", "runway", "wan"]
+            "use_comparison": self.api_name in ["kling", "nano_banana", "runway", "wan", "dreamactor"]
         }
     
     def _extract_date_from_folder(self, folder):
@@ -2510,7 +2684,13 @@ class UnifiedReportGenerator:
     
     def _load_presentation_template(self, task: Dict) -> tuple:
         """Load presentation template and return (ppt, template_loaded, use_comparison)"""
-        use_comparison = task.get('use_comparison_template', False) or bool(task.get('reference_folder'))
+        # Stacked-layout APIs place media at custom positions, so they always
+        # use the standard 2-media template even when use_comparison_template is set.
+        slide_config = self.get_slide_config()
+        if slide_config.get('override_positions', False):
+            use_comparison = False
+        else:
+            use_comparison = task.get('use_comparison_template', False) or bool(task.get('reference_folder'))
         template_key = 'comparison_template_path' if use_comparison else 'template_path'
         template_path = (self.config.get(template_key) or
                         self.report_definitions.get(template_key,
@@ -2589,7 +2769,11 @@ class UnifiedReportGenerator:
             # The overall title slide at the top already shows all effects
             
             # Create content slides for this task
-            task_use_comparison = task.get('use_comparison_template', False) or bool(task.get('reference_folder'))
+            slide_config = self.get_slide_config()
+            if slide_config.get('override_positions', False):
+                task_use_comparison = False
+            else:
+                task_use_comparison = task.get('use_comparison_template', False) or bool(task.get('reference_folder'))
             self.create_slides(ppt, pairs, template_loaded, task_use_comparison)
             
             logger.info(f"  ✓ Added task {idx}/{len(task_pairs_list)}: {len(pairs)} slides")
@@ -2894,8 +3078,13 @@ class UnifiedReportGenerator:
         comparison_tasks = []
         regular_tasks = []
         
+        slide_config = self.get_slide_config()
+        force_regular = slide_config.get('override_positions', False)
         for task in tasks:
-            use_comparison = task.get('use_comparison_template', False) or bool(task.get('reference_folder'))
+            if force_regular:
+                use_comparison = False
+            else:
+                use_comparison = task.get('use_comparison_template', False) or bool(task.get('reference_folder'))
             if use_comparison:
                 comparison_tasks.append(task)
             else:
@@ -3028,7 +3217,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'veo', 'veo_itv']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'dreamactor', 'veo', 'veo_itv']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -3037,7 +3226,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'veo', 'veo_itv'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'dreamactor', 'veo', 'veo_itv'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

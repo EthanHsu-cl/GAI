@@ -1,70 +1,67 @@
-"""Wan 2.2 API Handler - Image cropping and cross-matching logic."""
+"""DreamActor API Handler - Image-video cross-matching for face reenactment."""
 from pathlib import Path
 from gradio_client import handle_file
+import shutil
 import time
+import json
 from datetime import datetime
 from .base_handler import BaseAPIHandler
 
 
-class WanHandler(BaseAPIHandler):
+class DreamactorHandler(BaseAPIHandler):
     """
-    Wan 2.2 handler.
-    
-    Processes images and videos through a two-step workflow:
-    1. Crop images to match video aspect ratios
-    2. Generate animated videos using cropped images and source videos
-    
-    Cross-matches all images with all videos (e.g., 4 images × 5 videos = 20 generations).
+    DreamActor handler.
+
+    Processes images and videos through cross-matching:
+    each source image is paired with each driver video to produce
+    face-reenacted output videos.
+
+    Cross-matches all images with all videos
+    (e.g., 3 images x 4 videos = 12 generations).
     """
-    
+
     def process_task(self, task, task_num, total_tasks):
-        """Override: Handle image-video cross-matching with cropping step."""
+        """Override: Handle image-video cross-matching."""
         folder = Path(task['folder'])
         self.logger.info(f"📁 Task {task_num}/{total_tasks}: {folder.name}")
-        
+
         source_image_folder = folder / "Source Image"
         source_video_folder = folder / "Source Video"
         output_folder = folder / "Generated_Video"
         metadata_folder = folder / "Metadata"
-        
-        # Get all images and videos
+
         image_files = self.processor._get_files_by_type(source_image_folder, 'image')
         video_files = self.processor._get_files_by_type(source_video_folder, 'video')
-        
+
         if not image_files:
             self.logger.warning(f"⚠️ No images found in {source_image_folder}")
             return
-        
+
         if not video_files:
             self.logger.warning(f"⚠️ No videos found in {source_video_folder}")
             return
-        
-        # Cross-match: all combinations (video-first ordering to match report slides)
+
         total_combinations = len(image_files) * len(video_files)
         self.logger.info(
             f"🔄 Cross-matching {len(video_files)} videos × {len(image_files)} images "
             f"= {total_combinations} generations"
         )
-        
+
         successful = 0
         skipped = 0
         combination_num = 0
         max_retries = self.api_defs.get('max_retries', 3)
-        
+
         for video_file in video_files:
             for image_file in image_files:
                 combination_num += 1
-                
-                # Check if this combination was already processed
-                # Use video_image ordering to match success metadata naming
-                combo_base = f"{video_file.stem}_{image_file.stem}"
+
+                combo_base = f"{image_file.stem}_{video_file.stem}"
                 combo_metadata = metadata_folder / f"{combo_base}_metadata.json"
                 if combo_metadata.exists():
                     try:
-                        import json
                         with open(combo_metadata, 'r') as f:
                             meta = json.load(f)
-                        # Skip if successful OR if failed and exhausted all retries
                         if meta.get('success', False):
                             self.logger.info(
                                 f" ⏭️ {combination_num}/{total_combinations}: "
@@ -83,117 +80,103 @@ class WanHandler(BaseAPIHandler):
                             continue
                     except (json.JSONDecodeError, IOError):
                         pass
-                
+
                 self.logger.info(
                     f" 🎬 {combination_num}/{total_combinations}: "
                     f"{image_file.name} + {video_file.name}"
                 )
-                
-                # Create task config with both files
+
                 combined_task = task.copy()
                 combined_task['image_file'] = str(image_file)
                 combined_task['video_file'] = str(video_file)
-                
+
                 if self.processor.process_file(
                     str(image_file), combined_task, output_folder, metadata_folder
                 ):
                     successful += 1
-                
-                # Rate limiting between combinations
+
                 if combination_num < total_combinations:
                     time.sleep(self.api_defs.get('rate_limit', 3))
-        
-        self.logger.info(f"✓ Task {task_num}: {successful}/{total_combinations} successful ({skipped} skipped)")
-    
+
+        self.logger.info(
+            f"✓ Task {task_num}: {successful}/{total_combinations} successful "
+            f"({skipped} skipped)"
+        )
+
     def _make_api_call(self, file_path, task_config, attempt):
         """
-        Make Wan 2.2 API call.
-        
-        Two-step process:
-        1. Crop image to video aspect ratio using /fn_update_cropped_image
-        2. Generate animation using /fn_wan_animate
-        
+        Make DreamActor API call.
+
+        Sends a source image and driver video to the /process_dreamactor
+        endpoint for face reenactment generation.
+
         Args:
-            file_path: Path to source image
-            task_config: Task configuration containing video_file and parameters
-            attempt: Current retry attempt number
-            
+            file_path: Path to source image (reference face).
+            task_config: Task configuration containing video_file and parameters.
+            attempt: Current retry attempt number.
+
         Returns:
-            API result tuple (video output, designer config)
+            API result tuple (video, task_id, time_taken, status_code, debug_info).
         """
         image_path = Path(file_path)
         video_path = Path(task_config['video_file'])
-        
-        # Step 1: Crop image to video aspect ratio
-        self.logger.info(f" 🔧 Step 1/2: Cropping {image_path.name} to match {video_path.name}")
-        
-        cropped_result = self.client.predict(
-            image=handle_file(str(image_path)),
-            video={"video": handle_file(str(video_path)), "subtitles": None},
-            api_name="/fn_update_cropped_image"
+
+        use_base64 = task_config.get(
+            'use_base64', self.config.get('use_base64', True)
         )
-        
-        if not cropped_result:
-            raise ValueError("Image cropping failed - no result returned")
-        
-        # Extract cropped image path from result
-        cropped_image_path = None
-        if isinstance(cropped_result, dict) and 'path' in cropped_result:
-            cropped_image_path = cropped_result['path']
-        elif isinstance(cropped_result, str):
-            cropped_image_path = cropped_result
-        else:
-            raise ValueError(f"Unexpected cropped image format: {type(cropped_result)}")
-        
-        self.logger.info(f" ✓ Cropped image ready")
-        
-        # Step 2: Generate animation
-        self.logger.info(f" 🎨 Step 2/2: Generating animation")
-        
-        prompt = task_config.get('prompt', '')
-        embed = task_config.get('embed', 'Hello!!')
-        num_outputs = task_config.get('num_outputs', 1)
-        seed = task_config.get('seed', '-1')
-        animation_mode = task_config.get('animation_mode', 'move')
-        
-        result = self.client.predict(
-            video={"video": handle_file(str(video_path)), "subtitles": None},
-            image=handle_file(cropped_image_path),
-            prompt=prompt,
-            embed=embed,
-            _=num_outputs,
-            seed=seed,
-            animation_mode=animation_mode,
-            api_name="/fn_wan_animate"
+        video_url_direct = task_config.get('video_url_direct', '')
+        cut_switch = task_config.get(
+            'cut_switch', self.config.get('cut_switch', True)
         )
-        
-        return result
-    
-    def _handle_result(self, result, file_path, task_config, output_folder, 
-                      metadata_folder, base_name, file_name, start_time, attempt):
+
+        return self.client.predict(
+            image_input_path=handle_file(str(image_path)),
+            use_base64=use_base64,
+            video_file_path={
+                "video": handle_file(str(video_path)),
+                "subtitles": None,
+            },
+            video_url_direct=video_url_direct,
+            cut_switch=cut_switch,
+            api_name=self.api_defs['api_name']
+        )
+
+    def _handle_result(self, result, file_path, task_config, output_folder,
+                       metadata_folder, base_name, file_name, start_time,
+                       attempt):
         """
-        Handle Wan 2.2 API result.
-        
+        Handle DreamActor API result.
+
         Args:
-            result: API result tuple (video_dict, designer_config)
-            file_path: Source image path
-            task_config: Task configuration
-            output_folder: Output video directory
-            metadata_folder: Metadata directory
-            base_name: Base filename without extension
-            file_name: Full source filename
-            start_time: Processing start timestamp
-            attempt: Current retry attempt
-            
+            result: API result tuple of 5 elements
+                (video_dict, task_id, time_taken, status_code, debug_info).
+            file_path: Source image path.
+            task_config: Task configuration.
+            output_folder: Output video directory.
+            metadata_folder: Metadata directory.
+            base_name: Base filename without extension.
+            file_name: Full source filename.
+            start_time: Processing start timestamp.
+            attempt: Current retry attempt.
+
         Returns:
-            bool: True if processing succeeded, False otherwise
+            bool: True if processing succeeded, False otherwise.
         """
-        if not isinstance(result, tuple) or len(result) < 2:
-            raise ValueError(f"Invalid API response format: expected tuple, got {type(result)}")
-        
-        video_dict, designer_config = result[0], result[1]
-        
-        # Extract video path
+        if not isinstance(result, tuple) or len(result) < 5:
+            raise ValueError(
+                f"Invalid API response format: expected 5-element tuple, "
+                f"got {type(result)}"
+            )
+
+        video_dict = result[0]
+        task_id = result[1]
+        time_taken = result[2]
+        status_code = result[3]
+        debug_info = result[4]
+
+        self.logger.info(f"   Task ID: {task_id}")
+
+        # Extract video path from result
         video_path = None
         if video_dict is None:
             self.logger.warning(
@@ -209,61 +192,54 @@ class WanHandler(BaseAPIHandler):
                 f"   ⚠️ Unexpected video format: {type(video_dict)} — will retry"
             )
             return False
-        
+
         if not video_path:
             self.logger.warning("   ⚠️ Empty video path returned — will retry")
             return False
-        
-        # Generate output filename (video-first ordering)
+
+        # Build output filename: video-first ordering
         image_name = Path(file_path).stem
         video_name = Path(task_config['video_file']).stem
-        animation_mode = task_config.get('animation_mode', 'move')
-        
-        output_filename = f"{video_name}_{image_name}_{animation_mode}.mp4"
+        output_filename = f"{video_name}_{image_name}_dreamactor.mp4"
         output_path = Path(output_folder) / output_filename
-        
-        # Handle video file (either URL or local path)
+
+        # Save video (local copy or remote download)
         video_source = Path(video_path)
         if video_source.exists():
-            # Local file - copy directly
-            import shutil
             shutil.copy2(video_source, output_path)
-            self.logger.info(f" 📥 Copied local file: {video_source}")
+            self.logger.info(f"   📥 Copied local file: {video_source}")
         else:
-            # Remote URL - download
             if not self.processor.download_file(video_path, output_path):
                 raise IOError(f"Failed to download video from {video_path}")
-        
+
         # Save success metadata
         processing_time = time.time() - start_time
-        
         metadata = {
             "source_image": Path(file_path).name,
             "source_video": Path(task_config['video_file']).name,
-            "prompt": task_config.get('prompt', ''),
-            "embed": task_config.get('embed', 'Hello!!'),
-            "num_outputs": task_config.get('num_outputs', 2),
-            "seed": task_config.get('seed', '-1'),
-            "animation_mode": task_config.get('animation_mode', 'move'),
-            "designer_config": designer_config,
+            "use_base64": task_config.get('use_base64', True),
+            "cut_switch": task_config.get('cut_switch', True),
+            "task_id": task_id,
+            "time_taken": time_taken,
+            "status_code": status_code,
+            "debug_info": debug_info,
             "generated_video": output_filename,
             "processing_time_seconds": round(processing_time, 1),
             "processing_timestamp": datetime.now().isoformat(),
             "attempts": attempt + 1,
             "success": True,
-            "api_name": self.api_name
+            "api_name": self.api_name,
         }
-        
+
         self.processor.save_metadata(
-            Path(metadata_folder), 
-            f"{video_name}_{image_name}", 
+            Path(metadata_folder),
+            f"{video_name}_{image_name}",
             file_name,
-            metadata, 
-            task_config
+            metadata,
+            task_config,
         )
-        
-        self.logger.info(f" ✅ Generated: {output_filename}")
-        
+
+        self.logger.info(f"   ✅ Generated: {output_filename}")
         return True
 
     def _save_failure(self, file_path, task_config, metadata_folder, error,
@@ -308,5 +284,5 @@ class WanHandler(BaseAPIHandler):
         )
 
     def _get_source_field(self):
-        """Override: Wan uses both images and videos."""
+        """Override: DreamActor uses both images and videos."""
         return "source_image"

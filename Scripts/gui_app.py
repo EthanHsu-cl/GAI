@@ -293,6 +293,21 @@ API_FIELD_SCHEMAS = {
             {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder'},
         ]
     },
+    'dreamactor': {
+        'name': 'DreamActor (Image + Video)',
+        'fields': [
+            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True,
+             'help': 'Folder with Source Image and Source Video subfolders'},
+            {'key': 'use_base64', 'label': 'Use Base64', 'type': 'checkbox', 'default': True,
+             'help': 'Encode source image as base64 (no S3 upload)'},
+            {'key': 'cut_switch', 'label': 'Crop First Second', 'type': 'checkbox', 'default': True,
+             'help': 'Crop approximately 1s transition from output start'},
+            {'key': 'video_url_direct', 'label': 'Video URL (optional)', 'type': 'text', 'default': '',
+             'help': 'Direct video URL; overrides uploaded file if provided'},
+            {'key': 'use_comparison_template', 'label': 'Use Comparison Template', 'type': 'checkbox', 'default': False},
+            {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder'},
+        ]
+    },
     'vidu_effects': {
         'name': 'Vidu Effects',
         'fields': [
@@ -337,6 +352,7 @@ PLATFORM_DISPLAY_NAMES = {
     'viduref': 'Vidu Reference',
     'runway': 'Runway Gen4',
     'wan': 'Wan 2.2 (Image + Video)',
+    'dreamactor': 'DreamActor (Image + Video)',
     'veo': 'Veo (Text-to-Video)',
     'veoitv': 'Veo ITV (Image-to-Video)',
     'all': '🔄 All Platforms',

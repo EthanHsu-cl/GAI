@@ -35,6 +35,13 @@ class NanoBananaHandler(BaseAPIHandler):
     ]
     DEFAULT_ASPECT_RATIO = 'auto'
     
+    # Error 429 patterns for Resource Exhausted detection
+    ERROR_429_PATTERNS = [
+        'Error 429',
+        'RESOURCE_EXHAUSTED',
+        'Resource exhausted',
+    ]
+    
     def __init__(self, processor):
         """Initialize handler with multi-image support."""
         super().__init__(processor)
@@ -44,6 +51,75 @@ class NanoBananaHandler(BaseAPIHandler):
         self._random_source_selections = {}  # Track random source selections for reproducibility
         self._source_image_cache = {}  # Cache source images per task
     
+    def _is_error_429(self, error_str):
+        """Check if an error string indicates a 429 Resource Exhausted error.
+
+        Args:
+            error_str: The error message string to check.
+
+        Returns:
+            bool: True if the error matches a 429 pattern.
+        """
+        if not error_str:
+            return False
+        error_lower = error_str.lower()
+        return any(p.lower() in error_lower for p in self.ERROR_429_PATTERNS)
+
+    def _read_error429_retries(self, base_name, metadata_folder):
+        """Read existing error 429 retry count from a metadata file.
+
+        Args:
+            base_name: Base name for the metadata file (without suffix).
+            metadata_folder: Path to the metadata folder.
+
+        Returns:
+            int: The current error429_retries count, or 0 if not found.
+        """
+        import json
+        meta_file = Path(metadata_folder) / f"{base_name}_metadata.json"
+        if meta_file.exists():
+            try:
+                with open(meta_file, 'r') as f:
+                    meta = json.load(f)
+                return meta.get('error429_retries', 0)
+            except (json.JSONDecodeError, IOError):
+                pass
+        return 0
+
+    def _check_metadata_status(self, metadata):
+        """Check completion status from loaded metadata dict.
+
+        Handles both normal retry exhaustion and 429-specific retry limits.
+
+        Args:
+            metadata: Metadata dictionary loaded from a metadata JSON file.
+
+        Returns:
+            tuple: (is_complete, status_reason) where:
+                - is_complete: True if file/iteration should be skipped
+                - status_reason: 'success', 'failed_exhausted',
+                  'failed_error429_exhausted', or None if not complete
+        """
+        if metadata.get('success', False):
+            return True, 'success'
+
+        # Check for 429 error with separate retry limit
+        error = str(metadata.get('error', ''))
+        all_errors = ' '.join(str(e) for e in metadata.get('all_errors', []))
+        if self._is_error_429(error) or self._is_error_429(all_errors):
+            max_429 = self.api_defs.get('max_retries_error429', 0)
+            if max_429 > 0:
+                if metadata.get('error429_retries', 0) >= max_429:
+                    return True, 'failed_error429_exhausted'
+                return False, None
+
+        # Normal retry exhaustion check
+        max_retries = self.api_defs.get('max_retries', 3)
+        if metadata.get('attempts', 0) >= max_retries:
+            return True, 'failed_exhausted'
+
+        return False, None
+
     def _load_image_pools(self, task_config, max_additional=None):
         """Load and cache image pools from additional folders.
         
@@ -685,6 +761,8 @@ class NanoBananaHandler(BaseAPIHandler):
                 if status == 'success':
                     self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (already processed)")
                     successful += 1
+                elif status == 'failed_error429_exhausted':
+                    self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (failed - 429 retries exhausted)")
                 else:  # failed_exhausted
                     self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (failed - max retries reached)")
                 skipped += 1
@@ -745,18 +823,32 @@ class NanoBananaHandler(BaseAPIHandler):
             try:
                 with open(metadata_file, 'r') as f:
                     metadata = json.load(f)
-                
-                # Skip if previous processing was successful
-                if metadata.get('success', False):
-                    return True, 'success'
-                
-                # Also skip if failed and exhausted all retries
-                max_retries = self.api_defs.get('max_retries', 3)
-                attempts = metadata.get('attempts', 0)
-                if not metadata.get('success', False) and attempts >= max_retries:
-                    return True, 'failed_exhausted'
-                
+                return self._check_metadata_status(metadata)
+            except (json.JSONDecodeError, IOError):
                 return False, None
+        return False, None
+    
+    def _get_processing_status(self, file_path, metadata_folder):
+        """Get processing status with 429 error awareness.
+
+        Overrides base class to check for 429 errors with their own retry limit.
+
+        Args:
+            file_path: Path to the source file.
+            metadata_folder: Path to the metadata folder.
+
+        Returns:
+            tuple: (is_complete, status_reason)
+        """
+        import json
+        base_name = Path(file_path).stem
+        metadata_file = Path(metadata_folder) / f"{base_name}_metadata.json"
+
+        if metadata_file.exists():
+            try:
+                with open(metadata_file, 'r') as f:
+                    metadata = json.load(f)
+                return self._check_metadata_status(metadata)
             except (json.JSONDecodeError, IOError):
                 return False, None
         return False, None
@@ -1012,6 +1104,10 @@ class NanoBananaHandler(BaseAPIHandler):
             # Include text responses in failure metadata for debugging
             if text_responses_list:
                 metadata['text_responses'] = text_responses_list
+            # Track 429 error retries for cross-run persistence
+            combined_errors = str(failure_reason or '') + ' '.join(str(e) for e in all_error_messages)
+            if self._is_error_429(combined_errors):
+                metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
             if use_random_source and all_imgs_info:
                 metadata['all_images_used'] = all_imgs_info
                 metadata['random_source_selection'] = True
@@ -1062,6 +1158,9 @@ class NanoBananaHandler(BaseAPIHandler):
                 metadata['text_responses'] = text_responses_list
             elif text_responses:
                 metadata['text_responses'] = text_responses
+            # Track 429 error retries for cross-run persistence
+            if self._is_error_429(error_reason):
+                metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
             if use_random_source and all_imgs_info:
                 metadata['all_images_used'] = all_imgs_info
                 metadata['random_source_selection'] = True
