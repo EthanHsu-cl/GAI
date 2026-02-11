@@ -15,7 +15,7 @@ schedule:
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 tasks:
 - mode: pro
-  folder: ../Media Files/Kling Endframe/1107 1 Style/Iron Raptor
+  folder: Media Files/Kling Endframe/1107 1 Style/Iron Raptor
   prompt: 猛烈的火焰從鳥的身體開始燃燒，毛髮被火焰吞噬並逐漸轉化成金屬質感。牠靜止於烈焰之中，像在感受體內湧動的力量。隨著熱浪翻湧，牠緩緩抬起頭，眼中燃起炙烈光芒。火焰順著牠的頸部與胸口蔓延，牠的頭部微微擺動、雙翼緩緩張開，動作自然而有節奏，如同在呼吸般與火焰共鳴。當火焰達到最盛時，牠深吸一口氣般張開嘴，發出低沉而震撼的吼聲——但嘴部完全為封閉式金屬結構，沒有任何生物特徵，只有純粹的火焰與光在其中閃耀。火焰從金屬喙的縫隙間流出，光隨呼吸閃動。隨著每一次振翅與呼吸，火焰在牠的身上流動、冷卻、凝結成金屬裝甲，羽毛逐層轉化為鋼鐵與機械結構。光線在金屬與火焰之間閃爍流動，牠的身軀漸漸穩定、挺立於餘燼之中。最終，烈焰化為光，留下閃耀冷冽的鋼鐵身軀——一隻自火焰中重生的機械鳥。整體氛圍充滿力量、平衡與重生之美，具電影級光影效果。
   negative_prompt: ''
   duration: 5
@@ -50,25 +50,25 @@ comments:
     default_single_generation:
       comment: Standard A/B pairing with single generation per pair
       mode: pro
-      folder: ../Media Files/Kling Endframe/1030 3 Styles/Anime Awakening
+      folder: Media Files/Kling Endframe/1030 3 Styles/Anime Awakening
       prompt: Your prompt here
       negative_prompt: Your negative prompt here
     multiple_generations:
       comment: Generate 6 videos per pair with A/B naming (overrides global setting if present)
       mode: pro
-      folder: ../Media Files/Kling Endframe/1030 3 Styles/Barbie Dream
+      folder: Media Files/Kling Endframe/1030 3 Styles/Barbie Dream
       prompt: Your prompt here
       generation_count: 6
     sequential_pairing:
       comment: Use sequential pairing for images without A/B naming
       mode: pro
-      folder: ../Media Files/Kling Endframe/Custom Folder
+      folder: Media Files/Kling Endframe/Custom Folder
       prompt: Your prompt here
       pairing_mode: sequential
     sequential_with_multiple_generations:
       comment: Combine sequential pairing with multiple generations
       mode: pro
-      folder: ../Media Files/Kling Endframe/Custom Folder
+      folder: Media Files/Kling Endframe/Custom Folder
       prompt: Your prompt here
       pairing_mode: sequential
       generation_count: 3

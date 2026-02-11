@@ -15,7 +15,7 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bbd2c01681_0_227#slide=id.g3bbd2c01681_0_227
 
 tasks:
-  # - folder: ../Media Files/Nano Banana/0128 6 Styles CNY 2/0128 馬上幸福全家福V3
+  # - folder: Media Files/Nano Banana/0128 6 Styles CNY 2/0128 馬上幸福全家福V3
   #   model: gemini-3-pro-image-preview
   #   resolution: "2K"
   #   aspect_ratio: "9:16" 
@@ -184,7 +184,7 @@ tasks:
   #   max_images: 4
   #   num_iterations: 50
 
-  # - folder: ../Media Files/Nano Banana/0128 6 Styles CNY 2/0128 火鍋全家福V3
+  # - folder: Media Files/Nano Banana/0128 6 Styles CNY 2/0128 火鍋全家福V3
   #   model: gemini-3-pro-image-preview
   #   resolution: "2K"
   #   aspect_ratio: "4:3" 
@@ -378,7 +378,7 @@ tasks:
   #   max_images: 4
   #   num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY 2/0128 賀年斗方情境圖V2
+  - folder: Media Files/Nano Banana/0128 6 Styles CNY 2/0128 賀年斗方情境圖V2
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "4:5" 
@@ -532,7 +532,7 @@ tasks:
     max_images: 3
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY 2/0128 斗方印刷圖V2
+  - folder: Media Files/Nano Banana/0128 6 Styles CNY 2/0128 斗方印刷圖V2
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4" 
@@ -649,7 +649,7 @@ tasks:
     max_images: 3
     num_iterations: 50
 
-  # - folder: ../Media Files/Nano Banana/0128 6 Styles CNY 2/0128 時尚港風全家福v2
+  # - folder: Media Files/Nano Banana/0128 6 Styles CNY 2/0128 時尚港風全家福v2
   #   model: gemini-3-pro-image-preview
   #   resolution: "2K"
   #   aspect_ratio: "5:4" 
@@ -782,7 +782,7 @@ tasks:
   #   max_images: 3
   #   num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0128 6 Styles CNY 2/0128 可印製紅包V3
+  - folder: Media Files/Nano Banana/0128 6 Styles CNY 2/0128 可印製紅包V3
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4" 

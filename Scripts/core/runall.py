@@ -84,10 +84,12 @@ def run_automation(
         Exit code: 0 for success, 1 for failure.
     """
     # Set working directory for relative path resolution
-    if working_dir:
-        import os
-        os.chdir(working_dir)
-        logger.info(f"📂 Working directory: {working_dir}")
+    import os
+    if not working_dir:
+        # Default to the GAI project root (parent of the Scripts directory)
+        working_dir = str(Path(__file__).parent.parent.parent)
+    os.chdir(working_dir)
+    logger.info(f"📂 Working directory: {working_dir}")
     
     if verbose:
         logging.getLogger().setLevel(logging.DEBUG)
@@ -726,6 +728,7 @@ def main():
         parallel=args['parallel'],
         verbose=args['verbose'],
         runtime_overrides=None,
+        working_dir=None,
     )
 
     return exit_code == 0

@@ -8,7 +8,7 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 tasks:
-- folder: ../Media Files/Tests/1003 Genvideo Test
+- folder: Media Files/Tests/1003 Genvideo Test
   img_prompt: 'Transform the subject from the uploaded image into a character in the style of Charlie and Lola (children’s
     cartoon). Use thin, sketchy outlines, flat bold colors, childlike proportions, playful hand-drawn charm, and simple paper-cut
     textures. Retain the subject’s original clothing, hairstyle, facial features, accessories, skin tone, pose, and expression,

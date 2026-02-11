@@ -16,7 +16,7 @@ root_design_link:
 source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBFHnbCEbI-Q50vepdJzTVlAaMFv4mesVzmBWHdcIV0jTc?e=GoeJOP
 
 tasks:
-- folder: ../Media Files/DreamActor/0209 9 Style
+- folder: Media Files/DreamActor/0209 9 Style
   use_base64: true
   video_url_direct: ''
   cut_switch: true

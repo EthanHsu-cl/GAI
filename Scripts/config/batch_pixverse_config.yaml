@@ -1,4 +1,4 @@
-base_folder: ../Media Files/Pixverse/0128 1 Style Valentine
+base_folder: Media Files/Pixverse/0128 1 Style Valentine
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 template_path: templates/I2V templates.pptx
 testbed: http://192.168.31.161:8000/video_effect/

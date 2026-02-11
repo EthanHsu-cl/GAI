@@ -14,7 +14,7 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3bda2c62735_0_73#slide=id.g3bda2c62735_0_73
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0211 4 Styles/0211 櫻花微夢
+  - folder: Media Files/Nano Banana/0211 4 Styles/0211 櫻花微夢
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
@@ -63,7 +63,7 @@ tasks:
     max_images: 4
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0211 4 Styles/0211 櫻花攝影
+  - folder: Media Files/Nano Banana/0211 4 Styles/0211 櫻花攝影
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
@@ -129,7 +129,7 @@ tasks:
     max_images: 4
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0211 4 Styles/0211 櫻花空見
+  - folder: Media Files/Nano Banana/0211 4 Styles/0211 櫻花空見
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
@@ -224,7 +224,7 @@ tasks:
     max_images: 1
     num_iterations: 50
 
-  - folder: ../Media Files/Nano Banana/0211 4 Styles/0211 棒球風網美照
+  - folder: Media Files/Nano Banana/0211 4 Styles/0211 棒球風網美照
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"

@@ -17,7 +17,7 @@ output:
 generation_count: 5
 
 # Root folder containing all style subfolders
-root_folder: ../Media Files/Veo_ITV
+root_folder: Media Files/Veo_ITV
 
 schedule:
   start_time: ''
@@ -30,7 +30,7 @@ root_design_link: https://docs.google.com/presentation/d/1XWlCZ0QVzoQcUIYvHrm5CF
 # The folder should contain a 'Source' subfolder with the source images
 tasks:
   - style_name: Street Rap
-    folder: ../Media Files/Veo_ITV/0130 6 Styles/Street Rap
+    folder: Media Files/Veo_ITV/0130 6 Styles/Street Rap
     prompt: |
       Cinematic music video opening shot, urban noir aesthetic, core subject is a young African American male rapper with short dreadlocks, wearing a high-gloss black shiny puffer jacket over a black tee, adorned with heavy layered diamond Cuban link chains and a large iced-out pendant, diamond rings and watch, confident rapping performance with mouth open, right hand raised in a rhythmic gesture, set in a narrow brick alleyway covered in graffiti, lighting provided by ambient cyan, pink, and purple neon signs scattered in the background mid-ground, casting diffused colored light onto the scene but specifically avoiding direct backlighting or rim lighting behind the subject's head, environmental details include wet pavement with strong ray-tracing reflections, subtle atmospheric haze and light wisps of smoke drifting gently from the left side, shot on Arri Alexa Mini LF with a 50mm Anamorphic lens, f/1.8 aperture, cinematic shallow depth of field with creamy bokeh, sharp focus on subject, cool color palette with high contrast, 8k ultra-realistic texture.
     negative_prompt: ''
@@ -45,7 +45,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Eyes Zoom-in
-    folder: ../Media Files/Veo_ITV/0130 6 Styles/Eyes Zoom-in
+    folder: Media Files/Veo_ITV/0130 6 Styles/Eyes Zoom-in
     prompt: |
       Cinematic music video aesthetic, consistent slow-motion flow, hyper-realistic textures. The sequence begins with an extreme macro close-up of an azure iris, the camera executes an uninterrupted, ultra-smooth unidirectional Dolly In, gliding directly into the pupil functioning as an infinite forward-moving dark tunnel, maintaining constant forward velocity with absolutely no regression, seamlessly emerging from the void into a dazzling surreal fantasy garden filled with giant dewy flowers rhythmically swaying in the wind, populated by numerous colorful butterflies exhibiting complex, autonomous flight trajectories, engaging in natural swarming behaviors and erratic, individualistic interactions with the flora, distinct from mere ornamentation, physically accurate wing aerodynamics with motion blur, the entire space pulsating with dynamic life and motion, bathed in ethereal warm God Rays and golden-hour volumetric lighting, soft diffused warm ambient lighting, pastel tones, creamy bokeh, 1/4 Black Pro-Mist filter aesthetic, 8k resolution, cinematic fluidity, high-fidelity transition.
     negative_prompt: ''
@@ -60,7 +60,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Running in the field
-    folder: ../Media Files/Veo_ITV/0130 6 Styles/Running in the field
+    folder: Media Files/Veo_ITV/0130 6 Styles/Running in the field
     prompt: |
       Cinematic music video aesthetic, Phantom Flex high-speed cinematography rendering hyper-real viscous slow motion, refined 35mm film stock with subtle and minimal grain structure, tracking shot following a woman with long blonde hair running through a golden wheat field towards a distant pylon, camera moves gently forward as she decelerates and executes a fluid anatomically synchronized 180-degree monolithic body pivot where head shoulders and torso rotate as a single unified structure at a constant angular velocity to fully face the lens strictly preventing head-body rotational lag, camera continues to push in seamlessly while she gently turns her head laterally transitioning into an intimate Extreme Close-Up profile shot of her face with an enigmatic smile, rich sunset atmosphere, final frame composition strictly enforces clear spatial separation with the character's profile positioned in the left-center-third preventing any physical overlap with the visible sunset orb anchored firmly within the right half, intense solar bloom and heavy halation radiating from frame-right, directional low-angle key light sculpting the profile edge, soft diffused warm fill light from the front-left illuminating facial features against powerful backlight, balanced exposure, pastel tones, creamy bokeh, 1/4 Black Pro-Mist filter aesthetic, warm and tender atmospheric haze
     negative_prompt: ''
@@ -75,7 +75,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Girl with Pearl Earrings
-    folder: ../Media Files/Veo_ITV/0130 6 Styles/Girl with Pearl Earrings
+    folder: Media Files/Veo_ITV/0130 6 Styles/Girl with Pearl Earrings
     prompt: |
       Style Anchor: Cinematic Moving Oil Painting, Vermeer Aesthetic, continuous heavy impasto texture visible throughout; Optical Specs: 50mm Prime Lens, shallow depth of field, 8k resolution; Dynamic Camera Encoding: Fixed Mid-Shot composition maintaining absolute framing integrity with no camera movement; Visual Subject: The Girl with a Pearl Earring matching reference images, features strictly limited to exactly one single visible pearl earring on the visible earlobe, no second earring exists; Action Trajectory: The subject's left hand ascends gracefully and slowly from the lower frame to execute a delicate, elegant surface-only fingertip graze upon the fixed pearl earring attached to her earlobe, synchronized with a natural, gentle eye blink; Physical Details: Spatial Lock [The single pearl remains physically anchored to the ear], Chiaroscuro lighting, slow fluid motion
     negative_prompt: ''
@@ -90,7 +90,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: ASMR hamburger
-    folder: ../Media Files/Veo_ITV/0130 6 Styles/ASMR hamburger
+    folder: Media Files/Veo_ITV/0130 6 Styles/ASMR hamburger
     prompt: |
       Cinematic Commercial ASMR, Static Side Profile Close-Up, shot on ARRI Alexa 35 with 100mm Macro lens. Subject: Woman with voluminous curly red hair, glowing under intense Golden Hour backlighting with sharp rim light. Action: She holds a large, golden-brown fried chicken drumstick with both hands, manicured dark blue nails, mouth engaged in a deliberate, high-pressure bite. Visual Synesthesia for Audio: Focus strictly on the solid mechanics of the crunch; the sharp, crystalline fracturing of the deep-fried batter, the rigid fragmentation of the irregular crispy skin clearly separating from the meat under tooth pressure, and the clean tear of the dense chicken fibers without any moisture mist. Constraint: Zero steam, no heat waves, no atmospheric haze; maintaining absolute optical sterility. Subject's face, skin, and lips remain impeccably clean, free of grease or crumbs. Lighting: Vacuum-level clarity, high contrast texture rendering. Background: Creamy heavy optical bokeh of a cafe interior. 8K resolution.
     negative_prompt: ''
@@ -105,7 +105,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Violin
-    folder: ../Media Files/Veo_ITV/0130 6 Styles/Violin
+    folder: Media Files/Veo_ITV/0130 6 Styles/Violin
     prompt: |
       Based on the visual benchmark of image_8.png, cinematic realism style captured with a 50mm prime lens. The woman with wavy blonde hair in the black dress performs a highly dynamic violin performance with extremely large-amplitude, expressive bowing movements. Her entire body executes a slow, continuous fluid rotation (pirouette) while playing. A stable Steadicam tracking orbit shot synchronizes perfectly with her rotation speed, encircling her to capture the constantly shifting body postures and intense kinetic energy. The dramatic side Rembrandt lighting and warm golden rim light established in image_8.png rapidly flow and shift across her face, hair, and the violin body as she turns. The atmosphere is ultra-pristine and crystal clear, explicitly characterized by the complete absence of any floating dust, rosin particles, or volumetric fog against the deep pitch-black background.
     negative_prompt: ''

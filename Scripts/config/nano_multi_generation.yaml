@@ -15,7 +15,7 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 root_design_link: https://docs.google.com/presentation/d/1L4TYRkUKvmLZdGmzlI_5-MdZmifLYA_iyLnFGK10AYg/edit?slide=id.g3bbd2c01681_0_349#slide=id.g3bbd2c01681_0_349
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0129 賀年斗方情境圖V3
+  - folder: Media Files/Nano Banana/0129 賀年斗方情境圖V3
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "4:5"

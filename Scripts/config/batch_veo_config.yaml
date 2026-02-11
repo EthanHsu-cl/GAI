@@ -6,7 +6,7 @@ schedule:
 
 tasks:
   - style_name: Dog_Run_To_Owner
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A dog is happily running toward its owner with excitement
     negative_prompt: ''
@@ -21,7 +21,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Capybara_Onsen_Closeup
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A close up capybara bathe in a white smoky hot spring, looking around, smoke on the water surface, foggy, blurred mountain background in Japan, bright environment
     negative_prompt: ''
@@ -36,7 +36,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Cherry_Soda_Condensation
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A chilled glass bottle of cherry soda with condsation, surrounded by fresh, juicy cherries. The background is a blend of soft pink and red gradients, Splashes of soda fizz and bubbles are dynamically captured around the bottle
     negative_prompt: ''
@@ -51,7 +51,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Coral_Reef_Camera_Move
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A vivid and highly detailed coral reef teeming with life. Brightly colored corals in rich, saturated hues—reds, purples, oranges, and yellows—form a dynamic underwater landscape. Dozens of vibrant tropical fish swim in harmony across the scene, with smooth, coordinated motion. Sunlight beams through crystal-clear, blue-tinted ocean water, casting magical light rays across the reef. The camera gently glides forward with a cinematic feel, capturing the colorful reef from a low angle, evoking a surreal, painterly atmosphere.
     negative_prompt: ''
@@ -66,7 +66,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Fresh_Salad_Camera_Move
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       Fresh salad in a bowl, with vibrant greens and vegetables, camera movement
     negative_prompt: ''
@@ -81,7 +81,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Polar_Bear_Beer_Cheers
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A friendly polar bear wearing a cozy red scarf, smiling warmly while holding a bottle of beer in one paw. The bear raises the bottle cheerfully. The scene is set in a snowy Arctic landscape with bright sunlight and an igloo in the background. The bear’s fur is soft and detailed, and its posture is relaxed and inviting.
     negative_prompt: ''
@@ -96,7 +96,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Diamond_Ring_Rotation
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       Diamond ring placed on a velvet cloth, creating dazzling reflections, with the camera slowly rotating around it under a spotlight
     negative_prompt: ''
@@ -111,7 +111,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Pancakes_Syrup_Drizzle
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A stack of fluffy Japanese pancakes topped with whipped cream and strawberries is being drizzled with golden syrup from a pitcher, set on a wooden plate
     negative_prompt: ''
@@ -126,7 +126,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Skincare_Floating_Platform
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       Skincare products displayed on a floating circular stone platform. The background features soft lighting, fluffy white clouds, large circular abstract shapes, and tropical leaves as accents. The entire scene reflects on a calm water surface with subtle ripples
     negative_prompt: ''
@@ -141,7 +141,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Tropical_Beach_Waves
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       Crystal clear turquoise sea waves gently washing over soft white sand on a sunny tropical beach, fine texture of sand, calm and serene atmosphere, Camera Movement
     negative_prompt: ''
@@ -156,7 +156,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Forest_River_Camera_Move
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A photo of serene forest with crystal-clear river flowing through, surrounded by lush green trees and wildflowers, under a bright blue sky, an eco-friendly atmosphere, vibrant colors, clean and fresh environment, Camera Movement
     negative_prompt: ''
@@ -171,7 +171,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Steam_Cloud_Pan
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       The steam gently rising from cup like fluffy white clouds , natural motion, continuously flowing without interruption. The camera smoothly moves in a slow cinematic pan
     negative_prompt: ''
@@ -186,7 +186,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Desert_Door_To_Oasis
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A glowing door stands alone in the middle of a desert under a star-filled night sky. When the door opens from one side, it reveals a lush green oasis with palm trees, shimmering water, and bright sunlight, contrasting with the surrounding dark desert, Camera Movement
     negative_prompt: ''
@@ -201,7 +201,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Grilled_Steak_Smoke
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A juicy perfectly grilled steak on a wire grid, causing a smoky
     negative_prompt: ''
@@ -216,7 +216,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Whiskey_Condensation_Fire
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A bottle of premium whiskey emanates from blazing fires, showcasing a condensation effect. The backlight accentuates the bottle's silhouette and transparent texture.
     negative_prompt: ''
@@ -231,7 +231,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Futuristic_UFO_Landscape
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A futuristic, possibly sci-fi scene set in a rocky, desert-like landscape with a massive flying saucer-like UFO hovering above the ground. An astronaut stands in the foreground, facing away from the viewer, dressed in a full spacesuit with a reflective helmet, walking toward the hovering spacecraft
     negative_prompt: ''
@@ -246,7 +246,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Tiny_Kitten_Yawning
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A tiny kitten, snugly wrapped in a pastel blanket, blinks slowly and lets out a long, exaggerated yawn. The background is cozy and softly lit, with twinkling fairy lights and plush pillows creating a dreamy bedtime vibe.
     negative_prompt: ''
@@ -261,7 +261,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Astronaut_Sandstorm
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       Cinematic video of an astronaut strolling on a barren, dusty planet amidst a raging sandstorm. In the background, a massive planet looms in the sky, while a bright sun casts a dramatic glow over the scene, enhancing the otherworldly atmosphere.
     negative_prompt: ''
@@ -276,7 +276,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Sunrise_Over_Mountains
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       Breathtaking video of the sun rising from behind towering mountain peaks. The sky is clear and cloudless, allowing the golden dawn to cast a warm glow over the icy, snow-covered summits. As the sun emerges, its radiant halo shimmers and gently rotates, illuminating the rugged landscape with a stunning interplay of light and shadow.
     negative_prompt: ''
@@ -291,7 +291,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: Cozy_Winter_Cabin
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: |
       A cozy cabin nestled among snow-laden trees in a tranquil winter landscape. Smoke gently rises from the chimney, and soft snowflakes fall from the sky. The scene exudes warmth and serenity, with the camera capturing the peaceful ambiance from a distance.
     negative_prompt: ''
@@ -306,7 +306,7 @@ tasks:
     person_generation: allow_all
 
   - style_name: NYC_Loft_Sunlight
-    output_folder: ../Media Files/Veo/1229 21 Styles 3.1/Generated_Video
+    output_folder: Media Files/Veo/1229 21 Styles 3.1/Generated_Video
     prompt: "The late afternoon sun peeking through the window of a New York City loft"
     negative_prompt: ''
     model_id: veo-3.1-generate-preview

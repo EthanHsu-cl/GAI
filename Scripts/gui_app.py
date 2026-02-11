@@ -339,6 +339,47 @@ API_FIELD_SCHEMAS = {
 }
 
 
+# API-specific config key names for link fields (source video and design links)
+# Maps api_name -> {'source_link': config_key_name, 'design_link': config_key_name}
+API_LINK_KEYS = {
+    'nano_banana': {
+        'source_link': 'root_source_video_link',
+        'design_link': 'root_design_link',
+    },
+    'kling': {},
+    'kling_effects': {},
+    'kling_endframe': {},
+    'kling_ttv': {
+        'source_link': 'source_video_link',
+        'design_link': 'design_link',
+    },
+    'veo': {},
+    'veo_itv': {},
+    'pixverse': {
+        'source_link': 'source_video_link',
+        'design_link': 'design_link',
+    },
+    'genvideo': {},
+    'runway': {},
+    'wan': {
+        'source_link': 'source_video_link',
+        'design_link': 'root_design_link',
+    },
+    'dreamactor': {
+        'source_link': 'source_video_link',
+        'design_link': 'root_design_link',
+    },
+    'vidu_effects': {
+        'source_link': 'source_video_link',
+        'design_link': 'design_link',
+    },
+    'vidu_reference': {
+        'source_link': 'source_video_link',
+        'design_link': 'root_design_link',
+    },
+}
+
+
 # Platform display names for the dropdown
 PLATFORM_DISPLAY_NAMES = {
     'kling': 'Kling 2.1 (Image-to-Video)',
@@ -771,10 +812,93 @@ class AutomationGUI:
             font=('Helvetica', 9)
         ).pack(side=tk.RIGHT, padx=5)
         
+        # Global Settings section
+        self._global_frame = ttk.LabelFrame(
+            self._advanced_frame, text="Global Settings", padding="10"
+        )
+        self._global_frame.pack(fill=tk.X, pady=(0, 10))
+        self._global_widgets = {}
+
+        # Output Directory
+        row = ttk.Frame(self._global_frame)
+        row.pack(fill=tk.X, pady=2)
+        ttk.Label(row, text="Output Directory", width=20, anchor='e').pack(
+            side=tk.LEFT, padx=(0, 5))
+        dir_frame = ttk.Frame(row)
+        dir_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self._global_widgets['output_directory'] = tk.StringVar()
+        ttk.Entry(
+            dir_frame,
+            textvariable=self._global_widgets['output_directory'],
+            width=40
+        ).pack(side=tk.LEFT, fill=tk.X, expand=True)
+        ttk.Button(
+            dir_frame, text="...", width=3,
+            command=lambda: self._browse_field_folder(
+                self._global_widgets['output_directory'])
+        ).pack(side=tk.LEFT, padx=2)
+
+        # Group Tasks By
+        row = ttk.Frame(self._global_frame)
+        row.pack(fill=tk.X, pady=2)
+        ttk.Label(row, text="Group Tasks By", width=20, anchor='e').pack(
+            side=tk.LEFT, padx=(0, 5))
+        self._global_widgets['group_tasks_by'] = tk.StringVar(value='0')
+        ttk.Entry(
+            row, textvariable=self._global_widgets['group_tasks_by'], width=10
+        ).pack(side=tk.LEFT)
+        ttk.Label(
+            row, text="\U0001f4a1 0 = individual reports per task",
+            foreground='#a0a0a0', font=('Helvetica', 9)
+        ).pack(side=tk.LEFT, padx=10)
+
+        # Schedule Start Time
+        row = ttk.Frame(self._global_frame)
+        row.pack(fill=tk.X, pady=2)
+        ttk.Label(row, text="Schedule", width=20, anchor='e').pack(
+            side=tk.LEFT, padx=(0, 5))
+        self._global_widgets['schedule'] = tk.StringVar()
+        ttk.Entry(
+            row, textvariable=self._global_widgets['schedule'], width=15
+        ).pack(side=tk.LEFT)
+        ttk.Label(
+            row, text="\U0001f4a1 HH:MM (24h). Empty = start immediately",
+            foreground='#a0a0a0', font=('Helvetica', 9)
+        ).pack(side=tk.LEFT, padx=10)
+
+        # Source Video Link (conditionally shown based on API)
+        self._source_link_row = ttk.Frame(self._global_frame)
+        ttk.Label(
+            self._source_link_row, text="Source Video Link", width=20,
+            anchor='e'
+        ).pack(side=tk.LEFT, padx=(0, 5))
+        self._global_widgets['source_link'] = tk.StringVar()
+        ttk.Entry(
+            self._source_link_row,
+            textvariable=self._global_widgets['source_link'],
+            width=50
+        ).pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+        # Design Link (conditionally shown based on API)
+        self._design_link_row = ttk.Frame(self._global_frame)
+        ttk.Label(
+            self._design_link_row, text="Design Link", width=20, anchor='e'
+        ).pack(side=tk.LEFT, padx=(0, 5))
+        self._global_widgets['design_link'] = tk.StringVar()
+        ttk.Entry(
+            self._design_link_row,
+            textvariable=self._global_widgets['design_link'],
+            width=50
+        ).pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+        # Separator between global settings and task entries
+        ttk.Separator(self._advanced_frame, orient='horizontal').pack(
+            fill=tk.X, pady=5)
+
         # Simple container for task entries (no nested canvas)
         self._task_list_frame = ttk.Frame(self._advanced_frame)
         self._task_list_frame.pack(fill=tk.X, expand=False)
-        
+
         # Store task widgets
         self._task_entries: List[Dict[str, Any]] = []
         self._current_api_name = None
@@ -1036,6 +1160,147 @@ class AutomationGUI:
             # Platform changed, clear existing tasks
             self._clear_all_tasks()
             self._current_api_name = api_name
+        
+        # Always update link field visibility for the current platform
+        self._update_global_link_visibility()
+
+    def _update_global_link_visibility(self) -> None:
+        """Show or hide link fields based on the current platform."""
+        platform = self._platform_var.get()
+        api_name = API_MAPPING.get(platform, platform)
+        link_keys = API_LINK_KEYS.get(api_name, {})
+
+        if link_keys.get('source_link'):
+            self._source_link_row.pack(fill=tk.X, pady=2)
+        else:
+            self._source_link_row.pack_forget()
+            self._global_widgets['source_link'].set('')
+
+        if link_keys.get('design_link'):
+            self._design_link_row.pack(fill=tk.X, pady=2)
+        else:
+            self._design_link_row.pack_forget()
+            self._global_widgets['design_link'].set('')
+
+    def _get_nested_config_value(self, config: Dict, *key_paths) -> Any:
+        """
+        Try multiple nested key paths and return the first found value.
+
+        Args:
+            config: Configuration dictionary to search.
+            *key_paths: Each argument is a list of keys representing a nested
+                path, or a single string for a top-level key.
+
+        Returns:
+            The first found value, or None if no path matches.
+        """
+        for keys in key_paths:
+            if isinstance(keys, str):
+                keys = [keys]
+            value = config
+            try:
+                for k in keys:
+                    value = value[k]
+                return value
+            except (KeyError, TypeError):
+                continue
+        return None
+
+    def _set_nested_config_value(
+        self, config: Dict, value: Any, *key_paths
+    ) -> bool:
+        """
+        Set a value in config at the first existing key path.
+
+        Tries each key path in order. If a path already exists in the
+        config, the value is set there. If none exists, the first path
+        is created.
+
+        Args:
+            config: Configuration dictionary to modify.
+            value: Value to set.
+            *key_paths: Key paths to try (list of keys or single string).
+
+        Returns:
+            True if value was set.
+        """
+        # Try to find an existing path first
+        for keys in key_paths:
+            if isinstance(keys, str):
+                keys = [keys]
+            target = config
+            try:
+                for k in keys[:-1]:
+                    target = target[k]
+                if keys[-1] in target:
+                    target[keys[-1]] = value
+                    return True
+            except (KeyError, TypeError):
+                continue
+
+        # No existing path found - create the first path
+        first_keys = key_paths[0]
+        if isinstance(first_keys, str):
+            first_keys = [first_keys]
+        target = config
+        for k in first_keys[:-1]:
+            if k not in target or not isinstance(target[k], dict):
+                target[k] = {}
+            target = target[k]
+        target[first_keys[-1]] = value
+        return True
+
+    def _load_global_settings_from_config(
+        self, config: Dict[str, Any], api_name: str
+    ) -> None:
+        """
+        Populate the global settings widgets from a config dictionary.
+
+        Args:
+            config: Loaded configuration dictionary.
+            api_name: Internal API name for link key resolution.
+        """
+        # Output directory
+        output_dir = self._get_nested_config_value(
+            config,
+            ['output', 'directory'],
+            ['output', 'output_directory'],
+            'output_directory'
+        )
+        self._global_widgets['output_directory'].set(
+            str(output_dir) if output_dir else ''
+        )
+
+        # Group tasks by
+        group_by = self._get_nested_config_value(
+            config,
+            ['output', 'group_tasks_by'],
+            'group_tasks_by'
+        )
+        self._global_widgets['group_tasks_by'].set(
+            str(group_by) if group_by is not None else '0'
+        )
+
+        # Schedule start time
+        schedule_time = self._get_nested_config_value(
+            config, ['schedule', 'start_time']
+        )
+        self._global_widgets['schedule'].set(
+            str(schedule_time) if schedule_time else ''
+        )
+
+        # Link fields
+        link_keys = API_LINK_KEYS.get(api_name, {})
+        if link_keys.get('source_link'):
+            source_val = config.get(link_keys['source_link'], '')
+            self._global_widgets['source_link'].set(
+                str(source_val) if source_val else ''
+            )
+        if link_keys.get('design_link'):
+            design_val = config.get(link_keys['design_link'], '')
+            self._global_widgets['design_link'].set(
+                str(design_val) if design_val else ''
+            )
 
     def _create_control_buttons(self, parent: ttk.Frame) -> None:
         """Create the main control buttons."""
@@ -1203,13 +1468,45 @@ class AutomationGUI:
 
     def _get_runtime_overrides(self) -> Optional[Dict[str, Any]]:
         """
-        Parse runtime overrides from the advanced task entries.
-        
+        Parse runtime overrides from advanced task entries and global settings.
+
         Returns:
             Dictionary of overrides, or None if empty.
         """
         overrides = {}
-        
+
+        # Collect global settings overrides
+        if hasattr(self, '_global_widgets'):
+            platform = self._platform_var.get()
+            api_name = API_MAPPING.get(platform, platform)
+
+            output_dir = self._global_widgets['output_directory'].get().strip()
+            if output_dir:
+                overrides['output_directory'] = output_dir
+                overrides.setdefault('output', {})['directory'] = output_dir
+
+            group_by_str = self._global_widgets['group_tasks_by'].get().strip()
+            if group_by_str:
+                try:
+                    group_val = int(group_by_str)
+                    overrides['group_tasks_by'] = group_val
+                    overrides.setdefault('output', {})['group_tasks_by'] = group_val
+                except ValueError:
+                    pass
+
+            schedule_time = self._global_widgets['schedule'].get().strip()
+            if schedule_time:
+                overrides['schedule'] = {'start_time': schedule_time}
+
+            link_keys = API_LINK_KEYS.get(api_name, {})
+            source_link = self._global_widgets['source_link'].get().strip()
+            if link_keys.get('source_link') and source_link:
+                overrides[link_keys['source_link']] = source_link
+
+            design_link = self._global_widgets['design_link'].get().strip()
+            if link_keys.get('design_link') and design_link:
+                overrides[link_keys['design_link']] = design_link
+
         # Collect task overrides from GUI entries
         tasks_override = []
         
@@ -1346,7 +1643,10 @@ class AutomationGUI:
                     config = json.load(f)
                 else:
                     config = yaml.safe_load(f) or {}
-            
+
+            # Load global settings into their widgets
+            self._load_global_settings_from_config(config, api_name)
+
             # Get tasks from config
             tasks = config.get('tasks', [])
             if not tasks:
@@ -1480,14 +1780,50 @@ class AutomationGUI:
             
             # Update config with new tasks
             config['tasks'] = new_tasks
-            
+
+            # Save global settings
+            platform = self._platform_var.get()
+            api_name = API_MAPPING.get(platform, platform)
+
+            output_dir = self._global_widgets['output_directory'].get().strip()
+            if output_dir:
+                self._set_nested_config_value(
+                    config, output_dir,
+                    ['output', 'directory'],
+                    ['output', 'output_directory'],
+                    'output_directory'
+                )
+
+            group_by_str = self._global_widgets['group_tasks_by'].get().strip()
+            if group_by_str:
+                try:
+                    group_val = int(group_by_str)
+                    self._set_nested_config_value(
+                        config, group_val,
+                        ['output', 'group_tasks_by'],
+                        'group_tasks_by'
+                    )
+                except ValueError:
+                    pass
+
+            schedule_time = self._global_widgets['schedule'].get().strip()
+            if 'schedule' not in config:
+                config['schedule'] = {}
+            config['schedule']['start_time'] = schedule_time
+
+            link_keys = API_LINK_KEYS.get(api_name, {})
+            if link_keys.get('source_link'):
+                source_val = self._global_widgets['source_link'].get().strip()
+                config[link_keys['source_link']] = source_val
+            if link_keys.get('design_link'):
+                design_val = self._global_widgets['design_link'].get().strip()
+                config[link_keys['design_link']] = design_val
+
             # Also update top-level fields that might be shared across tasks
             # (take from first task if present)
             first_task = new_tasks[0]
-            platform = self._platform_var.get()
-            api_name = API_MAPPING.get(platform, platform)
             schema = API_FIELD_SCHEMAS.get(api_name, {})
-            
+
             # Some fields are typically top-level in config
             top_level_keys = ['model', 'model_version', 'mode', 'resolution', 
                              'aspect_ratio', 'duration', 'cfg', 'testbed']

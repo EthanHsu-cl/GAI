@@ -11,188 +11,42 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 root_design_link: https://docs.google.com/presentation/d/198gdbsdOLG1VPPCI6DJDSwScr2p_fC6p-QFWru93OB8/edit?slide=id.g3bd8162879e_108_0#slide=id.g3bd8162879e_108_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0211 復古愛心漫畫
+  - folder: Media Files/Nano Banana/0211 日式棒球卡
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "3:4"
+    aspect_ratio: "2:3"
     prompt: |-
-      Use ONLY the uploaded photos as image content.
-      Do NOT generate, invent, redraw, recolor, or hallucinate any images.
-      This is a FIXED vintage magazine template insertion task, NOT a redesign.
+      Absolute priority: the human subject must remain indistinguishable from a real photograph. If any instruction conflicts with photographic realism, photographic realism always overrides card style, visual effects, or UI design.
 
-      ────────────────────────
-      INPUT IMAGE RULES (CRITICAL)
-      ────────────────────────
+      Use the uploaded person as the only human subject. The person in the uploaded image must be the only character in the final result. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, facial expression, and body proportions exactly as shown in the uploaded photo. Do NOT beautify, stylize, idealize, or alter the face or body in any way. No extra people may appear.
 
-      • Accept 4 OR 5 uploaded photos only.
-      • NEVER duplicate any uploaded photo.
-      • NEVER generate new people, objects, animals, or backgrounds.
+      The subject must remain fully photorealistic at all times, appearing as if captured in a real professional baseball game by a high-speed sports camera. Skin texture, facial realism, lighting realism, and photographic detail must be preserved exactly. The subject must NOT look illustrated, painted, game-rendered, or artificially enhanced. All stylization is limited strictly to the card design and background effects.
 
-      IF 5 photos are uploaded:
-      – Use the full 5-frame layout exactly as defined.
+      Transform the subject into a modern professional baseball card character, wearing a clean yet visually rich modern baseball uniform.
 
-      IF ONLY 4 photos are uploaded:
-      – Merge the TOP-LEFT vertical frame and the MID-LEFT horizontal frame into ONE combined vertical frame.
-      – This merged frame occupies the exact combined area of those two frames.
-      – ALL OTHER FRAMES REMAIN UNCHANGED in size and position.
-      – Do NOT shift, resize, or redesign any other frame.
+      Uniform restrictions (strict):
+      No text, letters, logos, emblems, icons, or symbols are allowed except the jersey number. This explicitly includes no check marks, tick symbols, swooshes, V-shaped marks, abstract approval marks, or any logo-like shapes. Absolutely no brand marks, team logos, sponsor graphics, trademark-like shapes, national flags, national colors, country references, cultural symbols, or any real-world identifiable elements may appear on the uniform or helmet.
 
-      ────────────────────────
-      ABSOLUTE PRIORITY (NON-NEGOTIABLE)
-      ────────────────────────
+      Uniform requirements:
+      A clearly visible jersey number on the chest or torso. Distinct piping or trim lines along jersey edges, sleeves, or placket. A restrained premium color scheme with one primary color and subtle secondary accents. Pants must be pure white. Fabric must appear fully realistic with natural folds, seams, stitching, and material tension. The helmet follows the same rules.
 
-      • Frame positions are FIXED.
-      • Frame sizes are FIXED.
-      • Black border style is FIXED.
-      • Photos MUST appear INSIDE frames.
-      • Photos MUST retain their original colors and lighting.
-      • The page MUST NOT turn into a single-color wash.
-      • The background pink filter MUST NOT override photo colors.
+      Pose (must match exactly):
+      Captured mid-run with strong forward momentum, leaning slightly forward. Both arms bent at the elbows, hands in front of the chest. Both index fingers extended, pointing straight downward; remaining fingers naturally curled. Elbows angled outward, forming a tight, inward-focused gesture. The subject shows a smile. Shoulders slightly hunched forward, chest pushed outward, expressing explosive energy and confidence. Do not alter or substitute the gesture.
 
-      If any photo is not clearly placed inside a black-bordered frame, the result is WRONG.
+      The image is vertically oriented and composed as a complete Japanese baseball card. The subject dominates the upper and central area; the lower section contains structured card UI elements and stats with metallic accents, glowing borders, layered panels, and clear hierarchy.
 
-      ────────────────────────
-      CANVAS / PAGE (FIXED)
-      ────────────────────────
+      The card design must convey a premium holographic rarity: Iridescent foil textures and rainbow light refraction across the card surface. Subtle prismatic highlights and metallic shimmer layers. High-end glowing borders and multi-layered frames. Light streaks, sparkles, and reflective accents that shift across the card. Deep layered depth, making the card feel thick, luxurious, and collectible. These effects must enhance the card’s rarity and prestige while never affecting the subject’s photographic realism.
 
-      Portrait magazine page, A4-like vertical layout (~3:4).
+      Place the following fixed text at the very top of the card, clearly separated from the stat panels and visually anchored as a header. The text must remain fixed and exact, and must appear exactly as written:
 
-      Background:
-      – Warm off-white / cream paper
-      – A light pink halftone display with a delicate texture
-      – Soft vintage pink paper tone ONLY on the background
+      2026 Series 1
 
-      IMPORTANT:
-      The pink tone applies ONLY to the paper background.
-      Uploaded photos must retain their original color and contrast.
+      The rarity grade (S級 / A級 / B級 / C級 / D級) must be clearly displayed at the top-left corner of the card, visually prominent and immediately recognizable, similar to high-rarity indicators in online gacha games.
 
-      Add very light halftone dots on the background ONLY.
-      Do NOT apply halftone or color wash over the photos themselves.
+      At the bottom portion of the card, display randomly generated card stats written entirely in Japanese, following the visual style of Japanese baseball collectible cards, creating a strong gacha / collectible feeling.
 
-      ────────────────────────
-      FIXED MAGAZINE HEADER (TOP)
-      ────────────────────────
-
-      Main headline text:
-      – Content: randomly generate a SIMPLE, POSITIVE English word or phrase
-        Examples: “Lovely Day”, “Sweet Moments”, “Pure Joy”, “Happy Smiles”
-      – MUST NOT repeat “Tickled Pink”
-      – MUST NOT copy photo captions
-
-      Font:
-      – Google Font: Pacifico
-      – Smooth handwritten script
-      – Medium-large size, NOT oversized
-      – Balanced to match the reference scale (not dominating the page)
-
-      Color:
-      – Dark brown or near-black ink
-      – Printed look, NOT digital black
-      – No outline, no shadow, no glow
-
-      Placement:
-      – Top center
-      – Slightly organic, magazine masthead feel
-      – Clean spacing above frames
-
-      ────────────────────────
-      SECONDARY CURVED TEXT (ABOVE HEART)
-      ────────────────────────
-
-      Add ONE short curved line of text that follows the upper arc of the heart frame.
-
-      Text content:
-      – Simple positive blessing or feeling
-        Examples: “sweet smiles”, “warm wishes”, “pure joy”, “soft moments”
-
-      Style:
-      – Same ink color as headline
-      – Smaller than headline
-      – Gently curved to hug the heart shape
-      – Printed, subtle, editorial
-
-      ────────────────────────
-      FIXED FRAME STRUCTURE
-      ────────────────────────
-
-      Use thick black hand-drawn comic ink borders:
-      – Same stroke thickness everywhere
-      – Slight organic wobble
-
-      DO NOT add labels (A/B/C/D/E) - MUST.
-      DO NOT add numbering or markers.
-
-      FRAME DEFINITIONS:
-
-      • Top-left: vertical rectangle
-      • Center-upper: large heart frame (dominant)
-      • Left-middle: small horizontal rectangle
-      • Bottom-left: wide horizontal rectangle
-      • Right side: tall vertical rectangle
-
-      ────────────────────────
-      PHOTO PLACEMENT RULES (CRITICAL)
-      ────────────────────────
-
-      Each uploaded photo MUST be:
-      – Placed fully INSIDE a frame
-      – Preserving original aspect ratio
-      – No stretching, no squeezing, no warping
-
-      If aspect ratio does not match:
-      – Scale proportionally
-      – Allow natural cropping OR small margins
-      – Never distort faces or bodies
-
-      Photos must look PRINTED INTO frames,
-      not floating, not blended into background.
-
-      ────────────────────────
-      CAPTIONS / SMALL TEXT
-      ────────────────────────
-
-      Add 4 small captions total.
-
-      Caption rules:
-      – Content: simple positive words or blessings
-      – Examples: “so lovely”, “sweet vibes”, “pure joy”
-      – Small size, low contrast
-      – Printed magazine feel
-      – Placed near frame edges , Not in the box
-
-      NO big subtitles.
-      NO repeated headline text.
-
-      ────────────────────────
-      COLOR & FINISH
-      ────────────────────────
-
-      Overall finish:
-      – Soft vintage magazine scan
-      – Low contrast
-      – Slight paper softness
-
-      DO NOT:
-      – Flatten image colors
-      – Turn photos monochrome
-      – Apply global pink overlay to photos
-      – Create modern glossy HDR look
-
-      ────────────────────────
-      FINAL LOCK RULE
-      ────────────────────────
-
-      The result must look like:
-      Different photos printed into the SAME fixed vintage magazine page.
-
-      If:
-      – Photos are missing from frames
-      – Frames move or resize
-      – Page becomes one solid color
-      – New images appear
-
-      → The result is incorrect.
-    use_random_source_selection: true
+      All other labels, categories, and values displayed on the card must be presented using Japanese text and numerals, including rarity grade, spirit value, cost, level state, limit break values, training status, special abilities, and numerical stats. No player names, character names, team names, or any form of personal naming may appear anywhere in the stats or UI. The random stats should appear plausible within Japanese professional baseball card systems and be presented using structured, game-style UI panels with Japanese typography, rather than floating text. Each generation should feel like a distinct card pull, with believable variation in rarity and strength, while maintaining a polished, premium collectible card appearance.
+    use_random_source_selection: false
     use_deterministic_random: true
     random_seed: 42
     min_images: 4

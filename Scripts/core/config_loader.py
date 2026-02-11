@@ -303,45 +303,55 @@ class ConfigLoader:
 
 def _resolve_task_paths(config: Dict[str, Any], base_dir: Path) -> Dict[str, Any]:
     """
-    Resolve relative paths in task configurations to absolute paths.
-    
-    This ensures that relative paths like '../Media Files/...' are resolved
-    correctly based on the current working directory, not the config file location.
-    
+    Resolve relative paths in config and task configurations to absolute paths.
+
+    Handles both top-level config keys (base_folder, output_folder, root_folder)
+    and per-task path keys so that all relative paths are resolved from the
+    current working directory.
+
     Args:
         config: Configuration dictionary with tasks.
         base_dir: Base directory for resolving relative paths (current working dir).
-    
+
     Returns:
         Configuration with resolved absolute paths.
     """
-    tasks = config.get('tasks', [])
-    if not tasks:
-        return config
-    
     path_keys = ['folder', 'reference_folder', 'output_folder', 'base_folder']
+    top_level_path_keys = ['base_folder', 'output_folder', 'root_folder']
     resolved_count = 0
     missing_paths = []
-    
+
+    # Resolve top-level relative paths
+    for key in top_level_path_keys:
+        if key in config and config[key]:
+            original_path = config[key]
+            path_obj = Path(original_path)
+            if not path_obj.is_absolute():
+                resolved_path = (base_dir / original_path).resolve()
+                config[key] = str(resolved_path)
+                resolved_count += 1
+
+    # Resolve per-task relative paths
+    tasks = config.get('tasks', [])
     for i, task in enumerate(tasks):
         for key in path_keys:
             if key in task and task[key]:
                 original_path = task[key]
                 path_obj = Path(original_path)
-                
+
                 # Only resolve if it's a relative path
                 if not path_obj.is_absolute():
                     resolved_path = (base_dir / original_path).resolve()
                     task[key] = str(resolved_path)
                     resolved_count += 1
-                    
+
                     # Check if the resolved path exists
                     if not resolved_path.exists():
                         missing_paths.append((i + 1, key, str(resolved_path)))
-    
+
     if resolved_count > 0:
-        logger.debug(f"Resolved {resolved_count} relative paths in task configurations")
-    
+        logger.debug(f"Resolved {resolved_count} relative paths in configurations")
+
     if missing_paths:
         logger.warning(f"⚠️ {len(missing_paths)} resolved path(s) do not exist:")
         for task_num, key, path in missing_paths[:3]:  # Show first 3
@@ -349,7 +359,7 @@ def _resolve_task_paths(config: Dict[str, Any], base_dir: Path) -> Dict[str, Any
         if len(missing_paths) > 3:
             logger.warning(f"   ... and {len(missing_paths) - 3} more")
         logger.warning(f"   Hint: Check that 'Working Directory' is set to the correct project folder")
-    
+
     return config
 
 

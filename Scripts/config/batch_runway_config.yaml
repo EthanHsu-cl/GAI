@@ -11,7 +11,7 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 tasks:
-- folder: ../Media Files/Tests/1003 Runway Test
+- folder: Media Files/Tests/1003 Runway Test
   prompt: Change the man's face to the reference image, keep the background and other elements unchanged
   pairing_strategy: all_combinations
   comment_pairing_strategy: 'How to pair videos with reference images: ''one_to_one'' (pair by index) or ''all_combinations''

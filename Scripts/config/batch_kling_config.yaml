@@ -64,7 +64,7 @@ comments:
 
 tasks:
 - mode: std
-  folder: ../Media Files/Kling 2.5/1226 Send flower v2
+  folder: Media Files/Kling 2.5/1226 Send flower v2
   prompt: |
     A soft and romantic two-person interaction that maintains the original facial features, outfits, and body proportions. Person A reaches behind their back, retrieves a red rose from behind them with a smooth, stable motion, and brings it forward while clearly holding it in their hand before offering it to Person B.After the rose is handed over, both characters pause and remain still for a brief, clear moment to look at the rose together. Person B shows a visible, gentle expression of happiness and emotional joy while holding the rose. This “seeing the rose” moment must last for several frames and should not immediately transition into kissing.After this extended moment of shared attention on the rose, Person B continues to move closer, and both characters advance until their lips make clear, full contact. The kiss must be fully completed with visible lip overlap and several frames of held contact—never stopping before touching and never cutting away. The entire movement should remain slow, natural, and emotionally expressive. After the kiss, their foreheads rest together in a tender moment.The background remains identical to the uploaded image, with no scene changes or camera movement.
   negative_prompt: |
