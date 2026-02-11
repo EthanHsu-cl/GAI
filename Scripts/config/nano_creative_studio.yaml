@@ -7,8 +7,8 @@ output:
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCCjAznB8B5RLsxBh3i6VzZAVOoGG65PVWtaIFlgzAG8RA?e=Yhc6YZ
-root_design_link: https://docs.google.com/presentation/d/198gdbsdOLG1VPPCI6DJDSwScr2p_fC6p-QFWru93OB8/edit?slide=id.g3bd8162879e_108_0#slide=id.g3bd8162879e_108_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDOGJuMwnIVSp02PaMpFbucATNfOMsWCxLBl250H1HFN3U?e=jcdkUv
+root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3bdc7f652f2_1_53#slide=id.g3bdc7f652f2_1_53
 
 tasks:
   - folder: Media Files/Nano Banana/0211 日式棒球卡

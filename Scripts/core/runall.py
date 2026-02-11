@@ -260,6 +260,13 @@ def _run_platform_with_overrides(
             elif not Path(config_path).exists():
                 logger.warning(f"⚠️ Config file not found: {config_path}")
                 config_path = None
+    else:
+        # User-provided config path: if not found directly, try from Scripts dir
+        if not Path(config_path).exists():
+            script_dir = Path(__file__).parent.parent
+            alt_path = script_dir / config_path
+            if alt_path.exists():
+                config_path = str(alt_path)
 
     merged_config = None
     if config_path or runtime_overrides:
