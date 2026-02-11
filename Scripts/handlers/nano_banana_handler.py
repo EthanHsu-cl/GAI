@@ -816,9 +816,14 @@ class NanoBananaHandler(BaseAPIHandler):
                     else:
                         self.logger.error(f" ❌ All {max_retries} attempts failed: {e}")
             
-            # Rate limit
+            # Rate limit — scale proportionally by number of images used
             if iteration_idx < num_iterations - 1:
-                time.sleep(self.api_defs.get('rate_limit', 3))
+                base_rate = self.api_defs.get('rate_limit', 3)
+                num_images_used = len(selected_images)
+                effective_max = max_images if max_images > 0 else 1
+                scaled_wait = max(1, base_rate * num_images_used / effective_max)
+                self.logger.info(f" ⏳ Rate limit: {scaled_wait:.0f}s ({num_images_used}/{effective_max} images)")
+                time.sleep(scaled_wait)
         
         self.logger.info(
             f"✓ Task {task_num}: {successful}/{num_iterations} successful ({skipped} skipped)"

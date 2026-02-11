@@ -10,7 +10,7 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: 
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgC9tRqo-XYvSbgoCnYB6AJpAVXmIOw-9ybAA68pkeAfrM4?e=KReW0T
 root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3bda2c62735_0_73#slide=id.g3bda2c62735_0_73
 
 tasks:
@@ -217,7 +217,7 @@ tasks:
       Foreground blossoms are bokeh only; the subject’s face is always sharp and unobstructed.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: true
+    use_random_source_selection: false
     use_deterministic_random: true
     random_seed: 42
     min_images: 1
