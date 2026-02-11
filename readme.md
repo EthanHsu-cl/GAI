@@ -1,6 +1,6 @@
 # Automated Processing & Reporting Automation Suite
 
-A Python automation framework for batch processing images/videos through 12+ AI APIs with automated PowerPoint report generation.
+A Python automation framework for batch processing images/videos through 14 AI APIs with automated PowerPoint report generation.
 
 ## 🚀 Quick Start (Command Line)
 
@@ -104,17 +104,17 @@ When you select a platform, the Advanced Options section shows API-specific fiel
 
 | API | Available Options |
 | :-- | :-- |
-| **Kling** | Duration (5/10s), CFG Scale (0.0-1.0) |
-| **Kling Effects** | Duration, CFG, Pairing Mode, Generation Count |
-| **Kling Endframe** | Duration, CFG, Generation Count |
-| **Kling TTV** | Duration, CFG Scale |
-| **Nano Banana** | Iterations, Deterministic Random, Seed |
-| **Veo / Veo ITV** | Model, Duration, Aspect Ratio, Resolution, Person Generation |
-| **Pixverse** | Model, Duration, Quality, Generate Audio |
-| **Runway** | Model, Aspect Ratio, Pairing Strategy |
+| **Kling** | Mode, Duration (5/10s), CFG Scale (0.0-1.0) |
+| **Kling Effects** | Duration, Effect Name, Preset Effect |
+| **Kling Endframe** | Duration, CFG, Generation Count, Pairing Mode |
+| **Kling TTV** | Mode, Duration, Ratio, CFG Scale, Generation Count, Sound |
+| **Nano Banana** | Model, Resolution, Aspect Ratio, Random Source Selection, Deterministic Random, Seed, Min/Max Images, Iterations |
+| **Veo / Veo ITV** | Model, Duration, Aspect Ratio, Resolution, Person Generation, Enhance Prompt, Generate Audio |
+| **Pixverse** | Model, Duration, Quality, Motion Mode, Style, Generate Audio, Multi Clip, Thinking Type |
+| **Runway** | Model, Aspect Ratio, Pairing Strategy, Public Figure Moderation |
 | **Wan** | Animation Mode, Num Outputs, Seed, Embed |
 | **DreamActor** | Use Base64, Cut Switch, Video URL |
-| **Vidu Effects** | Category, Model |
+| **Vidu Effects** | Category, Effect, Model |
 | **Vidu Reference** | Model, Duration, Resolution, Movement |
 
 These options override the corresponding values in the config file for the current run.
@@ -131,11 +131,11 @@ These options override the corresponding values in the config file for the curre
 
 | Short Name | Full Name | Description |
 | :-- | :-- | :-- |
-| `kling` | Kling 2.1 | Image-to-video generation with v2.1 model |
+| `kling` | Kling 2.5 | Image-to-video generation with v2.5-turbo model |
 | `klingfx` | Kling Effects | Apply premade video effects to images |
-| `klingend` | Kling Endframe | Start/end frame video generation (A→B transitions) |
-| `klingttv` | Kling TTV | Text-to-video generation (no input images) |
-| `pixverse` | Pixverse v4.5 | Effect-based video generation with custom effects |
+| `kling_endframe` | Kling Endframe | Start/end frame video generation (A→B transitions) |
+| `kling_ttv` | Kling TTV | Text-to-video generation (no input images) |
+| `pixverse` | Pixverse v5.5 | Effect-based video generation with custom effects |
 | `genvideo` | GenVideo | Image-to-image transformation (Gashapon style) |
 | `nano` | Nano Banana/Google Flash | Multi-image generation with AI models |
 | `vidu` | Vidu Effects | Effect-based video generation with categories |
@@ -197,7 +197,9 @@ TaskFolder/
 ├── Source Video/        # Wan 2.2: source videos  
 ├── Additional/          # Nano Banana: extra images
 ├── Reference/           # Runway, Vidu Reference: reference images
-├── Generated_Video/     # Auto-created outputs
+├── Generated_Video/     # Auto-created video outputs
+├── Generated_Output/    # Auto-created outputs (Nano Banana)
+├── Generated_Image/     # Auto-created outputs (GenVideo)
 └── Metadata/            # Auto-created metadata
 ```
 
@@ -206,7 +208,7 @@ TaskFolder/
 - Most APIs: `Source/`
 - Wan 2.2: `Source Image/` + `Source Video/` (cross-matched)
 - DreamActor: `Source Image/` + `Source Video/` (cross-matched)
-- Nano Banana multi-image: `Source/` + `Additional/`
+- Nano Banana multi-image: `Source/` + `Additional/` (or `Source/` only with random selection mode)
 - Runway/Vidu Reference: `Source/` + `Reference/`
 
 ## ⚙️ Configuration Files
@@ -219,18 +221,29 @@ All configuration files are located in the `Scripts/config/` directory and follo
 - **`source_video_link`**: URL to source video reference (optional)
 - **`reference_folder`**: Path to reference comparison folder (optional)
 - **`use_comparison_template`**: Enable comparison template for reports (boolean)
+- **`schedule.start_time`**: Delayed start in `HH:MM` 24-hour format (leave empty for immediate)
+- **`output.group_tasks_by`**: Group N tasks into one combined report (0 = individual reports)
+- **`template_path`**: Path to the PowerPoint template file
+- **`output_directory`**: Directory for generated PPTX report files
 
 ### **Kling Configuration** (`config/batch_kling_config.yaml`)
 
 ```yaml
 testbed: http://192.168.31.161:8000/kling/
-model_version: v2.1
+model_version: v2.5-turbo
+group_tasks_by: 4
+
+schedule:
+  start_time: ""  # HH:MM or empty for immediate
 
 tasks:
-  - folder: /path/to/TaskName1
+  - mode: std
+    folder: /path/to/TaskName1
     prompt: "Transform this portrait into a cinematic video"
     negative_prompt: "blurry, low quality"
 ```
+
+**Options:** Model (`v1.6`/`v2.1`/`v2.5-turbo`), Mode (`std`/`pro`), Duration (`5`/`10`), CFG (`0.0`-`1.0`)
 
 ### **Kling Effects Configuration** (`config/batch_kling_effects_config.yaml`)
 
@@ -316,24 +329,53 @@ Text-to-video generation (no input images required).
 testbed: http://192.168.31.161:8000/kling/
 model: "v2.5-turbo"
 output_folder: ../Media Files/Kling TTV/Test
+generation_count: 1
+sound_enabled: true
 
 tasks:
   - style_name: "Dog Running"
     prompt: "A dog is happily running toward its owner"
-    mode: "std"
+    neg_prompt: ""
+    mode: "pro"
     duration: 5
-    ratio: "16:9"
+    ratio: "1:1"
     cfg: 0.5
+    generation_count: 1
+    sound_enabled: true
 ```
 
-**Options:** Model (`v1.6`/`v2.1`/`v2.5-turbo`), Mode (`std`/`pro`), Ratio (`16:9`/`9:16`/`1:1`)
+**Options:** Model (`v1.6`/`v2.0-master`/`v2.1-master`/`v2.5-turbo`), Mode (`std`/`pro`), Ratio (`16:9`/`9:16`/`1:1`), `sound_enabled` (true/false), `generation_count`
 
 ### **Nano Banana Configuration** (`config/batch_nano_banana_config.yaml`)
 
+Supports two modes: **Random Source Selection** (select N random images from Source folder per API call) and **Multi-Image** (Source + Additional folder pairing).
+
 ```yaml
 testbed: http://192.168.31.161:8000/image_generation/
+
+output:
+  group_tasks_by: 2
+
+schedule:
+  start_time: ""  # HH:MM or empty for immediate
+
 tasks:
+  # Random Source Selection mode (recommended)
   - folder: /path/to/TaskName1
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: "Your prompt here"
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 1
+    max_images: 4
+    num_iterations: 50
+
+  # Multi-Image mode (Source + Additional folder)
+  - folder: /path/to/TaskName2
+    model: gemini-2.5-flash-image
     prompt: "Generate variations"
     use_multi_image: true
     multi_image_config:
@@ -341,7 +383,18 @@ tasks:
       folders: ["/path/to/Additional/"]
 ```
 
+**Per-task fields:** `model`, `resolution` (`1K`/`2K`), `aspect_ratio` (`1:1`/`2:3`/`3:2`/`3:4`/`4:3`/`4:5`/`5:4`/`9:16`/`16:9`/`21:9` — auto-detected from source if omitted)
+
 **Model limits:** `gemini-2.5-flash-image` (max 3 images), `gemini-3-pro-image-preview` (max 14 images)
+
+**Random Source Selection:**
+
+- `use_random_source_selection`: Enable selecting N images from Source folder per API call
+- `use_deterministic_random`: Same seed = same selections every run (reproducible)
+- `random_seed`: Explicit seed for deterministic mode (auto-generated from folder path if omitted)
+- `min_images` / `max_images`: Range of images per API call
+- `num_iterations`: Number of API calls to make (defaults to source file count)
+- Optimal formula: `sources_needed = num_iterations × (min_images + max_images) / 2`
 
 #### Error 429 (Resource Exhausted) Retry
 
@@ -384,7 +437,17 @@ tasks:
 
 ```yaml
 base_folder: ../Media Files/Pixverse
-testbed: http://192.168.31.161:8000/pixverse_image/
+testbed: http://192.168.31.161:8000/video_effect/
+
+default_settings:
+  model: v5.5
+  duration: 5s
+  motion_mode: normal
+  quality: 720p
+  style: none
+  generate_audio: true
+  generate_multi_clip: false
+  thinking_type: auto
 
 tasks:
   - effect: Dynamic Motion
@@ -392,7 +455,7 @@ tasks:
     custom_effect_id: ""
 ```
 
-**Defaults:** Model v4.5, Duration 5s, Quality 720p
+**Defaults:** Model v5.5, Duration 5s, Quality 720p, Motion Mode normal, Generate Audio true
 
 ### **GenVideo Configuration** (`config/batch_genvideo_config.yaml`)
 
@@ -413,16 +476,17 @@ tasks:
 ```yaml
 testbed: http://192.168.31.161:8000/runway/
 model: gen4_aleph
+ratio: 1280:720
+public_figure_moderation: low  # low/medium/high
 
 tasks:
   - folder: /path/to/TaskName1
     prompt: "Face swap effect"
-    pairing_strategy: one_to_one  # or 'all_combinations'
-    requires_reference: true
+    pairing_strategy: all_combinations  # or 'one_to_one'
 ```
 
 **Pairing:** `one_to_one` (1:1 mapping) or `all_combinations` (N×M outputs)
-**Ratios:** `1280:720`, `720:1280`, `1104:832`, `960:960`, `832:1104`, `1584:672`
+**Ratios:** `1280:720`, `720:1280`, `1104:832`, `960:960`, `832:1104`, `1584:672`, `848:480`, `640:480`
 
 ### **Wan 2.2 Configuration** (`config/batch_wan_config.yaml`)
 
@@ -444,18 +508,24 @@ Text-to-video generation (no input images required).
 
 ```yaml
 testbed: http://192.168.31.161:8000/google_veo/
+generation_count: 1
 
 tasks:
   - prompt: "A serene landscape with mountains at sunset"
-    model_id: veo-3.1-generate-001
-    duration_seconds: 8
+    style_name: Mountain_Sunset
+    model_id: veo-3.1-generate-preview
+    duration_seconds: 6
     aspect_ratio: "16:9"
     resolution: 1080p
+    compression_quality: optimized
+    enhance_prompt: true
+    generate_audio: true
+    person_generation: allow_all
     output_folder: ../Media Files/Veo/Test1/Generated_Video
 ```
 
-**Models:** `veo-2.0-generate-001`, `veo-3.0-generate-001`, `veo-3.0-fast-generate-001`, `veo-3.1-generate-preview`
-**Options:** Ratio (`16:9`/`9:16`), Resolution (`720p`/`1080p`), `enhance_prompt`, `generate_audio`
+**Models:** `veo-2.0-generate-001`, `veo-3.0-generate-001`, `veo-3.0-fast-generate-001`, `veo-3.0-generate-preview`, `veo-3.1-generate-preview`, `veo-3.1-fast-generate-preview`, `veo-3.1-generate-001`, `veo-3.1-fast-generate-001`
+**Options:** Ratio (`16:9`/`9:16`), Resolution (`720p`/`1080p`), `compression_quality` (`optimized`/`lossless`), `enhance_prompt`, `generate_audio`, `person_generation` (`allow_all`/`allow_adult`/`dont_allow`)
 
 ### **Veo ITV Configuration** (`config/batch_veo_itv_config.yaml`)
 
@@ -508,6 +578,9 @@ brew install ffmpeg  # macOS (required for video processing)
 - `gradio_client` - API client for AI services
 - `python-pptx` - PowerPoint report generation
 - `opencv-python` - Video/image processing
+- `pillow-heif` - HEIF/HEIC image format support
+- `wakepy` - Cross-platform sleep prevention (used on non-macOS)
+- `tqdm` - Progress bars for batch processing
 
 ## 📦 Building the Desktop App
 
@@ -541,18 +614,19 @@ The app bundle will be created at `Scripts/dist/AI Video Suite.app` (macOS) or `
 
 | API | Type | Key Features |
 | ----- | ------ | -------------- |
-| Kling 2.1 | I2V | Streaming downloads, v2.1 model, negative prompts |
+| Kling 2.5 | I2V | Streaming downloads, v2.5-turbo model, negative prompts |
 | Kling Effects | I2V | 100+ preset effects, custom effects |
 | Kling Endframe | I2V | A→B transitions, pairing modes |
-| Kling TTV | T2V | Text-to-video, multiple models |
-| Pixverse | I2V | v4.5 model, custom effect IDs |
+| Kling TTV | T2V | Text-to-video, sound generation, multiple models |
+| Pixverse | I2V | v5.5 model, custom effect IDs, multi-clip |
 | GenVideo | I2I | Gashapon style, GPT/Gemini models |
-| Nano Banana | I2I | Multi-image (up to 14), sequential/random pairing |
+| Nano Banana | I2I | Multi-image (up to 14), random source selection, deterministic random |
 | Vidu Effects | I2V | Category organization, viduq2-pro |
 | Vidu Reference | I2V | Up to 6 references, movement control |
 | Runway | V2V | one_to_one/all_combinations pairing |
 | Wan 2.2 | I+V | Auto-cropping, video×image cross-match |
-| Veo | T2V | Veo 2.0-3.1, audio generation |
+| DreamActor | I+V | Image + video face reenactment, base64 encoding |
+| Veo | T2V | Veo 2.0–3.1, audio generation, compression quality |
 | Veo ITV | I2V | Image-to-video, multi-generation per image |
 
 **All APIs use deterministic file sorting for reproducible results.**
@@ -581,10 +655,10 @@ The framework uses an auto-discovery handler system:
 - **`HandlerRegistry`** - Auto-discovers and registers API handlers
 - **`BaseAPIHandler`** - Common processing logic (validation, metadata, retries)
 - **`UnifiedAPIProcessor`** - Image conversion, video extraction, optimal ratio matching
-  - **Sleep prevention** – On macOS, each processor instance spawns its own `caffeinate -di` subprocess tracked by PID. Cleanup is guaranteed via `finally`, `atexit`, and `SIGINT`/`SIGTERM` signal handlers so orphaned processes cannot block system sleep. Multiple concurrent script instances are safe; only the owning instance's `caffeinate` is terminated.
+  - **Sleep prevention** – On macOS, uses native `caffeinate -di` subprocess tracked by PID. On other platforms, uses `wakepy` library. Cleanup is guaranteed via `finally`, `atexit`, and `SIGINT`/`SIGTERM` signal handlers so orphaned processes cannot block system sleep. Multiple concurrent script instances are safe.
 - **`UnifiedReportGenerator`** - PowerPoint generation with parallel metadata loading
 
-**13 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, Pixverse, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, Veo, VeoItv
+**14 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, Pixverse, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, DreamActor, Veo, VeoItv
 
 ---
 

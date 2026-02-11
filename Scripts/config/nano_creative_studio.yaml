@@ -7,316 +7,197 @@ output:
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDg-H8kdxObQ4GFDEBGzuyaAaqaTgjp_TAdDYV8ngmDjTk?e=C9fxWk
-root_design_link: https://docs.google.com/presentation/d/166d30yVLdqoxFLlsgWfY_pdHXoDOuoiffVEkAah__ng/edit?slide=id.g3bd7d618995_31_0#slide=id.g3bd7d618995_31_0
+root_source_video_link: 
+root_design_link: https://docs.google.com/presentation/d/198gdbsdOLG1VPPCI6DJDSwScr2p_fC6p-QFWru93OB8/edit?slide=id.g3bd8162879e_108_0#slide=id.g3bd8162879e_108_0
 
 tasks:
-  - folder: ../Media Files/Nano Banana/0209 4 Styles Creative Studio/0209 春光微醺
+  - folder: ../Media Files/Nano Banana/0211 復古愛心漫畫
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |-
-      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME) :
-      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the SUBJECT’s face.
-      The generated face must be the SAME REAL SUBJECT as in the input photo, copied directly from the input, NOT reconstructed, NOT reinterpreted.
-      Do NOT beautify, optimize, stylize, idealize, or normalize the face in any way.
-      Do NOT adjust facial proportions, features, symmetry, skin texture, or age.
-      Do NOT change ethnicity, race, or regional facial characteristics.
-      If the face does not immediately look identical to the input SUBJECT, the result is INVALID and must be regenerated.
-      The face must be directly copied from the input photo at the pixel-structure level, not re-generated or averaged.
-      SUBJECT & SOURCE IMAGE RULES:
-      Use the uploaded user photos as the ONLY visual sources for all SUBJECTS.
-      - The number of SUBJECTS in the final image must EXACTLY match the number of uploaded photos (1–4 only)
-      - No extra SUBJECTS
-      - No duplicated faces
-      - No merged identities
-      - No face swapping
-      All facial features must come ONLY from the input photos.
-
-
-      <instruction_set>
-        <mode>Strict Image-to-Image Generation</mode>
-        <reference_priority>Highest (100% Identity Match)</reference_priority>
-        <consistency_target>
-          1. Face Shape: LOCKED to input image.
-          2. Facial Features: LOCKED to input image.
-          3. Hairstyle: LOCKED to input image.
-          4. Expression: Serene, closed-mouth (override input if input has open mouth).
-        </consistency_target>
-      </instruction_set>
-
-      <scene_description>
-      A nostalgic, cinematic medium shot exactly mirroring the input subject's 100% identical face shape, specific facial features, and exact hairstyle; the subject maintains a serene, closed-mouth expression with no teeth showing. If the subject is a human, they wear the exact same delicate cream-colored eyelet lace blouse with a clearly defined, structured Cuban collar and intricate perforated patterns. If the subject is an animal, it must be depicted naturally without any clothing, maintaining its raw anatomical form while preserving the specific facial markers of the input.
-
-      In the foreground, scattered individual cherry blossoms and slender, delicate floral stems occupy the right mid-ground and immediate foreground, rendered with a soft-focus blur that creates a translucent, airy veil over the subject's left cheek and shoulder, avoiding any dense clusters. The sunlight, filtering through the sparse floral canopy, casts distinct, sharp lace-like shadows of individual petals and fine twigs across the lower-left portion of the subject's form (either the white blouse or the animal’s natural fur), with the shadows following the soft contours of the surface.
-
-      The aesthetic is strictly a vintage 35mm film style with a muted color palette and soft contrast. The sky is rendered in a pale, desaturated periwinkle, while the blossoms feature an interplay of pale shell-pink and dusty rose. The foliage is a deep, muted olive-charcoal. Captured during the golden hour, the subject's skin or fur glows with a translucent, waxy warmth. Shadows are lifted and tinged with a subtle warm amber hue, avoiding pure blacks. The image is characterized by a natural film grain and gentle lens softening, with the background dissolving into a creamy bokeh of muted green and hazy sunlight, perfectly replicating the textural soul of a vintage film photograph.
-      </scene_description>
-
-      <negative_constraints>
-      (MUTATED FACE:2.0), (CHANGING IDENTITY:2.0), (OPEN MOUTH:1.5), (TEETH:1.5), smiling, laughing, distorted features, bad anatomy, cartoon, 3d render, vector art, high contrast, harsh black shadows, digital art style, makeup changes, facial hair changes (unless present in input), glasses (unless present in input), plastic skin texture, over-smoothed skin.
-      </negative_constraints>
-    use_random_source_selection: false
-
-  - folder: ../Media Files/Nano Banana/0209 4 Styles Creative Studio/0209 熱血棒球漫畫
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |-
-      CRITICAL IDENTITY & FACIAL FEATURE LOCK — ABSOLUTE PRIORITY
-      The main subject’s facial features, proportions, bone structure, and overall facial silhouette must be perfectly and exactly preserved from the uploaded input image.
-      The generated face must be an unmistakable match to the input image at first glance.
-      Do NOT beautify, redesign, stylize, exaggerate, normalize, idealize, or reinterpret the face in any way.
-      No facial optimization, no symmetry correction, no style-driven face changes.
-      The face may only be translated into a Japanese manga drawing style while maintaining the exact original identity.
-      Do NOT describe or invent facial details. Identity accuracy is mandatory.
-      If the face does not strongly and immediately resemble the input image, the result is invalid.
-
-      Create a black-and-white Japanese baseball manga page in a classic hot-blooded sports manga style.
-      Strong ink lines, aggressive speed lines, high-contrast shading, and dense motion strokes.
-      The subject is a baseball batter (hitter).
-
-      Panel composition (based on dynamic manga action layout):
-
-      Main upper panel (dominant panel):
-      A powerful batting moment frozen at the peak of the swing.
-      The batter’s body twists explosively, bat extended, with extreme speed lines radiating outward.
-      A baseball deformed from extreme high-speed impact appears near the bat, visibly compressed and warped by the force of the hit.
-      Around the batter’s body and bat, violent lightning-like electric energy erupts, wrapping and cracking through the air.
-      Include a jagged, lightning-shaped manga speech bubble (electric burst style) integrated with the electric energy.
-      The speech bubble text must read exactly:
-      「背負ってるのは期待じゃない――運命だ。」
-
-      ELECTRIC ENERGY EMPHASIS — VISUAL DOMINANCE REQUIRED
-      The electric energy must be extremely bright, aggressive, and visually dominant, immediately drawing the viewer’s attention.
-      Lightning effects should be thick, sharp, and violently fractured, with high contrast against the black-and-white background.
-      The electricity must feel overwhelming, tense, and explosive, as if tearing through the panel composition.
-      Electric arcs should extend beyond the batter’s body and bat, partially breaking panel boundaries to increase visual pressure.
-      The sense of force must be extreme, conveying unbearable tension at the exact moment of impact.
-
-      The electricity is the only colored element in the entire page and must appear unmistakably more intense than all other visual elements combined.
-      If the electric effect does not immediately stand out at first glance, the result is invalid.
-
-      Lower-left panel:
-      Fielders or opponents react in shock and panic, eyes wide, mouths open, bodies frozen mid-motion.
-      Include a standard rounded manga speech bubble (non-jagged, normal dialogue style).
-      The speech bubble text must read exactly:
-      「うそだろ……まだ、そんな力が……！？」
-
-      Lower-right panel:
-      A close-range reaction shot of characters watching the hit, showing disbelief, tension, and fear through facial expressions and heavy line work. Eyebrows are sharply raised or twisted, facial features slightly warped for comedic impact, emphasizing disbelief rather than fear.
-
-      Use traditional manga panel borders and layouts, with overlapping action lines and compressed framing to enhance impact.
-
-      Include manga-style speech bubbles or narration boxes with an intense, over-the-top, chuunibyou tone.
-
-      Strictly manga illustration only.
-      No photorealism. No anime cell shading. No soft coloring.
-      No country names, nationality references, national symbols, or text implying national identity are allowed anywhere in the image.
-      No brand names, logos, trademarks, or identifiable commercial markings are allowed anywhere in the image.
-
-      Only the electric energy contains color; everything else must remain black and white.
-    use_random_source_selection: false
-
-  - folder: ../Media Files/Nano Banana/0209 4 Styles Creative Studio/0209 春日映瞳V1
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |-
-      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME) :
-      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the SUBJECT’s face.
-      The generated face must be the SAME REAL SUBJECT as in the input photo, copied directly from the input, NOT reconstructed, NOT reinterpreted.
-      If the face does not immediately look identical to the input SUBJECT, the result is INVALID and must be regenerated.
-      The face must be directly copied from the input photo at the pixel-structure level, not re-generated or averaged.
-
-      In all three panels, eye contact with the camera is strictly forbidden.
-      The subject shows natural facial expression with subtle, nuanced emotion.
-      If the input image shows the subject wearing glasses, the glasses must remain clearly visible in all panels. Do not add glasses if the subject is not wearing glasses in the input image.
-
-      A seamless vertical triptych composed of three horizontal panels with no visible borders or separators.
-      Each panel uses a distinct camera distance to create cinematic hierarchy.
-      Ultra-realistic cinematic photography, natural optics, shallow depth of field.
-
-      Lighting must produce strong separation between highlights and shadows, avoiding flat or evenly distributed illumination.
-
-      Primary light is strong directional daylight.
-      Secondary light is soft backlit daylight, creating controlled highlight bloom and subtle halation through lens response.
-
-      The scene contains a subtle pink-tinted ambient atmosphere,
-      Pink tone exists in the air and light, not as a color filter.
-
-      ---
-
-      Top panel (closest framing)
-
-      A very close-up portrait of the subject, framed tighter than the bottom panel.
-      Cherry blossom branches cross the foreground.
-
-      The body remains turned to the side while the head gently turns back, with the gaze drifting toward something behind, not forward.
-      The expression is calm and gentle, with no sense of sadness or melancholy.
-
-      Clear, direct spring sunlight visibly strikes the face,
-      creating strong highlights across the cheeks, nose bridge, and eyes.
-      The face must appear distinctly sunlit and luminous.
-      Shadows are present but pushed onto surrounding blossoms and background,
-      not flattening or dimming the face.
-
-      A light breeze moves multiple strands of hair, with several fine hairs drifting freely across the face in mid-air.
-      Foreground petals remain softly out of focus.
-      Small openings between branches reveal soft blue sky in the background.
-
-      ---
-
-      Middle panel (visual anchor)
-
-      An extreme close-up of one eye.
-      The gaze is angled upward toward the light source above, clearly not looking at the camera.
-
-      Only a very limited portion of the face is visible.
-      The framing must strictly exclude the nose, nostrils, and nose bridge.
-      Only the eye area and a small surrounding region of skin are revealed,
-      as if the eye is glimpsed through a narrow opening between blossoms.
-
-      Cherry blossoms, petals, and thin branches densely occupy the foreground.
-      The nearest one or two blossoms are softly blurred due to shallow depth of field.
-
-      A powerful, focused beam of sunlight breaks through the blossoms
-      and lands directly on the eye area.
-      The light is noticeably bright and intense, significantly brighter than the rest of the frame.
-      Petal and branch shadows are sharply defined, clearly showing sunlight passing through layered blossoms rather than diffused evenly.
-
-      The eye contains a strong, luminous highlight with slight flare.
-      The iris shows natural radial texture and tonal variation, but remains realistic in scale and coloration.
-      Avoid exaggerated iris size, overly saturated colors, or unnatural contrast commonly associated with AI-rendered eyes.
-
-      Natural skin texture is fully preserved with no smoothing.
-
-
-      ---
-
-      Bottom panel (more distant)
-
-      A medium side-profile shot of the subject, framed wider and farther than the top panel.
-      The head is turned slightly upward and away.
-      The subject does not look at the camera.
-
-      Cherry blossoms densely surround and envelop the subject.
-      Sunlight selectively illuminates parts of the face and hair,
-      while deeper shadows remain in surrounding foliage,
-      enhancing depth and contrast.
-
-      Out-of-focus green tones from nearby trees appear in the background, contrasting naturally with the pink blossoms.
-
-      ---
-
-      Overall color & cinematic tone
-
-      High-contrast cinematic lighting with preserved shadow depth.
-      Warmth leans toward soft pink, peach, and warm-white tones — not yellow or amber.
-      Highlights remain crisp and luminous.
-      Shadows stay deep, warm, and dimensional, never gray or flat.
-
-      Avoid flat lighting, evenly lit faces, golden-hour yellow, over-soft skin, glowing pupils, heavy bloom, haze, fog, text, logos, or watermarks.
-    use_random_source_selection: false
-
-  - folder: ../Media Files/Nano Banana/0209 4 Styles Creative Studio/0209 春日映瞳V2
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: |-
-      Ensure the subject’s facial features, proportions, and overall appearance closely match the provided input image. 
-      In all three panels, eye contact with the camera is strictly forbidden.
-      The subject shows natural facial expression with subtle, nuanced emotion.
-      If the input image shows the subject wearing glasses, the glasses must remain clearly visible in all panels.
-
-      A seamless vertical triptych composed of three horizontal panels with no visible borders or separators.
-      Each panel uses a distinct camera distance to create cinematic hierarchy.
-      Ultra-realistic cinematic photography, natural optics, shallow depth of field.
-
-      Overall exposure slightly brighter (~10%) but with clearly increased contrast.
-      Lighting must produce strong separation between highlights and shadows, avoiding flat or evenly distributed illumination.
-
-      Primary light is strong directional daylight.
-      Secondary light is soft backlit daylight, creating controlled highlight bloom and subtle halation through lens response.
-
-      The scene contains a subtle pink-tinted ambient atmosphere,
-      Pink tone exists in the air and light, not as a color filter.
-
-      ---
-
-      Top panel (closest framing)
-
-      A very close-up portrait of the subject, framed tighter than the bottom panel.
-      Cherry blossom branches cross the foreground.
-
-      The body remains turned to the side while the head gently turns back, with the gaze drifting toward something behind, not forward.
-      The expression is calm and gentle, with no sense of sadness or melancholy.
-
-      Clear, direct spring sunlight visibly strikes the face,
-      creating strong highlights across the cheeks, nose bridge, and eyes.
-      The face must appear distinctly sunlit and luminous.
-      Shadows are present but pushed onto surrounding blossoms and background,
-      not flattening or dimming the face.
-
-      A light breeze moves multiple strands of hair, with several fine hairs drifting freely across the face in mid-air.
-      Foreground petals remain softly out of focus.
-      Small openings between branches reveal soft blue sky in the background.
-
-      ---
-
-      Middle panel (visual anchor)
-
-      An extreme close-up of one eye.
-      The gaze is angled upward toward the light source above, clearly not looking at the camera.
-
-      Only a very limited portion of the face is visible.
-      The framing must strictly exclude the nose, nostrils, and nose bridge.
-      Only the eye area and a small surrounding region of skin are revealed,
-      as if the eye is glimpsed through a narrow opening between blossoms.
-
-      Cherry blossoms, petals, and thin branches densely occupy the foreground.
-      The nearest one or two blossoms are softly blurred due to shallow depth of field.
-
-      A powerful, focused beam of sunlight breaks through the blossoms
-      and lands directly on the eye area.
-      The light is noticeably bright and intense, significantly brighter than the rest of the frame.
-      Petal and branch shadows are sharply defined, clearly showing sunlight passing through layered blossoms rather than diffused evenly.
-
-      The eye contains a strong, luminous highlight with slight flare.
-      The iris shows natural radial texture and tonal variation, but remains realistic in scale and coloration.
-      Avoid exaggerated iris size, overly saturated colors, or unnatural contrast commonly associated with AI-rendered eyes.
-
-      Natural skin texture is fully preserved with no smoothing.
-
-
-      ---
-
-      Bottom panel (more distant)
-
-      A medium side-profile shot of the subject, framed wider and farther than the top panel.
-      The head is turned slightly upward and away.
-      The subject does not look at the camera.
-
-      Cherry blossoms densely surround and envelop the subject.
-      Sunlight selectively illuminates parts of the face and hair,
-      while deeper shadows remain in surrounding foliage,
-      enhancing depth and contrast.
-
-      Out-of-focus green tones from nearby trees appear in the background, contrasting naturally with the pink blossoms.
-
-      ---
-
-      Overall color & cinematic tone
-
-      High-contrast cinematic lighting with preserved shadow depth.
-      Warmth leans toward soft pink, peach, and warm-white tones — not yellow or amber.
-      Highlights remain crisp and luminous.
-      Shadows stay deep, warm, and dimensional, never gray or flat.
-
-      Avoid flat lighting, evenly lit faces, golden-hour yellow,
-      over-soft skin, glowing pupils, heavy bloom, haze, fog,
-      text, logos, or watermarks.
-    use_random_source_selection: false
+      Use ONLY the uploaded photos as image content.
+      Do NOT generate, invent, redraw, recolor, or hallucinate any images.
+      This is a FIXED vintage magazine template insertion task, NOT a redesign.
+
+      ────────────────────────
+      INPUT IMAGE RULES (CRITICAL)
+      ────────────────────────
+
+      • Accept 4 OR 5 uploaded photos only.
+      • NEVER duplicate any uploaded photo.
+      • NEVER generate new people, objects, animals, or backgrounds.
+
+      IF 5 photos are uploaded:
+      – Use the full 5-frame layout exactly as defined.
+
+      IF ONLY 4 photos are uploaded:
+      – Merge the TOP-LEFT vertical frame and the MID-LEFT horizontal frame into ONE combined vertical frame.
+      – This merged frame occupies the exact combined area of those two frames.
+      – ALL OTHER FRAMES REMAIN UNCHANGED in size and position.
+      – Do NOT shift, resize, or redesign any other frame.
+
+      ────────────────────────
+      ABSOLUTE PRIORITY (NON-NEGOTIABLE)
+      ────────────────────────
+
+      • Frame positions are FIXED.
+      • Frame sizes are FIXED.
+      • Black border style is FIXED.
+      • Photos MUST appear INSIDE frames.
+      • Photos MUST retain their original colors and lighting.
+      • The page MUST NOT turn into a single-color wash.
+      • The background pink filter MUST NOT override photo colors.
+
+      If any photo is not clearly placed inside a black-bordered frame, the result is WRONG.
+
+      ────────────────────────
+      CANVAS / PAGE (FIXED)
+      ────────────────────────
+
+      Portrait magazine page, A4-like vertical layout (~3:4).
+
+      Background:
+      – Warm off-white / cream paper
+      – A light pink halftone display with a delicate texture
+      – Soft vintage pink paper tone ONLY on the background
+
+      IMPORTANT:
+      The pink tone applies ONLY to the paper background.
+      Uploaded photos must retain their original color and contrast.
+
+      Add very light halftone dots on the background ONLY.
+      Do NOT apply halftone or color wash over the photos themselves.
+
+      ────────────────────────
+      FIXED MAGAZINE HEADER (TOP)
+      ────────────────────────
+
+      Main headline text:
+      – Content: randomly generate a SIMPLE, POSITIVE English word or phrase
+        Examples: “Lovely Day”, “Sweet Moments”, “Pure Joy”, “Happy Smiles”
+      – MUST NOT repeat “Tickled Pink”
+      – MUST NOT copy photo captions
+
+      Font:
+      – Google Font: Pacifico
+      – Smooth handwritten script
+      – Medium-large size, NOT oversized
+      – Balanced to match the reference scale (not dominating the page)
+
+      Color:
+      – Dark brown or near-black ink
+      – Printed look, NOT digital black
+      – No outline, no shadow, no glow
+
+      Placement:
+      – Top center
+      – Slightly organic, magazine masthead feel
+      – Clean spacing above frames
+
+      ────────────────────────
+      SECONDARY CURVED TEXT (ABOVE HEART)
+      ────────────────────────
+
+      Add ONE short curved line of text that follows the upper arc of the heart frame.
+
+      Text content:
+      – Simple positive blessing or feeling
+        Examples: “sweet smiles”, “warm wishes”, “pure joy”, “soft moments”
+
+      Style:
+      – Same ink color as headline
+      – Smaller than headline
+      – Gently curved to hug the heart shape
+      – Printed, subtle, editorial
+
+      ────────────────────────
+      FIXED FRAME STRUCTURE
+      ────────────────────────
+
+      Use thick black hand-drawn comic ink borders:
+      – Same stroke thickness everywhere
+      – Slight organic wobble
+
+      DO NOT add labels (A/B/C/D/E) - MUST.
+      DO NOT add numbering or markers.
+
+      FRAME DEFINITIONS:
+
+      • Top-left: vertical rectangle
+      • Center-upper: large heart frame (dominant)
+      • Left-middle: small horizontal rectangle
+      • Bottom-left: wide horizontal rectangle
+      • Right side: tall vertical rectangle
+
+      ────────────────────────
+      PHOTO PLACEMENT RULES (CRITICAL)
+      ────────────────────────
+
+      Each uploaded photo MUST be:
+      – Placed fully INSIDE a frame
+      – Preserving original aspect ratio
+      – No stretching, no squeezing, no warping
+
+      If aspect ratio does not match:
+      – Scale proportionally
+      – Allow natural cropping OR small margins
+      – Never distort faces or bodies
+
+      Photos must look PRINTED INTO frames,
+      not floating, not blended into background.
+
+      ────────────────────────
+      CAPTIONS / SMALL TEXT
+      ────────────────────────
+
+      Add 4 small captions total.
+
+      Caption rules:
+      – Content: simple positive words or blessings
+      – Examples: “so lovely”, “sweet vibes”, “pure joy”
+      – Small size, low contrast
+      – Printed magazine feel
+      – Placed near frame edges , Not in the box
+
+      NO big subtitles.
+      NO repeated headline text.
+
+      ────────────────────────
+      COLOR & FINISH
+      ────────────────────────
+
+      Overall finish:
+      – Soft vintage magazine scan
+      – Low contrast
+      – Slight paper softness
+
+      DO NOT:
+      – Flatten image colors
+      – Turn photos monochrome
+      – Apply global pink overlay to photos
+      – Create modern glossy HDR look
+
+      ────────────────────────
+      FINAL LOCK RULE
+      ────────────────────────
+
+      The result must look like:
+      Different photos printed into the SAME fixed vintage magazine page.
+
+      If:
+      – Photos are missing from frames
+      – Frames move or resize
+      – Page becomes one solid color
+      – New images appear
+
+      → The result is incorrect.
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 4
+    max_images: 5
+    num_iterations: 50
 
 
 comments:
