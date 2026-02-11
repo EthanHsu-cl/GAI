@@ -90,9 +90,13 @@ If you have the complete `GAI/` project folder:
    python gui_app.py
    ```
 
+   Note: The working directory automatically defaults to the GAI project root,
+   so relative paths like `Media Files/...` in configs resolve correctly
+   regardless of where you invoke the script from.
+
 **Advantages:**
 
-- Use relative paths in config files (e.g., `../Media Files/...`)
+- Use relative paths in config files (e.g., `Media Files/...`)
 - Full command-line interface with all options
 - Can modify handlers, add new APIs, customize reports
 - Can build your own executable for distribution
@@ -103,7 +107,7 @@ If you have the complete `GAI/` project folder:
 
 | Scenario | Config Path Style | Example |
 | ---------- | ------------------- | -------- |
-| **Full source** (run from Scripts/) | Relative | `folder: ../Media Files/Kling/Task1` |
+| **Full source** (run from GAI/) | Relative | `folder: Media Files/Kling/Task1` |
 | **Executable only** | Absolute | `folder: /Users/me/Projects/Media Files/Kling/Task1` |
 | **Executable** (launched from project dir) | Relative | Works if you `cd` to project folder first |
 

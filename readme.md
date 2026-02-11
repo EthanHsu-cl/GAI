@@ -250,7 +250,7 @@ tasks:
 Applies premade video effects to images. Supports both preset effects and custom effect names.
 
 ```yaml
-base_folder: ../Media Files/Kling Effects/1127 Test
+base_folder: Media Files/Kling Effects/1127 Test
 testbed: http://192.168.31.161:8000/kling/
 
 # Global settings
@@ -305,7 +305,7 @@ output:
 
 tasks:
   - mode: pro
-    folder: ../Media Files/Kling Endframe/1030 3 Styles/Anime Awakening
+    folder: Media Files/Kling Endframe/1030 3 Styles/Anime Awakening
     prompt: "Smooth transition from start to end frame"
     negative_prompt: ""
     duration: 5
@@ -328,7 +328,7 @@ Text-to-video generation (no input images required).
 ```yaml
 testbed: http://192.168.31.161:8000/kling/
 model: "v2.5-turbo"
-output_folder: ../Media Files/Kling TTV/Test
+output_folder: Media Files/Kling TTV/Test
 generation_count: 1
 sound_enabled: true
 
@@ -407,7 +407,7 @@ Nano Banana has built-in handling for Google API `429 RESOURCE_EXHAUSTED` errors
 ### **Vidu Effects Configuration** (`config/batch_vidu_effects_config.yaml`)
 
 ```yaml
-base_folder: ../Media Files/Vidu/1027 Product
+base_folder: Media Files/Vidu/1027 Product
 testbed: http://192.168.31.161:8000/video_effect/
 model_version: viduq2-pro
 
@@ -419,7 +419,7 @@ tasks:
 ### **Vidu Reference Configuration** (`config/batch_vidu_reference_config.yaml`)
 
 ```yaml
-base_folder: ../Media Files/Vidu_Ref/1201 1 Style
+base_folder: Media Files/Vidu_Ref/1201 1 Style
 testbed: http://192.168.31.161:8000/video_effect/
 model: viduq1
 duration: 5
@@ -436,7 +436,7 @@ tasks:
 ### **Pixverse Configuration** (`config/batch_pixverse_config.yaml`)
 
 ```yaml
-base_folder: ../Media Files/Pixverse
+base_folder: Media Files/Pixverse
 testbed: http://192.168.31.161:8000/video_effect/
 
 default_settings:
@@ -494,7 +494,7 @@ tasks:
 testbed: http://210.244.31.18:7008/
 
 tasks:
-  - folder: ../Media Files/Wan 2.2/Test
+  - folder: Media Files/Wan 2.2/Test
     prompt: "The person is dancing"
     animation_mode: move  # or 'mix'
 ```
@@ -521,7 +521,7 @@ tasks:
     enhance_prompt: true
     generate_audio: true
     person_generation: allow_all
-    output_folder: ../Media Files/Veo/Test1/Generated_Video
+    output_folder: Media Files/Veo/Test1/Generated_Video
 ```
 
 **Models:** `veo-2.0-generate-001`, `veo-3.0-generate-001`, `veo-3.0-fast-generate-001`, `veo-3.0-generate-preview`, `veo-3.1-generate-preview`, `veo-3.1-fast-generate-preview`, `veo-3.1-generate-001`, `veo-3.1-fast-generate-001`
@@ -532,12 +532,12 @@ tasks:
 Image-to-video generation with source images.
 
 ```yaml
-root_folder: ../Media Files/Veo_ITV
+root_folder: Media Files/Veo_ITV
 generation_count: 2  # Videos per source image
 
 tasks:
   - style_name: Style 11_Statue Selfie
-    folder: ../Media Files/Veo_ITV/Style 11_Statue Selfie
+    folder: Media Files/Veo_ITV/Style 11_Statue Selfie
     prompt: "The statue comes to life in a cinematic motion."
     model_id: veo-3.1-generate-001
     duration_seconds: 8

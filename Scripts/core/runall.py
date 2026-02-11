@@ -616,11 +616,16 @@ def run_platform(platform, action, config_file=None):
     if not config_file:
         config_file = CONFIG_MAPPING.get(api_name)
 
-    # Check if config file exists
+    # Resolve config path: try Scripts dir as fallback for relative paths
     if config_file and not Path(config_file).exists():
-        logger.warning(f"⚠️ Config file not found: {config_file}")
-        logger.info(f"Proceeding without config file for {platform}")
-        config_file = None
+        script_dir = Path(__file__).parent.parent
+        alt_path = script_dir / config_file
+        if alt_path.exists():
+            config_file = str(alt_path)
+        else:
+            logger.warning(f"⚠️ Config file not found: {config_file}")
+            logger.info(f"Proceeding without config file for {platform}")
+            config_file = None
 
     results = {}
     skip_report = False
