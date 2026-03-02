@@ -7,50 +7,724 @@ output:
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDOGJuMwnIVSp02PaMpFbucATNfOMsWCxLBl250H1HFN3U?e=jcdkUv
-root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3bdc7f652f2_1_53#slide=id.g3bdc7f652f2_1_53
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCvBuRzEDTxTZCRUqSC6BPdAQ4xy6339EDfzNw-DhBlV0Y?e=PlvfOu
+root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3c0bffee9a0_0_156#slide=id.g3c0bffee9a0_0_156
 
 tasks:
-  - folder: Media Files/Nano Banana/0211 日式棒球卡
+  - folder: Media Files/Nano Banana/0226 櫻花微夢 2 Styles/0226 櫻花微夢 多人
     model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "2:3"
+    resolution: "1K"
+    aspect_ratio: "3:4"
     prompt: |-
-      Absolute priority: the human subject must remain indistinguishable from a real photograph. If any instruction conflicts with photographic realism, photographic realism always overrides card style, visual effects, or UI design.
+      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME) :
+      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the SUBJECT’s face.
+      The generated face must be the SAME REAL SUBJECT as in the input photo.
+      Do NOT alter facial structure, proportions, skin texture, ethnicity, or identity.
+      No beautification. No smoothing. No facial adjustment.
 
-      Use the uploaded person as the only human subject. The person in the uploaded image must be the only character in the final result. Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, facial expression, and body proportions exactly as shown in the uploaded photo. Do NOT beautify, stylize, idealize, or alter the face or body in any way. No extra people may appear.
+      If input a photo of an animal, it will naturally interact with people or naturally sit on the grass with correct physical weight and shadow.
 
-      The subject must remain fully photorealistic at all times, appearing as if captured in a real professional baseball game by a high-speed sports camera. Skin texture, facial realism, lighting realism, and photographic detail must be preserved exactly. The subject must NOT look illustrated, painted, game-rendered, or artificially enhanced. All stylization is limited strictly to the card design and background effects.
+      The overall color tone is bright and clear with slightly increased saturation, ensuring cherry blossoms appear soft pink rather than white. Highlights remain luminous without washing out color, preserving a fresh sakura pink while maintaining a clean, neutral daylight balance. Neutral spring daylight reaches the subject’s face, creating subtle light-and-shadow contrast on the skin without warm coloration. The environment consists only of blooming cherry blossom trees, evoking purity, renewal, and quiet seasonal beauty.
 
-      Transform the subject into a modern professional baseball card character, wearing a clean yet visually rich modern baseball uniform.
+      Photos must be taken during the peak cherry blossom season in spring. Photos must be original images, taken in different poses, and all must be taken in a park where cherry blossoms are in full bloom. Absent faces and duplicate people are strictly prohibited.CRITICAL PERSON COUNT RULE (NON-NEGOTIABLE):
 
-      Uniform restrictions (strict):
-      No text, letters, logos, emblems, icons, or symbols are allowed except the jersey number. This explicitly includes no check marks, tick symbols, swooshes, V-shaped marks, abstract approval marks, or any logo-like shapes. Absolutely no brand marks, team logos, sponsor graphics, trademark-like shapes, national flags, national colors, country references, cultural symbols, or any real-world identifiable elements may appear on the uniform or helmet.
+      The number of people in the final image MUST exactly match the number of uploaded input people.(ABSOLUTELY CRUCIAL)
+      Do NOT add extra people.
+      Do NOT remove any person.
+      Do NOT duplicate any person.
+      Do NOT merge faces.
 
-      Uniform requirements:
-      A clearly visible jersey number on the chest or torso. Distinct piping or trim lines along jersey edges, sleeves, or placket. A restrained premium color scheme with one primary color and subtle secondary accents. Pants must be pure white. Fabric must appear fully realistic with natural folds, seams, stitching, and material tension. The helmet follows the same rules.
+      Each uploaded person must appear once and only once.
+      No repetition.
+      No cloning.
+      No additional characters.
 
-      Pose (must match exactly):
-      Captured mid-run with strong forward momentum, leaning slightly forward. Both arms bent at the elbows, hands in front of the chest. Both index fingers extended, pointing straight downward; remaining fingers naturally curled. Elbows angled outward, forming a tight, inward-focused gesture. The subject shows a smile. Shoulders slightly hunched forward, chest pushed outward, expressing explosive energy and confidence. Do not alter or substitute the gesture.
+      ────────────────────────────
+      COMPOSITION — JAPANESE MAGAZINE COVER STYLE (CRITICAL)
+      ────────────────────────────
 
-      The image is vertically oriented and composed as a complete Japanese baseball card. The subject dominates the upper and central area; the lower section contains structured card UI elements and stats with metallic accents, glowing borders, layered panels, and clear hierarchy.
+      True 90-degree overhead shot.
 
-      The card design must convey a premium holographic rarity: Iridescent foil textures and rainbow light refraction across the card surface. Subtle prismatic highlights and metallic shimmer layers. High-end glowing borders and multi-layered frames. Light streaks, sparkles, and reflective accents that shift across the card. Deep layered depth, making the card feel thick, luxurious, and collectible. These effects must enhance the card’s rarity and prestige while never affecting the subject’s photographic realism.
+      Subjects must occupy 82–90% of the frame.
+      Faces must appear visually large and intimate.
 
-      Place the following fixed text at the very top of the card, clearly separated from the stat panels and visually anchored as a header. The text must remain fixed and exact, and must appear exactly as written:
+      Camera positioned closer than previous versions.
+      Crop tightly around heads and upper torsos.
+      Reduce empty grass significantly.
 
-      2026 Series 1
+      Framing should feel like a Japanese fashion magazine cover,
+      not a wide lifestyle advertisement shot.
 
-      The rarity grade (S級 / A級 / B級 / C級 / D級) must be clearly displayed at the top-left corner of the card, visually prominent and immediately recognizable, similar to high-rarity indicators in online gacha games.
+      No distant perspective.
 
-      At the bottom portion of the card, display randomly generated card stats written entirely in Japanese, following the visual style of Japanese baseball collectible cards, creating a strong gacha / collectible feeling.
+      ⚠️ IF INPUT IS A SINGLE SUBJECT:
 
-      All other labels, categories, and values displayed on the card must be presented using Japanese text and numerals, including rarity grade, spirit value, cost, level state, limit break values, training status, special abilities, and numerical stats. No player names, character names, team names, or any form of personal naming may appear anywhere in the stats or UI. The random stats should appear plausible within Japanese professional baseball card systems and be presented using structured, game-style UI panels with Japanese typography, rather than floating text. Each generation should feel like a distinct card pull, with believable variation in rarity and strength, while maintaining a polished, premium collectible card appearance.
+      The camera must move even closer than group framing.
+
+      The crop must include the full head + shoulders + chest and reach at least to below the bust line (lower chest visible).
+      Head + upper torso (down to below bust) must fill approximately 85–92% of the frame height.
+      The face must feel intimate and near the lens.
+      Reduce surrounding grass by an additional 20%.
+      Minimize visible empty areas around shoulders.
+      Avoid excessive negative space around the head.
+      Avoid small-scale subject rendering.
+
+      The visual feeling must be:
+      close
+      editorial
+      personal
+      not distant
+
+      ────────────────────────────
+      SUBJECT ORIENTATION & ANGLE LOCK — EXTREMELY IMPORTANT
+      ────────────────────────────
+
+      When the input contains a SINGLE SUBJECT:
+
+      The subject must be oriented upright in the frame with the HEAD positioned toward the TOP of the image.
+
+      FORBIDDEN:
+      – upside-down orientation
+      – head located at bottom of frame
+      – 180° inversion
+      – sideways / horizontal entry (subject lying left-to-right across the frame)
+      – any 90% rotated head/body angle
+      – any “hanging / inverted” look
+      – any “dropped into frame” look
+
+      Required orientation structure:
+
+      TOP OF FRAME
+      → subject head and hair
+
+      CENTER OF FRAME
+      → subject face and eyes looking up toward camera
+
+      LOWER FRAME
+      → shoulders + chest (down to below bust)
+
+      Allowed rotation / tilt:
+      maximum ±15° from vertical.
+      (Only a gentle diagonal is allowed. No strong rotation.)
+
+      The body axis must run generally top-to-bottom (portrait orientation),
+      never left-to-right.
+
+      ────────────────────────────
+      SINGLE SUBJECT POSE & ACTION LOCK (VERY IMPORTANT)
+      ────────────────────────────
+
+      Single-subject pose must be an editorial “reclined” portrait, not a flat stiff lay-down.
+
+      The subject is gently reclined on a dense sakura-petal ground with grass visible in gaps.
+      Upper back and shoulders supported by the ground, but the pose must feel softly propped and composed (not fully flat).
+      Neck line clean and relaxed.
+      Chin slightly raised toward camera (subtle), creating a natural face contour.
+
+      Hair:
+      Long hair spread softly around the head following gravity.
+      Hair must feel naturally placed, not perfectly fanned.
+      Some petals resting on hair.
+
+      Hands / action (choose ONE, keep it natural):
+      Option A: One hand raised near the face holding a single small sakura flower close to one eye area (not covering the full eye), delicate fingers.
+      Option B: One hand lightly touching near the cheek while holding a sakura flower.
+      The other arm must be relaxed and lower in the frame, partially visible, not mirrored, not symmetrical.
+
+      Expression:
+      Calm, soft, gentle smile or neutral soft lips.
+      Eyes looking upward directly to the camera.
+      No exaggerated expression, no “advertising” grin.
+
+      ────────────────────────────
+      CAMERA–SUBJECT SPATIAL RELATION LOCK
+      ────────────────────────────
+
+      The subject must feel naturally positioned on the ground .
+      Soft contact shadows under hairline, neck, shoulders, and along the jaw.
+
+      ────────────────────────────
+      ANTI-GEOMETRY LAYOUT (EXTREMELY IMPORTANT)
+      ────────────────────────────
+
+      FORBIDDEN:
+
+      – perfect circle
+      – radial star formation
+      – evenly spaced heads
+      – symmetrical cross
+      – mirrored layout
+      – balanced four-corner arrangement
+      – geometric alignment
+      – evenly radiating angles
+      – identical head distance from center
+
+      REQUIRED:
+
+      Subjects must feel like they lay down at slightly different times.
+
+      One subject slightly overlaps another’s personal space.
+      One subject closer to camera.
+      One subject slightly farther outward.
+      Uneven spacing between each head (clear irregular gaps).
+      Varied rotation angles (minimum 25–50° difference).
+      At least one head rotated off-axis noticeably.
+      At least one subject slightly breaking the circular flow.
+
+      Heads must NOT form a clean ring.
+      The circle must feel imperfect and slightly broken.
+
+      Hair must spread naturally following gravity.
+      No evenly fanned shapes.
+      Some hair overlapping grass organically.
+
+      Hands must not mirror each other.
+      Avoid identical chest-rest poses.
+      One hand relaxed beside body.
+      One hand partially bent.
+      One hand slightly shifted or asymmetric.
+
+      Arrangement must feel:
+      unguarded
+      relaxed
+      spontaneous
+      organic
+
+      as if captured mid-moment.
+
+      Not staged.
+      Not evenly distributed.
+      Not compositionally perfect.
+
+      One subject must subtly break visual balance.
+
+      ────────────────────────────
+      VISUAL HIERARCHY — MAGAZINE COVER FEEL
+      ────────────────────────────
+
+      There must be a soft visual hierarchy.
+
+      One subject slightly more central or visually dominant.
+      Others orbit loosely around.
+
+      Avoid equal visual weight in four corners.
+      Maintain asymmetry.
+      Avoid balanced quadrant layout.
+
+      ────────────────────────────
+      GROUND & PETALS (ADJUSTED)
+      ────────────────────────────
+
+      Grass slightly compressed under head and shoulders.
+      Soft contact shadows under hair and neck.
+
+      Cherry blossoms must create a near full-ground coverage effect.
+
+      Petal density increased noticeably.
+
+      Clusters should overlap and partially cover grass.
+
+      Grass must still be visible in gaps, but pink coverage should visually dominate.
+
+      Create the feeling of:
+
+      “lying on a carpet of fallen sakura”
+
+      Petals scattered organically in layers.
+      Some small piles.
+      Some petals resting on hair and clothing.
+
+      No floating petals.
+
+      Avoid large uninterrupted green areas.
+
+      Reduce visible green dominance.
+
+      ────────────────────────────
+      FOREGROUND BLOSSOMS — COVER FRAME
+      ────────────────────────────
+
+      Soft-focus cherry blossoms must consistently appear
+      from upper frame edges.
+
+      Strong creamy bokeh (f/2.0 feel).
+
+      Large soft foreground blur.
+
+      Do NOT block faces.
+
+      Create soft natural framing.
+
+      Not symmetrical.
+
+      ────────────────────────────
+      LIGHTING — SOFT FUJI SPRING COVER (ADJUSTED)
+      ────────────────────────────
+
+      Soft diffused spring sunlight.
+
+      Light must feel filtered through thin cherry blossom branches.
+
+      Very gentle light falloff.
+
+      No harsh top-down sun.
+
+      No sharp dapple shadows.
+
+      Reduce contrast 30%.
+
+      Very soft shadow edges.
+
+      Creamy highlight rolloff.
+
+      Subtle luminous bloom around bright areas (extremely light).
+
+      Light should feel:
+
+      airy
+      romantic
+      translucent
+      natural
+
+      like a Japanese spring editorial cover.
+
+      Skin must retain natural texture.
+
+      No gloss.
+
+      No commercial clarity.
+
+      No HDR effect.
+
+      ────────────────────────────
+      COLOR PROFILE — FUJI COVER TONE
+      ────────────────────────────
+
+      – slightly desaturated
+      – creamy brightness
+      – soft pink undertone
+      – reduce green saturation 25%
+      – lower micro-contrast
+      – gentle highlight rolloff
+
+      Cherry blossoms must appear:
+
+      soft sakura pink (not white)
+
+      not overexposed
+
+      not magenta
+
+      Green grass should feel muted and subdued,
+      not vivid or dominant.
+
+      Skin:
+
+      natural texture preserved.
+
+      No smoothing.
+
+      No glow filter.
+
+      ────────────────────────────
+      WARDROBE — SPRING COVER PALETTE
+      ────────────────────────────
+
+      White, cream, blush pink, pale butter yellow.
+
+      Light breathable fabrics.
+
+      No dark tones.
+
+      No strong color blocking.
+
+      Soft spring editorial feel.
+
+      ────────────────────────────
+      ABSOLUTE RESTRICTIONS
+      ────────────────────────────
+
+      NO:
+
+      – upside-down subjects
+      – any inverted / hanging / 180° rotated look
+      – any 90% rotated head/body angle
+      – any sideways/horizontal entry pose
+      – head positioned at bottom of frame
+      – evenly spaced heads
+      – perfect circular layout
+      – small subjects in frame
+      – wide empty grass areas
+      – geometric symmetry
+      – strong contrast shadows
+      – commercial advertising sharpness
+      – beauty retouch
+      – plastic skin
+      – overly staged positioning
+      – No text is allowed.
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 2
+    max_images: 4
+    num_iterations: 30
+
+  - folder: Media Files/Nano Banana/0226 櫻花微夢 2 Styles/0226 櫻花微夢 單人
+    model: gemini-3-pro-image-preview
+    resolution: "1K"
+    aspect_ratio: "3:4"
+    prompt: |-
+      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME) :
+      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the SUBJECT’s face.
+      The generated face must be the SAME REAL SUBJECT as in the input photo.
+      Do NOT alter facial structure, proportions, skin texture, ethnicity, or identity.
+      No beautification. No smoothing. No facial adjustment.
+
+      If input a photo of an animal, it will naturally interact with people or naturally sit on the grass with correct physical weight and shadow.
+
+      The overall color tone is bright and clear with slightly increased saturation, ensuring cherry blossoms appear soft pink rather than white. Highlights remain luminous without washing out color, preserving a fresh sakura pink while maintaining a clean, neutral daylight balance. Neutral spring daylight reaches the subject’s face, creating subtle light-and-shadow contrast on the skin without warm coloration. The environment consists only of blooming cherry blossom trees, evoking purity, renewal, and quiet seasonal beauty.
+
+      Photos must be taken during the peak cherry blossom season in spring. Photos must be original images, taken in different poses, and all must be taken in a park where cherry blossoms are in full bloom. Absent faces and duplicate people are strictly prohibited.CRITICAL PERSON COUNT RULE (NON-NEGOTIABLE):
+
+      The number of people in the final image MUST exactly match the number of uploaded input people.(ABSOLUTELY CRUCIAL)
+      Do NOT add extra people.
+      Do NOT remove any person.
+      Do NOT duplicate any person.
+      Do NOT merge faces.
+
+      Each uploaded person must appear once and only once.
+      No repetition.
+      No cloning.
+      No additional characters.
+
+      ────────────────────────────
+      COMPOSITION — JAPANESE MAGAZINE COVER STYLE (CRITICAL)
+      ────────────────────────────
+
+      True 90-degree overhead shot.
+
+      Subjects must occupy 82–90% of the frame.
+      Faces must appear visually large and intimate.
+
+      Camera positioned closer than previous versions.
+      Crop tightly around heads and upper torsos.
+      Reduce empty grass significantly.
+
+      Framing should feel like a Japanese fashion magazine cover,
+      not a wide lifestyle advertisement shot.
+
+      No distant perspective.
+
+      ⚠️ IF INPUT IS A SINGLE SUBJECT:
+
+      The camera must move even closer than group framing.
+
+      The crop must include the full head + shoulders + chest and reach at least to below the bust line (lower chest visible).
+      Head + upper torso (down to below bust) must fill approximately 85–92% of the frame height.
+      The face must feel intimate and near the lens.
+      Reduce surrounding grass by an additional 20%.
+      Minimize visible empty areas around shoulders.
+      Avoid excessive negative space around the head.
+      Avoid small-scale subject rendering.
+
+      The visual feeling must be:
+      close
+      editorial
+      personal
+      not distant
+
+      ────────────────────────────
+      SUBJECT ORIENTATION & ANGLE LOCK — EXTREMELY IMPORTANT
+      ────────────────────────────
+
+      When the input contains a SINGLE SUBJECT:
+
+      The subject must be oriented upright in the frame with the HEAD positioned toward the TOP of the image.
+
+      FORBIDDEN:
+      – upside-down orientation
+      – head located at bottom of frame
+      – 180° inversion
+      – sideways / horizontal entry (subject lying left-to-right across the frame)
+      – any 90% rotated head/body angle
+      – any “hanging / inverted” look
+      – any “dropped into frame” look
+
+      Required orientation structure:
+
+      TOP OF FRAME
+      → subject head and hair
+
+      CENTER OF FRAME
+      → subject face and eyes looking up toward camera
+
+      LOWER FRAME
+      → shoulders + chest (down to below bust)
+
+      Allowed rotation / tilt:
+      maximum ±15° from vertical.
+      (Only a gentle diagonal is allowed. No strong rotation.)
+
+      The body axis must run generally top-to-bottom (portrait orientation),
+      never left-to-right.
+
+      ────────────────────────────
+      SINGLE SUBJECT POSE & ACTION LOCK (VERY IMPORTANT)
+      ────────────────────────────
+
+      Single-subject pose must be an editorial “reclined” portrait, not a flat stiff lay-down.
+
+      The subject is gently reclined on a dense sakura-petal ground with grass visible in gaps.
+      Upper back and shoulders supported by the ground, but the pose must feel softly propped and composed (not fully flat).
+      Neck line clean and relaxed.
+      Chin slightly raised toward camera (subtle), creating a natural face contour.
+
+      Hair:
+      Long hair spread softly around the head following gravity.
+      Hair must feel naturally placed, not perfectly fanned.
+      Some petals resting on hair.
+
+      Hands / action (choose ONE, keep it natural):
+      Option A: One hand raised near the face holding a single small sakura flower close to one eye area (not covering the full eye), delicate fingers.
+      Option B: One hand lightly touching near the cheek while holding a sakura flower.
+      The other arm must be relaxed and lower in the frame, partially visible, not mirrored, not symmetrical.
+
+      Expression:
+      Calm, soft, gentle smile or neutral soft lips.
+      Eyes looking upward directly to the camera.
+      No exaggerated expression, no “advertising” grin.
+
+      ────────────────────────────
+      CAMERA–SUBJECT SPATIAL RELATION LOCK
+      ────────────────────────────
+
+      The subject must feel naturally positioned on the ground .
+      Soft contact shadows under hairline, neck, shoulders, and along the jaw.
+
+      ────────────────────────────
+      ANTI-GEOMETRY LAYOUT (EXTREMELY IMPORTANT)
+      ────────────────────────────
+
+      FORBIDDEN:
+
+      – perfect circle
+      – radial star formation
+      – evenly spaced heads
+      – symmetrical cross
+      – mirrored layout
+      – balanced four-corner arrangement
+      – geometric alignment
+      – evenly radiating angles
+      – identical head distance from center
+
+      REQUIRED:
+
+      Subjects must feel like they lay down at slightly different times.
+
+      One subject slightly overlaps another’s personal space.
+      One subject closer to camera.
+      One subject slightly farther outward.
+      Uneven spacing between each head (clear irregular gaps).
+      Varied rotation angles (minimum 25–50° difference).
+      At least one head rotated off-axis noticeably.
+      At least one subject slightly breaking the circular flow.
+
+      Heads must NOT form a clean ring.
+      The circle must feel imperfect and slightly broken.
+
+      Hair must spread naturally following gravity.
+      No evenly fanned shapes.
+      Some hair overlapping grass organically.
+
+      Hands must not mirror each other.
+      Avoid identical chest-rest poses.
+      One hand relaxed beside body.
+      One hand partially bent.
+      One hand slightly shifted or asymmetric.
+
+      Arrangement must feel:
+      unguarded
+      relaxed
+      spontaneous
+      organic
+
+      as if captured mid-moment.
+
+      Not staged.
+      Not evenly distributed.
+      Not compositionally perfect.
+
+      One subject must subtly break visual balance.
+
+      ────────────────────────────
+      VISUAL HIERARCHY — MAGAZINE COVER FEEL
+      ────────────────────────────
+
+      There must be a soft visual hierarchy.
+
+      One subject slightly more central or visually dominant.
+      Others orbit loosely around.
+
+      Avoid equal visual weight in four corners.
+      Maintain asymmetry.
+      Avoid balanced quadrant layout.
+
+      ────────────────────────────
+      GROUND & PETALS (ADJUSTED)
+      ────────────────────────────
+
+      Grass slightly compressed under head and shoulders.
+      Soft contact shadows under hair and neck.
+
+      Cherry blossoms must create a near full-ground coverage effect.
+
+      Petal density increased noticeably.
+
+      Clusters should overlap and partially cover grass.
+
+      Grass must still be visible in gaps, but pink coverage should visually dominate.
+
+      Create the feeling of:
+
+      “lying on a carpet of fallen sakura”
+
+      Petals scattered organically in layers.
+      Some small piles.
+      Some petals resting on hair and clothing.
+
+      No floating petals.
+
+      Avoid large uninterrupted green areas.
+
+      Reduce visible green dominance.
+
+      ────────────────────────────
+      FOREGROUND BLOSSOMS — COVER FRAME
+      ────────────────────────────
+
+      Soft-focus cherry blossoms must consistently appear
+      from upper frame edges.
+
+      Strong creamy bokeh (f/2.0 feel).
+
+      Large soft foreground blur.
+
+      Do NOT block faces.
+
+      Create soft natural framing.
+
+      Not symmetrical.
+
+      ────────────────────────────
+      LIGHTING — SOFT FUJI SPRING COVER (ADJUSTED)
+      ────────────────────────────
+
+      Soft diffused spring sunlight.
+
+      Light must feel filtered through thin cherry blossom branches.
+
+      Very gentle light falloff.
+
+      No harsh top-down sun.
+
+      No sharp dapple shadows.
+
+      Reduce contrast 30%.
+
+      Very soft shadow edges.
+
+      Creamy highlight rolloff.
+
+      Subtle luminous bloom around bright areas (extremely light).
+
+      Light should feel:
+
+      airy
+      romantic
+      translucent
+      natural
+
+      like a Japanese spring editorial cover.
+
+      Skin must retain natural texture.
+
+      No gloss.
+
+      No commercial clarity.
+
+      No HDR effect.
+
+      ────────────────────────────
+      COLOR PROFILE — FUJI COVER TONE
+      ────────────────────────────
+
+      – slightly desaturated
+      – creamy brightness
+      – soft pink undertone
+      – reduce green saturation 25%
+      – lower micro-contrast
+      – gentle highlight rolloff
+
+      Cherry blossoms must appear:
+
+      soft sakura pink (not white)
+
+      not overexposed
+
+      not magenta
+
+      Green grass should feel muted and subdued,
+      not vivid or dominant.
+
+      Skin:
+
+      natural texture preserved.
+
+      No smoothing.
+
+      No glow filter.
+
+      ────────────────────────────
+      WARDROBE — SPRING COVER PALETTE
+      ────────────────────────────
+
+      White, cream, blush pink, pale butter yellow.
+
+      Light breathable fabrics.
+
+      No dark tones.
+
+      No strong color blocking.
+
+      Soft spring editorial feel.
+
+      ────────────────────────────
+      ABSOLUTE RESTRICTIONS
+      ────────────────────────────
+
+      NO:
+
+      – upside-down subjects
+      – any inverted / hanging / 180° rotated look
+      – any 90% rotated head/body angle
+      – any sideways/horizontal entry pose
+      – head positioned at bottom of frame
+      – evenly spaced heads
+      – perfect circular layout
+      – small subjects in frame
+      – wide empty grass areas
+      – geometric symmetry
+      – strong contrast shadows
+      – commercial advertising sharpness
+      – beauty retouch
+      – plastic skin
+      – overly staged positioning
+      – No text is allowed.      
     use_random_source_selection: false
     use_deterministic_random: true
     random_seed: 42
-    min_images: 4
-    max_images: 5
+    min_images: 2
+    max_images: 4
     num_iterations: 50
 
 
