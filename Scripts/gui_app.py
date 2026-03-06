@@ -178,6 +178,27 @@ API_FIELD_SCHEMAS = {
             {'key': 'sound_enabled', 'label': 'Enable Sound', 'type': 'checkbox', 'default': True},
         ]
     },
+    'kling_motion': {
+        'name': 'Kling Motion (Image + Video)',
+        'fields': [
+            {'key': 'folder', 'label': 'Task Folder', 'type': 'folder', 'required': True,
+             'help': 'Folder with Source Image and Source Video subfolders'},
+            {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 3,
+             'help': 'Optional prompt describing desired motion'},
+            {'key': 'model', 'label': 'Model', 'type': 'dropdown',
+             'options': ['v2.6', 'v3'], 'default': 'v3'},
+            {'key': 'character_orientation', 'label': 'Character Orientation', 'type': 'dropdown',
+             'options': ['image', 'video'], 'default': 'video'},
+            {'key': 'mode', 'label': 'Mode', 'type': 'dropdown',
+             'options': ['std', 'pro'], 'default': 'pro'},
+            {'key': 'keep_original_sound', 'label': 'Keep Original Sound', 'type': 'checkbox', 'default': True},
+            {'key': 'element_list_str', 'label': 'Element IDs', 'type': 'text', 'default': '',
+             'help': 'Optional comma-separated element IDs'},
+            {'key': 'use_comparison_template', 'label': 'Use Comparison Template', 'type': 'checkbox', 'default': False},
+            {'key': 'reference_folder', 'label': 'Reference Folder', 'type': 'folder',
+             'help': 'Optional folder for comparison report'},
+        ]
+    },
     'veo': {
         'name': 'Veo (Text-to-Video)',
         'fields': [
@@ -353,6 +374,10 @@ API_LINK_KEYS = {
         'source_link': 'source_video_link',
         'design_link': 'design_link',
     },
+    'kling_motion': {
+        'source_link': 'source_video_link',
+        'design_link': 'root_design_link',
+    },
     'veo': {},
     'veo_itv': {},
     'pixverse': {
@@ -386,6 +411,7 @@ PLATFORM_DISPLAY_NAMES = {
     'klingfx': 'Kling Effects (Premade Effects)',
     'kling_endframe': 'Kling Endframe (A→B Transitions)',
     'kling_ttv': 'Kling TTV (Text-to-Video)',
+    'klingmotion': 'Kling Motion (Image + Video)',
     'pixverse': 'Pixverse v4.5 (Effects)',
     'genvideo': 'GenVideo (Image Generation)',
     'nano': 'Nano Banana / Google Flash',

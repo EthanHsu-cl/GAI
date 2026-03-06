@@ -558,6 +558,8 @@ class UnifiedAPIProcessor:
             return self._validate_wan_structure()
         elif self.api_name == "dreamactor":
             return self._validate_dreamactor_structure()
+        elif self.api_name == "kling_motion":
+            return self._validate_kling_motion_structure()
         elif self.api_name == "veo":
             return self._validate_veo_structure()
         elif self.api_name == "veo_itv":
@@ -991,6 +993,88 @@ class UnifiedAPIProcessor:
 
         if invalid_videos:
             self.write_invalid_report(invalid_videos, 'dreamactor_videos')
+            raise ValidationError(f"{len(invalid_videos)} invalid videos found")
+
+        return valid_tasks
+
+    def _validate_kling_motion_structure(self):
+        """
+        Validate Kling Motion structure with separate image and video folders.
+
+        Kling Motion requires:
+        - Source Image/ folder with reference images (character appearance)
+        - Source Video/ folder with motion source videos
+        - All images will be cross-matched with all videos
+        """
+        valid_tasks = []
+        invalid_images = []
+        invalid_videos = []
+
+        for i, task in enumerate(self._tasks_cache, 1):
+            folder = Path(task['folder'])
+
+            folder.mkdir(parents=True, exist_ok=True)
+            source_image_folder = folder / "Source Image"
+            source_video_folder = folder / "Source Video"
+            source_image_folder.mkdir(exist_ok=True)
+            source_video_folder.mkdir(exist_ok=True)
+
+            image_files = self._get_files_by_type(source_image_folder, 'image')
+            if not image_files:
+                self.logger.warning(f"❌ Task {i}: No images found in {source_image_folder}")
+                continue
+
+            video_files = self._get_files_by_type(source_video_folder, 'video')
+            if not video_files:
+                self.logger.warning(f"❌ Task {i}: No videos found in {source_video_folder}")
+                continue
+
+            valid_image_count = 0
+            for image_file in image_files:
+                is_valid, reason = self.validate_file(image_file, 'image')
+                if not is_valid:
+                    invalid_images.append({
+                        'path': str(image_file),
+                        'folder': str(folder),
+                        'name': image_file.name,
+                        'reason': reason
+                    })
+                else:
+                    valid_image_count += 1
+
+            valid_video_count = 0
+            for video_file in video_files:
+                is_valid, reason = self.validate_file(video_file, 'video')
+                if not is_valid:
+                    invalid_videos.append({
+                        'path': str(video_file),
+                        'folder': str(folder),
+                        'name': video_file.name,
+                        'reason': reason
+                    })
+                else:
+                    valid_video_count += 1
+
+            if valid_image_count == 0 or valid_video_count == 0:
+                self.logger.warning(f"❌ Task {i}: Insufficient valid files")
+                continue
+
+            (folder / "Generated_Video").mkdir(exist_ok=True)
+            (folder / "Metadata").mkdir(exist_ok=True)
+
+            valid_tasks.append(task)
+            total_combinations = valid_image_count * valid_video_count
+            self.logger.info(
+                f"✓ Task {i}: {valid_image_count} images × {valid_video_count} videos = "
+                f"{total_combinations} total generations"
+            )
+
+        if invalid_images:
+            self.write_invalid_report(invalid_images, 'kling_motion_images')
+            raise ValidationError(f"{len(invalid_images)} invalid images found")
+
+        if invalid_videos:
+            self.write_invalid_report(invalid_videos, 'kling_motion_videos')
             raise ValidationError(f"{len(invalid_videos)} invalid videos found")
 
         return valid_tasks

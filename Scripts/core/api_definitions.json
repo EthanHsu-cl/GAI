@@ -988,5 +988,90 @@
             "9:16",
             "16:9"
         ]
+    },
+    "kling_motion": {
+        "endpoint": "http://192.168.31.161:8000/kling/",
+        "api_name": "/MotionControlSubmit",
+        "file_types": {
+            "image": [
+                ".jpg",
+                ".jpeg",
+                ".png",
+                ".bmp",
+                ".tiff",
+                ".webp"
+            ],
+            "video": [
+                ".mp4",
+                ".mov",
+                ".avi",
+                ".mkv",
+                ".webm"
+            ]
+        },
+        "validation": {
+            "image": {
+                "max_size_mb": 50,
+                "min_dimension": 128
+            },
+            "video": {
+                "max_size_mb": 500,
+                "min_dimension": 320,
+                "duration": [
+                    1,
+                    300
+                ]
+            }
+        },
+        "folders": {
+            "source_image": "Source Image",
+            "source_video": "Source Video",
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 3,
+        "task_delay": 10,
+        "max_retries": 3,
+        "special_handling": "image_video_cross_match",
+        "config_structure": "task_folders",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "comparison_template_path": "templates/I2V Comparison Template.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": true
+        },
+        "task_fields": [
+            "folder",
+            "prompt",
+            "model",
+            "character_orientation",
+            "mode",
+            "keep_original_sound",
+            "element_list_str",
+            "design_link",
+            "source_video_link",
+            "reference_folder",
+            "use_comparison_template"
+        ],
+        "api_params": {
+            "model": "v3",
+            "character_orientation": "video",
+            "mode": "pro",
+            "keep_original_sound": true,
+            "element_list_str": ""
+        },
+        "model_options": [
+            "v2.6",
+            "v3"
+        ],
+        "character_orientation_options": [
+            "image",
+            "video"
+        ],
+        "mode_options": [
+            "std",
+            "pro"
+        ]
     }
 }

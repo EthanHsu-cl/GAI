@@ -171,6 +171,7 @@ class UnifiedReportGenerator:
             'pixverse': 'Pixverse',
             'wan': 'Wan 2.2',
             'dreamactor': 'DreamActor',
+            'kling_motion': 'Kling Motion',
             'veo': 'Veo',
             'veo_itv': 'Veo ITV'
         }
@@ -180,7 +181,7 @@ class UnifiedReportGenerator:
         self.load_report_definitions()
         
         # Update Kling display name based on model in config
-        if self.api_name in ['kling', 'kling_endframe', 'kling_ttv']:
+        if self.api_name in ['kling', 'kling_endframe', 'kling_ttv', 'kling_motion']:
             self._update_kling_display_name()
     
     # ================== UNIFIED CONFIGURATION SYSTEM ==================
@@ -280,6 +281,14 @@ class UnifiedReportGenerator:
                 **self.LAYOUT_3_MEDIA_STACKED,
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['source_image', 'source_video', 'task_id', 'time_taken', 'status_code', 'processing_time_seconds', 'success'],
+                'error_handling': 'video_fallback'
+            },
+            'kling_motion': {
+                **base_config,
+                'media_types': ['source', 'source_video', 'generated'],
+                **self.LAYOUT_3_MEDIA_STACKED,
+                'title_format': 'Generation {index}: {source_file}',
+                'metadata_fields': ['source_image', 'source_video', 'model', 'character_orientation', 'mode', 'video_id', 'task_id', 'processing_time_seconds', 'success'],
                 'error_handling': 'video_fallback'
             },
             'veo': {
@@ -641,7 +650,7 @@ class UnifiedReportGenerator:
                 
                 return sorted(pairs, key=get_sort_key)
         
-        if self.api_name in ['wan', 'runway', 'dreamactor']:
+        if self.api_name in ['wan', 'runway', 'dreamactor', 'kling_motion']:
             # Combination APIs: Failed slides first, then group by source video,
             # then sort within groups by source file
             def get_sort_key(pair):
@@ -1120,7 +1129,7 @@ class UnifiedReportGenerator:
         
         if self.api_name == 'runway':
             return self.create_runway_media_pairs(folder, ref_folder, task, use_comparison)
-        elif self.api_name in ('wan', 'dreamactor'):
+        elif self.api_name in ('wan', 'dreamactor', 'kling_motion'):
             return self.create_wan_media_pairs(folder, ref_folder, task, use_comparison)
         else:
             return self.create_standard_media_pairs(folder, ref_folder, task, use_comparison)
@@ -2154,7 +2163,7 @@ class UnifiedReportGenerator:
         self.config = config
         
         # Update Kling display name if applicable
-        if self.api_name in ['kling', 'kling_endframe', 'kling_ttv']:
+        if self.api_name in ['kling', 'kling_endframe', 'kling_ttv', 'kling_motion']:
             self._update_kling_display_name()
     
     def _update_kling_display_name(self):
@@ -2162,14 +2171,14 @@ class UnifiedReportGenerator:
         # Check both 'model' and 'model_version' fields at root level
         model = (self.config.get('model') or self.config.get('model_version', '')).lower()
         
-        # For kling_ttv, check the first task's model if not at root level
-        if not model and self.api_name == 'kling_ttv':
+        # For kling_ttv/kling_motion, check the first task's model if not at root level
+        if not model and self.api_name in ('kling_ttv', 'kling_motion'):
             tasks = self.config.get('tasks', [])
             if tasks and 'model' in tasks[0]:
                 model = tasks[0]['model'].lower()
         
         # Map official Kling model names to display names
-        # Official model names: v1.5, v1.6, v2.0-master, v2.1, v2.1-master, v2.5-turbo
+        # Official model names: v1.5, v1.6, v2.0-master, v2.1, v2.1-master, v2.5-turbo, v2.6, v3
         model_mapping = {
             'v1.5': 'Kling 1.5',
             'v1.6': 'Kling 1.6',
@@ -2177,6 +2186,8 @@ class UnifiedReportGenerator:
             'v2.1': 'Kling 2.1',
             'v2.1-master': 'Kling 2.1',
             'v2.5-turbo': 'Kling 2.5',
+            'v2.6': 'Kling 2.6',
+            'v3': 'Kling 3.0',
         }
         
         # Try to find a match
@@ -2192,12 +2203,14 @@ class UnifiedReportGenerator:
                 is_turbo = 'turbo' in model
                 display_name = f"Kling {version}{' Turbo' if is_turbo else ''}"
         
-        # Update the display name for kling, kling_endframe, and kling_ttv
+        # Update the display name for kling, kling_endframe, kling_ttv, and kling_motion
         if display_name:
             if self.api_name == 'kling_endframe':
                 self._api_display_names['kling_endframe'] = f"{display_name} Endframe"
             elif self.api_name == 'kling_ttv':
                 self._api_display_names['kling_ttv'] = f"{display_name} TTV"
+            elif self.api_name == 'kling_motion':
+                self._api_display_names['kling_motion'] = f"{display_name} Motion"
             else:
                 self._api_display_names['kling'] = display_name
             logger.info(f"✓ Kling display name set to: {self._api_display_names[self.api_name]}")
@@ -2207,6 +2220,8 @@ class UnifiedReportGenerator:
                 self._api_display_names['kling_endframe'] = 'Kling 1.6 Endframe'  # Default for endframe
             elif self.api_name == 'kling_ttv':
                 self._api_display_names['kling_ttv'] = 'Kling 1.6 TTV'  # Default for TTV
+            elif self.api_name == 'kling_motion':
+                self._api_display_names['kling_motion'] = 'Kling 3.0 Motion'  # Default for motion
             else:
                 self._api_display_names['kling'] = 'Kling 2.1'  # Default for regular kling
             if model:
@@ -2256,7 +2271,7 @@ class UnifiedReportGenerator:
             "template_path": "templates/I2V templates.pptx",
             "comparison_template_path": "templates/I2V Comparison Template.pptx",
             "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
-            "use_comparison": self.api_name in ["kling", "nano_banana", "runway", "wan", "dreamactor"]
+            "use_comparison": self.api_name in ["kling", "nano_banana", "runway", "wan", "dreamactor", "kling_motion"]
         }
     
     def _extract_date_from_folder(self, folder):
@@ -3217,7 +3232,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'dreamactor', 'veo', 'veo_itv']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'dreamactor', 'veo', 'veo_itv']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -3226,7 +3241,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'dreamactor', 'veo', 'veo_itv'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'dreamactor', 'veo', 'veo_itv'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

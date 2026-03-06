@@ -1,6 +1,6 @@
 # Automated Processing & Reporting Automation Suite
 
-A Python automation framework for batch processing images/videos through 14 AI APIs with automated PowerPoint report generation.
+A Python automation framework for batch processing images/videos through 15 AI APIs with automated PowerPoint report generation.
 
 ## 🚀 Quick Start (Command Line)
 
@@ -108,6 +108,7 @@ When you select a platform, the Advanced Options section shows API-specific fiel
 | **Kling Effects** | Duration, Effect Name, Preset Effect |
 | **Kling Endframe** | Duration, CFG, Generation Count, Pairing Mode |
 | **Kling TTV** | Mode, Duration, Ratio, CFG Scale, Generation Count, Sound |
+| **Kling Motion** | Model, Character Orientation, Mode, Keep Original Sound, Element IDs |
 | **Nano Banana** | Model, Resolution, Aspect Ratio, Random Source Selection, Deterministic Random, Seed, Min/Max Images, Iterations |
 | **Veo / Veo ITV** | Model, Duration, Aspect Ratio, Resolution, Person Generation, Enhance Prompt, Generate Audio |
 | **Pixverse** | Model, Duration, Quality, Motion Mode, Style, Generate Audio, Multi Clip, Thinking Type |
@@ -135,6 +136,7 @@ These options override the corresponding values in the config file for the curre
 | `klingfx` | Kling Effects | Apply premade video effects to images |
 | `kling_endframe` | Kling Endframe | Start/end frame video generation (A→B transitions) |
 | `kling_ttv` | Kling TTV | Text-to-video generation (no input images) |
+| `klingmotion` | Kling Motion | Image + video motion control via cross-matching |
 | `pixverse` | Pixverse v5.5 | Effect-based video generation with custom effects |
 | `genvideo` | GenVideo | Image-to-image transformation (Gashapon style) |
 | `nano` | Nano Banana/Google Flash | Multi-image generation with AI models |
@@ -157,6 +159,7 @@ GAI/                                    # Project root
     │   ├── batch_kling_effects_config.yaml # Kling Effects configuration
     │   ├── batch_kling_endframe_config.yaml # Kling Endframe configuration
     │   ├── batch_kling_ttv_config.yaml    # Kling TTV configuration
+    │   ├── batch_kling_motion_config.yaml  # Kling Motion configuration
     │   ├── batch_pixverse_config.yaml     # Pixverse configuration
     │   ├── batch_genvideo_config.yaml     # GenVideo configuration
     │   ├── batch_nano_banana_config.yaml  # Nano Banana configuration
@@ -179,6 +182,7 @@ GAI/                                    # Project root
     │   ├── kling_effects_handler.py  # Kling Effects handler
     │   ├── kling_endframe_handler.py # Kling Endframe handler
     │   ├── kling_ttv_handler.py      # Kling TTV handler
+    │   ├── kling_motion_handler.py   # Kling Motion handler
     │   └── ...                       # Other API handlers
     ├── processors/                    # Legacy individual processors
     ├── reports/                       # Legacy individual report generators
@@ -208,6 +212,7 @@ TaskFolder/
 - Most APIs: `Source/`
 - Wan 2.2: `Source Image/` + `Source Video/` (cross-matched)
 - DreamActor: `Source Image/` + `Source Video/` (cross-matched)
+- Kling Motion: `Source Image/` + `Source Video/` (cross-matched)
 - Nano Banana multi-image: `Source/` + `Additional/` (or `Source/` only with random selection mode)
 - Runway/Vidu Reference: `Source/` + `Reference/`
 
@@ -345,6 +350,43 @@ tasks:
 ```
 
 **Options:** Model (`v1.6`/`v2.0-master`/`v2.1-master`/`v2.5-turbo`), Mode (`std`/`pro`), Ratio (`16:9`/`9:16`/`1:1`), `sound_enabled` (true/false), `generation_count`
+
+### **Kling Motion Configuration** (`config/batch_kling_motion_config.yaml`)
+
+Image + video motion control generation. Cross-matches all reference images with all motion source videos.
+
+```yaml
+testbed: http://192.168.31.161:8000/kling/
+
+default_params:
+  prompt: ''
+  model: v3
+  character_orientation: video
+  mode: pro
+  keep_original_sound: true
+  element_list_str: ''
+
+tasks:
+  - folder: Media Files/Kling Motion/Style1
+    prompt: ''
+    model: v3
+    character_orientation: video
+    mode: pro
+    keep_original_sound: true
+    element_list_str: ''
+```
+
+**Folder Structure:**
+
+```bash
+TaskFolder/
+├── Source Image/        # Reference images (character appearance)
+├── Source Video/        # Motion source videos
+├── Generated_Video/     # Auto-created output folder
+└── Metadata/            # Auto-created metadata folder
+```
+
+**Options:** Model (`v2.6`/`v3`), Character Orientation (`image`/`video`), Mode (`std`/`pro`), `keep_original_sound` (true/false), `element_list_str` (comma-separated IDs)
 
 ### **Nano Banana Configuration** (`config/batch_nano_banana_config.yaml`)
 
@@ -618,6 +660,7 @@ The app bundle will be created at `Scripts/dist/AI Video Suite.app` (macOS) or `
 | Kling Effects | I2V | 100+ preset effects, custom effects |
 | Kling Endframe | I2V | A→B transitions, pairing modes |
 | Kling TTV | T2V | Text-to-video, sound generation, multiple models |
+| Kling Motion | I+V | Image + video motion control, cross-matching |
 | Pixverse | I2V | v5.5 model, custom effect IDs, multi-clip |
 | GenVideo | I2I | Gashapon style, GPT/Gemini models |
 | Nano Banana | I2I | Multi-image (up to 14), random source selection, deterministic random |
@@ -639,6 +682,7 @@ The app bundle will be created at `Scripts/dist/AI Video Suite.app` (macOS) or `
 | Kling Effects | `{filename}_{effect}_effect.mp4` |
 | Kling Endframe | `{filename}_generated_{n}.mp4` |
 | Kling TTV/Veo | `{style}-{n}_generated.mp4` |
+| Kling Motion | `{video}_{image}_motion.mp4` |
 | Veo ITV | `{source_image}_{n}.mp4` |
 | Pixverse/Vidu | `{filename}_{effect}_effect.mp4` |
 | Runway | `{filename}_ref_{ref}_runway_generated.mp4` |
@@ -658,7 +702,7 @@ The framework uses an auto-discovery handler system:
   - **Sleep prevention** – On macOS, uses native `caffeinate -di` subprocess tracked by PID. On other platforms, uses `wakepy` library. Cleanup is guaranteed via `finally`, `atexit`, and `SIGINT`/`SIGTERM` signal handlers so orphaned processes cannot block system sleep. Multiple concurrent script instances are safe.
 - **`UnifiedReportGenerator`** - PowerPoint generation with parallel metadata loading
 
-**14 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, Pixverse, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, DreamActor, Veo, VeoItv
+**15 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, KlingMotion, Pixverse, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, DreamActor, Veo, VeoItv
 
 ---
 
