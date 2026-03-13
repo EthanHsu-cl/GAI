@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor
 import logging
 import sys
 
-from config_loader import get_app_base_path, get_resource_path, get_core_path
+from config_loader import get_app_base_path, get_resource_path, get_core_path, get_testbed_cookie
 
 # Register HEIC/HEIF format support for Pillow
 try:
@@ -89,6 +89,7 @@ class UnifiedAPIProcessor:
         self._caffeinate_process = None
         self._original_sigint = None
         self._original_sigterm = None
+        self._testbed_cookie = get_testbed_cookie()
 
         # Setup logging
         logging.basicConfig(level=logging.INFO, format='%(message)s')
@@ -1619,7 +1620,13 @@ class UnifiedAPIProcessor:
             if self.api_name == "nano_banana" and self.config.get('testbed'):
                 endpoint = self.config['testbed']
 
-            self.client = Client(endpoint)
+            # Build optional headers (cookie for authenticated testbed access)
+            headers = {}
+            cookie = self.config.get('testbed_cookie') or self._testbed_cookie
+            if cookie:
+                headers['Cookie'] = cookie
+
+            self.client = Client(endpoint, headers=headers or None)
             self.logger.info(f"✓ Client initialized: {endpoint}")
             return True
         except Exception as e:
@@ -2011,7 +2018,12 @@ class UnifiedAPIProcessor:
     def download_file(self, url, path):
         """Standard file download method"""
         try:
-            with requests.get(url, stream=True, timeout=30) as r:
+            headers = {}
+            cookie = self.config.get('testbed_cookie') or self._testbed_cookie
+            if cookie:
+                headers['Cookie'] = cookie
+
+            with requests.get(url, stream=True, timeout=30, headers=headers or None) as r:
                 r.raise_for_status()
                 with open(path, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=16384):

@@ -1,7 +1,7 @@
 base_folder: Media Files/Vidu_Ref/1224 1 Style
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 template_path: templates/I2V templates.pptx
-testbed: http://192.168.31.161:8000/video_effect/
+testbed: http://192.168.31.161/external-testbed/video_effect/
 default_prompt: ''
 model: viduq1
 duration: 5

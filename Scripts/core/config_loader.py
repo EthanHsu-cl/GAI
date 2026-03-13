@@ -441,3 +441,49 @@ def get_default_config_path(api_name: str) -> Optional[str]:
         return str(json_path)
     
     return None
+
+
+def load_env_file() -> None:
+    """
+    Load environment variables from a .env file in the Scripts directory.
+
+    Reads key=value pairs and sets them as environment variables.
+    Does not overwrite variables that are already set in the environment.
+    Lines starting with '#' and blank lines are ignored.
+    """
+    env_path = get_app_base_path() / ".env"
+    if not env_path.exists():
+        return
+
+    try:
+        with open(env_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                if '=' not in line:
+                    continue
+                key, _, value = line.partition('=')
+                key = key.strip()
+                value = value.strip()
+                if not key:
+                    continue
+                # Do not overwrite existing environment variables
+                if key not in os.environ:
+                    os.environ[key] = value
+    except OSError:
+        logger.warning(f"Could not read .env file: {env_path}")
+
+
+def get_testbed_cookie() -> str:
+    """
+    Get the testbed cookie from the environment.
+
+    Loads the .env file first (if not already loaded), then reads the
+    TESTBED_COOKIE environment variable.
+
+    Returns:
+        The cookie string, or empty string if not set.
+    """
+    load_env_file()
+    return os.environ.get('TESTBED_COOKIE', '')

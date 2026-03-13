@@ -234,7 +234,7 @@ All configuration files are located in the `Scripts/config/` directory and follo
 ### **Kling Configuration** (`config/batch_kling_config.yaml`)
 
 ```yaml
-testbed: http://192.168.31.161:8000/kling/
+testbed: http://192.168.31.161/external-testbed/kling/
 model_version: v2.5-turbo
 group_tasks_by: 4
 
@@ -256,7 +256,7 @@ Applies premade video effects to images. Supports both preset effects and custom
 
 ```yaml
 base_folder: Media Files/Kling Effects/1127 Test
-testbed: http://192.168.31.161:8000/kling/
+testbed: http://192.168.31.161/external-testbed/kling/
 
 # Global settings
 duration: '5'
@@ -300,7 +300,7 @@ BaseFolder/
 Generates videos from start and end frame image pairs, creating smooth A→B transitions.
 
 ```yaml
-testbed: http://192.168.31.161:8000/kling/
+testbed: http://192.168.31.161/external-testbed/kling/
 model_version: v2.1
 generation_count: 1  # Global default, can override per task
 
@@ -331,7 +331,7 @@ tasks:
 Text-to-video generation (no input images required).
 
 ```yaml
-testbed: http://192.168.31.161:8000/kling/
+testbed: http://192.168.31.161/external-testbed/kling/
 model: "v2.5-turbo"
 output_folder: Media Files/Kling TTV/Test
 generation_count: 1
@@ -356,7 +356,7 @@ tasks:
 Image + video motion control generation. Cross-matches all reference images with all motion source videos.
 
 ```yaml
-testbed: http://192.168.31.161:8000/kling/
+testbed: http://192.168.31.161/external-testbed/kling/
 
 default_params:
   prompt: ''
@@ -393,7 +393,7 @@ TaskFolder/
 Supports two modes: **Random Source Selection** (select N random images from Source folder per API call) and **Multi-Image** (Source + Additional folder pairing).
 
 ```yaml
-testbed: http://192.168.31.161:8000/image_generation/
+testbed: http://192.168.31.161/external-testbed/image_generation/
 
 output:
   group_tasks_by: 2
@@ -450,7 +450,7 @@ Nano Banana has built-in handling for Google API `429 RESOURCE_EXHAUSTED` errors
 
 ```yaml
 base_folder: Media Files/Vidu/1027 Product
-testbed: http://192.168.31.161:8000/video_effect/
+testbed: http://192.168.31.161/external-testbed/video_effect/
 model_version: viduq2-pro
 
 tasks:
@@ -462,7 +462,7 @@ tasks:
 
 ```yaml
 base_folder: Media Files/Vidu_Ref/1201 1 Style
-testbed: http://192.168.31.161:8000/video_effect/
+testbed: http://192.168.31.161/external-testbed/video_effect/
 model: viduq1
 duration: 5
 resolution: 1080p
@@ -479,7 +479,7 @@ tasks:
 
 ```yaml
 base_folder: Media Files/Pixverse
-testbed: http://192.168.31.161:8000/video_effect/
+testbed: http://192.168.31.161/external-testbed/video_effect/
 
 default_settings:
   model: v5.5
@@ -502,7 +502,7 @@ tasks:
 ### **GenVideo Configuration** (`config/batch_genvideo_config.yaml`)
 
 ```yaml
-testbed: http://192.168.31.161:8000/genvideo/
+testbed: http://192.168.31.161/external-testbed/genvideo/
 
 tasks:
   - folder: /path/to/TaskName1
@@ -516,7 +516,7 @@ tasks:
 ### **Runway Configuration** (`config/batch_runway_config.yaml`)
 
 ```yaml
-testbed: http://192.168.31.161:8000/runway/
+testbed: http://192.168.31.161/external-testbed/runway/
 model: gen4_aleph
 ratio: 1280:720
 public_figure_moderation: low  # low/medium/high
@@ -549,7 +549,7 @@ tasks:
 Text-to-video generation (no input images required).
 
 ```yaml
-testbed: http://192.168.31.161:8000/google_veo/
+testbed: http://192.168.31.161/external-testbed/google_veo/
 generation_count: 1
 
 tasks:
@@ -624,7 +624,47 @@ brew install ffmpeg  # macOS (required for video processing)
 - `wakepy` - Cross-platform sleep prevention (used on non-macOS)
 - `tqdm` - Progress bars for batch processing
 
-## 📦 Building the Desktop App
+## � Testbed Cookie Setup
+
+The testbed at `192.168.31.161` requires browser cookie authentication. Each
+user must provide their own cookie. The cookie is **never committed to Git**.
+
+### Option 1: `.env` File (recommended for CLI / code usage)
+
+```bash
+cd Scripts
+cp .env.example .env
+```
+
+Edit `.env` and paste your cookie:
+
+```env
+TESTBED_COOKIE=session_id=abc123; auth_token=xyz789
+```
+
+### Option 2: GUI Field
+
+Open the GUI → Advanced Options → **Testbed Cookie** field. The field
+auto-loads the value from `.env` on launch. You can paste a different cookie
+here and it will be used for the current run only.
+
+### Option 3: Environment Variable
+
+Export the variable before running:
+
+```bash
+export TESTBED_COOKIE="session_id=abc123; auth_token=xyz789"
+python core/runall.py kling auto
+```
+
+### How to Get Your Cookie
+
+1. Open the testbed URL in your browser and log in.
+2. Open DevTools (F12) → **Network** tab.
+3. Reload the page and click any request to the testbed host.
+4. Copy the full **Cookie** header value from the request headers.
+
+## �📦 Building the Desktop App
 
 To package the application as a standalone executable for distribution:
 

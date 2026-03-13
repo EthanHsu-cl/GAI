@@ -1,6 +1,6 @@
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
-testbed: http://192.168.31.161:8000/image_generation/
+testbed: http://192.168.31.161/external-testbed/image_generation/
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
@@ -14,248 +14,40 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3c0bffee9a0_0_67#slide=id.g3c0bffee9a0_0_67
 
 tasks:
-  # - folder: Media Files/Nano Banana/0226 2 Styles/0226 未成年主張
-  #   model: gemini-3-pro-image-preview
-  #   resolution: "2K"
-  #   aspect_ratio: "16:9"
-  #   prompt: |
-  #     A high-quality 4K Japanese TV variety show screenshot. The composition is a medium-wide shot with a slight low-angle perspective, viewed from just outside a white metal rooftop guardrail. 
-  #     Only one main subject is allowed in the scene. No additional people in the frame.
-
-  #     High-fidelity identity preservation: the subject’s facial features and hairstyle must remain exactly identical to the uploaded reference; any visible deviation makes the result invalid and must be regenerated.
-
-  #     [SUBJECT & SCENE]: A Japanese high school student stands on an outdoor school rooftop, leaning slightly forward with both hands resting naturally on the white railing. The subject is captured in a clear three-quarter side view, shoulders angled away from the camera.The head is slightly lowered with a gentle smile, and the subject does not look at the camera. The mouth is open naturally as if shouting out into the open space below, without addressing any visible person. 
-
-  #     The expression is earnest and emotionally sincere, without distortion, exaggeration, or facial strain. Wearing a crisp white short-sleeved school uniform shirt.
-
-  #     [LIGHTING & ENVIRONMENT]: Bright, direct natural sunlight illuminates the subject's face clearly with minimal shadows. Behind the subject is a vast, expansive clear blue sky with sparse, soft white clouds. 
-
-  #     [UI & GRAPHICS LAYOUT]:
-  #     1. TOP-LEFT: A small circular wipe inset frame showing a studio guest (Japanese person) with a determined expression and raised fists against a neutral indoor background. 
-  #     2. TOP-RIGHT: A bold, colorful Japanese TV-style graphic reading 「忘れられないホワイトデー」with a smaller subtitle 「気になる告白の返事は？」 positioned directly below it. And only the word 「ホワイトデー」 must be enclosed inside a solid rectangular color background block.
-  #     3. BOTTOM OVERLAY: A single horizontal line of dynamic Japanese captions with varied scaling and staggered vertical positions. 
-  #       - 「待たせてごめーーん!!」 (Medium size, black text, thick white outline).
-  #       - 「答えは」 (Smallest size, yellow text, black outline).
-  #       - 「はいでーす!!」 (Largest size, bold vivid red text, thick white outline, subtle black drop shadow). 
-
-  #     The overall image has a realistic TV broadcast texture, clean digital gradients, and perfectly rendered Japanese characters with energetic variety show styling.
-  #   reference_folder: ""
-  #   use_comparison_template: false
-  #   use_random_source_selection: false
-  #   use_deterministic_random: true
-  #   random_seed: 42
-  #   min_images: 1
-  #   max_images: 1
-  #   num_iterations: 50
-
-  - folder: Media Files/Nano Banana/0226 2 Styles/0226 告白回覆
+  - folder: Media Files/Nano Banana/0313 Daisy Notes
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "3:4"
     prompt: |
-      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME) :
-      Use the uploaded photo(s) as the ONLY and ABSOLUTE source of the SUBJECT’s face.
-      The person in the uploaded image must be the only human in the final result.
-      Preserve the subject’s real face, facial features, identity, skin tone, hairstyle, facial expression, and body proportions exactly as shown in the uploaded photo.
-      Do not beautify, stylize, replace, or reinterpret the face in any way.
+      Photo usage rules (strict):
+      Each input photo must be used exactly once.
+      Every tile must contain a different photo.
+      No photo may appear more than once in the entire layout.
+      Duplicating or cloning photos across tiles is strictly forbidden.
+      One tile contains exactly one photo only.
+      A single photo cannot be split or reused across multiple tiles.
 
-      Create a two-panel vertical split composition inspired by Japanese cinematic school drama visuals for White Day.
+      Photo integrity rules:
+      User photos must remain exactly as originally provided. Preserve the original colors, lighting, subjects, facial details, and aspect ratios. Photos must appear as intact, unaltered images with faces and key subjects fully visible. The subject’s face must remain clearly visible and unobstructed, and no objects, text, stickers, or graphic elements may cover or overlap the face.
 
-      uploaded photo into one of a student in a Japanese high school uniform standing quietly in a classroom.
+      Flat graphic collage design. Soft neutral gray-white full-bleed paper background with subtle paper fiber texture and faint natural speckles, resembling clean premium stationery.
 
-      Top panel
+      User photos appear as classic Polaroid instant photo prints with preserved original aspect ratios. Each photo sits inside a thick white instant-film frame with a noticeably wider bottom margin, characteristic of traditional Polaroid film. The frame surface should resemble matte photographic paper with subtle edge softness. 
+      If any shadow is present, it must be an extremely subtle contact shadow where the photo touches the paper surface. The shadow should be very faint, soft, and close to the photo edge, nearly imperceptible, with no visible drop shadow effect.  Avoid floating shadows, hard edge shadows, or strong depth effects so the photos appear naturally resting on the paper background. The photos are randomly placed across the layout with slight natural tilts, resembling casually arranged instant photos in a scrapbook. The placement should feel balanced but informal, with clear spacing between photos and no forced grid, row, or diagonal alignment. Photos remain the visual focal point.
 
-      Framing and camera rules (NON-NEGOTIABLE):
+      Decorative elements consist of one single botanical illustration only. 
+      The flower must be positioned at the bottom-left corner of the layout, partially overlapping the photo edges like a scrapbook sticker. The decoration is a single hand-drawn daisy flower with soft cream petals and a warm yellow center, accompanied by a slender green stem and a few simple leaves. The illustration style is light, airy, and spring-like, with thin natural linework and subtle watercolor shading. No additional flowers or botanical elements should appear.
 
-      Medium full shot.
+      Typography features an elegant handwritten script title placed centered at the very top of the composition. The title text should be automatically generated to match the theme, mood, or subject of the uploaded photos, rather than using fixed wording. The lettering is slightly tilted with smooth connected curves and organic stroke variation. The title color uses a soft gradient transition, blending from fresh botanical green into warm golden tones.
 
-      Subject occupies approximately 70–75% of the vertical height of the top panel.
-      (The figure must appear visually dominant and proportionally similar to a medium-distance cinematic portrait — NOT small in frame.)
-
-      Camera distance closer than a wide shot but not cropped at knees.
-
-      Body turned slightly 15–25 degrees to one side only.
-      ⚠️ STRICT LIMIT — DO NOT exceed 30 degrees.
-      NOT front-facing flat.
-      NOT full profile.
-      NOT strong 3/4 side.
-      NOT exaggerated side-body pose.
-
-      Upper torso slightly angled.
-      Head gently angled downward.
-      Face subtly turned toward camera just enough to show partial cheek contour.
-      Both eyes still partially visible from camera view.
-      No sharp side angle.
-      No near-profile silhouette.
-
-      Hands placed naturally behind the back.
-
-      Camera positioned at eye-level.
-      Straight perspective.
-      No tilt.
-      No dramatic angle.
-
-      Classroom perspective rules:
-
-      Desks and chairs must follow a consistent depth perspective.
-      Rows angled gently toward depth (subtle diagonal flow).
-      NOT extreme diagonal.
-      NOT symmetrical flat layout.
-
-      Background:
-
-      Large classroom windows behind subject.
-      Cherry blossoms clearly visible outside.
-      Curtains softly lit.
-      Soft spring daylight atmosphere.
-
-      Lighting:
-
-      Primary light source from window side.
-      Soft rim light outlining hair edge and shoulder contour.
-      Gentle directional side light on face.
-      Natural shadow on opposite cheek.
-      Warm spring tone.
-      No flat lighting.
-
-      🔴 ENHANCED FACE BRIGHTNESS CORRECTION (HIGH PRIORITY FIX)
-
-      Even if the subject is backlit by the window, the face must appear clearly illuminated and naturally bright — never dim, muddy, or underexposed.
-
-      Apply the following precise exposure adjustments:
-
-      • Increase facial exposure approximately +1 stops relative to current output.
-      • Maintain overall scene exposure balance — do NOT overexpose window highlights.
-      • Add natural bounce-fill effect from classroom interior (as if light reflects from pale walls and desks).
-      • Midtones on face must be lifted noticeably while keeping realistic contrast.
-      • Eye sockets must NOT fall into shadow.
-      • Under-eye and cheek shadow density must be softened (not erased).
-      • Preserve natural shadow direction and structure — do not flatten the face.
-
-      CRITICAL:
-
-      The face brightness must visually match reference image 2 (well-lit, readable skin tone, not backlit-dark).
-
-      No harsh flash.
-      No studio beauty light.
-      No glam lighting.
-      No artificial spotlight.
-      No HDR look.
-      No over-smoothing.
-
-      Skin texture must remain realistic.
-      Natural micro-contrast preserved.
-
-      Add subtle natural eye catchlight from window direction.
-      Eyes must remain clearly visible and readable.
-
-      Facial expression:
-
-      Soft, shy, sweet expression.
-      Eyes gently lowered.
-      Subtle restrained smile.
-      Emotion bashful, warm, quietly affectionate.
-      No exaggerated smile.
-      No dramatic sadness.
-
-      Text overlay (STRICT PLACEMENT RULE):
-
-      Text must be positioned EXACTLY at the horizontal boundary between the top and bottom panels.
-
-      Centered across full width.
-
-      White color only.
-
-      “White Day” — large serif font.
-
-      「ホワイトデー」 — smaller, placed directly below.
-
-      No alternative placement.
-      No decorative effects.
-      No drop shadow.
-      No repositioning.
-
-      Bottom panel ( EXACTLY — CRITICAL )
-
-      ⚠️ Must match upper body orientation angle.
-
-      Camera perspective:
-
-      Close-up from a mild rear-side angle consistent with 15–25 degree body rotation.
-      NOT straight-on symmetrical.
-      NOT strong side profile.
-
-      Envelope held behind the back.
-      Arms angled slightly according to subtle body rotation.
-
-      Hands & envelope framing rules (NON-NEGOTIABLE):
-
-      Only hands and envelope visible.
-      NO face.
-      NO torso.
-      NO shoulders.
-      NO silhouette.
-
-      Envelope slightly angled consistent with body angle (very mild tilt only).
-      Wax seal visible.
-      Natural perspective aligned with top panel rotation.
-
-      Scale:
-
-      Envelope large and central but not rigidly symmetrical.
-      Hands positioned naturally according to slight body angle.
-
-      Envelope details:
-
-      Cream-colored envelope.
-      Small red wax heart seal centered.
-
-      Background:
-
-      Softly blurred classroom wall or window.
-      Same lighting direction as top panel.
-      No narrative shift.
-      No added props.
-
-      BOTTOM PANEL EXPOSURE CONSISTENCY (CRITICAL):
-
-      Keep overall brightness consistent with corrected top panel.
-
-      Do NOT darken bottom panel.
-      Maintain soft readable shadows.
-      Preserve natural daylight tone.
-
-      Global strict rules
-
-      Top panel = visually dominant medium full shot with slight 15–25° rotation only.
-      NOT strong side pose.
-      NOT full profile.
-
-      Bottom panel = mild rear-side angled close-up consistent with top angle.
-
-      Text fixed at center boundary.
-
-      No frontal flat pose.
-      No exaggerated side-body pose.
-      No cinematic reinterpretation.
-      No extra props.
-      No extra gestures.
-
-      Overall tone:
-
-      Quiet.
-      Restrained.
-      Shy-sweet.
-      Japanese school drama aesthetic.
-      Soft spring light with controlled directional window glow.
-      Overall exposure lifted to natural bright spring daylight while preserving realism (no overexposure, no flat lighting).
+      A small subtle caption appears near the lower edge of the layout, aligned neatly and visually secondary. This text uses a typewriter-style font, with slightly spaced mechanical characters and a muted warm gray tone, evoking classic stationery or typed notes.  The caption should be not include any year, date, or numerical time reference.
     reference_folder: ""
     use_comparison_template: false
-    use_random_source_selection: false
+    use_random_source_selection: true
     use_deterministic_random: true
     random_seed: 42
-    min_images: 1
-    max_images: 1
+    min_images: 2
+    max_images: 5
     num_iterations: 50
 
 

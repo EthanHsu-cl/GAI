@@ -19,6 +19,9 @@
 **/*.log
 **/*.pyc
 
+# Secrets
+**/.env
+
 # System files
 **/.DS_Store
 **/__pycache__/

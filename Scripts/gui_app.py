@@ -63,7 +63,7 @@ core_dir = script_dir / "core"
 sys.path.insert(0, str(core_dir))
 
 from core.runall import run_automation, API_MAPPING, CONFIG_MAPPING
-from core.config_loader import ConfigLoader, get_default_config_path
+from core.config_loader import ConfigLoader, get_default_config_path, get_testbed_cookie
 
 # Logger for this module
 logger = logging.getLogger(__name__)
@@ -892,6 +892,24 @@ class AutomationGUI:
             foreground='#a0a0a0', font=('Helvetica', 9)
         ).pack(side=tk.LEFT, padx=10)
 
+        # Testbed Cookie
+        row = ttk.Frame(self._global_frame)
+        row.pack(fill=tk.X, pady=2)
+        ttk.Label(row, text="Testbed Cookie", width=20, anchor='e').pack(
+            side=tk.LEFT, padx=(0, 5))
+        self._global_widgets['testbed_cookie'] = tk.StringVar(
+            value=get_testbed_cookie())
+        ttk.Entry(
+            row,
+            textvariable=self._global_widgets['testbed_cookie'],
+            width=50,
+            show='\u2022'
+        ).pack(side=tk.LEFT, fill=tk.X, expand=True)
+        ttk.Label(
+            row, text="\U0001f4a1 From .env or paste here",
+            foreground='#a0a0a0', font=('Helvetica', 9)
+        ).pack(side=tk.LEFT, padx=10)
+
         # Source Video Link (conditionally shown based on API)
         self._source_link_row = ttk.Frame(self._global_frame)
         ttk.Label(
@@ -1523,6 +1541,10 @@ class AutomationGUI:
             schedule_time = self._global_widgets['schedule'].get().strip()
             if schedule_time:
                 overrides['schedule'] = {'start_time': schedule_time}
+
+            cookie = self._global_widgets['testbed_cookie'].get().strip()
+            if cookie:
+                overrides['testbed_cookie'] = cookie
 
             link_keys = API_LINK_KEYS.get(api_name, {})
             source_link = self._global_widgets['source_link'].get().strip()

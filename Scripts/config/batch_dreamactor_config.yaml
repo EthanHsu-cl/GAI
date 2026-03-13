@@ -1,4 +1,4 @@
-testbed: http://192.168.31.161:8000/video_effect/
+testbed: http://192.168.31.161/external-testbed/video_effect/
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
