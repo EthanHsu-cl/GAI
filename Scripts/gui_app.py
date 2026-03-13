@@ -63,7 +63,10 @@ core_dir = script_dir / "core"
 sys.path.insert(0, str(core_dir))
 
 from core.runall import run_automation, API_MAPPING, CONFIG_MAPPING
-from core.config_loader import ConfigLoader, get_default_config_path, get_testbed_cookie
+from core.config_loader import (
+    ConfigLoader, get_default_config_path, get_testbed_cookie,
+    save_testbed_cookie, get_env_file_path,
+)
 
 # Logger for this module
 logger = logging.getLogger(__name__)
@@ -544,6 +547,7 @@ class AutomationGUI:
         self._create_config_section(main_frame)
         self._create_working_dir_section(main_frame)
         self._create_options_section(main_frame)
+        self._create_cookie_section(main_frame)
         self._create_advanced_section(main_frame)
         self._create_control_buttons(main_frame)
         self._create_log_console(main_frame)
@@ -772,6 +776,74 @@ class AutomationGUI:
         )
         verbose_cb.pack(side=tk.LEFT, padx=15)
 
+    def _create_cookie_section(self, parent: ttk.Frame) -> None:
+        """Create the testbed cookie section with save/load capability."""
+        frame = ttk.LabelFrame(parent, text="Testbed Cookie", padding="10")
+        frame.pack(fill=tk.X, pady=5)
+
+        # Cookie entry row
+        entry_row = ttk.Frame(frame)
+        entry_row.pack(fill=tk.X, pady=(0, 5))
+
+        self._cookie_var = tk.StringVar(value=get_testbed_cookie())
+        self._cookie_entry = ttk.Entry(
+            entry_row, textvariable=self._cookie_var, show='\u2022'
+        )
+        self._cookie_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
+
+        self._cookie_show_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(
+            entry_row, text="Show",
+            variable=self._cookie_show_var,
+            command=self._toggle_cookie_visibility
+        ).pack(side=tk.LEFT, padx=(0, 5))
+
+        ttk.Button(
+            entry_row, text="Save", width=8,
+            command=self._save_cookie
+        ).pack(side=tk.LEFT)
+
+        # Status label
+        self._cookie_status = ttk.Label(
+            frame, text="", foreground='#a0a0a0', font=('Helvetica', 9)
+        )
+        self._cookie_status.pack(anchor='w')
+        self._update_cookie_status()
+
+    def _toggle_cookie_visibility(self) -> None:
+        """Toggle between masked and visible cookie display."""
+        if self._cookie_show_var.get():
+            self._cookie_entry.config(show='')
+        else:
+            self._cookie_entry.config(show='\u2022')
+
+    def _save_cookie(self) -> None:
+        """Save the current cookie value to the .env file."""
+        cookie = self._cookie_var.get().strip()
+        try:
+            env_path = save_testbed_cookie(cookie)
+            self._cookie_status.config(
+                text=f"\u2713 Saved to {env_path.name}",
+                foreground='green'
+            )
+        except OSError as e:
+            self._cookie_status.config(
+                text=f"\u274c Save failed: {e}",
+                foreground='red'
+            )
+
+    def _update_cookie_status(self) -> None:
+        """Show the current .env file location and status."""
+        env_path = get_env_file_path()
+        if env_path.exists():
+            self._cookie_status.config(
+                text=f"\U0001f4a1 Loaded from {env_path}"
+            )
+        else:
+            self._cookie_status.config(
+                text=f"\U0001f4a1 No .env file yet \u2014 click Save to create at {env_path}"
+            )
+
     def _create_advanced_section(self, parent: ttk.Frame) -> None:
         """Create the collapsible advanced section with API-specific fields."""
         self._advanced_visible = tk.BooleanVar(value=False)
@@ -889,24 +961,6 @@ class AutomationGUI:
         ).pack(side=tk.LEFT)
         ttk.Label(
             row, text="\U0001f4a1 HH:MM (24h). Empty = start immediately",
-            foreground='#a0a0a0', font=('Helvetica', 9)
-        ).pack(side=tk.LEFT, padx=10)
-
-        # Testbed Cookie
-        row = ttk.Frame(self._global_frame)
-        row.pack(fill=tk.X, pady=2)
-        ttk.Label(row, text="Testbed Cookie", width=20, anchor='e').pack(
-            side=tk.LEFT, padx=(0, 5))
-        self._global_widgets['testbed_cookie'] = tk.StringVar(
-            value=get_testbed_cookie())
-        ttk.Entry(
-            row,
-            textvariable=self._global_widgets['testbed_cookie'],
-            width=50,
-            show='\u2022'
-        ).pack(side=tk.LEFT, fill=tk.X, expand=True)
-        ttk.Label(
-            row, text="\U0001f4a1 From .env or paste here",
             foreground='#a0a0a0', font=('Helvetica', 9)
         ).pack(side=tk.LEFT, padx=10)
 
@@ -1542,10 +1596,6 @@ class AutomationGUI:
             if schedule_time:
                 overrides['schedule'] = {'start_time': schedule_time}
 
-            cookie = self._global_widgets['testbed_cookie'].get().strip()
-            if cookie:
-                overrides['testbed_cookie'] = cookie
-
             link_keys = API_LINK_KEYS.get(api_name, {})
             source_link = self._global_widgets['source_link'].get().strip()
             if link_keys.get('source_link') and source_link:
@@ -1554,6 +1604,12 @@ class AutomationGUI:
             design_link = self._global_widgets['design_link'].get().strip()
             if link_keys.get('design_link') and design_link:
                 overrides[link_keys['design_link']] = design_link
+
+        # Include testbed cookie from the cookie section
+        if hasattr(self, '_cookie_var'):
+            cookie = self._cookie_var.get().strip()
+            if cookie:
+                overrides['testbed_cookie'] = cookie
 
         # Collect task overrides from GUI entries
         tasks_override = []

@@ -443,15 +443,31 @@ def get_default_config_path(api_name: str) -> Optional[str]:
     return None
 
 
+def get_env_file_path() -> Path:
+    """
+    Get the path to the .env file.
+
+    For PyInstaller builds, the .env file lives next to the executable
+    (not inside the temp _MEIPASS bundle). For development, it lives in
+    the Scripts directory.
+
+    Returns:
+        Absolute path to the .env file location.
+    """
+    if getattr(sys, 'frozen', False):
+        return Path(sys.executable).parent / ".env"
+    return Path(__file__).parent.parent / ".env"
+
+
 def load_env_file() -> None:
     """
-    Load environment variables from a .env file in the Scripts directory.
+    Load environment variables from a .env file.
 
     Reads key=value pairs and sets them as environment variables.
     Does not overwrite variables that are already set in the environment.
     Lines starting with '#' and blank lines are ignored.
     """
-    env_path = get_app_base_path() / ".env"
+    env_path = get_env_file_path()
     if not env_path.exists():
         return
 
@@ -473,6 +489,43 @@ def load_env_file() -> None:
                     os.environ[key] = value
     except OSError:
         logger.warning(f"Could not read .env file: {env_path}")
+
+
+def save_testbed_cookie(cookie: str) -> Path:
+    """
+    Save the testbed cookie to the .env file.
+
+    Creates the file if it doesn't exist. If it already exists, updates
+    or appends the TESTBED_COOKIE line while preserving other content.
+
+    Args:
+        cookie: The cookie string to save.
+
+    Returns:
+        The path to the .env file that was written.
+    """
+    env_path = get_env_file_path()
+    lines: list[str] = []
+    found = False
+
+    if env_path.exists():
+        with open(env_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                if line.strip().startswith('TESTBED_COOKIE=') or line.strip() == 'TESTBED_COOKIE=':
+                    lines.append(f"TESTBED_COOKIE={cookie}\n")
+                    found = True
+                else:
+                    lines.append(line)
+
+    if not found:
+        lines.append(f"TESTBED_COOKIE={cookie}\n")
+
+    with open(env_path, 'w', encoding='utf-8') as f:
+        f.writelines(lines)
+
+    # Also update the in-memory environment variable
+    os.environ['TESTBED_COOKIE'] = cookie
+    return env_path
 
 
 def get_testbed_cookie() -> str:
