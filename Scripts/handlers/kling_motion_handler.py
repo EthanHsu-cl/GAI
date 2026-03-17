@@ -252,6 +252,25 @@ class KlingMotionHandler(BaseAPIHandler):
 
         if not video_saved:
             self.logger.warning("   ⚠️ Failed to save video — will retry")
+            # Save failure metadata
+            combo_base = f"{video_name}_{image_name}"
+            metadata = {
+                'source_image': Path(file_path).name,
+                'source_video': Path(task_config['video_file']).name,
+                'video_id': video_id,
+                'task_id': task_id,
+                'output_url': output_url,
+                'error': 'Video download/save failed',
+                'attempts': attempt + 1,
+                'success': False,
+                'processing_time_seconds': round(processing_time, 1),
+                'processing_timestamp': datetime.now().isoformat(),
+                'api_name': self.api_name,
+            }
+            self.processor.save_metadata(
+                Path(metadata_folder), combo_base, file_name,
+                metadata, task_config
+            )
             return False
 
         # Save success metadata

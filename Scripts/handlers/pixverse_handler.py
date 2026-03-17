@@ -76,6 +76,24 @@ class PixverseHandler(BaseAPIHandler):
             # Log the error message for debugging
             if error_message:
                 self.logger.info(f"   ❌ API Error: {error_message}")
+            
+            # Save failure metadata
+            processing_time = time.time() - start_time
+            default_settings = self.config.get("default_settings", {})
+            metadata = {
+                'effect_name': effect,
+                'model': default_settings.get("model", "v5.5"),
+                'video_id': video_id,
+                'error': error_message or 'Video download/save failed',
+                'processing_time_seconds': round(processing_time, 1),
+                'processing_timestamp': datetime.now().isoformat(),
+                'attempts': attempt + 1,
+                'success': False,
+                'api_name': self.api_name,
+                **all_fields
+            }
+            self.processor.save_metadata(Path(metadata_folder), base_name, file_name,
+                                        metadata, task_config)
             return False
         
         # Save success metadata

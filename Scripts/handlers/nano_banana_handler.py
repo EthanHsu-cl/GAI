@@ -717,6 +717,34 @@ class NanoBananaHandler(BaseAPIHandler):
             
         except Exception as e:
             self.logger.error(f" ❌ Error processing {base_name}: {e}")
+            # Save failure metadata so every attempt produces a metadata file
+            processing_time = time.time() - start_time
+            use_random_source = task_config.get('use_random_source_selection', False)
+            all_imgs = getattr(self, '_current_all_images', {}).get(str(file_path), [])
+            all_imgs_info = [Path(img).name for img in all_imgs if img]
+            additional_imgs = getattr(self, '_current_additional_images', {}).get(str(file_path), [])
+            additional_imgs_info = [Path(img).name for img in additional_imgs if img]
+            error_str = str(e)
+
+            metadata = {
+                'error': error_str,
+                'success': False,
+                'attempts': attempt + 1,
+                'processing_time_seconds': round(processing_time, 1),
+                'processing_timestamp': datetime.now().isoformat(),
+                'api_name': self.api_name
+            }
+            if self._is_error_429(error_str):
+                self._last_error_is_429 = True
+                metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
+            if use_random_source and all_imgs_info:
+                metadata['all_images_used'] = all_imgs_info
+                metadata['random_source_selection'] = True
+            elif additional_imgs_info:
+                metadata['additional_images_used'] = additional_imgs_info
+
+            self.processor.save_nano_metadata(Path(metadata_folder), base_name, file_name,
+                                             metadata, task_config)
             raise
     
     def _process_iterations(self, task, task_num, total_tasks, output_folder, metadata_folder):

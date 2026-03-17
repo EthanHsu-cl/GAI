@@ -14,10 +14,10 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3c0bffee9a0_0_67#slide=id.g3c0bffee9a0_0_67
 
 tasks:
-  - folder: Media Files/Nano Banana/0313 Daisy Notes
+  - folder: Media Files/Nano Banana/0317 2 Styles/0317 Collage- Pinned Moments
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "3:4"
+    aspect_ratio: "9:16"
     prompt: |
       Photo usage rules (strict):
       Each input photo must be used exactly once.
@@ -28,26 +28,170 @@ tasks:
       A single photo cannot be split or reused across multiple tiles.
 
       Photo integrity rules:
-      User photos must remain exactly as originally provided. Preserve the original colors, lighting, subjects, facial details, and aspect ratios. Photos must appear as intact, unaltered images with faces and key subjects fully visible. The subject’s face must remain clearly visible and unobstructed, and no objects, text, stickers, or graphic elements may cover or overlap the face.
+      User photos must preserve their original colors, lighting, subjects, and facial details.
+      Photos may be cropped when necessary to achieve a clean and balanced layout, but the subject’s face and key subjects must remain fully visible and unobstructed.
+      No distortion, recoloring, filtering, or retouching is allowed.
+      No graphic elements, text, or decorations may cover a person’s face.
 
-      Flat graphic collage design. Soft neutral gray-white full-bleed paper background with subtle paper fiber texture and faint natural speckles, resembling clean premium stationery.
+      Flat graphic editorial collage design.
+      Photos form the entire visual surface of the composition with no visible background.
+      The collage must fill the canvas completely edge-to-edge.
 
-      User photos appear as classic Polaroid instant photo prints with preserved original aspect ratios. Each photo sits inside a thick white instant-film frame with a noticeably wider bottom margin, characteristic of traditional Polaroid film. The frame surface should resemble matte photographic paper with subtle edge softness. 
-      If any shadow is present, it must be an extremely subtle contact shadow where the photo touches the paper surface. The shadow should be very faint, soft, and close to the photo edge, nearly imperceptible, with no visible drop shadow effect.  Avoid floating shadows, hard edge shadows, or strong depth effects so the photos appear naturally resting on the paper background. The photos are randomly placed across the layout with slight natural tilts, resembling casually arranged instant photos in a scrapbook. The placement should feel balanced but informal, with clear spacing between photos and no forced grid, row, or diagonal alignment. Photos remain the visual focal point.
+      Photo layout:
+      User photos appear primarily as clean borderless photographic prints with no white borders.
+      Photos may be cropped slightly to create a tidy and balanced grid-like collage layout.
+      Arrange the photos in a dense mosaic-style collage that fully covers the canvas.
+      Photos may touch each other directly and align flush edge-to-edge with no spacing or gaps.
+      The composition should resemble a seamless editorial photo wall.
 
-      Decorative elements consist of one single botanical illustration only. 
-      The flower must be positioned at the bottom-left corner of the layout, partially overlapping the photo edges like a scrapbook sticker. The decoration is a single hand-drawn daisy flower with soft cream petals and a warm yellow center, accompanied by a slender green stem and a few simple leaves. The illustration style is light, airy, and spring-like, with thin natural linework and subtle watercolor shading. No additional flowers or botanical elements should appear.
+      Polaroid variation rule:
+      Only 1–2 photos may transform into classic Polaroid-style instant prints.
+      These Polaroid photos include a white instant-film frame with a slightly thicker bottom margin.
+      Polaroids must appear flat with no drop shadow or floating effect.
 
-      Typography features an elegant handwritten script title placed centered at the very top of the composition. The title text should be automatically generated to match the theme, mood, or subject of the uploaded photos, rather than using fixed wording. The lettering is slightly tilted with smooth connected curves and organic stroke variation. The title color uses a soft gradient transition, blending from fresh botanical green into warm golden tones.
+      Decoration rules:
+      Only the Polaroid photos may include decorative elements.
+      A subtle metallic paper clip may attach to the corner of the Polaroid frame.
+      Borderless photos must remain completely clean with no decorations, no clips, and no graphic elements.
 
-      A small subtle caption appears near the lower edge of the layout, aligned neatly and visually secondary. This text uses a typewriter-style font, with slightly spaced mechanical characters and a muted warm gray tone, evoking classic stationery or typed notes.  The caption should be not include any year, date, or numerical time reference.
+      Typography rules:
+      Text may appear only on the Polaroid photos, typically centered on the lower white margin of the frame.
+      Use subtle vintage typewriter-style lettering for short captions or titles.
+      All other photos must contain no text.
+
+      Avoid generating specific dates or years.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
     use_deterministic_random: true
     random_seed: 42
-    min_images: 2
+    min_images: 3
     max_images: 5
+    num_iterations: 50
+
+  - folder: Media Files/Nano Banana/0317 2 Styles/0317 Collage- Circle Pop
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "1:1"
+    prompt: |
+      <div>
+
+      <h1>Photo Protection Rules</h1>
+      <p>
+      Photo usage rules (strict):<br>
+      Each input photo must be used exactly once.<br>
+      Every circle must contain a different photo.<br>
+      No photo may appear more than once in the entire layout.<br>
+      Duplicating or cloning photos across circles is strictly forbidden.<br>
+      One circle contains exactly one photo only.<br>
+      A single photo cannot be split or reused across multiple circles.<br><br>
+
+      Photo integrity rules:<br>
+      Do not remove the background from the photo.<br>
+      User photos must preserve their original colors, lighting, subjects, and facial details.<br>
+      Photos may be cropped when necessary to fit the circular composition cleanly, but the subject’s face and key subjects must remain fully visible and unobstructed.<br>
+      No distortion, recoloring, filtering, or retouching is allowed.<br>
+      No graphic elements, text, or decorations may cover a person’s face.
+
+      </p>
+
+      <hr>
+
+      <h1>Design Description</h1>
+      <p>
+
+      Visual style:  
+      Flat graphic editorial collage with a lively, playful, childlike graphic mood.  
+      The overall design should feel energetic, cheerful, simple, and bold.
+
+      Background:  
+      Pure white full-bleed background.  
+      Do not use turquoise, gray, beige, gradients, textures, shadows, or paper effects.
+
+      Layout structure:  
+      The canvas is vertically divided into two zones:  
+      1. title area at the top  
+      2. photo grid area in the middle  
+
+      Title area:  
+      The main title stays at the top center.
+
+      Title typography:  
+      Playful rounded display lettering with a hand-drawn, bubbly, slightly uneven look.  
+      The title color must be solid black.
+
+      Photo grid area:  
+      The number of circles must exactly match the number of user photos.  
+      Each user photo must appear inside one circular tile.  
+      Do not generate extra circles.  
+      No empty circles are allowed.
+
+      Circle arrangement rules:  
+      The circles must be arranged in a clean and intentional composition.  
+      Do not scatter circles randomly.
+
+      If there is 1 photo, place one circle centered.  
+      If there are 2 photos, place two circles in one horizontal row.  
+      If there are 3 photos, arrange the circles as a tidy triangle: one circle centered above, two circles below.  
+      If there are 4 photos, arrange the circles in two rows of two.  
+      If there are 5 photos, arrange the circles in two rows with two circles on the top row and three circles on the bottom row. The two rows must not be perfectly aligned; the top row should be slightly offset so the layout feels intentionally staggered rather than forming a strict centered grid.  
+      If there are 6 photos, arrange the circles in two rows of three.
+
+      Spacing and alignment:  
+      All circles must remain evenly spaced with clean visual balance.  
+      The composition should feel tidy and organized, while following the required layout rules above.
+
+      Circle color system (strict order):  
+      Circles must follow this fixed color sequence in reading order from left to right, top to bottom:
+
+      1. red  
+      2. blue  
+      3. green  
+      4. yellow  
+      5. pink  
+      6. light blue  
+
+      Only the number of circles needed should appear, following this sequence.
+
+      Circle styling:  
+      Each circle uses one solid color only.  
+      Do not add an outer border plus inner fill structure.  
+      Do not use double rings, outlines, or multi-layer circle frames.  
+      Each circle must appear as a clean, single solid-color circular tile.
+
+      Photo placement rules:  
+      Each user photo appears inside one circular tile only.  
+      Photos may be cropped as needed to fit the circular composition cleanly, while keeping faces and key subjects fully visible.
+
+      Decorative graphic style reference:  
+      Decorative elements should be inspired by a playful hand-drawn doodle style: simple floral shapes, rounded petals, organic leaves, loose squiggles, starburst marks, and thick childlike brush shapes.
+
+      The doodles should feel flat, graphic, spontaneous, and fun.  
+      No realistic rendering, no texture, and no shading.
+
+      Decorative Quantity:
+      Use only 5 to 8 decorative elements total.
+
+      Decorative element behavior:  
+      Scatter a small number of playful doodle graphics around the circular photo area to enhance the lively mood.  
+      They must remain secondary to the photos.  
+      Do not cover faces.  
+      Do not overcrowd the canvas.
+
+      Overall composition:  
+      Keep the design bright, fresh, and energetic, with a pure white background, a black playful title, colorful circular photo tiles, and small doodle accents.  
+      The circle arrangement must follow the required photo-count layout exactly.
+
+      </p>
+
+      </div>
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 3
+    max_images: 6
     num_iterations: 50
 
 

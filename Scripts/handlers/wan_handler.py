@@ -193,12 +193,32 @@ class WanHandler(BaseAPIHandler):
         
         video_dict, designer_config = result[0], result[1]
         
+        # Helper to save failure metadata for early exits
+        def _save_fail_meta(error_reason):
+            meta = {
+                "source_image": Path(file_path).name,
+                "source_video": Path(task_config['video_file']).name,
+                "error": error_reason,
+                "attempts": attempt + 1,
+                "success": False,
+                "processing_time_seconds": round(time.time() - start_time, 1),
+                "processing_timestamp": datetime.now().isoformat(),
+                "api_name": self.api_name,
+            }
+            image_n = Path(file_path).stem
+            video_n = Path(task_config['video_file']).stem
+            self.processor.save_metadata(
+                Path(metadata_folder), f"{video_n}_{image_n}",
+                file_name, meta, task_config,
+            )
+
         # Extract video path
         video_path = None
         if video_dict is None:
             self.logger.warning(
                 f"   ⚠️ API returned None video — generation failed, will retry"
             )
+            _save_fail_meta("API returned None video")
             return False
         elif isinstance(video_dict, dict) and 'video' in video_dict:
             video_path = video_dict['video']
@@ -208,10 +228,12 @@ class WanHandler(BaseAPIHandler):
             self.logger.warning(
                 f"   ⚠️ Unexpected video format: {type(video_dict)} — will retry"
             )
+            _save_fail_meta(f"Unexpected video format: {type(video_dict)}")
             return False
         
         if not video_path:
             self.logger.warning("   ⚠️ Empty video path returned — will retry")
+            _save_fail_meta("Empty video path returned")
             return False
         
         # Generate output filename (video-first ordering)
