@@ -626,7 +626,7 @@
         "parallel_validation": true
     },
     "wan": {
-        "endpoint": "http://210.244.31.18:7008/",
+        "endpoint": "http://210.244.31.18:7007/",
         "api_name": "/fn_wan_animate",
         "file_types": {
             "image": [

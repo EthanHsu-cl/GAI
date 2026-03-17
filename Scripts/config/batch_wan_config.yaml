@@ -1,4 +1,4 @@
-testbed: http://210.244.31.18:7008/
+testbed: http://210.244.31.18:7007/
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
@@ -15,28 +15,17 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 root_design_link: https://docs.google.com/spreadsheets/d/1Rnin9ASAYecB103SocZztNlNxlPH2oCVnTmm-gtdJR4/edit?gid=478526346#gid=478526346
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgC-jkQ_s8MOQYn8UsHQtQ4ZAUmJBgyT80C7yv_EgjvhpxM?e=c60Hfa
+source_video_link: 
 
 tasks:
-- folder: Media Files/Wan 2.2/0311 7 Styles Portrait
+- folder: Media Files/Wan 2.2/0317 4 Styles 
   prompt: ''
   embed: ''
   num_outputs: 1
   seed: '-1'
   animation_mode: move
   design_link: ''
-  source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAjKXMl5WWvTaNFPZ4N8f7pAXTdWuWrVP4wpTgEC_CmoOI?e=2RVHKg
-  reference_folder: ''
-  use_comparison_template: true
-
-- folder: Media Files/Wan 2.2/0311 2 Styles Landscape
-  prompt: ''
-  embed: ''
-  num_outputs: 1
-  seed: '-1'
-  animation_mode: move
-  design_link: ''
-  source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgA0x3afqvVQQ7aZhE2omsaVAZw8FkRWeXvoa8A4kfFtupM?e=VB6awD
+  source_video_link: ''
   reference_folder: ''
   use_comparison_template: true
 

@@ -533,7 +533,7 @@ tasks:
 ### **Wan 2.2 Configuration** (`config/batch_wan_config.yaml`)
 
 ```yaml
-testbed: http://210.244.31.18:7008/
+testbed: http://210.244.31.18:7007/
 
 tasks:
   - folder: Media Files/Wan 2.2/Test
