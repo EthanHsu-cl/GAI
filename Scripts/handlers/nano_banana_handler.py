@@ -682,14 +682,17 @@ class NanoBananaHandler(BaseAPIHandler):
         file_name = Path(file_path).name
         start_time = time.time()
         self._last_error_is_429 = False
+        metadata_saved = False
+        success = False
         
         try:
             # Make API-specific call with connection retry wrapper
             result = self._make_api_call_with_connection_retry(file_path, task_config, attempt)
             
-            # Parse and save result
+            # Parse and save result (_handle_result always saves metadata)
             success = self._handle_result(result, file_path, task_config, output_folder,
                                          metadata_folder, base_name, file_name, start_time, attempt)
+            metadata_saved = True
             
             # Retry loop for 429 Resource Exhausted errors (independent of max_retries)
             max_429 = self.api_defs.get('max_retries_error429', 0)
@@ -706,6 +709,7 @@ class NanoBananaHandler(BaseAPIHandler):
                     result = self._make_api_call_with_connection_retry(file_path, task_config, attempt)
                     success = self._handle_result(result, file_path, task_config, output_folder,
                                                  metadata_folder, base_name, file_name, start_time, attempt)
+                    metadata_saved = True
                 except Exception:
                     break
             
@@ -717,35 +721,55 @@ class NanoBananaHandler(BaseAPIHandler):
             
         except Exception as e:
             self.logger.error(f" ❌ Error processing {base_name}: {e}")
-            # Save failure metadata so every attempt produces a metadata file
-            processing_time = time.time() - start_time
-            use_random_source = task_config.get('use_random_source_selection', False)
-            all_imgs = getattr(self, '_current_all_images', {}).get(str(file_path), [])
-            all_imgs_info = [Path(img).name for img in all_imgs if img]
-            additional_imgs = getattr(self, '_current_additional_images', {}).get(str(file_path), [])
-            additional_imgs_info = [Path(img).name for img in additional_imgs if img]
-            error_str = str(e)
+            if not metadata_saved:
+                # Save failure metadata so every attempt produces a metadata file
+                processing_time = time.time() - start_time
+                use_random_source = task_config.get('use_random_source_selection', False)
+                all_imgs = getattr(self, '_current_all_images', {}).get(str(file_path), [])
+                all_imgs_info = [Path(img).name for img in all_imgs if img]
+                additional_imgs = getattr(self, '_current_additional_images', {}).get(str(file_path), [])
+                additional_imgs_info = [Path(img).name for img in additional_imgs if img]
+                error_str = str(e)
 
-            metadata = {
-                'error': error_str,
-                'success': False,
-                'attempts': attempt + 1,
-                'processing_time_seconds': round(processing_time, 1),
-                'processing_timestamp': datetime.now().isoformat(),
-                'api_name': self.api_name
-            }
-            if self._is_error_429(error_str):
-                self._last_error_is_429 = True
-                metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
-            if use_random_source and all_imgs_info:
-                metadata['all_images_used'] = all_imgs_info
-                metadata['random_source_selection'] = True
-            elif additional_imgs_info:
-                metadata['additional_images_used'] = additional_imgs_info
+                metadata = {
+                    'error': error_str,
+                    'success': False,
+                    'attempts': attempt + 1,
+                    'processing_time_seconds': round(processing_time, 1),
+                    'processing_timestamp': datetime.now().isoformat(),
+                    'api_name': self.api_name
+                }
+                if self._is_error_429(error_str):
+                    self._last_error_is_429 = True
+                    metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
+                if use_random_source and all_imgs_info:
+                    metadata['all_images_used'] = all_imgs_info
+                    metadata['random_source_selection'] = True
+                elif additional_imgs_info:
+                    metadata['additional_images_used'] = additional_imgs_info
 
-            self.processor.save_nano_metadata(Path(metadata_folder), base_name, file_name,
-                                             metadata, task_config)
+                self.processor.save_nano_metadata(Path(metadata_folder), base_name, file_name,
+                                                 metadata, task_config)
+                metadata_saved = True
             raise
+        
+        finally:
+            if not metadata_saved:
+                # Last-resort fallback for unexpected failures
+                processing_time = time.time() - start_time
+                metadata = {
+                    'error': 'Unexpected failure - no metadata saved by normal paths',
+                    'success': False,
+                    'attempts': attempt + 1,
+                    'processing_time_seconds': round(processing_time, 1),
+                    'processing_timestamp': datetime.now().isoformat(),
+                    'api_name': self.api_name
+                }
+                try:
+                    self.processor.save_nano_metadata(Path(metadata_folder), base_name, file_name,
+                                                     metadata, task_config)
+                except Exception:
+                    self.logger.error(f" ❌ Failed to save fallback metadata for {base_name}")
     
     def _process_iterations(self, task, task_num, total_tasks, output_folder, metadata_folder):
         """Process task using iteration-based loop (for num_iterations mode).

@@ -14,7 +14,7 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 root_design_link: https://docs.google.com/presentation/d/1yIU-UbADITybiCTf6G81Q2qJh1pThhmsIbL1PbPKGYo/edit?slide=id.g3c0bffee9a0_0_67#slide=id.g3c0bffee9a0_0_67
 
 tasks:
-  - folder: Media Files/Nano Banana/0317 2 Styles/0317 Collage- Pinned Moments
+  - folder: Media Files/Nano Banana/0318 2 Styles/0318 Collage- Pinned Moments
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "9:16"
@@ -69,7 +69,7 @@ tasks:
     max_images: 5
     num_iterations: 50
 
-  - folder: Media Files/Nano Banana/0317 2 Styles/0317 Collage- Circle Pop
+  - folder: Media Files/Nano Banana/0318 2 Styles/0318 Collage- Circle Pop
     model: gemini-3-pro-image-preview
     resolution: "2K"
     aspect_ratio: "1:1"
