@@ -15,7 +15,7 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 root_design_link: https://docs.google.com/spreadsheets/d/1Rnin9ASAYecB103SocZztNlNxlPH2oCVnTmm-gtdJR4/edit?gid=478526346#gid=478526346
-source_video_link: 
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCHa4sq6rkARqsuThfWS51gAQd7oWUbVkoF-O3DkH47EuY?e=5aVtok
 
 tasks:
 - folder: Media Files/Wan 2.2/0317 4 Styles 

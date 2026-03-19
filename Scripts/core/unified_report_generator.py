@@ -1596,12 +1596,15 @@ class UnifiedReportGenerator:
                 logger.warning(f"No source image found for meta {stem}")
                 continue
             
-            # Determine effect_name from folder or config
-            effect_name = self.config.get('effect') or self.config.get('effect_name')
-            if not effect_name:
-                # Remove leading date (e.g., '1111 ') from folder name
-                m = re.match(r'^(\d{4})\s*(.+)', folder.name)
-                effect_name = m.group(2) if m else folder.name
+            # Use source video name as effect_name for per-video section dividers
+            if src_vid_path:
+                effect_name = src_vid_path.stem
+            else:
+                effect_name = self.config.get('effect') or self.config.get('effect_name')
+                if not effect_name:
+                    # Remove leading date (e.g., '1111 ') from folder name
+                    m = re.match(r'^(\d{4})\s*(.+)', folder.name)
+                    effect_name = m.group(2) if m else folder.name
             
             pair = MediaPair(
                 source_file=src_img_path.name,
@@ -2320,7 +2323,7 @@ class UnifiedReportGenerator:
         
         # Use model (API name) as the primary identifier
         # For APIs with many styles, show count instead of listing all names to avoid long filenames
-        if self.api_name in ['veo', 'kling_ttv', 'veo_itv'] and effect_names:
+        if self.api_name in ['veo', 'kling_ttv', 'veo_itv', 'wan', 'dreamactor', 'kling_motion'] and effect_names:
             effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
         else:
             # Effect names are the actual content description
@@ -2375,7 +2378,7 @@ class UnifiedReportGenerator:
             
             # Build effect string - combine all unique effects
             # For APIs with many styles, show count instead of listing all names
-            if self.api_name in ['veo', 'kling_ttv', 'veo_itv'] and effect_names:
+            if self.api_name in ['veo', 'kling_ttv', 'veo_itv', 'wan', 'dreamactor', 'kling_motion'] and effect_names:
                 effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
             else:
                 effect_str = ', '.join(effect_names) if effect_names else 'Combined'
