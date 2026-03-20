@@ -1,5 +1,4 @@
 testbed: http://210.244.31.18:7007/
-output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
 default_params:
@@ -15,10 +14,10 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 root_design_link: https://docs.google.com/spreadsheets/d/1Rnin9ASAYecB103SocZztNlNxlPH2oCVnTmm-gtdJR4/edit?gid=478526346#gid=478526346
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCHa4sq6rkARqsuThfWS51gAQd7oWUbVkoF-O3DkH47EuY?e=5aVtok
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDmmIrpY2zdSb2hXycH0i_MAWDrLW-7Lt3D9rYkAStMD9Q?e=xxdDSF
 
 tasks:
-- folder: Media Files/Wan 2.2/0317 4 Styles 
+- folder: Media Files/Wan 2.2/0319 7 Styles 
   prompt: ''
   embed: ''
   num_outputs: 1

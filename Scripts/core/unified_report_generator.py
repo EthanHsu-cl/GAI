@@ -2999,9 +2999,13 @@ class UnifiedReportGenerator:
             filename = f"{api_line} {styles_line}"
             
             # Get output directory
-            output_dir = Path(self.config.get('output_directory',
-                            self.config.get('output', {}).get('directory',
-                            self.report_definitions.get('output_directory', './'))))
+            # Priority: output.output_directory > output.directory > top-level output_directory > fallback
+            output_section = self.config.get('output', {})
+            output_dir = Path(
+                output_section.get('output_directory',
+                    output_section.get('directory',
+                        self.config.get('output_directory',
+                            self.report_definitions.get('output_directory', './')))))
             # Ensure output directory exists
             output_dir.mkdir(parents=True, exist_ok=True)
             output_path = output_dir / f"{filename}.pptx"

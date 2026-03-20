@@ -1,7 +1,6 @@
 # Kling Video Effects Configuration
 # Applies premade video effects to images using the Kling API
 
-output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 testbed: http://192.168.31.161/external-testbed/kling/
 template_path: templates/I2V templates.pptx
 
@@ -10,16 +9,16 @@ duration: 5
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 2
+  group_tasks_by: 3
 
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0206 4 Effects
+base_folder: Media Files/Kling Effects/0319 3 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=2134584856#gid=2134584856
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCL84HQqQUWSanBeMLA4drHATjPPVSBmoAORADWXKKqnVg?e=bZ6LGi
+source_video_link: 
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,16 +27,13 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'horse_mask'
+    custom_effect: 'color_mixing'
 
   - effect:
-    custom_effect: 'unique_firework'
+    custom_effect: 'raid_check'
 
   - effect: 
-    custom_effect: 'fortune_god_transform'
-
-  - effect:
-    custom_effect: 'unique_spring_couplets'
+    custom_effect: 'palm_sized_figure'
 
 
 comments:

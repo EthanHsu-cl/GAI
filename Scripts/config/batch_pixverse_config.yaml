@@ -1,5 +1,4 @@
-base_folder: Media Files/Pixverse/0128 1 Style Valentine
-output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+base_folder: Media Files/Pixverse/0319 3 Styles
 template_path: templates/I2V templates.pptx
 testbed: http://192.168.31.161/external-testbed/video_effect/
 design_link: https://platform.pixverse.ai/effect-list
@@ -13,14 +12,24 @@ default_settings:
   motion_mode: normal
   quality: 720p
   style: none
-  generate_audio: true
+  generate_audio: false
   generate_multi_clip: false
   thinking_type: auto
 
 tasks:
-- effect: 我等的那句 Yes
+- effect: Pocket-Sized Fury
   prompt: ''
-  custom_effect_id: '381463884835264'
+  custom_effect_id: '391703825032576'
+  negative_prompt: ''
+
+- effect: Palm Treasure
+  prompt: ''
+  custom_effect_id: '384835694407680'
+  negative_prompt: ''
+
+- effect: Caught Mid-Lift
+  prompt: ''
+  custom_effect_id: '385185427574208'
   negative_prompt: ''
 
 
