@@ -1349,7 +1349,10 @@ class UnifiedAPIProcessor:
         invalid_images = []
 
         def process_task(task):
-            effect_name = task.get('effect', '')
+            effect_name = task.get('effect', '') or task.get('custom_effect_name', '')
+            if not effect_name:
+                self.logger.warning("⚠️ Task missing both 'effect' and 'custom_effect_name'")
+                return None, []
             task_folder = base_folder / effect_name
             
             # Auto-create task folder and Source subfolder if they don't exist
@@ -1361,6 +1364,7 @@ class UnifiedAPIProcessor:
             image_files = self._get_files_by_type(source_dir, 'image')
 
             if not image_files:
+                self.logger.warning(f"⚠️ No images found in: {source_dir}")
                 return None, []
 
             # Validate images

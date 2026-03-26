@@ -257,7 +257,7 @@ class BaseAPIHandler:
         output_folder.mkdir(parents=True, exist_ok=True)
         metadata_folder.mkdir(parents=True, exist_ok=True)
         
-        task_name = task.get('effect', folder.name)
+        task_name = task.get('effect', '') or task.get('custom_effect_name', '') or folder.name
         self.logger.info(f"📁 Task {task_num}/{total_tasks}: {task_name}")
         
         # Get files to process

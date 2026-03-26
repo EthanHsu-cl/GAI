@@ -1,39 +1,44 @@
-base_folder: Media Files/Vidu/1027 Product
+base_folder: Media Files/Vidu/0324 8 Products
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 testbed: http://192.168.31.161/external-testbed/video_effect/
 template_path: templates/I2V templates.pptx
 prompt: ''
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 7
+  group_tasks_by: 4
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 model_version: viduq2-pro
-design_link: https://platform.vidu.com/docs/templates
-source_video_link: ''
+design_link: https://docs.google.com/spreadsheets/d/119kFckXwKzzMkBEbaNssCHCG16ntBD83YnNfttdXViA/edit?usp=sharing
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCQ_ZVOM56GSpJQ1yl6WBeiAW3wvzIKm0_dX3G6AhSL-Ss?e=a8QYlU
 tasks:
 - category: Product
-  effect: Auto Spin
+  custom_effect_name: creatice_product_up
   prompt: ''
 - category: Product
-  effect: Bloom Magic
+  custom_effect_name: drink_waterfall
   prompt: ''
 - category: Product
-  effect: Orbit
+  custom_effect_name: food_explosion
   prompt: ''
 - category: Product
-  effect: Orbit Dolly
+  custom_effect_name: unbox_time
   prompt: ''
 - category: Product
-  effect: Orbit Dolly Fast
+  custom_effect_name: product_ingredient
   prompt: ''
 - category: Product
-  effect: Spin 360
+  custom_effect_name: world_of_materials
   prompt: ''
 - category: Product
-  effect: Zoom In
+  custom_effect_name: naked_eye_screen
   prompt: ''
+- category: Product
+  custom_effect_name: hair_color_change
+  prompt: ''
+
+  
 comments:
   base_folder: |
     Root folder containing effect subfolders. Each effect folder should have 

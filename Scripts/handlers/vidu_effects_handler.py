@@ -13,19 +13,27 @@ class ViduEffectsHandler(BaseAPIHandler):
         """Make Vidu Effects API call."""
         prompt = task_config.get('prompt', '') or self.config.get('prompt', '')
         effect = task_config.get('effect', '')
+        custom_effect_name = task_config.get('custom_effect_name', '')
         model = task_config.get('model', self.config.get('model_version', 'viduq2-pro'))
         
+        # When custom_effect_name is provided, category and effect must be "Custom"
+        if custom_effect_name:
+            effect = 'Custom'
+            task_config['category'] = 'Custom'
+        
         self.logger.info(f"   Model: {model}, Effect: {effect}")
+        if custom_effect_name:
+            self.logger.info(f"   Custom Effect Name: {custom_effect_name}")
         
         return self.client.predict(
             effect=effect,
             prompt=prompt,
-            # model=model,
             aspect_ratio="as input image",
             area="auto",
             beast="auto",
             bgm=False,
             images=(handle_file(str(file_path)),),
+            custom_effect_name=custom_effect_name,
             api_name=self.api_defs['api_name']
         )
     
@@ -47,7 +55,7 @@ class ViduEffectsHandler(BaseAPIHandler):
         
         # Download video
         output_url = output_urls[0] if isinstance(output_urls, (tuple, list)) else output_urls
-        effect_name = task_config.get('effect', '').replace(' ', '_').replace('-', '_')
+        effect_name = (task_config.get('effect', '') or task_config.get('custom_effect_name', '')).replace(' ', '_').replace('-', '_')
         output_video_name = f"{base_name}_{effect_name}_effect.mp4"
         output_path = Path(output_folder) / output_video_name
         
@@ -59,6 +67,7 @@ class ViduEffectsHandler(BaseAPIHandler):
         metadata = {
             "effect_category": task_config.get('category', ''),
             "effect_name": task_config.get('effect', ''),
+            "custom_effect_name": task_config.get('custom_effect_name', ''),
             "model": task_config.get('model', self.config.get('model_version', 'viduq2-pro')),
             "prompt": task_config.get('prompt', ''),
             "video_url": output_url,

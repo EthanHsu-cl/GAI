@@ -1645,48 +1645,48 @@ class UnifiedReportGenerator:
         if self.api_name == "vidu_effects":
             # Process each effect folder
             # Support single-task filtering for grouped processing
-            tasks_to_process = [task] if task.get('effect') else self.config.get('tasks', [])
-            
+            tasks_to_process = [task] if (task.get('effect') or task.get('custom_effect_name')) else self.config.get('tasks', [])
+
             for task_config in tasks_to_process:
-                effect = task_config.get('effect', '')
+                effect = task_config.get('effect', '') or task_config.get('custom_effect_name', '')
                 category = task_config.get('category', 'Unknown')
                 if not effect:
                     continue
-                
+
                 folders = {k: base_folder / effect / v
                           for k, v in {'src': 'Source', 'vid': 'Generated_Video', 'meta': 'Metadata'}.items()}
-                
+
                 if not folders['src'].exists():
                     logger.warning(f"Source folder not found for effect: {effect}")
                     continue
-                
+
                 logger.info(f"Processing Vidu effect: {effect}")
-                
+
                 # OPTIMIZED: Single-pass directory scanning
                 images, _, _ = self._scan_directory_once(folders['src'])
-                
+
                 _, raw_videos, _ = self._scan_directory_once(folders['vid'])
                 videos = {}
                 for f in raw_videos.values():
                     key = self.extract_video_key(f.name, effect)
                     videos[key] = f
-                
+
                 _, _, metadata_files = self._scan_directory_once(folders['meta'])
-                
+
                 # Batch load metadata
                 metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
-                
+
                 logger.info(f"Images: {len(images)}, Videos: {len(videos)}, Meta {len(metadata_files)}")
-                
+
                 # Pre-compute aspect ratios
                 all_media = list(images.values()) + list(videos.values())
                 if all_media:
                     self._compute_aspect_ratios_batch(all_media, are_videos={p: True for p in videos.values()})
-                
+
                 # Match metadata to source files
                 for key, img in images.items():
                     metadata = metadata_cache.get(key, {})
-                    
+
                     vid = videos.get(key)
                     pair = MediaPair(
                         source_file=img.name,

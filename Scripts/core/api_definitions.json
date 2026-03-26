@@ -331,8 +331,9 @@
             ".webp"
         ],
         "validation": {
-            "max_size_mb": 50,
+            "max_size_mb": 20,
             "min_dimension": 128,
+            "max_dimension": 4000,
             "aspect_ratio": [
                 0.25,
                 4.0
