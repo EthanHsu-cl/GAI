@@ -15,10 +15,10 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0408 5 Effects
+base_folder: Media Files/Kling Effects/0409 3 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147 
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAobvDkLpfjS4c4ydqCvXbDAfTLjXhxbEC2Ei4gE7fRNL8?e=eZiGjD
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCDrO3jBd9aQ6ExlwT1rB3BASYhBalFxBL9FiZcQpjb6WE?e=WDr4Mh
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -27,19 +27,13 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'pet_moto_rider'
+    custom_effect: 'pet_vlogger'
 
   - effect:
-    custom_effect: 'muscle_pet'
+    custom_effect: 'tangyuan_to_animal'
 
   - effect: 
-    custom_effect: 'pet_delivery'
-
-  - effect: 
-    custom_effect: 'pet_bee_pro'
-
-  - effect: 
-    custom_effect: 'jelly_jiggle'
+    custom_effect: 'perler_beads'
 
 
 comments:

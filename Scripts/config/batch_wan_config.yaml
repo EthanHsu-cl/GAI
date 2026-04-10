@@ -8,16 +8,16 @@ default_params:
   seed: '-1'
   animation_mode: move
 output:
-  output_directory: /Users/ethanhsu/Library/CloudStorage/OneDrive-CyberLinkCorp/Kling Vidu/Report
+  output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 0
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
-root_design_link: https://docs.google.com/spreadsheets/d/1Rnin9ASAYecB103SocZztNlNxlPH2oCVnTmm-gtdJR4/edit?gid=478526346#gid=478526346
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDmmIrpY2zdSb2hXycH0i_MAWDrLW-7Lt3D9rYkAStMD9Q?e=xxdDSF
+root_design_link: https://docs.google.com/presentation/d/1I5bm8n2DqduPlI7btPdDObI3oc45GYa2sGmNmqEwUsk/edit?slide=id.g3ddfd358aa5_0_46#slide=id.g3ddfd358aa5_0_46
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAs3hnJmGXLSqOmKtnAMed4AZvQR4ONnGvy16hQHgxFxy4?e=V1fluU
 
 tasks:
-- folder: Media Files/Wan 2.2/0319 7 Styles 
+- folder: Media Files/Wan 2.2/0409 5 Styles 
   prompt: ''
   embed: ''
   num_outputs: 1
