@@ -10,7 +10,25 @@ from .base_handler import BaseAPIHandler
 
 class PixverseHandler(BaseAPIHandler):
     """Pixverse effects handler."""
-    
+
+    def validate_structure(self, tasks, config):
+        """Validate Pixverse with base_folder/effect subfolders.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid enhanced task dictionaries with folder paths.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        return self._validate_base_folder_effects_structure(
+            tasks, config, effect_key='effect', custom_effect_key='custom_effect_id',
+            parallel=True
+        )
+
     def _make_api_call(self, file_path, task_config, attempt):
         """Make Pixverse API call."""
         default_settings = self.config.get("default_settings", {})
@@ -115,7 +133,5 @@ class PixverseHandler(BaseAPIHandler):
         
         self.processor.save_metadata(Path(metadata_folder), base_name, file_name, 
                                     metadata, task_config)
-        
-        return True
         
         return True

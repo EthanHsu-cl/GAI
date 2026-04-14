@@ -14,7 +14,92 @@ class VeoItvHandler(BaseAPIHandler):
     Handles image-to-video generation where each style folder contains
     source images and generated videos are named based on the source image.
     """
-    
+
+    def validate_structure(self, tasks, config):
+        """Validate Veo ITV with folder/Source images and generation_count.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid enhanced task dictionaries.
+
+        Raises:
+            Exception: If no valid tasks found.
+        """
+        from .base_handler import ValidationError
+
+        valid_tasks = []
+        invalid_images = []
+
+        for i, task in enumerate(tasks, 1):
+            if not task.get('prompt'):
+                self.logger.warning(f"⚠️ Task {i}: Missing prompt")
+                continue
+
+            folder = Path(task.get('folder', ''))
+            if not folder or str(folder) == '':
+                self.logger.warning(f"⚠️ Task {i}: Missing folder path")
+                continue
+
+            folder.mkdir(parents=True, exist_ok=True)
+            source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
+
+            image_files = self.processor._get_files_by_type(source_folder, 'image')
+            if not image_files:
+                self.logger.warning(f"⚠️ Task {i}: No images found in {source_folder}")
+                continue
+
+            valid_count = 0
+            for img_file in image_files:
+                is_valid, reason = self.validate_file(img_file)
+                if not is_valid:
+                    invalid_images.append({
+                        'folder': folder.name, 'filename': img_file.name, 'reason': reason
+                    })
+                else:
+                    valid_count += 1
+
+            if valid_count == 0:
+                self.logger.warning(f"⚠️ Task {i}: No valid images in {source_folder}")
+                continue
+
+            output_folder = folder / "Generated_Video"
+            metadata_folder = folder / "Metadata"
+            output_folder.mkdir(parents=True, exist_ok=True)
+            metadata_folder.mkdir(parents=True, exist_ok=True)
+
+            task_count = task.get('generation_count')
+            global_count = config.get('generation_count', 1)
+            generation_count = task_count if task_count is not None else global_count
+
+            enhanced_task = task.copy()
+            enhanced_task.update({
+                'folder': str(folder),
+                'folder_name': folder.name,
+                'style_name': task.get('style_name', folder.name),
+                'source_dir': str(source_folder),
+                'generated_dir': str(output_folder),
+                'metadata_dir': str(metadata_folder),
+                'generation_count': generation_count,
+                'task_num': i
+            })
+            valid_tasks.append(enhanced_task)
+            total_expected = valid_count * generation_count
+            self.logger.info(
+                f"✓ Task {i}: {valid_count} images × {generation_count} generations = {total_expected} videos"
+            )
+
+        if invalid_images:
+            self.processor.write_invalid_report(invalid_images, "veo_itv")
+            self.logger.warning(f"⚠️ {len(invalid_images)} invalid images found (see report)")
+
+        if not valid_tasks:
+            raise Exception("No valid Veo ITV tasks found")
+        return valid_tasks
+
     def _make_api_call(self, file_path, task_config, attempt):
         """
         Make Veo ITV API call.

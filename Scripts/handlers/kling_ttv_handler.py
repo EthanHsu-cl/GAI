@@ -11,7 +11,22 @@ class KlingTTVHandler(BaseAPIHandler):
     
     Generates videos from text prompts using Kling's TextToVideo API.
     """
-    
+
+    def validate_structure(self, tasks, config):
+        """Validate Kling TTV text-to-video structure.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            Exception: If no valid tasks found.
+        """
+        return self._validate_text_to_video_structure(tasks)
+
     def _make_api_call(self, file_path, task_config, attempt):
         """
         Make Kling TTV API call.

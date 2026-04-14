@@ -109,7 +109,7 @@ When you select a platform, the Advanced Options section shows API-specific fiel
 | **Kling Endframe** | Duration, CFG, Generation Count, Pairing Mode |
 | **Kling TTV** | Mode, Duration, Ratio, CFG Scale, Generation Count, Sound |
 | **Kling Motion** | Model, Character Orientation, Mode, Keep Original Sound, Element IDs |
-| **Nano Banana** | Model, Resolution, Aspect Ratio, Random Source Selection, Deterministic Random, Seed, Min/Max Images, Iterations |
+| **Nano Banana** | Model, Resolution, Aspect Ratio, Random Source Selection, Deterministic Random, Seed, Min/Max Images, Iterations, Generations per Source, Reference Images |
 | **Veo / Veo ITV** | Model, Duration, Aspect Ratio, Resolution, Person Generation, Enhance Prompt, Generate Audio |
 | **Pixverse** | Model, Duration, Quality, Motion Mode, Style, Generate Audio, Multi Clip, Thinking Type |
 | **Runway** | Model, Aspect Ratio, Pairing Strategy, Public Figure Moderation |
@@ -200,7 +200,7 @@ TaskFolder/
 ├── Source Image/        # Wan 2.2: source images
 ├── Source Video/        # Wan 2.2: source videos  
 ├── Additional/          # Nano Banana: extra images
-├── Reference/           # Runway, Vidu Reference: reference images
+├── Reference/           # Runway, Vidu Reference, Nano Banana (with use_reference_images): reference images
 ├── Generated_Video/     # Auto-created video outputs
 ├── Generated_Output/    # Auto-created outputs (Nano Banana)
 ├── Generated_Image/     # Auto-created outputs (GenVideo)
@@ -213,7 +213,7 @@ TaskFolder/
 - Wan 2.2: `Source Image/` + `Source Video/` (cross-matched)
 - DreamActor: `Source Image/` + `Source Video/` (cross-matched)
 - Kling Motion: `Source Image/` + `Source Video/` (cross-matched)
-- Nano Banana multi-image: `Source/` + `Additional/` (or `Source/` only with random selection mode)
+- Nano Banana multi-image: `Source/` + `Additional/` (or `Source/` only with random selection mode) + optional `Reference/`
 - Runway/Vidu Reference: `Source/` + `Reference/`
 
 ## ⚙️ Configuration Files
@@ -414,6 +414,8 @@ tasks:
     min_images: 1
     max_images: 4
     num_iterations: 50
+    generations_per_source: 1
+    use_reference_images: false
 
   # Multi-Image mode (Source + Additional folder)
   - folder: /path/to/TaskName2
@@ -436,7 +438,15 @@ tasks:
 - `random_seed`: Explicit seed for deterministic mode (auto-generated from folder path if omitted)
 - `min_images` / `max_images`: Range of images per API call
 - `num_iterations`: Number of API calls to make (defaults to source file count)
+- `generations_per_source`: Number of generations per source group (default: `1`). Each iteration's selected images are sent N times. Example: 50 iterations × 5 generations = 250 total API calls.
 - Optimal formula: `sources_needed = num_iterations × (min_images + max_images) / 2`
+
+**Reference Images:**
+
+- `use_reference_images`: Set to `true` to prepend reference images to every API call
+- Place reference images in `<task_folder>/Reference/` (same level as `Source/`)
+- Reference images do **not** count toward `min_images` / `max_images` limits
+- Example: With 1 reference image and `min_images=1`, `max_images=4`, the API receives 2–5 images (1 ref + 1–4 source)
 
 #### Error 429 (Resource Exhausted) Retry
 

@@ -3,7 +3,7 @@ comparison_template_path: templates/I2V Comparison Template.pptx
 testbed: http://192.168.31.161/external-testbed/image_generation/
 
 output:
-  directory: /Users/ethanhsu/Library/CloudStorage/OneDrive-CyberLinkCorp/Kling Vidu/Report
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 1
 
 schedule:
@@ -14,30 +14,186 @@ root_source_video_link:
 root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3b9d25cdcf3_11_321#slide=id.g3b9d25cdcf3_11_321
 
 tasks:
-  - folder: Media Files/Nano Banana/0402 Collage - Modular DEBUG
+  - folder: Media Files/Nano Banana/0414 Dear Mom
     model: gemini-3-pro-image-preview
     resolution: "2K"
-    aspect_ratio: "9:16"
+    aspect_ratio: "4:3"
     prompt: |
-      Create a single, vertically oriented modular photo story layout that resembles a cinematic travel journal webpage, presented as one complete scrollable composition. Use one user-uploaded photo as a full-width hero background at the top, with a black gradient overlay (darker at the bottom, lighter at the top) to ensure strong text contrast. Overlay large bold title typography, a smaller location subtitle, navigation-style labels (e.g., “Home”, “Photos”, “Stories”) near the top, a visible date, and a short reflective paragraph aligned left in a clean editorial layout.​
+      Use the uploaded photo(s) as the ONLY source of people in the final image.
 
-      If fewer than six photos are uploaded, generate additional images to support the modular layout. Generated images should either complement the uploaded photos thematically, maintaining strong visual coherence and consistent style.Each photo should function as an independent module while adhering to a strict grid system, and no photo may be repeated—each user-uploaded or generated image may appear only once within the composition.​
+      The final image must contain EXACTLY the same number of people as the uploaded photo(s).
+      Do NOT add extra people.
+      Do NOT remove people.
+      Do NOT duplicate any person.
+      Do NOT generate repeated versions of the same person.
+      Do NOT copy any human figure from the reference image.
 
-      As the layout scrolls downward, deepen the black gradient into a darker midsection. Place the remaining user-uploaded photos (up to five) into a centered horizontal carousel module with consistent sizing and spacing. Include visible left and right navigation arrows styled as modern, semi-transparent white carousel controls layered above the images to clearly suggest interactivity. Each photo should function as an independent module while adhering to a strict grid system. Beneath the carousel, add small UI-style supporting text modules that match the overall typographic hierarchy.​
+      IMPORTANT:
+      Reference image  is for STYLE, TEXTURE, COLOR PALETTE, and POSTCARD LAYOUT ONLY.
+      Reference image  must NOT be used as a source of people, faces, hairstyles, clothing, poses, age, gender, family members, or character composition.
+      Absolutely do NOT generate any person appearing in reference image .
 
-      In the lower half, transition the gradient into another large background image to maintain vertical continuity. Overlay minimal footer-style text such as story credits or a subtle social reference.​
+      The final illustration style must strictly match reference image in visual treatment only:
+      – Hand-drawn style of the reference image
+      – warm beige textured paper background
+      – gentle pastel color palette
+      – subtle brush texture
+      – soft natural shading
+      – delicate hand-drawn lines
+      – warm greeting-card feeling
+      – minimal, clean postcard design
 
-      Additional rule: the bottom background image should, whenever possible, use one of the user-uploaded photos (preferably a different one from the top hero image) rather than a fully generated image.​
+      STRICTLY FORBIDDEN:
+      – using any character from reference image 
+      – adding mother-and-child figures from the reference
+      – adding family members not present in the uploaded photo(s)
+      – repeating the same uploaded person twice
+      – mirrored duplicate people
+      – extra background people
+      – anime style
+      – flat cartoon style
+      – vector illustration
+      – chibi style
+      – sticker style
+      – thick black outlines
+      – glossy digital rendering
 
-      The overall aesthetic should be cinematic and modern, with warm natural tones, deep blacks, soft shadows, consistent typography, and a polished travel story webpage mockup feel.​
+      POSTCARD LAYOUT MUST BE FIXED:
+
+      Create a horizontal Mother's Day postcard.
+      The canvas must be split into two perfectly equal vertical halves.
+
+      LEFT HALF = illustration area
+      RIGHT HALF = writing/message area
+
+      The divider line must be:
+      – exactly centered
+      – perfectly vertical
+      – thin and straight
+
+      The left and right sections must be equal width: 50% / 50%.
+
+      LEFT HALF RULES:
+      – all people must appear only inside the left half
+      – no person may cross into the right half
+      – the illustration must stay compact and centered within the left half
+      – keep enough blank space above for the title
+      – keep enough blank space around the figures so the layout stays airy and balanced
+
+      CHARACTER RULES:
+      For 1 person:
+      – the person is smiling gently
+      – holding a bouquet of carnations
+
+      For 2 or more people:
+      – show only the uploaded people
+      – show warm family interaction such as hugging, leaning together, or giving carnations
+      – interaction must feel natural and gentle
+      – do not invent any additional family member
+      – do not clone or repeat any uploaded face
+
+      TEXT RULES:
+      The text “Happy Mother’s Day” must appear ONLY in the upper-left area of the LEFT HALF.
+      It must never appear on the right half.
+      It must never overlap with “TO:” or the writing lines.
+      It must remain as one title block at the top-left, above the illustrated people.
+
+      Correct title placement:
+      – top-left quadrant
+      – large and readable
+      – balanced above the character scene
+      – handwritten style
+      – warm brown color
+
+      Incorrect title placement, strictly forbidden:
+      – on the right half
+      – centered across both halves
+      – above the TO area
+      – broken into awkward spacing
+      – too low, touching the heads
+      – too far right
+
+      RIGHT HALF RULES:
+      Keep the right half clean and minimal.
+      Do not place any people on the right half.
+
+      Show only:
+
+      TO:
+      ____________
+
+      ____________
+
+      ____________
+
+      FROM:
+
+      Add a small carnation illustration in the bottom-right corner only.
+
+      BACKGROUND RULES:
+      – warm beige textured paper
+      – soft watercolor wash
+      – no realistic room
+      – no furniture
+      – no table
+      – no scenery
+      – no extra decorative objects beyond subtle floral accents and small sparkles
+
+      FINAL MANDATORY REQUIREMENTS:
+      1. Use uploaded photo(s) as the only source of people
+      2. Match reference image  only in style and postcard design language
+      3. Do not copy or generate any person from reference image 
+      4. Do not duplicate any uploaded person
+      5. Keep the title only at the top-left of the left half
+      6. Keep the postcard split exactly 50/50
+      7. Keep all people only in the left half
+
+      BACKGROUND LOCKING REQUIREMENT – ​​MUST MATCH THE POSTCARD EFFECT OF THE REFERENCE IMAGE.
+
+      The background must be:
+
+      clean  
+      smooth  
+      light beige  
+      flat  
+      soft neutral tone  
+      minimal  
+      uniform  
+
+      The background must NOT contain:
+
+      watercolor stains  
+      watercolor wash  
+      paper blotches  
+      dirty paper texture  
+      aged paper effect  
+      grain noise  
+      ink marks  
+      patchy color areas  
+      uneven color spots  
+      vintage paper texture  
+      rough paper fibers  
+      old paper effect  
+
+      The background must look:
+
+      fresh  
+      clean  
+      modern  
+      simple  
+      flat paper surface  
+
+      NOT artistic watercolor paper.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: true
     use_deterministic_random: true
     random_seed: 42
-    min_images: 7
-    max_images: 7
-    num_iterations: 50
+    min_images: 2
+    max_images: 4
+    num_iterations: 10
+    generations_per_source: 5
+    use_reference_images: true
 
 
 # Comments and documentation
@@ -124,6 +280,76 @@ comments:
       num_iterations: 50
       model: gemini-3-pro-image-preview
   
+  reference_images:
+    description: "Toggle to include reference images from a 'Reference' folder (sibling to 'Source' folder)"
+    use_reference_images: "Set to true to prepend reference images to every API call. Reference images do NOT count toward min_images/max_images limits."
+    folder_structure: "Place reference images in <task_folder>/Reference/ (same level as Source/). The folder is auto-created when use_reference_images is true."
+    behavior: |
+      - Reference images are prepended to the images list before source images in every API call
+      - They do NOT count toward min_images / max_images limits
+      - If use_reference_images is true but Reference/ folder is missing or empty, a warning is logged and processing continues without references
+      - Reference images are sorted alphabetically and cached per task
+      - Tracked in metadata as 'reference_images_used'
+    
+    example_with_random_source: |
+      # Reference images + random source selection
+      # With 1 reference image and min=1, max=4: API receives 2-5 images (1 ref + 1-4 source)
+      use_random_source_selection: true
+      use_deterministic_random: true
+      random_seed: 42
+      min_images: 1
+      max_images: 4
+      num_iterations: 50
+      use_reference_images: true
+      model: gemini-3-pro-image-preview
+    
+    example_with_fixed_count: |
+      # Reference images with fixed image count
+      # With 2 reference images and min=max=5: API receives 7 images (2 ref + 5 source)
+      use_random_source_selection: true
+      min_images: 5
+      max_images: 5
+      num_iterations: 30
+      use_reference_images: true
+      model: gemini-3-pro-image-preview
+    
+    folder_structure_example: |
+      TaskFolder/
+      ├── Source/              # Source images (selected by min/max_images)
+      ├── Reference/           # Reference images (prepended to every call, not counted in min/max)
+      ├── Generated_Output/    # Auto-created
+      └── Metadata/            # Auto-created
+
+  generations_per_source:
+    description: "Number of times each iteration's source group is sent to the API"
+    default: "1 (each source group is processed once)"
+    behavior: |
+      - Each iteration's selected images are sent to the API N times
+      - Total API calls = num_iterations × generations_per_source
+      - Output files get '_gen00', '_gen01', etc. suffixes when generations_per_source > 1
+      - Each generation is independently resumable (separate metadata files)
+    
+    example_basic: |
+      # 50 iterations × 5 generations = 250 total API calls
+      use_random_source_selection: true
+      min_images: 1
+      max_images: 5
+      num_iterations: 50
+      generations_per_source: 5
+      model: gemini-3-pro-image-preview
+    
+    example_with_reference: |
+      # Combined: 50 iterations × 3 generations = 150 API calls, with reference images
+      use_random_source_selection: true
+      use_deterministic_random: true
+      random_seed: 42
+      min_images: 1
+      max_images: 4
+      num_iterations: 50
+      generations_per_source: 3
+      use_reference_images: true
+      model: gemini-3-pro-image-preview
+
   multi_image_config:
     description: "Configuration for multi-image generation (Source + Additional folders mode)"
     enabled: "Must be true to use multi-image features"

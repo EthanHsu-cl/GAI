@@ -8,7 +8,27 @@ from .base_handler import BaseAPIHandler
 
 class ViduEffectsHandler(BaseAPIHandler):
     """Vidu Effects handler."""
-    
+
+    def validate_structure(self, tasks, config):
+        """Validate Vidu Effects with base_folder/effect subfolders.
+
+        Supports both 'effect' and 'custom_effect_name' keys.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid enhanced task dictionaries with folder paths.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        return self._validate_base_folder_effects_structure(
+            tasks, config, effect_key='effect', custom_effect_key='custom_effect_name',
+            parallel=True
+        )
+
     def _make_api_call(self, file_path, task_config, attempt):
         """Make Vidu Effects API call."""
         prompt = task_config.get('prompt', '') or self.config.get('prompt', '')

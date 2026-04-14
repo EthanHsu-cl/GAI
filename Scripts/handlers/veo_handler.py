@@ -12,7 +12,22 @@ class VeoHandler(BaseAPIHandler):
     Veo is a text-to-video API that generates videos from text prompts only
     (no input image required).
     """
-    
+
+    def validate_structure(self, tasks, config):
+        """Validate Veo text-to-video structure (prompt + output_folder).
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            Exception: If no valid tasks found.
+        """
+        return self._validate_text_to_video_structure(tasks)
+
     def _make_api_call(self, file_path, task_config, attempt):
         """
         Make Veo API call.

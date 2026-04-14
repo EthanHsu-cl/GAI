@@ -5,6 +5,17 @@ New APIs only need to implement the unique parts.
 import time
 from pathlib import Path
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
+from PIL import Image
+
+
+class ValidationError(Exception):
+    """Exception raised when file validation fails.
+
+    This exception signals that invalid files were found during validation.
+    When caught, processing should stop and report generation should be skipped.
+    """
+    pass
 
 
 class BaseAPIHandler:
@@ -301,3 +312,345 @@ class BaseAPIHandler:
         """Get files for this task. Override for special handling."""
         file_type = 'video' if self.api_name == 'runway' else 'image'
         return self.processor._get_files_by_type(source_folder, file_type)
+
+    # ==================== VALIDATION METHODS ====================
+
+    def validate_file(self, file_path, file_type='image'):
+        """Validate a single file. Override for API-specific validation rules.
+
+        Args:
+            file_path: Path to the file to validate.
+            file_type: 'image' or 'video'.
+
+        Returns:
+            tuple: (is_valid, reason_string)
+        """
+        try:
+            validation_rules = self.api_defs.get('validation', {})
+
+            if file_type == 'video':
+                file_path_obj = file_path if isinstance(file_path, Path) else Path(file_path)
+                file_size_mb = file_path_obj.stat().st_size / (1024 * 1024)
+                video_rules = validation_rules.get('video', {})
+
+                if file_size_mb > video_rules.get('max_size_mb', 500):
+                    return False, f"Size {file_size_mb:.1f}MB too large"
+
+                info = self.processor._get_video_info(file_path)
+                if not info:
+                    return False, "Cannot read video info"
+
+                duration_range = video_rules.get('duration', [1, 30])
+                if not (duration_range[0] <= info['duration'] <= duration_range[1]):
+                    return False, f"Duration {info['duration']:.1f}s invalid"
+
+                min_dim = video_rules.get('min_dimension', 320)
+                if info['width'] < min_dim or info['height'] < min_dim:
+                    return False, f"Resolution {info['width']}x{info['height']} too small"
+
+                return True, f"{info['width']}x{info['height']}, {info['duration']:.1f}s, {info['size_mb']:.1f}MB"
+
+            else:
+                file_path_obj = file_path if isinstance(file_path, Path) else Path(file_path)
+                file_size_mb = file_path_obj.stat().st_size / (1024 * 1024)
+
+                with Image.open(file_path) as img:
+                    w, h = img.size
+
+                    max_size = validation_rules.get('max_size_mb', 50)
+                    if file_size_mb >= max_size:
+                        return False, f"Size > {max_size}MB"
+
+                    min_dim = validation_rules.get('min_dimension', 128)
+                    if w < min_dim or h < min_dim:
+                        return False, f"Dims {w}x{h} too small"
+
+                    max_dim = validation_rules.get('max_dimension')
+                    if max_dim and (w > max_dim or h > max_dim):
+                        return False, f"Dims {w}x{h} exceed {max_dim}x{max_dim}"
+
+                    aspect_ratio_range = validation_rules.get('aspect_ratio')
+                    if aspect_ratio_range:
+                        ratio = w / h
+                        if not (aspect_ratio_range[0] <= ratio <= aspect_ratio_range[1]):
+                            return False, f"Ratio {ratio:.2f} invalid"
+
+                    return True, f"{w}x{h}"
+
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+
+    def validate_structure(self, tasks, config):
+        """Validate folder structure and return valid tasks.
+
+        Override this in subclasses for API-specific folder structures.
+        Default: simple folder/Source → images pattern.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid task dictionaries ready for processing.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        return self._validate_source_images_structure(tasks)
+
+    def _validate_source_images_structure(self, tasks, output_dir_name='Generated_Video',
+                                          extra_dirs=None):
+        """Validate simple folder/Source → images structure.
+
+        Shared base pattern for APIs that read images from a Source subfolder.
+
+        Args:
+            tasks: List of task dicts each containing 'folder' key.
+            output_dir_name: Name of the output directory to create.
+            extra_dirs: Optional list of additional directory names to create.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        valid_tasks, invalid_images = [], []
+        for i, task in enumerate(tasks, 1):
+            folder = Path(task['folder'])
+            folder.mkdir(parents=True, exist_ok=True)
+            source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
+
+            image_files = self.processor._get_files_by_type(source_folder, 'image')
+            if not image_files:
+                self.logger.warning(f"❌ Empty source: {source_folder}")
+                continue
+
+            valid_count = 0
+            for img_file in image_files:
+                is_valid, reason = self.validate_file(img_file)
+                if not is_valid:
+                    invalid_images.append({
+                        'path': str(img_file), 'folder': str(folder),
+                        'name': img_file.name, 'reason': reason
+                    })
+                else:
+                    valid_count += 1
+
+            if valid_count > 0:
+                (folder / output_dir_name).mkdir(exist_ok=True)
+                (folder / "Metadata").mkdir(exist_ok=True)
+                if extra_dirs:
+                    for d in extra_dirs:
+                        (folder / d).mkdir(exist_ok=True)
+                valid_tasks.append(task)
+                self.logger.info(f"✓ Task {i}: {valid_count}/{len(image_files)} valid images")
+
+        if invalid_images:
+            self.processor.write_invalid_report(invalid_images, self.api_name)
+            raise ValidationError(f"{len(invalid_images)} invalid images found")
+        return valid_tasks
+
+    def _validate_base_folder_effects_structure(self, tasks, config, effect_key='effect',
+                                                 custom_effect_key='custom_effect',
+                                                 parallel=False):
+        """Validate base_folder/effect_name/Source pattern.
+
+        Shared pattern for effects-based APIs (kling_effects, vidu_effects, pixverse).
+
+        Args:
+            tasks: List of task dicts each containing an effect key.
+            config: Processor config containing 'base_folder'.
+            effect_key: Key in task dict for the effect name.
+            custom_effect_key: Key in task dict for custom effect override.
+            parallel: Whether to use parallel validation.
+
+        Returns:
+            list: Valid enhanced task dictionaries with folder paths.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        base_folder = Path(config.get('base_folder', ''))
+        base_folder.mkdir(parents=True, exist_ok=True)
+
+        valid_tasks = []
+        invalid_images = []
+
+        def process_task(task):
+            custom_effect = task.get(custom_effect_key, '')
+            effect = task.get(effect_key, '')
+            folder_name = custom_effect if custom_effect else effect
+            if not folder_name:
+                self.logger.warning(f"⚠️ Task has no {effect_key} or {custom_effect_key} specified")
+                return None, []
+
+            task_folder = base_folder / folder_name
+            task_folder.mkdir(parents=True, exist_ok=True)
+            source_dir = task_folder / "Source"
+            source_dir.mkdir(exist_ok=True)
+
+            image_files = self.processor._get_files_by_type(source_dir, 'image')
+            if not image_files:
+                self.logger.warning(f"⚠️ No images found in: {source_dir}")
+                return None, []
+
+            invalid_for_task = []
+            valid_count = 0
+            for img_file in image_files:
+                is_valid, reason = self.validate_file(img_file)
+                if not is_valid:
+                    invalid_for_task.append({
+                        'folder': folder_name, 'filename': img_file.name, 'reason': reason
+                    })
+                else:
+                    valid_count += 1
+
+            if valid_count > 0:
+                (task_folder / "Generated_Video").mkdir(exist_ok=True)
+                (task_folder / "Metadata").mkdir(exist_ok=True)
+                enhanced_task = task.copy()
+                enhanced_task.update({
+                    'folder': str(task_folder),
+                    'folder_name': folder_name,
+                    'source_dir': str(source_dir),
+                    'generated_dir': str(task_folder / "Generated_Video"),
+                    'metadata_dir': str(task_folder / "Metadata")
+                })
+                self.logger.info(f"✓ {folder_name}: {valid_count}/{len(image_files)} valid images")
+                return enhanced_task, invalid_for_task
+            return None, invalid_for_task
+
+        if parallel and self.api_defs.get('parallel_validation', False):
+            with ThreadPoolExecutor(max_workers=4) as executor:
+                results = list(executor.map(process_task, tasks))
+        else:
+            results = [process_task(task) for task in tasks]
+
+        for task, invalid_for_task in results:
+            if task:
+                valid_tasks.append(task)
+            invalid_images.extend(invalid_for_task)
+
+        if invalid_images:
+            self.processor.write_invalid_report(invalid_images, self.api_name)
+            raise ValidationError(f"{len(invalid_images)} invalid images found")
+
+        if not valid_tasks:
+            raise Exception(f"No valid {self.api_name} tasks found")
+        return valid_tasks
+
+    def _validate_image_video_cross_match_structure(self, tasks):
+        """Validate Source Image + Source Video cross-match pattern.
+
+        Shared pattern for APIs that cross-match images with videos
+        (wan, dreamactor, kling_motion).
+
+        Args:
+            tasks: List of task dicts each containing 'folder' key.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        valid_tasks = []
+        invalid_images = []
+        invalid_videos = []
+
+        for i, task in enumerate(tasks, 1):
+            folder = Path(task['folder'])
+            folder.mkdir(parents=True, exist_ok=True)
+            source_image_folder = folder / "Source Image"
+            source_video_folder = folder / "Source Video"
+            source_image_folder.mkdir(exist_ok=True)
+            source_video_folder.mkdir(exist_ok=True)
+
+            image_files = self.processor._get_files_by_type(source_image_folder, 'image')
+            if not image_files:
+                self.logger.warning(f"❌ Task {i}: No images found in {source_image_folder}")
+                continue
+
+            video_files = self.processor._get_files_by_type(source_video_folder, 'video')
+            if not video_files:
+                self.logger.warning(f"❌ Task {i}: No videos found in {source_video_folder}")
+                continue
+
+            valid_image_count = 0
+            for image_file in image_files:
+                is_valid, reason = self.validate_file(image_file, 'image')
+                if not is_valid:
+                    invalid_images.append({
+                        'path': str(image_file), 'folder': str(folder),
+                        'name': image_file.name, 'reason': reason
+                    })
+                else:
+                    valid_image_count += 1
+
+            valid_video_count = 0
+            for video_file in video_files:
+                is_valid, reason = self.validate_file(video_file, 'video')
+                if not is_valid:
+                    invalid_videos.append({
+                        'path': str(video_file), 'folder': str(folder),
+                        'name': video_file.name, 'reason': reason
+                    })
+                else:
+                    valid_video_count += 1
+
+            if valid_image_count == 0 or valid_video_count == 0:
+                self.logger.warning(f"❌ Task {i}: Insufficient valid files")
+                continue
+
+            (folder / "Generated_Video").mkdir(exist_ok=True)
+            (folder / "Metadata").mkdir(exist_ok=True)
+            valid_tasks.append(task)
+            total_combinations = valid_image_count * valid_video_count
+            self.logger.info(
+                f"✓ Task {i}: {valid_image_count} images × {valid_video_count} videos = "
+                f"{total_combinations} total generations"
+            )
+
+        if invalid_images:
+            self.processor.write_invalid_report(invalid_images, f'{self.api_name}_images')
+            raise ValidationError(f"{len(invalid_images)} invalid images found")
+        if invalid_videos:
+            self.processor.write_invalid_report(invalid_videos, f'{self.api_name}_videos')
+            raise ValidationError(f"{len(invalid_videos)} invalid videos found")
+        return valid_tasks
+
+    def _validate_text_to_video_structure(self, tasks):
+        """Validate text-to-video structure (prompt + output_folder).
+
+        Shared pattern for TTV APIs (veo, kling_ttv).
+
+        Args:
+            tasks: List of task dicts with 'prompt' and 'output_folder'.
+
+        Returns:
+            list: Valid task dictionaries with task_num added.
+
+        Raises:
+            Exception: If no valid tasks found.
+        """
+        valid_tasks = []
+        for i, task in enumerate(tasks, 1):
+            if not task.get('prompt'):
+                self.logger.warning(f"⚠️ Task {i}: Missing prompt")
+                continue
+            output_folder = Path(task.get('output_folder', ''))
+            if not output_folder or str(output_folder) == '':
+                self.logger.warning(f"⚠️ Task {i}: Missing output_folder")
+                continue
+            output_folder.mkdir(parents=True, exist_ok=True)
+            metadata_folder = output_folder.parent / "Metadata"
+            metadata_folder.mkdir(parents=True, exist_ok=True)
+            task['task_num'] = i
+            valid_tasks.append(task)
+            self.logger.info(f"✓ Task {i}: Text-to-video prompt configured")
+
+        if not valid_tasks:
+            raise Exception(f"No valid {self.api_name} tasks found")
+        return valid_tasks

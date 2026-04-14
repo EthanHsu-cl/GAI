@@ -208,7 +208,7 @@ class UnifiedReportGenerator:
                 **self.LAYOUT_2_MEDIA,
                 'title_format': '❌ GENERATION FAILED',
                 'title_show_only_if_failed': True,
-                'metadata_fields': ['response_id', 'additional_images_used', 'success', 'attempts', 'processing_time_seconds'],
+                'metadata_fields': ['response_id', 'additional_images_used', 'reference_images_used', 'generation_index', 'success', 'attempts', 'processing_time_seconds'],
                 'use_comparison': False,
                 'supports_multi_image': True,
                 # Alternative 3-media layout (used when additional_images are present)
@@ -370,7 +370,12 @@ class UnifiedReportGenerator:
     
     def _format_title(self, pair, index, title_format, show_only_if_failed):
         """Format title for slide based on configuration"""
-        if show_only_if_failed and not pair.failed:
+        md = pair.metadata or {}
+        gen_idx = md.get('generation_index')
+        gens_per_source = md.get('generations_per_source', 1)
+        has_gen_info = gen_idx is not None and gens_per_source > 1
+        
+        if show_only_if_failed and not pair.failed and not has_gen_info:
             return None
         
         # Build format kwargs with all possible placeholders
@@ -381,7 +386,17 @@ class UnifiedReportGenerator:
             'style_name': pair.effect_name or '',  # effect_name is used for style_name
         }
         
-        return title_format.format(**format_kwargs)
+        title = title_format.format(**format_kwargs) if pair.failed else ""
+        
+        # Append generation info when generations_per_source > 1
+        if has_gen_info:
+            gen_label = f"Gen {gen_idx + 1}/{gens_per_source}"
+            if title:
+                title = f"{title}  [{gen_label}]"
+            else:
+                title = gen_label
+        
+        return title if title else None
     
     def _compute_stacked_positions(self, pair, base_positions):
         """Dynamically adjust stacked layout heights based on source aspect ratios.
@@ -1035,6 +1050,16 @@ class UnifiedReportGenerator:
             if add_imgs:
                 text = add_imgs[0] if len(add_imgs) == 1 else ', '.join(add_imgs)
                 meta_lines.append(f"Additional: {text}")
+        elif field == 'reference_images_used':
+            ref_imgs = md.get(field, [])
+            if ref_imgs:
+                text = ref_imgs[0] if len(ref_imgs) == 1 else ', '.join(ref_imgs)
+                meta_lines.append(f"Reference: {text}")
+        elif field == 'generation_index':
+            gen_idx = md.get('generation_index')
+            gens_per_source = md.get('generations_per_source', 1)
+            if gen_idx is not None and gens_per_source > 1:
+                meta_lines.append(f"Generation: {gen_idx + 1}/{gens_per_source}")
         elif field == 'generation_number':
             gen_num = md.get('generation_number')
             total_gens = md.get('total_generations', 1)
@@ -1394,6 +1419,9 @@ class UnifiedReportGenerator:
             m = re.match(r'^(\d{4})\s*(.+)', folder.name)
             effect_name = m.group(2) if m else folder.name
         
+        # Check for Reference folder (for use_reference_images)
+        reference_folder = folder / 'Reference'
+        
         # Iterate over metadata entries (each represents one iteration)
         for md_key, md in sorted(metadata_cache.items()):
             if not md.get('random_source_selection'):
@@ -1415,6 +1443,22 @@ class UnifiedReportGenerator:
                 img_path = source_folder / img_name
                 if img_path.exists():
                     additional_source_paths.append(img_path)
+                elif reference_folder.exists():
+                    # Check Reference folder for reference images
+                    ref_path = reference_folder / img_name
+                    if ref_path.exists():
+                        additional_source_paths.append(ref_path)
+            
+            # Also include reference images from metadata if not already found via all_images_used
+            ref_images_used = md.get('reference_images_used', [])
+            if ref_images_used and reference_folder.exists():
+                existing_names = {p.name for p in additional_source_paths}
+                for ref_name in ref_images_used:
+                    if ref_name not in existing_names:
+                        ref_path = reference_folder / ref_name
+                        if ref_path.exists():
+                            # Prepend reference images so they appear first in composite
+                            additional_source_paths.insert(0, ref_path)
             
             # Use the first source image as the "primary" source for the pair
             primary_source = additional_source_paths[0] if additional_source_paths else None

@@ -24,7 +24,8 @@ class NanoBananaHandler(BaseAPIHandler):
     # Maximum images allowed per model
     MODEL_MAX_IMAGES = {
         'gemini-2.5-flash-image': 3,
-        'gemini-3-pro-image-preview': 14
+        'gemini-3-pro-image-preview': 14,
+        'gemini-3.1-flash-image-preview': 14
     }
     DEFAULT_MAX_IMAGES = 3
     DEFAULT_MIN_IMAGES = 1
@@ -51,6 +52,106 @@ class NanoBananaHandler(BaseAPIHandler):
         self._random_source_selections = {}  # Track random source selections for reproducibility
         self._source_image_cache = {}  # Cache source images per task
         self._last_error_is_429 = False  # Track if last failure was a 429
+        self._reference_image_cache = {}  # Cache reference images per task
+        self._selection_modes = {}  # Track selection modes per task
+        self._selection_plans = {}  # Pre-built selection plans per task
+        self._current_additional_images = {}  # Current additional images for metadata
+        self._current_all_images = {}  # Current all images for metadata
+
+    def validate_file(self, file_path, file_type='image'):
+        """Nano Banana specific validation with 32MB limit.
+
+        Args:
+            file_path: Path to the file to validate.
+            file_type: 'image' or 'video'.
+
+        Returns:
+            tuple: (is_valid, reason_string)
+        """
+        if file_type == 'video':
+            return super().validate_file(file_path, file_type)
+        try:
+            validation_rules = self.api_defs.get('validation', {})
+            file_path_obj = file_path if isinstance(file_path, Path) else Path(file_path)
+            file_size_mb = file_path_obj.stat().st_size / (1024 * 1024)
+            min_dimensions = validation_rules.get('min_dimension', 300)
+
+            with Image.open(file_path) as img:
+                w, h = img.size
+                if file_size_mb >= validation_rules.get('max_size_mb', 32):
+                    return False, "Size > 32MB"
+                if w <= min_dimensions or h <= min_dimensions:
+                    return False, f"Dims {w}x{h} too small"
+                return True, f"{w}x{h}"
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+
+    def validate_structure(self, tasks, config):
+        """Nano Banana validation with parallel processing and extra output dirs.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        from .base_handler import ValidationError
+
+        valid_tasks = []
+        invalid_images = []
+
+        def process_task(task):
+            folder = Path(task['folder'])
+            folder.mkdir(parents=True, exist_ok=True)
+            source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
+            if task.get('use_reference_images', False):
+                (folder / "Reference").mkdir(exist_ok=True)
+
+            image_files = self.processor._get_files_by_type(source_folder, 'image')
+            if not image_files:
+                self.logger.warning(f"⚠️ No images found in: {source_folder}")
+                return None, []
+
+            invalid_for_task = []
+            valid_count = 0
+            for img_file in image_files:
+                is_valid, reason = self.validate_file(img_file)
+                if not is_valid:
+                    invalid_for_task.append({
+                        'path': str(img_file), 'folder': str(folder),
+                        'name': img_file.name, 'reason': reason
+                    })
+                else:
+                    valid_count += 1
+
+            if valid_count > 0:
+                (folder / "Generated_Output").mkdir(exist_ok=True)
+                (folder / "Metadata").mkdir(exist_ok=True)
+                self.logger.info(f"✓ Task: {folder.name} - {valid_count}/{len(image_files)} valid images")
+                return task, invalid_for_task
+            return None, invalid_for_task
+
+        if self.api_defs.get('parallel_validation', False):
+            from concurrent.futures import ThreadPoolExecutor
+            with ThreadPoolExecutor(max_workers=4) as executor:
+                results = list(executor.map(process_task, tasks))
+        else:
+            results = [process_task(task) for task in tasks]
+
+        for task, invalid_for_task in results:
+            if task:
+                valid_tasks.append(task)
+            invalid_images.extend(invalid_for_task)
+
+        if invalid_images:
+            self.processor.write_invalid_report(invalid_images, "nano_banana")
+            raise ValidationError(f"{len(invalid_images)} invalid images found")
+        return valid_tasks
     
     def _is_error_429(self, error_str):
         """Check if an error string indicates a 429 Resource Exhausted error.
@@ -348,6 +449,43 @@ class NanoBananaHandler(BaseAPIHandler):
         
         return selected[:max_additional]
     
+    def _get_reference_images(self, task_config):
+        """Get reference images from the Reference folder if enabled.
+
+        Reference images are placed in a 'Reference' folder at the same level
+        as the 'Source' folder. They are prepended to every API call and do NOT
+        count toward the min_images/max_images limits.
+
+        Args:
+            task_config: Task configuration dictionary.
+
+        Returns:
+            list: Sorted list of Path objects for reference images, or empty
+                  list if disabled or no images found.
+        """
+        if not task_config.get('use_reference_images', False):
+            return []
+
+        task_key = str(task_config.get('folder', ''))
+
+        if task_key in self._reference_image_cache:
+            return self._reference_image_cache[task_key]
+
+        ref_folder = Path(task_config.get('folder', '')) / "Reference"
+        if ref_folder.exists():
+            images = self.processor._get_files_by_type(ref_folder, 'image')
+            images = sorted(images, key=lambda x: x.name.lower())
+            self._reference_image_cache[task_key] = images
+            if images:
+                self.logger.info(f" 📂 Loaded {len(images)} reference images from Reference/")
+            else:
+                self.logger.warning(f" ⚠️ Reference folder exists but no images found: {ref_folder}")
+        else:
+            self._reference_image_cache[task_key] = []
+            self.logger.warning(f" ⚠️ Reference folder not found: {ref_folder}")
+
+        return self._reference_image_cache[task_key]
+
     def _get_source_images_for_task(self, task_config):
         """Get and cache all source images for a task.
         
@@ -513,8 +651,6 @@ class NanoBananaHandler(BaseAPIHandler):
             selection_plan.append(selected)
         
         # Store selection mode for metadata tracking
-        if not hasattr(self, '_selection_modes'):
-            self._selection_modes = {}
         self._selection_modes[task_key] = selection_mode
         
         return selection_plan
@@ -543,9 +679,6 @@ class NanoBananaHandler(BaseAPIHandler):
         task_key = str(task_config.get('folder', ''))
         
         # Build selection plan on first call for this task
-        if not hasattr(self, '_selection_plans'):
-            self._selection_plans = {}
-        
         if task_key not in self._selection_plans:
             self._selection_plans[task_key] = self._build_selection_plan(task_config)
         
@@ -773,7 +906,10 @@ class NanoBananaHandler(BaseAPIHandler):
     
     def _process_iterations(self, task, task_num, total_tasks, output_folder, metadata_folder):
         """Process task using iteration-based loop (for num_iterations mode).
-        
+
+        Supports generations_per_source to repeat the same source group N times,
+        and use_reference_images to prepend reference images to every API call.
+
         Args:
             task: Task configuration dictionary.
             task_num: Current task number.
@@ -783,15 +919,20 @@ class NanoBananaHandler(BaseAPIHandler):
         """
         task_name = Path(task.get('folder', '')).name
         num_iterations = task.get('num_iterations', 1)
+        generations_per_source = max(1, task.get('generations_per_source', 1))
         source_images = self._get_source_images_for_task(task)
+        reference_images = self._get_reference_images(task)
         min_images = task.get('min_images', self.DEFAULT_MIN_IMAGES)
         max_images = task.get('max_images', self.MODEL_MAX_IMAGES.get(
             task.get('model', 'gemini-2.5-flash-image'), self.DEFAULT_MAX_IMAGES))
+        total_api_calls = num_iterations * generations_per_source
         
+        gen_info = f", {generations_per_source} gen/source" if generations_per_source > 1 else ""
+        ref_info = f", {len(reference_images)} ref images" if reference_images else ""
         self.logger.info(
             f"📁 Task {task_num}/{total_tasks}: {task_name} "
-            f"({num_iterations} iterations, {len(source_images)} source images, "
-            f"images per call: {min_images}-{max_images})"
+            f"({num_iterations} iterations{gen_info}{ref_info}, {len(source_images)} source images, "
+            f"images per call: {min_images}-{max_images}, total API calls: {total_api_calls})"
         )
         
         successful = 0
@@ -800,12 +941,11 @@ class NanoBananaHandler(BaseAPIHandler):
         
         # Pre-build selection plan to get actual selected images for naming
         task_key = str(task.get('folder', ''))
-        if not hasattr(self, '_selection_plans'):
-            self._selection_plans = {}
         if task_key not in self._selection_plans:
             self._selection_plans[task_key] = self._build_selection_plan(task)
         selection_plan = self._selection_plans.get(task_key, [])
         
+        call_index = 0
         for iteration_idx in range(num_iterations):
             # Get the actual selected images for this iteration from pre-built plan
             selected_images = selection_plan[iteration_idx] if iteration_idx < len(selection_plan) else []
@@ -814,71 +954,80 @@ class NanoBananaHandler(BaseAPIHandler):
                 self.logger.warning(f" ⚠️ No source images for iteration {iteration_idx}")
                 continue
             
-            # Create unique identifier based on actual selected image names
-            # Use first selected image as primary, include count if multiple
+            # Create base identifier from selected image names
             primary_image = selected_images[0]
             if len(selected_images) == 1:
-                base_name = f"iter{iteration_idx:03d}_{primary_image.stem}"
+                iter_base = f"iter{iteration_idx:03d}_{primary_image.stem}"
             else:
-                # Include all image names for multi-image selections
                 image_names = "_".join([img.stem for img in selected_images])
-                # Truncate if too long (max 200 chars for filename safety)
                 if len(image_names) > 150:
                     image_names = image_names[:147] + "..."
-                base_name = f"iter{iteration_idx:03d}_{image_names}"
+                iter_base = f"iter{iteration_idx:03d}_{image_names}"
             
-            # Check if already processed (success or failed with exhausted retries)
-            is_complete, status = self._get_iteration_status(base_name, metadata_folder)
-            if is_complete:
-                if status == 'success':
-                    self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (already processed)")
-                    successful += 1
-                elif status == 'failed_error429_exhausted':
-                    self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (failed - 429 retries exhausted)")
-                else:  # failed_exhausted
-                    self.logger.info(f" ⏭️ {iteration_idx+1}/{num_iterations}: {base_name} (failed - max retries reached)")
-                skipped += 1
-                continue
-            
-            self.logger.info(f" 🎲 {iteration_idx+1}/{num_iterations}: Processing iteration {iteration_idx}")
-            
-            # Inject iteration_index and base_name into task config
-            task_with_iteration = task.copy()
-            task_with_iteration['_iteration_index'] = iteration_idx
-            task_with_iteration['_base_name'] = base_name
-            
-            # Process with retries
-            for attempt in range(max_retries):
-                try:
-                    success = self.process(
-                        primary_image,
-                        task_with_iteration,
-                        output_folder,
-                        metadata_folder,
-                        attempt,
-                        max_retries
-                    )
-                    if success:
+            for gen_idx in range(generations_per_source):
+                # Append generation index to base_name when generations_per_source > 1
+                if generations_per_source > 1:
+                    base_name = f"{iter_base}_gen{gen_idx:02d}"
+                else:
+                    base_name = iter_base
+                
+                call_index += 1
+                
+                # Check if already processed (success or failed with exhausted retries)
+                is_complete, status = self._get_iteration_status(base_name, metadata_folder)
+                if is_complete:
+                    if status == 'success':
+                        self.logger.info(f" ⏭️ {call_index}/{total_api_calls}: {base_name} (already processed)")
                         successful += 1
-                        break
-                except Exception as e:
-                    if attempt < max_retries - 1:
-                        self.logger.warning(f" ⚠️ Attempt {attempt+1} failed: {e}")
-                        time.sleep(5)
-                    else:
-                        self.logger.error(f" ❌ All {max_retries} attempts failed: {e}")
-            
-            # Rate limit — scale proportionally by number of images used
-            if iteration_idx < num_iterations - 1:
-                base_rate = self.api_defs.get('rate_limit', 3)
-                num_images_used = len(selected_images)
-                effective_max = max_images if max_images > 0 else 1
-                scaled_wait = max(1, base_rate * num_images_used / effective_max)
-                self.logger.info(f" ⏳ Rate limit: {scaled_wait:.0f}s ({num_images_used}/{effective_max} images)")
-                time.sleep(scaled_wait)
+                    elif status == 'failed_error429_exhausted':
+                        self.logger.info(f" ⏭️ {call_index}/{total_api_calls}: {base_name} (failed - 429 retries exhausted)")
+                    else:  # failed_exhausted
+                        self.logger.info(f" ⏭️ {call_index}/{total_api_calls}: {base_name} (failed - max retries reached)")
+                    skipped += 1
+                    continue
+                
+                self.logger.info(f" 🎲 {call_index}/{total_api_calls}: Processing {base_name}")
+                
+                # Inject iteration_index, base_name, generation info, and reference images into task config
+                task_with_iteration = task.copy()
+                task_with_iteration['_iteration_index'] = iteration_idx
+                task_with_iteration['_base_name'] = base_name
+                task_with_iteration['_generation_index'] = gen_idx
+                task_with_iteration['_generations_per_source'] = generations_per_source
+                task_with_iteration['_reference_images'] = [str(img) for img in reference_images]
+                
+                # Process with retries
+                for attempt in range(max_retries):
+                    try:
+                        success = self.process(
+                            primary_image,
+                            task_with_iteration,
+                            output_folder,
+                            metadata_folder,
+                            attempt,
+                            max_retries
+                        )
+                        if success:
+                            successful += 1
+                            break
+                    except Exception as e:
+                        if attempt < max_retries - 1:
+                            self.logger.warning(f" ⚠️ Attempt {attempt+1} failed: {e}")
+                            time.sleep(5)
+                        else:
+                            self.logger.error(f" ❌ All {max_retries} attempts failed: {e}")
+                
+                # Rate limit — scale proportionally by number of images used
+                if call_index < total_api_calls:
+                    base_rate = self.api_defs.get('rate_limit', 3)
+                    num_images_used = len(selected_images) + len(reference_images)
+                    effective_max = max_images if max_images > 0 else 1
+                    scaled_wait = max(1, base_rate * num_images_used / effective_max)
+                    self.logger.info(f" ⏳ Rate limit: {scaled_wait:.0f}s ({num_images_used}/{effective_max} images)")
+                    time.sleep(scaled_wait)
         
         self.logger.info(
-            f"✓ Task {task_num}: {successful}/{num_iterations} successful ({skipped} skipped)"
+            f"✓ Task {task_num}: {successful}/{total_api_calls} successful ({skipped} skipped)"
         )
     
     def _get_iteration_status(self, base_name, metadata_folder):
@@ -984,12 +1133,6 @@ class NanoBananaHandler(BaseAPIHandler):
         Returns:
             tuple: API response tuple (response_id, error_msg, response_data).
         """
-        # Initialize tracking dict if needed
-        if not hasattr(self, '_current_additional_images'):
-            self._current_additional_images = {}
-        if not hasattr(self, '_current_all_images'):
-            self._current_all_images = {}
-        
         # Get model from task config or use default
         model = task_config.get('model', 'gemini-2.5-flash-image')
         
@@ -1030,6 +1173,14 @@ class NanoBananaHandler(BaseAPIHandler):
             # Use handle_file for each image to properly upload to Gradio API
             images_list = [handle_file(str(img)) for img in selected_images]
             
+            # Prepend reference images if enabled
+            ref_image_paths = task_config.get('_reference_images', [])
+            if ref_image_paths:
+                ref_handles = [handle_file(str(ref)) for ref in ref_image_paths]
+                images_list = ref_handles + images_list
+                self._current_all_images[str(file_path)] = ref_image_paths + [str(img) for img in selected_images]
+                self.logger.info(f" 📎 Prepended {len(ref_image_paths)} reference images")
+            
             # Log the number of images being sent
             self.logger.info(f" 📷 Sending {len(images_list)} images to API: {[img.name for img in selected_images]}")
             
@@ -1048,6 +1199,14 @@ class NanoBananaHandler(BaseAPIHandler):
             for img_path in additional_imgs:
                 if img_path:
                     images_list.append(handle_file(img_path))
+            
+            # Prepend reference images if enabled
+            ref_image_paths = task_config.get('_reference_images', [])
+            if ref_image_paths:
+                ref_handles = [handle_file(str(ref)) for ref in ref_image_paths]
+                images_list = ref_handles + images_list
+                self._current_all_images[str(file_path)] = ref_image_paths + [str(file_path)] + additional_imgs
+                self.logger.info(f" 📎 Prepended {len(ref_image_paths)} reference images")
             
             # Get aspect ratio from config or auto-detect from source image
             aspect_ratio = str(self._get_aspect_ratio(file_path, task_config))
@@ -1096,6 +1255,10 @@ class NanoBananaHandler(BaseAPIHandler):
         # Get images info for metadata
         additional_imgs = getattr(self, '_current_additional_images', {}).get(str(file_path), [])
         additional_imgs_info = [Path(img).name for img in additional_imgs if img]
+        
+        # Get reference images info for metadata
+        ref_image_paths = task_config.get('_reference_images', [])
+        ref_imgs_info = [Path(img).name for img in ref_image_paths if img]
         
         # Get all images used (for random source selection mode)
         all_imgs = getattr(self, '_current_all_images', {}).get(str(file_path), [])
@@ -1191,6 +1354,14 @@ class NanoBananaHandler(BaseAPIHandler):
                 metadata['random_source_selection'] = True
             elif additional_imgs_info:
                 metadata['additional_images_used'] = additional_imgs_info
+            # Save generation index info for generations_per_source
+            gen_idx_fail = task_config.get('_generation_index')
+            gens_per_source_fail = task_config.get('_generations_per_source', 1)
+            if gen_idx_fail is not None and gens_per_source_fail > 1:
+                metadata['generation_index'] = gen_idx_fail
+                metadata['generations_per_source'] = gens_per_source_fail
+            if task_config.get('_base_name'):
+                metadata['_base_name'] = task_config['_base_name']
             self.processor.save_nano_metadata(Path(metadata_folder), base_name, file_name, 
                                              metadata, task_config)
             return False
@@ -1245,6 +1416,14 @@ class NanoBananaHandler(BaseAPIHandler):
                 metadata['random_source_selection'] = True
             elif additional_imgs_info:
                 metadata['additional_images_used'] = additional_imgs_info
+            # Save generation index info for generations_per_source
+            gen_idx_fail2 = task_config.get('_generation_index')
+            gens_per_source_fail2 = task_config.get('_generations_per_source', 1)
+            if gen_idx_fail2 is not None and gens_per_source_fail2 > 1:
+                metadata['generation_index'] = gen_idx_fail2
+                metadata['generations_per_source'] = gens_per_source_fail2
+            if task_config.get('_base_name'):
+                metadata['_base_name'] = task_config['_base_name']
             self.processor.save_nano_metadata(Path(metadata_folder), base_name, file_name,
                                              metadata, task_config)
             return False
@@ -1270,6 +1449,17 @@ class NanoBananaHandler(BaseAPIHandler):
                 self.MODEL_MAX_IMAGES.get(task_config.get('model', 'gemini-2.5-flash-image'), self.DEFAULT_MAX_IMAGES))
         elif additional_imgs_info:
             metadata['additional_images_used'] = additional_imgs_info
+        if ref_imgs_info:
+            metadata['reference_images_used'] = ref_imgs_info
+        
+        # Save generation index info for generations_per_source
+        gen_idx = task_config.get('_generation_index')
+        gens_per_source = task_config.get('_generations_per_source', 1)
+        if gen_idx is not None and gens_per_source > 1:
+            metadata['generation_index'] = gen_idx
+            metadata['generations_per_source'] = gens_per_source
+        if task_config.get('_base_name'):
+            metadata['_base_name'] = task_config['_base_name']
         
         self.processor.save_nano_metadata(Path(metadata_folder), base_name, file_name, 
                                          metadata, task_config)

@@ -9,7 +9,26 @@ from .base_handler import BaseAPIHandler
 
 class KlingEffectsHandler(BaseAPIHandler):
     """Kling Video Effects handler for applying premade video effects to images."""
-    
+
+    def validate_structure(self, tasks, config):
+        """Validate Kling Effects with base_folder/effect subfolders.
+
+        Uses custom_effect (priority) or effect name from tasks.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid enhanced task dictionaries with folder paths.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        return self._validate_base_folder_effects_structure(
+            tasks, config, effect_key='effect', custom_effect_key='custom_effect'
+        )
+
     def _make_api_call(self, file_path, task_config, attempt):
         """Make Kling Video Effects API call.
         

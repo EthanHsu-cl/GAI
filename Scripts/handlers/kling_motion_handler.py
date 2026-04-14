@@ -20,6 +20,21 @@ class KlingMotionHandler(BaseAPIHandler):
     (e.g., 3 images x 4 videos = 12 generations).
     """
 
+    def validate_structure(self, tasks, config):
+        """Validate Kling Motion with Source Image + Source Video cross-match.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        return self._validate_image_video_cross_match_structure(tasks)
+
     def process_task(self, task, task_num, total_tasks):
         """Override: Handle image-video cross-matching."""
         folder = Path(task['folder'])

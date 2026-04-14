@@ -18,7 +18,99 @@ class KlingEndframeHandler(BaseAPIHandler):
         """Initialize handler with sequential pairing support."""
         super().__init__(processor)
         self._source_file_indices = {}  # Track source file index for sequential pairing
-    
+
+    def validate_structure(self, tasks, config):
+        """Validate Kling Endframe structure with image pairs.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        from .base_handler import ValidationError
+
+        valid_tasks = []
+        invalid_images = []
+
+        for i, task in enumerate(tasks, 1):
+            folder = Path(task['folder'])
+            folder.mkdir(parents=True, exist_ok=True)
+            source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
+
+            image_files = self.processor._get_files_by_type(source_folder, 'image')
+            if not image_files:
+                self.logger.warning(f"⚠️ Task {i}: No images found in {source_folder}")
+                continue
+
+            pairs = self._group_endframe_pairs(image_files)
+            if not pairs:
+                self.logger.warning(f"⚠️ Task {i}: No valid image pairs found")
+                continue
+
+            valid_pairs = 0
+            for start_img, end_img in pairs:
+                start_valid, start_msg = self.validate_file(start_img, 'image')
+                end_valid, end_msg = self.validate_file(end_img, 'image')
+                if not start_valid:
+                    invalid_images.append(f"{start_img}: {start_msg}")
+                if not end_valid:
+                    invalid_images.append(f"{end_img}: {end_msg}")
+                if start_valid and end_valid:
+                    valid_pairs += 1
+
+            if valid_pairs > 0:
+                (folder / "Generated_Video").mkdir(parents=True, exist_ok=True)
+                (folder / "Metadata").mkdir(parents=True, exist_ok=True)
+                valid_tasks.append(task)
+                self.logger.info(f"✓ Task {i}: {valid_pairs}/{len(pairs)} valid image pairs")
+
+        if invalid_images:
+            self.processor.write_invalid_report(invalid_images, "kling_endframe")
+            raise ValidationError(f"{len(invalid_images)} invalid images found")
+        return valid_tasks
+
+    @staticmethod
+    def _group_endframe_pairs(all_images):
+        """Group images into start/end pairs for Kling Endframe.
+
+        Expects naming: "name_A resolution.ext" and "name_B resolution.ext"
+
+        Args:
+            all_images: List of Path objects for all images in folder.
+
+        Returns:
+            list: Sorted list of (start_image, end_image) tuples.
+        """
+        image_dict = {}
+        for img_path in all_images:
+            name = img_path.stem
+            parts = name.rsplit('_', 1)
+            if len(parts) != 2:
+                continue
+            name_parts = name.split()
+            if len(name_parts) >= 2:
+                resolution = name_parts[-1]
+                base_name = ' '.join(name_parts[:-1])
+            else:
+                continue
+            base_key = base_name.rsplit('_', 1)[0] + '_' + resolution
+            frame_marker = parts[1].split()[0] if parts[1] else None
+            if base_key not in image_dict:
+                image_dict[base_key] = {}
+            if frame_marker in ['A', 'B']:
+                image_dict[base_key][frame_marker] = img_path
+        pairs = []
+        for base_key, frames in image_dict.items():
+            if 'A' in frames and 'B' in frames:
+                pairs.append((frames['A'], frames['B']))
+        return sorted(pairs, key=lambda x: x[0].name)
+
     def process_task(self, task, task_num, total_tasks):
         """
         Override: Process image pairs instead of individual files.

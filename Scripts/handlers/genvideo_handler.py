@@ -9,7 +9,22 @@ from .base_handler import BaseAPIHandler
 
 class GenvideoHandler(BaseAPIHandler):
     """GenVideo image-to-image handler."""
-    
+
+    def validate_structure(self, tasks, config):
+        """GenVideo uses Generated_Image instead of Generated_Video.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        return self._validate_source_images_structure(tasks, output_dir_name='Generated_Image')
+
     def _make_api_call(self, file_path, task_config, attempt):
         """Make GenVideo API call."""
         model = task_config.get('model', self.api_defs['api_params']['model'])

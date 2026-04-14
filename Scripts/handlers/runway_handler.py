@@ -3,12 +3,119 @@ from pathlib import Path
 from gradio_client import handle_file
 import time
 from datetime import datetime
-from .base_handler import BaseAPIHandler
+from PIL import Image
+from .base_handler import BaseAPIHandler, ValidationError
 
 
 class RunwayHandler(BaseAPIHandler):
     """Runway video processing handler."""
-    
+
+    def validate_file(self, file_path, file_type='image'):
+        """Runway-specific reference image validation.
+
+        Args:
+            file_path: Path to the file to validate.
+            file_type: 'image' or 'video'.
+
+        Returns:
+            tuple: (is_valid, reason_string)
+        """
+        if file_type == 'video':
+            return super().validate_file(file_path, file_type)
+        try:
+            validation_rules = self.api_defs.get('validation', {})
+            file_path_obj = file_path if isinstance(file_path, Path) else Path(file_path)
+            file_size_mb = file_path_obj.stat().st_size / (1024 * 1024)
+            min_dimensions = validation_rules.get('min_dimension', 300)
+
+            with Image.open(file_path) as img:
+                w, h = img.size
+                if file_size_mb >= validation_rules.get('max_size_mb', 32):
+                    return False, "Reference image > 32MB"
+                if w < min_dimensions or h < min_dimensions:
+                    return False, f"Reference image {w}x{h} too small"
+                return True, f"Reference: {w}x{h}"
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+
+    def validate_structure(self, tasks, config):
+        """Validate Runway with video source and optional reference images.
+
+        Args:
+            tasks: List of task configuration dictionaries.
+            config: Full processor configuration dictionary.
+
+        Returns:
+            list: Valid task dictionaries.
+
+        Raises:
+            ValidationError: If invalid files are found.
+        """
+        valid_tasks = []
+        invalid_videos = []
+
+        for i, task in enumerate(tasks, 1):
+            folder = Path(task['folder'])
+            folder.mkdir(parents=True, exist_ok=True)
+            source_folder = folder / "Source"
+            source_folder.mkdir(exist_ok=True)
+
+            use_comparison_template = task.get('use_comparison_template', False)
+            reference_folder_path = task.get('reference_folder', '').strip()
+            requires_reference = use_comparison_template or bool(reference_folder_path)
+
+            reference_images = []
+            if requires_reference:
+                if reference_folder_path:
+                    ref_folder = Path(reference_folder_path)
+                else:
+                    ref_folder = folder / "Reference"
+                if not ref_folder.exists():
+                    self.logger.warning(f"Missing reference folder {ref_folder}")
+                    continue
+                reference_images = self.processor._get_files_by_type(ref_folder, 'reference_image')
+                if not reference_images:
+                    self.logger.warning(f"Empty reference folder {ref_folder}")
+                    continue
+
+            video_files = self.processor._get_files_by_type(source_folder, 'video')
+            if not video_files:
+                self.logger.warning(f"Empty source folder {source_folder}")
+                continue
+
+            valid_count = 0
+            for video_file in video_files:
+                is_valid, reason = self.validate_file(video_file, 'video')
+                if not is_valid:
+                    invalid_videos.append({
+                        'path': str(video_file), 'folder': str(folder),
+                        'name': video_file.name, 'reason': reason
+                    })
+                else:
+                    valid_count += 1
+
+            if valid_count == 0:
+                continue
+
+            (folder / "Generated_Video").mkdir(exist_ok=True)
+            (folder / "Metadata").mkdir(exist_ok=True)
+
+            task['requires_reference'] = requires_reference
+            if requires_reference:
+                task['reference_images'] = reference_images
+
+            valid_tasks.append(task)
+            self.logger.info(
+                f"Task {i}: {valid_count}/{len(video_files)} valid videos"
+                + (f", {len(reference_images)} reference images" if requires_reference
+                   else " (text-to-video mode)")
+            )
+
+        if invalid_videos:
+            self.processor.write_invalid_report(invalid_videos, 'runway')
+            raise ValidationError(f"{len(invalid_videos)} invalid videos found")
+        return valid_tasks
+
     def process_task(self, task, task_num, total_tasks):
         """Override: Handle video-reference pairing strategies."""
         folder = Path(task['folder'])
