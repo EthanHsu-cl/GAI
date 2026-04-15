@@ -614,17 +614,90 @@
             "negative_prompt"
         ],
         "api_params": {
-            "model": "v4.5",
+            "model": "v6",
             "duration": "5s",
+            "v6_duration": 5,
             "motion_mode": "normal",
-            "quality": "720p",
+            "quality": "540p",
             "style": "none",
             "effect": "none",
             "custom_effect_id": "",
             "negative_prompt": "",
-            "prompt": ""
+            "prompt": "",
+            "seed": -1
         },
         "parallel_validation": true
+    },
+    "pixverse_ttv": {
+        "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
+        "api_name": "/submit_4",
+        "file_types": [],
+        "validation": {},
+        "folders": {
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 3,
+        "task_delay": 10,
+        "max_retries": 3,
+        "special_handling": "text_to_video",
+        "config_structure": "task_list",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": false
+        },
+        "task_fields": [
+            "prompt",
+            "negative_prompt",
+            "style",
+            "effect",
+            "custom_effect_id"
+        ],
+        "api_params": {
+            "model": "v6",
+            "aspect_ratio": "16:9",
+            "duration": "5s",
+            "v6_duration": 5,
+            "motion_mode": "normal",
+            "quality": "540p",
+            "style": "none",
+            "effect": "none",
+            "custom_effect_id": "",
+            "negative_prompt": "",
+            "prompt": "",
+            "seed": -1
+        },
+        "model_options": [
+            "v4.5",
+            "v5",
+            "v5.5",
+            "v5.6",
+            "v6",
+            "c1"
+        ],
+        "aspect_ratio_options": [
+            "16:9",
+            "4:3",
+            "1:1",
+            "3:4",
+            "9:16",
+            "2:3",
+            "3:2",
+            "21:9"
+        ],
+        "duration_options": [
+            "5s",
+            "8s",
+            "10s"
+        ],
+        "quality_options": [
+            "360p",
+            "540p",
+            "720p",
+            "1080p"
+        ]
     },
     "wan": {
         "endpoint": "http://210.244.31.18:7007/",

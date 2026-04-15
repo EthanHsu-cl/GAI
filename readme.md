@@ -111,7 +111,8 @@ When you select a platform, the Advanced Options section shows API-specific fiel
 | **Kling Motion** | Model, Character Orientation, Mode, Keep Original Sound, Element IDs |
 | **Nano Banana** | Model, Resolution, Aspect Ratio, Random Source Selection, Deterministic Random, Seed, Min/Max Images, Iterations, Generations per Source, Reference Images |
 | **Veo / Veo ITV** | Model, Duration, Aspect Ratio, Resolution, Person Generation, Enhance Prompt, Generate Audio |
-| **Pixverse** | Model, Duration, Quality, Motion Mode, Style, Generate Audio, Multi Clip, Thinking Type |
+| **Pixverse** | Model, Duration, V6 Duration, Quality, Motion Mode, Style, Seed, Generate Audio, Multi Clip, Thinking Type |
+| **Pixverse TTV** | Model, Aspect Ratio, Duration, V6 Duration, Quality, Motion Mode, Style, Seed, Generate Audio, Multi Clip, Thinking Type |
 | **Runway** | Model, Aspect Ratio, Pairing Strategy, Public Figure Moderation |
 | **Wan** | Animation Mode, Num Outputs, Seed, Embed |
 | **DreamActor** | Use Base64, Cut Switch, Video URL |
@@ -137,7 +138,8 @@ These options override the corresponding values in the config file for the curre
 | `kling_endframe` | Kling Endframe | Start/end frame video generation (A→B transitions) |
 | `kling_ttv` | Kling TTV | Text-to-video generation (no input images) |
 | `klingmotion` | Kling Motion | Image + video motion control via cross-matching |
-| `pixverse` | Pixverse v5.5 | Effect-based video generation with custom effects |
+| `pixverse` | Pixverse v6 | Effect-based video generation with custom effects |
+| `pixversettv` | Pixverse TTV | Text-to-video generation (no input images) |
 | `genvideo` | GenVideo | Image-to-image transformation (Gashapon style) |
 | `nano` | Nano Banana/Google Flash | Multi-image generation with AI models |
 | `vidu` | Vidu Effects | Effect-based video generation with categories |
@@ -161,6 +163,7 @@ GAI/                                    # Project root
     │   ├── batch_kling_ttv_config.yaml    # Kling TTV configuration
     │   ├── batch_kling_motion_config.yaml  # Kling Motion configuration
     │   ├── batch_pixverse_config.yaml     # Pixverse configuration
+    │   ├── batch_pixverse_ttv_config.yaml  # Pixverse TTV configuration
     │   ├── batch_genvideo_config.yaml     # GenVideo configuration
     │   ├── batch_nano_banana_config.yaml  # Nano Banana configuration
     │   ├── batch_runway_config.yaml       # Runway configuration
@@ -492,12 +495,14 @@ base_folder: Media Files/Pixverse
 testbed: http://192.168.31.161/external-testbed/video_effect/
 
 default_settings:
-  model: v5.5
+  model: v6
   duration: 5s
+  v6_duration: 5
   motion_mode: normal
-  quality: 720p
+  quality: 540p
   style: none
-  generate_audio: true
+  seed: -1
+  generate_audio: false
   generate_multi_clip: false
   thinking_type: auto
 
@@ -507,7 +512,39 @@ tasks:
     custom_effect_id: ""
 ```
 
-**Defaults:** Model v5.5, Duration 5s, Quality 720p, Motion Mode normal, Generate Audio true
+**Defaults:** Model v6, Duration 5s, Quality 540p, Motion Mode normal, Seed -1
+
+### **Pixverse TTV Configuration** (`config/batch_pixverse_ttv_config.yaml`)
+
+```yaml
+output_folder: Media Files/Pixverse TTV
+testbed: http://192.168.31.161/external-testbed/video_effect/
+generation_count: 1
+
+default_settings:
+  model: v6
+  aspect_ratio: "16:9"
+  duration: 5s
+  v6_duration: 5
+  motion_mode: normal
+  quality: 540p
+  style: none
+  seed: -1
+  generate_audio: false
+  generate_multi_clip: false
+  thinking_type: auto
+
+tasks:
+  - style_name: "Sample Prompt"
+    prompt: "A golden retriever running on a sunny beach"
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+    generation_count: 1
+```
+
+**Defaults:** Model v6, Aspect Ratio 16:9, Duration 5s, Quality 540p, Seed -1
 
 ### **GenVideo Configuration** (`config/batch_genvideo_config.yaml`)
 
@@ -711,7 +748,8 @@ The app bundle will be created at `Scripts/dist/AI Video Suite.app` (macOS) or `
 | Kling Endframe | I2V | A→B transitions, pairing modes |
 | Kling TTV | T2V | Text-to-video, sound generation, multiple models |
 | Kling Motion | I+V | Image + video motion control, cross-matching |
-| Pixverse | I2V | v5.5 model, custom effect IDs, multi-clip |
+| Pixverse | I2V | v6 model, custom effect IDs, multi-clip |
+| Pixverse TTV | T2V | Text-to-video, v6 model, effects, multi-clip |
 | GenVideo | I2I | Gashapon style, GPT/Gemini models |
 | Nano Banana | I2I | Multi-image (up to 14), random source selection, deterministic random |
 | Vidu Effects | I2V | Category organization, viduq2-pro |
@@ -732,6 +770,7 @@ The app bundle will be created at `Scripts/dist/AI Video Suite.app` (macOS) or `
 | Kling Effects | `{filename}_{effect}_effect.mp4` |
 | Kling Endframe | `{filename}_generated_{n}.mp4` |
 | Kling TTV/Veo | `{style}-{n}_generated.mp4` |
+| Pixverse TTV | `{style}-{n}_generated.mp4` |
 | Kling Motion | `{video}_{image}_motion.mp4` |
 | Veo ITV | `{source_image}_{n}.mp4` |
 | Pixverse/Vidu | `{filename}_{effect}_effect.mp4` |
@@ -752,7 +791,7 @@ The framework uses an auto-discovery handler system:
   - **Sleep prevention** – On macOS, uses native `caffeinate -di` subprocess tracked by PID. On other platforms, uses `wakepy` library. Cleanup is guaranteed via `finally`, `atexit`, and `SIGINT`/`SIGTERM` signal handlers so orphaned processes cannot block system sleep. Multiple concurrent script instances are safe.
 - **`UnifiedReportGenerator`** - PowerPoint generation with parallel metadata loading
 
-**15 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, KlingMotion, Pixverse, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, DreamActor, Veo, VeoItv
+**16 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, KlingMotion, Pixverse, PixverseTTV, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, DreamActor, Veo, VeoItv
 
 ---
 

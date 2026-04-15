@@ -26,6 +26,8 @@ API_MAPPING = {
     'runway': 'runway',
     'genvideo': 'genvideo',
     'pixverse': 'pixverse',
+    'pixverse_ttv': 'pixverse_ttv',
+    'pixversettv': 'pixverse_ttv',
     'wan': 'wan',
     'veo': 'veo',
     'veoitv': 'veo_itv',
@@ -45,6 +47,7 @@ CONFIG_MAPPING = {
     'runway': 'config/batch_runway_config.yaml',
     'genvideo': 'config/batch_genvideo_config.yaml',
     'pixverse': 'config/batch_pixverse_config.yaml',
+    'pixverse_ttv': 'config/batch_pixverse_ttv_config.yaml',
     'wan': 'config/batch_wan_config.yaml',
     'veo': 'config/batch_veo_config.yaml',
     'veo_itv': 'config/batch_veo_itv_config.yaml',
@@ -460,6 +463,7 @@ def show_usage():
     print("  runway - Runway face swap processing")
     print("  genvideo - GenVideo image generation processing")
     print("  pixverse - Pixverse Effects processing")
+    print("  pixverse_ttv - Pixverse Text-to-Video processing")
     print("  wan - Wan 2.2 image-video animation processing")
     print("  veo - Google Veo text-to-video processing")
     print("  veoitv - Google Veo image-to-video processing")
@@ -484,6 +488,7 @@ def show_usage():
     print("  python runall.py vidu auto")
     print("  python runall.py viduref auto --verbose")
     print("  python runall.py pixverse process")
+    print("  python runall.py pixverse_ttv auto")
     print("  python runall.py wan auto")
     print("  python runall.py veo auto")
     print("  python runall.py all auto --parallel")

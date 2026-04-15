@@ -1,0 +1,247 @@
+# Pixverse Text-to-Video Configuration
+# Generates videos from text prompts (no input images required)
+template_path: templates/I2V templates.pptx
+# Report Output Directory
+output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+# Root folder where generated videos will be saved. Metadata folder will be created automatically.
+testbed: http://192.168.31.161/external-testbed/video_effect/
+design_link: https://platform.pixverse.ai/
+source_video_link: ""
+generation_count: 1
+
+output_folder: Media Files/Pixverse TTV/0415 21 Styles
+
+default_settings:
+  model: v6
+  aspect_ratio: "16:9"
+  duration: 5s
+  v6_duration: 5
+  motion_mode: normal
+  quality: 1080p
+  style: none
+  seed: -1
+  generate_audio: true
+  generate_multi_clip: false
+  thinking_type: auto
+
+tasks:
+  - style_name: Dog_Run_To_Owner
+    prompt: |
+      A dog is happily running toward its owner with excitement
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Capybara_Onsen_Closeup
+    prompt: |
+      A close up capybara bathe in a white smoky hot spring, looking around, smoke on the water surface, foggy, blurred mountain background in Japan, bright environment
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Cherry_Soda_Condensation
+    prompt: |
+      A chilled glass bottle of cherry soda with condsation, surrounded by fresh, juicy cherries. The background is a blend of soft pink and red gradients, Splashes of soda fizz and bubbles are dynamically captured around the bottle
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "9:16"
+
+  - style_name: Coral_Reef_Camera_Move
+    prompt: |
+      A vivid and highly detailed coral reef teeming with life. Brightly colored corals in rich, saturated hues—reds, purples, oranges, and yellows—form a dynamic underwater landscape. Dozens of vibrant tropical fish swim in harmony across the scene, with smooth, coordinated motion. Sunlight beams through crystal-clear, blue-tinted ocean water, casting magical light rays across the reef. The camera gently glides forward with a cinematic feel, capturing the colorful reef from a low angle, evoking a surreal, painterly atmosphere.
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Fresh_Salad_Camera_Move
+    prompt: |
+      Fresh salad in a bowl, with vibrant greens and vegetables, camera movement
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Polar_Bear_Beer_Cheers
+    prompt: |
+      A friendly polar bear wearing a cozy red scarf, smiling warmly while holding a bottle of beer in one paw. The bear raises the bottle cheerfully. The scene is set in a snowy Arctic landscape with bright sunlight and an igloo in the background. The bear's fur is soft and detailed, and its posture is relaxed and inviting.
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Diamond_Ring_Rotation
+    prompt: |
+      Diamond ring placed on a velvet cloth, creating dazzling reflections, with the camera slowly rotating around it under a spotlight
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Pancakes_Syrup_Drizzle
+    prompt: |
+      A stack of fluffy Japanese pancakes topped with whipped cream and strawberries is being drizzled with golden syrup from a pitcher, set on a wooden plate
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Skincare_Floating_Platform
+    prompt: |
+      Skincare products displayed on a floating circular stone platform. The background features soft lighting, fluffy white clouds, large circular abstract shapes, and tropical leaves as accents. The entire scene reflects on a calm water surface with subtle ripples
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Tropical_Beach_Waves
+    prompt: |
+      Crystal clear turquoise sea waves gently washing over soft white sand on a sunny tropical beach, fine texture of sand, calm and serene atmosphere, Camera Movement
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Forest_River_Camera_Move
+    prompt: |
+      A photo of serene forest with crystal-clear river flowing through, surrounded by lush green trees and wildflowers, under a bright blue sky, an eco-friendly atmosphere, vibrant colors, clean and fresh environment, Camera Movement
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Steam_Cloud_Pan
+    prompt: |
+      The steam gently rising from cup like fluffy white clouds , natural motion, continuously flowing without interruption. The camera smoothly moves in a slow cinematic pan
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "9:16"
+
+  - style_name: Desert_Door_To_Oasis
+    prompt: |
+      A glowing door stands alone in the middle of a desert under a star-filled night sky. When the door opens from one side, it reveals a lush green oasis with palm trees, shimmering water, and bright sunlight, contrasting with the surrounding dark desert, Camera Movement
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "9:16"
+
+  - style_name: Grilled_Steak_Smoke
+    prompt: |
+      A juicy perfectly grilled steak on a wire grid, causing a smoky
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Whiskey_Condensation_Fire
+    prompt: |
+      A bottle of premium whiskey emanates from blazing fires, showcasing a condensation effect. The backlight accentuates the bottle's silhouette and transparent texture.
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "9:16"
+
+  - style_name: Futuristic_UFO_Landscape
+    prompt: |
+      A futuristic, possibly sci-fi scene set in a rocky, desert-like landscape with a massive flying saucer-like UFO hovering above the ground. An astronaut stands in the foreground, facing away from the viewer, dressed in a full spacesuit with a reflective helmet, walking toward the hovering spacecraft
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Tiny_Kitten_Yawning
+    prompt: |
+      A tiny kitten, snugly wrapped in a pastel blanket, blinks slowly and lets out a long, exaggerated yawn. The background is cozy and softly lit, with twinkling fairy lights and plush pillows creating a dreamy bedtime vibe.
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Astronaut_Sandstorm
+    prompt: |
+      Cinematic video of an astronaut strolling on a barren, dusty planet amidst a raging sandstorm. In the background, a massive planet looms in the sky, while a bright sun casts a dramatic glow over the scene, enhancing the otherworldly atmosphere.
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Sunrise_Over_Mountains
+    prompt: |
+      Breathtaking video of the sun rising from behind towering mountain peaks. The sky is clear and cloudless, allowing the golden dawn to cast a warm glow over the icy, snow-covered summits. As the sun emerges, its radiant halo shimmers and gently rotates, illuminating the rugged landscape with a stunning interplay of light and shadow.
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: Cozy_Winter_Cabin
+    prompt: |
+      A cozy cabin nestled among snow-laden trees in a tranquil winter landscape. Smoke gently rises from the chimney, and soft snowflakes fall from the sky. The scene exudes warmth and serenity, with the camera capturing the peaceful ambiance from a distance.
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+  - style_name: NYC_Loft_Sunlight
+    prompt: "The late afternoon sun peeking through the window of a New York City loft"
+    negative_prompt: ""
+    effect: none
+    custom_effect_id: ""
+    aspect_ratio: "16:9"
+
+comments:
+  output_folder: |
+    Root folder where generated videos will be saved.
+    Generated_Video and Metadata subfolders will be created automatically.
+  generation_count: |
+    Global generation count. Each task generates this many videos unless overridden.
+  default_settings: |
+    Global default settings applied to all tasks.
+  model: |
+    Pixverse model version.
+    Options: 'v4.5', 'v5', 'v5.5', 'v5.6', 'v6', 'c1'
+    Default: 'v6'
+  aspect_ratio: |
+    Video aspect ratio.
+    Options: '16:9', '4:3', '1:1', '3:4', '9:16', '2:3', '3:2', '21:9'
+    Note: '2:3', '3:2', '21:9' are v6/c1 only.
+    Default: '16:9'
+  duration: |
+    Video duration for v4.5-v5.6 models.
+    Options: '5s', '8s', '10s'
+    Default: '5s'
+  v6_duration: |
+    Video duration in seconds for v6/c1 models (1-15s).
+    Default: 5
+  motion_mode: |
+    Motion intensity for the video.
+    Options: 'normal', 'fast'
+    Default: 'normal'
+  quality: |
+    Output video quality/resolution.
+    Options: '360p', '540p', '720p', '1080p'
+    Default: '1080p'
+  style: |
+    Visual style preset.
+    Options: 'anime', '3d_animation', 'clay', 'comic', 'cyberpunk', 'none'
+    Default: 'none'
+  effect: |
+    Preset effect name from Pixverse effect list.
+    Default: 'none'
+  custom_effect_id: |
+    Custom effect ID for user-created or special effects.
+    Takes priority over the 'effect' field when specified.
+  prompt: |
+    Text prompt describing the video to generate.
+  negative_prompt: |
+    Elements to avoid in the generated video.
+  seed: |
+    Random seed for reproducibility. -1 for random.
+    Default: -1
+  thinking_type: |
+    Prompt reasoning mode.
+    Options: 'auto', 'enabled', 'disabled'
+    Default: 'auto'

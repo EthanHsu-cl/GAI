@@ -173,7 +173,8 @@ class UnifiedReportGenerator:
             'dreamactor': 'DreamActor',
             'kling_motion': 'Kling Motion',
             'veo': 'Veo',
-            'veo_itv': 'Veo ITV'
+            'veo_itv': 'Veo ITV',
+            'pixverse_ttv': 'Pixverse TTV'
         }
         
         # Load configurations
@@ -315,6 +316,16 @@ class UnifiedReportGenerator:
                 **self.LAYOUT_2_MEDIA,  # Use standard 2-media metadata position (top-right)
                 'title_format': 'Generation {index}: {style_name}',
                 'metadata_fields': ['style_name', 'generation_number', 'model', 'mode', 'duration', 'ratio', 'cfg', 'processing_time_seconds', 'success'],
+                'use_section_dividers': False,
+                'group_by': None
+            },
+            'pixverse_ttv': {
+                **base_config,
+                'media_types': ['prompt', 'generated'],  # Prompt text box + video
+                'positions': [(0.42, 2.15, 16, 16), (17.44, 2.15, 16, 16)],  # Prompt left, video right
+                **self.LAYOUT_2_MEDIA,  # Use standard 2-media metadata position (top-right)
+                'title_format': 'Generation {index}: {style_name}',
+                'metadata_fields': ['style_name', 'generation_number', 'model', 'aspect_ratio', 'duration', 'quality', 'processing_time_seconds', 'success'],
                 'use_section_dividers': False,
                 'group_by': None
             }
@@ -605,7 +616,7 @@ class UnifiedReportGenerator:
         
         path = path_map.get(media_type)
         # For text-to-video APIs (veo, kling_ttv), generated content is always video
-        is_video = (media_type in ['source_video', 'generated'] and self.api_name in ['veo', 'kling_ttv']) or \
+        is_video = (media_type in ['source_video', 'generated'] and self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv']) or \
                    (media_type == 'source_video') or \
                    (path and path.suffix.lower() in self.VIDEO_EXTS)
         
@@ -1137,7 +1148,7 @@ class UnifiedReportGenerator:
             return self.process_base_folder_structure(task)
         elif self.api_name == "genvideo":
             return self.process_genvideo_batch(task)
-        elif self.api_name in ["veo", "kling_ttv"]:
+        elif self.api_name in ["veo", "kling_ttv", "pixverse_ttv"]:
             return self.process_text_to_video_batch(task)
         else:
             return self.process_task_folder_structure(task)
@@ -2113,9 +2124,9 @@ class UnifiedReportGenerator:
         return pairs
     
     def process_text_to_video_batch(self, task: Dict) -> List[MediaPair]:
-        """Process text-to-video APIs (Veo, Kling TTV)"""
-        # Get root folder from config for kling_ttv, or task-level for veo
-        if self.api_name == 'kling_ttv':
+        """Process text-to-video APIs (Veo, Kling TTV, Pixverse TTV)"""
+        # Get root folder from config for kling_ttv/pixverse_ttv, or task-level for veo
+        if self.api_name in ['kling_ttv', 'pixverse_ttv']:
             root_folder = Path(self.config.get('output_folder', task.get('output_folder', '')))
             output_folder = root_folder / 'Generated_Video'
             metadata_folder = root_folder / 'Metadata'
@@ -2367,7 +2378,7 @@ class UnifiedReportGenerator:
         
         # Use model (API name) as the primary identifier
         # For APIs with many styles, show count instead of listing all names to avoid long filenames
-        if self.api_name in ['veo', 'kling_ttv', 'veo_itv', 'wan', 'dreamactor', 'kling_motion'] and effect_names:
+        if self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'veo_itv', 'wan', 'dreamactor', 'kling_motion'] and effect_names:
             effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
         else:
             # Effect names are the actual content description
@@ -2404,7 +2415,7 @@ class UnifiedReportGenerator:
             # Use effect names from the grouped task
             effect_list = grouped_task.get('_effect_names', [])
             # For APIs with many styles, show count instead of listing all names
-            if self.api_name in ['veo', 'kling_ttv', 'veo_itv'] and effect_list:
+            if self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'veo_itv'] and effect_list:
                 effect_str = f"{len(effect_list)} {'Style' if len(effect_list) == 1 else 'Styles'}"
             else:
                 effect_str = ', '.join(effect_list) if effect_list else 'Combined Effects'
@@ -2422,7 +2433,7 @@ class UnifiedReportGenerator:
             
             # Build effect string - combine all unique effects
             # For APIs with many styles, show count instead of listing all names
-            if self.api_name in ['veo', 'kling_ttv', 'veo_itv', 'wan', 'dreamactor', 'kling_motion'] and effect_names:
+            if self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'veo_itv', 'wan', 'dreamactor', 'kling_motion'] and effect_names:
                 effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
             else:
                 effect_str = ', '.join(effect_names) if effect_names else 'Combined'
@@ -3088,7 +3099,7 @@ class UnifiedReportGenerator:
                     else:
                         logger.warning("No pairs found for report.")
                         return False
-            elif self.api_name in ["veo", "kling_ttv"]:
+            elif self.api_name in ["veo", "kling_ttv", "pixverse_ttv"]:
                 # Text-to-video APIs - process once since all tasks share same root folder
                 if not tasks:
                     logger.warning("No tasks found in config.")
@@ -3283,7 +3294,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'dreamactor', 'veo', 'veo_itv']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'pixverse_ttv', 'wan', 'dreamactor', 'veo', 'veo_itv']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -3292,7 +3303,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'wan', 'dreamactor', 'veo', 'veo_itv'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'pixverse', 'pixverse_ttv', 'wan', 'dreamactor', 'veo', 'veo_itv'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

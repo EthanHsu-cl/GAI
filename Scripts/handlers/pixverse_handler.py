@@ -34,10 +34,11 @@ class PixverseHandler(BaseAPIHandler):
         default_settings = self.config.get("default_settings", {})
         
         return self.client.predict(
-            model=default_settings.get("model", "v5.5"),
+            model=default_settings.get("model", "v6"),
             duration=default_settings.get("duration", "5s"),
+            v6_duration=default_settings.get("v6_duration", 5),
             motion_mode=default_settings.get("motion_mode", "normal"),
-            quality=default_settings.get("quality", "720p"),
+            quality=default_settings.get("quality", "540p"),
             style=default_settings.get("style", "none"),
             effect=task_config.get("effect", "none") if not task_config.get("custom_effect_id") else "none",
             custom_effect_id=task_config.get("custom_effect_id", ""),
@@ -46,6 +47,7 @@ class PixverseHandler(BaseAPIHandler):
             use_url=False,
             image=handle_file(str(file_path)),
             image_url="",
+            seed=default_settings.get("seed", -1),
             generate_audio_switch=default_settings.get("generate_audio", False),
             generate_multi_clip_switch=default_settings.get("generate_multi_clip", False),
             thinking_type=default_settings.get("thinking_type", "auto"),
@@ -100,7 +102,7 @@ class PixverseHandler(BaseAPIHandler):
             default_settings = self.config.get("default_settings", {})
             metadata = {
                 'effect_name': effect,
-                'model': default_settings.get("model", "v5.5"),
+                'model': default_settings.get("model", "v6"),
                 'video_id': video_id,
                 'error': error_message or 'Video download/save failed',
                 'processing_time_seconds': round(processing_time, 1),
@@ -120,7 +122,7 @@ class PixverseHandler(BaseAPIHandler):
         
         metadata = {
             'effect_name': effect,
-            'model': default_settings.get("model", "v5.5"),
+            'model': default_settings.get("model", "v6"),
             'video_id': video_id,
             'generated_video': output_video_name,
             'processing_time_seconds': round(processing_time, 1),

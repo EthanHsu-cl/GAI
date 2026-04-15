@@ -7,11 +7,13 @@ output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 0
 default_settings:
-  model: v5.5
+  model: v6
   duration: 5s
+  v6_duration: 5
   motion_mode: normal
-  quality: 720p
+  quality: 540p
   style: none
+  seed: -1
   generate_audio: false
   generate_multi_clip: false
   thinking_type: auto
