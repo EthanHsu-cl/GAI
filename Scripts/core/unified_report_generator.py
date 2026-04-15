@@ -294,8 +294,8 @@ class UnifiedReportGenerator:
             },
             'veo': {
                 **base_config,
-                'media_types': ['generated'],
-                'positions': [(17.44, 2.15, 16, 16)],  # Single centered video
+                'media_types': ['prompt', 'generated'],  # Prompt text box + video
+                'positions': [(0.42, 2.15, 16, 16), (17.44, 2.15, 16, 16)],  # Prompt left, video right
                 **self.LAYOUT_2_MEDIA,  # Use standard 2-media metadata position (top-right)
                 'title_format': 'Generation {index}: {style_name}',
                 'metadata_fields': ['style_name', 'generation_number', 'model_id', 'duration_seconds', 'aspect_ratio', 'resolution', 'processing_time_seconds', 'success'],

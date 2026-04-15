@@ -102,8 +102,14 @@ class VeoHandler(BaseAPIHandler):
             else:
                 self.logger.warning(f" ⚠️ Video file not found: {local_path}")
         
+        # Extract output URL from video_dict if available
+        output_url = ''
+        if video_dict and isinstance(video_dict, dict):
+            output_url = video_dict.get('url', video_dict.get('video', ''))
+        
         # Save metadata
         metadata = {
+            'output_url': output_url,
             'status_message': status_message,
             'generated_video': output_path.name if video_saved else None,
             'attempts': attempt + 1,

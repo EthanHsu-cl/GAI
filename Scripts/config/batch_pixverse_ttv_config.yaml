@@ -6,7 +6,7 @@ output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 # Root folder where generated videos will be saved. Metadata folder will be created automatically.
 testbed: http://192.168.31.161/external-testbed/video_effect/
 design_link: https://platform.pixverse.ai/
-source_video_link: ""
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBmMyZru7SnSpdUJR89Jt5DAflngVr7uER_RsPIZ9iJMGU?e=FD4SQi
 generation_count: 1
 
 output_folder: Media Files/Pixverse TTV/0415 21 Styles
