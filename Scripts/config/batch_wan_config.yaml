@@ -13,8 +13,8 @@ output:
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
-root_design_link: https://docs.google.com/presentation/d/1I5bm8n2DqduPlI7btPdDObI3oc45GYa2sGmNmqEwUsk/edit?slide=id.g3ddfd358aa5_0_46#slide=id.g3ddfd358aa5_0_46
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAs3hnJmGXLSqOmKtnAMed4AZvQR4ONnGvy16hQHgxFxy4?e=V1fluU
+root_design_link: https://docs.google.com/presentation/d/1I5bm8n2DqduPlI7btPdDObI3oc45GYa2sGmNmqEwUsk/edit?slide=id.g3d5f30e022c_0_24#slide=id.g3d5f30e022c_0_24
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBXcDOnHWZ5R5JYhoZ9zjOOAZXLT1Npph4uUG40NHvifcw?e=YfKLTX
 
 tasks:
 - folder: Media Files/Wan 2.2/0414 6 Styles
