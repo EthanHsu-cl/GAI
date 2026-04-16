@@ -546,6 +546,62 @@ tasks:
 
 **Defaults:** Model v6, Aspect Ratio 16:9, Duration 5s, Quality 540p, Seed -1
 
+### **Seedance TTV Configuration** (`config/batch_seedance_ttv_config.yaml`)
+
+```yaml
+output_folder: Media Files/Seedance TTV
+testbed: http://192.168.31.161/external-testbed/video_effect/
+generation_count: 1
+
+default_settings:
+  model: dreamina-seedance-2-0-260128
+  aspect_ratio: adaptive
+  duration: 5
+  resolution: 720p
+  seed: -1
+  service_tier: default
+  generate_audio: true
+  draft: false
+  cam_fix: false
+  expires: 172800
+
+tasks:
+  - style_name: "Sample Prompt"
+    prompt: "A golden retriever running on a sunny beach"
+    aspect_ratio: adaptive
+    generation_count: 1
+```
+
+**Defaults:** Model dreamina-seedance-2-0-260128, Aspect Ratio adaptive, Duration 5s, Resolution 720p, Seed -1, Audio enabled
+
+### **Seedance I2V Configuration** (`config/batch_seedance_i2v_config.yaml`)
+
+```yaml
+root_folder: Media Files/Seedance I2V
+testbed: http://192.168.31.161/external-testbed/video_effect/
+generation_count: 1
+
+default_settings:
+  model: dreamina-seedance-2-0-260128
+  aspect_ratio: adaptive
+  duration: 5
+  resolution: 720p
+  seed: -1
+  service_tier: default
+  generate_audio: true
+  draft: false
+  cam_fix: false
+  expires: 172800
+
+tasks:
+  - style_name: "Sample Style"
+    folder: Media Files/Seedance I2V/0416 21 Styles/Sample_Style
+    prompt: "A golden retriever running on a sunny beach"
+    aspect_ratio: adaptive
+```
+
+**Defaults:** Model dreamina-seedance-2-0-260128, Aspect Ratio adaptive, Duration 5s, Resolution 720p, Seed -1, Audio enabled. Each task folder must contain a `Source` subfolder with input images.
+
 ### **GenVideo Configuration** (`config/batch_genvideo_config.yaml`)
 
 ```yaml

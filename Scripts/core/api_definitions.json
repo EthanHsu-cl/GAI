@@ -1147,5 +1147,126 @@
             "std",
             "pro"
         ]
+    },
+    "seedance_ttv": {
+        "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
+        "api_name": "/route_process_gen",
+        "file_types": [],
+        "validation": {},
+        "folders": {
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 3,
+        "task_delay": 10,
+        "max_retries": 3,
+        "special_handling": "text_to_video",
+        "config_structure": "task_list",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": false
+        },
+        "task_fields": [
+            "prompt",
+            "aspect_ratio",
+            "cam_fix"
+        ],
+        "api_params": {
+            "model": "dreamina-seedance-2-0-260128",
+            "aspect_ratio": "adaptive",
+            "duration": 5,
+            "resolution": "720p",
+            "seed": -1,
+            "service_tier": "default",
+            "generate_audio": true,
+            "draft": false,
+            "cam_fix": false,
+            "expires": 172800
+        },
+        "model_options": [
+            "dreamina-seedance-2-0-260128",
+            "dreamina-seedance-2-0-fast-260128"
+        ],
+        "aspect_ratio_options": [
+            "16:9",
+            "9:16",
+            "4:3",
+            "1:1",
+            "3:4",
+            "21:9",
+            "adaptive"
+        ],
+        "resolution_options": [
+            "480p",
+            "720p"
+        ]
+    },
+    "seedance_i2v": {
+        "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
+        "api_name": "/route_process_gen",
+        "file_types": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".bmp",
+            ".webp"
+        ],
+        "validation": {
+            "max_size_mb": 30,
+            "min_dimension": 300
+        },
+        "folders": {
+            "input": "Source",
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 3,
+        "task_delay": 10,
+        "max_retries": 3,
+        "config_structure": "base_folder",
+        "structure_type": "base_folder",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": true
+        },
+        "task_fields": [
+            "prompt",
+            "aspect_ratio",
+            "cam_fix",
+            "generation_count"
+        ],
+        "api_params": {
+            "model": "dreamina-seedance-2-0-260128",
+            "aspect_ratio": "adaptive",
+            "duration": 5,
+            "resolution": "720p",
+            "seed": -1,
+            "service_tier": "default",
+            "generate_audio": true,
+            "draft": false,
+            "cam_fix": false,
+            "expires": 172800
+        },
+        "model_options": [
+            "dreamina-seedance-2-0-260128",
+            "dreamina-seedance-2-0-fast-260128"
+        ],
+        "aspect_ratio_options": [
+            "16:9",
+            "9:16",
+            "4:3",
+            "1:1",
+            "3:4",
+            "21:9",
+            "adaptive"
+        ],
+        "resolution_options": [
+            "480p",
+            "720p"
+        ]
     }
 }
