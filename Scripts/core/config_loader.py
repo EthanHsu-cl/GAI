@@ -497,6 +497,8 @@ def save_testbed_cookie(cookie: str) -> Path:
 
     Creates the file if it doesn't exist. If it already exists, updates
     or appends the TESTBED_COOKIE line while preserving other content.
+    Also removes any bare cookie lines (raw cookie value without the
+    TESTBED_COOKIE= prefix) that may have been written by earlier code.
 
     Args:
         cookie: The cookie string to save.
@@ -511,9 +513,13 @@ def save_testbed_cookie(cookie: str) -> Path:
     if env_path.exists():
         with open(env_path, 'r', encoding='utf-8') as f:
             for line in f:
-                if line.strip().startswith('TESTBED_COOKIE=') or line.strip() == 'TESTBED_COOKIE=':
+                stripped = line.strip()
+                if stripped.startswith('TESTBED_COOKIE=') or stripped == 'TESTBED_COOKIE=':
                     lines.append(f"TESTBED_COOKIE={cookie}\n")
                     found = True
+                elif stripped == cookie:
+                    # Remove bare cookie value lines (no TESTBED_COOKIE= prefix)
+                    pass
                 else:
                     lines.append(line)
 
@@ -528,20 +534,65 @@ def save_testbed_cookie(cookie: str) -> Path:
     return env_path
 
 
+SUPPORTED_BROWSERS = ['brave', 'chrome', 'edge', 'safari', 'firefox', 'chromium', 'arc', 'opera', 'vivaldi']
+
+
+def load_browser_preference() -> str:
+    """
+    Load the preferred browser name from the .env file.
+    Change the browser preference by setting TESTBED_BROWSER in the .env file or by changing the browser name in the following code to one of the supported browsers.
+
+    Returns:
+        Browser name string, or 'brave' if not set.
+    """
+    load_env_file()
+    return os.environ.get('TESTBED_BROWSER', 'brave')
+
+
+def save_browser_preference(browser: str) -> None:
+    """
+    Save the preferred browser name to the .env file.
+
+    Args:
+        browser: Browser name to save (e.g. 'brave', 'chrome').
+    """
+    env_path = get_env_file_path()
+    lines: list[str] = []
+    found = False
+
+    if env_path.exists():
+        with open(env_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                if line.strip().startswith('TESTBED_BROWSER='):
+                    lines.append(f"TESTBED_BROWSER={browser}\n")
+                    found = True
+                else:
+                    lines.append(line)
+
+    if not found:
+        lines.append(f"TESTBED_BROWSER={browser}\n")
+
+    with open(env_path, 'w', encoding='utf-8') as f:
+        f.writelines(lines)
+
+    os.environ['TESTBED_BROWSER'] = browser
+
+
 def fetch_cookie_from_browser(
     domain: str = '192.168.31.18',
     browser: str = 'brave',
 ) -> str:
     """
-    Fetch cookies for a given domain directly from the Brave browser profile.
+    Fetch cookies for a given domain directly from the specified browser profile.
 
     Uses browser-cookie3 to read and decrypt the browser's on-disk cookie store.
-    Brave must have visited the domain at least once and the session must still
-    be valid. On macOS, the system may prompt once for Keychain access.
+    The browser must have visited the domain at least once and the session must
+    still be valid. On macOS, the system may prompt once for Keychain access.
 
     Args:
         domain: Hostname (or IP) to match against stored cookies.
-        browser: Browser name supported by browser-cookie3 (default: 'brave').
+        browser: Browser name supported by browser-cookie3 (e.g. 'brave',
+            'chrome', 'edge', 'safari', 'firefox'). Defaults to 'brave'.
 
     Returns:
         Cookie header string (e.g. "name1=val1; name2=val2"), or empty string
@@ -569,45 +620,43 @@ def fetch_cookie_from_browser(
         return ''
 
 
-def get_testbed_cookie(auto_fetch: bool = True) -> str:
+def get_testbed_cookie(auto_fetch: bool = True, browser: Optional[str] = None) -> str:
     """
     Get the testbed cookie from the environment.
 
     Resolution order:
-    1. TESTBED_COOKIE environment variable (already set in process).
-    2. .env file (loaded if not already loaded).
-    3. Brave browser cookie store (auto-fetch, if auto_fetch=True and the
-       above sources return nothing).
+    1. Specified browser's cookie store (freshest session, triggers Keychain once).
+    2. TESTBED_COOKIE environment variable / .env file (fallback if browser
+       returns nothing or auto_fetch=False).
 
     When the cookie is obtained from the browser it is also persisted to
-    the .env file so subsequent runs skip the browser lookup.
+    the .env file so it can serve as a fallback when the browser is unavailable.
 
     Args:
-        auto_fetch: If True, fall back to reading cookies from Brave when
-            no cookie is found in the environment or .env file.
+        auto_fetch: If True, try reading cookies from the browser first before
+            falling back to the environment or .env file.
+        browser: Browser to read cookies from (e.g. 'brave', 'chrome', 'edge',
+            'safari', 'firefox'). If None, reads from TESTBED_BROWSER in .env
+            or defaults to 'brave'.
 
     Returns:
         The cookie string, or empty string if not found anywhere.
     """
+    if auto_fetch:
+        chosen_browser = browser or load_browser_preference()
+        # Try each known testbed host until we find cookies
+        testbed_hosts = ['192.168.31.161', '210.244.31.18']
+        for host in testbed_hosts:
+            cookie = fetch_cookie_from_browser(domain=host, browser=chosen_browser)
+            if cookie:
+                logger.info(f"Auto-fetched testbed cookie from {chosen_browser} (domain: {host})")
+                try:
+                    save_testbed_cookie(cookie)
+                    logger.info("Auto-fetched cookie saved to .env")
+                except OSError as e:
+                    logger.warning(f"Could not persist auto-fetched cookie: {e}")
+                return cookie
+
+    # Fall back to .env file / environment variable
     load_env_file()
-    cookie = os.environ.get('TESTBED_COOKIE', '')
-    if cookie:
-        return cookie
-
-    if not auto_fetch:
-        return ''
-
-    # Try each known testbed host until we find cookies
-    testbed_hosts = ['192.168.31.161', '210.244.31.18']
-    for host in testbed_hosts:
-        cookie = fetch_cookie_from_browser(domain=host)
-        if cookie:
-            logger.info(f"Auto-fetched testbed cookie from Brave (domain: {host})")
-            try:
-                save_testbed_cookie(cookie)
-                logger.info("Auto-fetched cookie saved to .env")
-            except OSError as e:
-                logger.warning(f"Could not persist auto-fetched cookie: {e}")
-            return cookie
-
-    return ''
+    return os.environ.get('TESTBED_COOKIE', '')

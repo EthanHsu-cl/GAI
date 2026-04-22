@@ -1,11 +1,6 @@
-base_folder: Media Files/Pixverse/0319 3 Styles
-template_path: templates/I2V templates.pptx
-testbed: http://192.168.31.161/external-testbed/video_effect/
-design_link: https://platform.pixverse.ai/effect-list
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAUeBZxpJErRJLbnBSaZHH4AY24W8N_CyW20xkLCb6AxuA?e=TigUU9
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 0
+  group_tasks_by: 2
 default_settings:
   model: v6
   duration: 5s
@@ -18,21 +13,37 @@ default_settings:
   generate_multi_clip: false
   thinking_type: auto
 
+base_folder: Media Files/Pixverse/0421 5 Styles
+template_path: templates/I2V templates.pptx
+testbed: http://192.168.31.161/external-testbed/video_effect/
+design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBZ6wv6cTpYSY7cuUEsa-ImASh3y3qLjh996r-y6FBW-g8?e=oCch1n
+
 tasks:
-- effect: Pocket-Sized Fury
-  prompt: ''
-  custom_effect_id: '391703825032576'
-  negative_prompt: ''
+  - effect: Pick Me Up
+    prompt: ''
+    custom_effect_id: '394199090789760'
+    negative_prompt: ''
 
-- effect: Palm Treasure
-  prompt: ''
-  custom_effect_id: '384835694407680'
-  negative_prompt: ''
+  - effect: Evil Trigger
+    prompt: ''
+    custom_effect_id: '303788802773760'
+    negative_prompt: ''
 
-- effect: Caught Mid-Lift
-  prompt: ''
-  custom_effect_id: '385185427574208'
-  negative_prompt: ''
+  - effect: Museum Portrait
+    prompt: ''
+    custom_effect_id: '368689273684736'
+    negative_prompt: ''
+
+  - effect: Spotlight
+    prompt: ''
+    custom_effect_id: '376671855417216'
+    negative_prompt: ''
+
+  - effect: Insta-Bangs Spray
+    prompt: ''
+    custom_effect_id: '358127926981120'
+    negative_prompt: ''
 
 
 comments:

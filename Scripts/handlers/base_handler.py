@@ -481,7 +481,7 @@ class BaseAPIHandler:
         def process_task(task):
             custom_effect = task.get(custom_effect_key, '')
             effect = task.get(effect_key, '')
-            folder_name = custom_effect if custom_effect else effect
+            folder_name = effect if effect else custom_effect
             if not folder_name:
                 self.logger.warning(f"⚠️ Task has no {effect_key} or {custom_effect_key} specified")
                 return None, []

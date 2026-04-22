@@ -9,16 +9,16 @@ duration: 5
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3
+  group_tasks_by: 2
 
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0409 3 Effects
+base_folder: Media Files/Kling Effects/0421 6 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147 
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCDrO3jBd9aQ6ExlwT1rB3BASYhBalFxBL9FiZcQpjb6WE?e=WDr4Mh
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgA_WErDPcZ7QY-GYyocViwLAUfk4MP7DHnw2CFU8E4m5ZM?e=v3UsjI
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -27,13 +27,22 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'pet_vlogger'
+    custom_effect: 'pet_wizard'
 
   - effect:
-    custom_effect: 'tangyuan_to_animal'
+    custom_effect: 'sassy_shake'
 
-  - effect: 
-    custom_effect: 'perler_beads'
+  - effect:
+    custom_effect: 'twist_shake'
+
+  - effect:
+    custom_effect: 'heart_gesture_dance'
+
+  - effect:
+    custom_effect: 'happy_birthday'
+
+  - effect:
+    custom_effect: 'birthday_star'
 
 
 comments:

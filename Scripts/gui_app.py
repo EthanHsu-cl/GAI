@@ -66,6 +66,7 @@ from core.runall import run_automation, API_MAPPING, CONFIG_MAPPING
 from core.config_loader import (
     ConfigLoader, get_default_config_path, get_testbed_cookie,
     save_testbed_cookie, get_env_file_path,
+    load_browser_preference, save_browser_preference, SUPPORTED_BROWSERS,
 )
 
 # Logger for this module
@@ -781,11 +782,28 @@ class AutomationGUI:
         frame = ttk.LabelFrame(parent, text="Testbed Cookie", padding="10")
         frame.pack(fill=tk.X, pady=5)
 
+        # Browser selector row
+        browser_row = ttk.Frame(frame)
+        browser_row.pack(fill=tk.X, pady=(0, 5))
+
+        ttk.Label(browser_row, text="Browser:").pack(side=tk.LEFT, padx=(0, 5))
+
+        self._browser_var = tk.StringVar(value=load_browser_preference())
+        ttk.Combobox(
+            browser_row, textvariable=self._browser_var,
+            values=SUPPORTED_BROWSERS, state='readonly', width=12
+        ).pack(side=tk.LEFT, padx=(0, 10))
+
+        ttk.Button(
+            browser_row, text="Fetch from Browser", width=18,
+            command=self._fetch_cookie_from_browser
+        ).pack(side=tk.LEFT)
+
         # Cookie entry row
         entry_row = ttk.Frame(frame)
         entry_row.pack(fill=tk.X, pady=(0, 5))
 
-        self._cookie_var = tk.StringVar(value=get_testbed_cookie())
+        self._cookie_var = tk.StringVar(value=get_testbed_cookie(auto_fetch=False))
         self._cookie_entry = ttk.Entry(
             entry_row, textvariable=self._cookie_var, show='\u2022'
         )
@@ -831,6 +849,28 @@ class AutomationGUI:
                 text=f"\u274c Save failed: {e}",
                 foreground='red'
             )
+
+    def _fetch_cookie_from_browser(self) -> None:
+        """Fetch the testbed cookie from the selected browser and populate the field."""
+        browser = self._browser_var.get()
+        save_browser_preference(browser)
+        self._cookie_status.config(
+            text=f"Fetching from {browser}...", foreground='#a0a0a0'
+        )
+        self.update_idletasks()
+        cookie = get_testbed_cookie(auto_fetch=True, browser=browser)
+        if cookie:
+            self._cookie_var.set(cookie)
+            self._cookie_status.config(
+                text=f"\u2713 Fetched from {browser} and saved to .env",
+                foreground='green'
+            )
+        else:
+            self._cookie_status.config(
+                text=f"\u274c No cookie found in {browser} for testbed domain",
+                foreground='red'
+            )
+
 
     def _update_cookie_status(self) -> None:
         """Show the current .env file location and status."""
