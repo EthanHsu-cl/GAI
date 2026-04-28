@@ -644,17 +644,28 @@ def get_testbed_cookie(auto_fetch: bool = True, browser: Optional[str] = None) -
     """
     if auto_fetch:
         chosen_browser = browser or load_browser_preference()
+        # Read the existing .env cookie once for staleness comparison
+        load_env_file()
+        existing_cookie = os.environ.get('TESTBED_COOKIE', '')
         # Try each known testbed host until we find cookies
         testbed_hosts = ['192.168.31.161', '210.244.31.18']
         for host in testbed_hosts:
             cookie = fetch_cookie_from_browser(domain=host, browser=chosen_browser)
             if cookie:
-                logger.info(f"Auto-fetched testbed cookie from {chosen_browser} (domain: {host})")
-                try:
-                    save_testbed_cookie(cookie)
-                    logger.info("Auto-fetched cookie saved to .env")
-                except OSError as e:
-                    logger.warning(f"Could not persist auto-fetched cookie: {e}")
+                if cookie == existing_cookie:
+                    logger.warning(
+                        f"Auto-fetched cookie from {chosen_browser} (domain: {host}) matches the "
+                        f"existing .env cookie — the browser may not have flushed a new session to "
+                        f"disk yet. If you just logged in, try closing {chosen_browser} completely "
+                        f"and re-running, or manually paste the new cookie into .env."
+                    )
+                else:
+                    logger.info(f"Auto-fetched testbed cookie from {chosen_browser} (domain: {host})")
+                    try:
+                        save_testbed_cookie(cookie)
+                        logger.info("Auto-fetched cookie saved to .env")
+                    except OSError as e:
+                        logger.warning(f"Could not persist auto-fetched cookie: {e}")
                 return cookie
 
     # Fall back to .env file / environment variable

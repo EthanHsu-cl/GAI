@@ -15,7 +15,7 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0421 6 Effects
+base_folder: Media Files/Kling Effects/0424 28 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147 
 source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgA_WErDPcZ7QY-GYyocViwLAUfk4MP7DHnw2CFU8E4m5ZM?e=v3UsjI
@@ -27,22 +27,88 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'pet_wizard'
+    custom_effect: 'tiny_beast_printer'
 
   - effect:
-    custom_effect: 'sassy_shake'
+    custom_effect: 'spring_bloom'
 
   - effect:
-    custom_effect: 'twist_shake'
+    custom_effect: 'pixelpixel'
 
   - effect:
-    custom_effect: 'heart_gesture_dance'
+    custom_effect: 'instant_film'
 
   - effect:
-    custom_effect: 'happy_birthday'
+    custom_effect: 'media_interview'
 
   - effect:
-    custom_effect: 'birthday_star'
+    custom_effect: 'bullet_time_360'
+
+  - effect:
+    custom_effect: 'knock_at_a_door_revenge'
+
+  - effect:
+    custom_effect: 'swag_dance'
+
+  - effect:
+    custom_effect: 'bloodline_dance'
+
+  - effect:
+    custom_effect: 'love_theme_song'
+
+  - effect:
+    custom_effect: 'funky_martian'
+
+  - effect:
+    custom_effect: 'lucky_veggie'
+
+  - effect:
+    custom_effect: 'bouncy_dance'
+
+  - effect:
+    custom_effect: 'hot_feet_dance'
+
+  - effect:
+    custom_effect: 'cute_dance'
+
+  - effect:
+    custom_effect: 'overdrive'
+
+  - effect:
+    custom_effect: 'ghost_step_dance'
+
+  - effect:
+    custom_effect: 'steampunk'
+
+  - effect:
+    custom_effect: 'flash_ride'
+
+  - effect:
+    custom_effect: 'maestro_of_magic'
+
+  - effect:
+    custom_effect: 'magic_carpet_ride'
+
+  - effect:
+    custom_effect: 'shooting_star'
+
+  - effect:
+    custom_effect: 'sovereign_scepter'
+
+  - effect:
+    custom_effect: 'return_of_the_king'
+
+  - effect:
+    custom_effect: 'tiger_hug_pro'
+
+  - effect:
+    custom_effect: 'pet_lion_pro'
+
+  - effect:
+    custom_effect: 'running_man'
+
+  - effect:
+    custom_effect: 'wig_out'
 
 
 comments:
