@@ -347,6 +347,7 @@
         "rate_limit": 3,
         "task_delay": 10,
         "max_retries": 3,
+        "max_retries_timeout": 5,
         "api_params": {
             "aspect_ratio": "as input image",
             "area": "auto",

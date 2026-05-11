@@ -2,5 +2,10 @@
     "python.defaultInterpreterPath": "/opt/homebrew/Caskroom/miniconda/base/envs/myenv/bin/python",
     "python.terminal.activateEnvironment": true,
     "python-envs.defaultEnvManager": "ms-python.python:conda",
-    "python-envs.defaultPackageManager": "ms-python.python:conda"
+    "python-envs.defaultPackageManager": "ms-python.python:conda",
+    "terminal.integrated.env.osx": {
+        "CONDA_DEFAULT_ENV": "myenv",
+        "CONDA_PREFIX": "/opt/homebrew/Caskroom/miniconda/base/envs/myenv",
+        "PATH": "/opt/homebrew/Caskroom/miniconda/base/envs/myenv/bin:/opt/homebrew/Caskroom/miniconda/base/condabin:${env:PATH}"
+    }
 }

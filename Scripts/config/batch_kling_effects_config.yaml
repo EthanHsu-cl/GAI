@@ -18,7 +18,7 @@ schedule:
 base_folder: Media Files/Kling Effects/0424 28 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147 
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgA_WErDPcZ7QY-GYyocViwLAUfk4MP7DHnw2CFU8E4m5ZM?e=v3UsjI
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAc-MbyLG7qTL_EbdNPhbCTAb9ypyLHTGJIKSl9_V5C5E0?e=WVlgj8
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -26,24 +26,6 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # - Use 'custom_effect' to specify a custom effect name (has priority over 'effect')
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
-  - effect:
-    custom_effect: 'tiny_beast_printer'
-
-  - effect:
-    custom_effect: 'spring_bloom'
-
-  - effect:
-    custom_effect: 'pixelpixel'
-
-  - effect:
-    custom_effect: 'instant_film'
-
-  - effect:
-    custom_effect: 'media_interview'
-
-  - effect:
-    custom_effect: 'bullet_time_360'
-
   - effect:
     custom_effect: 'knock_at_a_door_revenge'
 

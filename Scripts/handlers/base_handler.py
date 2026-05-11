@@ -42,6 +42,10 @@ class BaseAPIHandler:
     CONNECTION_RETRY_INITIAL_WAIT = 10   # Start with 10 seconds
     CONNECTION_RETRY_MAX_WAIT = 60       # Cap at 60 seconds between retries
     CONNECTION_RETRY_BACKOFF = 1.5       # Exponential backoff multiplier
+
+    # Timeout error patterns (server-side generation timeout, distinct from connection errors)
+    TIMEOUT_ERROR_PATTERNS = ['timed out', 'timeout']
+    TIMEOUT_RETRY_WAIT = 60              # Base wait (seconds) between timeout retries
     
     def __init__(self, processor):
         self.processor = processor
@@ -55,6 +59,26 @@ class BaseAPIHandler:
         """Check if an error is a connection-related error."""
         error_lower = error_str.lower()
         return any(p.lower() in error_lower for p in self.CONNECTION_ERROR_PATTERNS)
+
+    def _is_timeout_error(self, error_str):
+        """Check if an error is a server-side generation timeout."""
+        if not error_str:
+            return False
+        error_lower = error_str.lower()
+        return any(p in error_lower for p in self.TIMEOUT_ERROR_PATTERNS)
+
+    def _read_timeout_retries(self, base_name, metadata_folder):
+        """Read the persisted timeout retry count from a metadata file."""
+        import json
+        meta_file = Path(metadata_folder) / f"{base_name}_metadata.json"
+        if meta_file.exists():
+            try:
+                with open(meta_file, 'r') as f:
+                    meta = json.load(f)
+                return meta.get('timeout_retries', 0)
+            except (json.JSONDecodeError, IOError):
+                pass
+        return 0
     
     def _make_api_call_with_connection_retry(self, file_path, task_config, attempt):
         """Wrap API call with connection error retry logic.
@@ -126,24 +150,44 @@ class BaseAPIHandler:
         base_name = Path(file_path).stem
         file_name = Path(file_path).name
         start_time = time.time()
-        
+
         try:
             # Make API-specific call with connection retry wrapper
             result = self._make_api_call_with_connection_retry(file_path, task_config, attempt)
-            
+
             # Parse and save result (subclass can override)
-            success = self._handle_result(result, file_path, task_config, output_folder, 
+            success = self._handle_result(result, file_path, task_config, output_folder,
                                          metadata_folder, base_name, file_name, start_time, attempt)
-            
+
             if not success and attempt < max_retries - 1:
                 time.sleep(5)
                 return False
-            
+
             return success
-            
+
         except Exception as e:
-            self._save_failure(file_path, task_config, metadata_folder, str(e), 
-                             attempt, start_time)
+            error_str = str(e)
+            is_timeout = self._is_timeout_error(error_str)
+
+            if is_timeout:
+                timeout_count = self._read_timeout_retries(base_name, metadata_folder) + 1
+                self._save_failure(file_path, task_config, metadata_folder, error_str,
+                                   attempt, start_time, timeout_retries=timeout_count)
+                max_timeout_retries = self.api_defs.get('max_retries_timeout', 0)
+                if max_timeout_retries > 0 and timeout_count < max_timeout_retries:
+                    wait_secs = self.TIMEOUT_RETRY_WAIT * timeout_count
+                    self.logger.info(
+                        f" ⏳ Timeout retry {timeout_count}/{max_timeout_retries} "
+                        f"(waiting {wait_secs}s)"
+                    )
+                    time.sleep(wait_secs)
+                elif max_timeout_retries > 0:
+                    self.logger.info(
+                        f" ⏭️ Timeout retry limit reached ({timeout_count}/{max_timeout_retries})"
+                    )
+            else:
+                self._save_failure(file_path, task_config, metadata_folder, error_str,
+                                   attempt, start_time)
             raise e
     
     def _make_api_call(self, file_path, task_config, attempt):
@@ -155,7 +199,8 @@ class BaseAPIHandler:
         """Override this to handle API-specific result format."""
         raise NotImplementedError(f"{self.__class__.__name__} must implement _handle_result()")
     
-    def _save_failure(self, file_path, task_config, metadata_folder, error, attempt, start_time):
+    def _save_failure(self, file_path, task_config, metadata_folder, error, attempt, start_time,
+                      timeout_retries=None):
         """Save failure metadata - common for all APIs."""
         # Handle text-to-video cases where file_path might be None
         if file_path is not None:
@@ -180,11 +225,14 @@ class BaseAPIHandler:
             "processing_timestamp": datetime.now().isoformat(),
             "api_name": self.api_name
         }
-        
+
+        if timeout_retries is not None:
+            metadata["timeout_retries"] = timeout_retries
+
         # Add source file name if available
         if file_name is not None:
             metadata[self._get_source_field()] = file_name
-        
+
         # Add task-specific fields
         for key in ['prompt', 'effect', 'model']:
             if key in task_config:
@@ -226,6 +274,15 @@ class BaseAPIHandler:
                 max_retries = self.api_defs.get('max_retries', 3)
                 attempts = metadata.get('attempts', 0)
                 if not metadata.get('success', False) and attempts >= max_retries:
+                    error = str(metadata.get('error', ''))
+                    if self._is_timeout_error(error):
+                        max_timeout_retries = self.api_defs.get('max_retries_timeout', 0)
+                        if max_timeout_retries > 0:
+                            if metadata.get('timeout_retries', 0) >= max_timeout_retries:
+                                return True, 'failed_timeout_exhausted'
+                            return False, None
+                        # No separate timeout limit configured — always allow retry
+                        return False, None
                     return True, 'failed_exhausted'
                 
                 return False, None
@@ -284,6 +341,8 @@ class BaseAPIHandler:
                 if status == 'success':
                     self.logger.info(f" ⏭️ {i}/{len(files)}: {file_path.name} (already processed)")
                     successful += 1
+                elif status == 'failed_timeout_exhausted':
+                    self.logger.info(f" ⏭️ {i}/{len(files)}: {file_path.name} (failed - timeout retries exhausted)")
                 else:  # failed_exhausted
                     self.logger.info(f" ⏭️ {i}/{len(files)}: {file_path.name} (failed - max retries reached)")
                 skipped += 1
