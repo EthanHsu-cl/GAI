@@ -1,3 +1,15 @@
+import os
+# Suppress resource_tracker's "leaked semaphore" warning at shutdown.
+# A third-party dep (gradio_client / its transitive deps) registers a
+# multiprocessing semaphore that we skip cleaning up because we force-exit
+# via os._exit to escape gradio_client's lingering httpx threads. Must be
+# set before `multiprocessing` is imported so the spawned resource_tracker
+# subprocess inherits the filter.
+os.environ.setdefault(
+    "PYTHONWARNINGS",
+    "ignore:resource_tracker:UserWarning",
+)
+
 import sys
 import logging
 from pathlib import Path
@@ -765,11 +777,22 @@ def main():
 
 
 if __name__ == "__main__":
+    import os as _os
+
+    exit_code = 1
     try:
-        sys.exit(0 if main() else 1)
+        exit_code = 0 if main() else 1
     except KeyboardInterrupt:
         logger.info("\n⏹️ Execution interrupted by user")
-        sys.exit(1)
+        exit_code = 1
     except Exception as e:
         logger.error(f"💥 Fatal error: {e}")
-        sys.exit(1)
+        exit_code = 1
+    finally:
+        # gradio_client (used by handlers) leaves non-daemon httpx threads
+        # alive that prevent normal interpreter shutdown. Caffeinate and other
+        # owned resources are already torn down in _run_with_caffeinate's
+        # finally block, so force-exit here to release the terminal.
+        sys.stdout.flush()
+        sys.stderr.flush()
+        _os._exit(exit_code)
