@@ -48,6 +48,10 @@ API_MAPPING = {
     'veo': 'veo',
     'veoitv': 'veo_itv',
     'dreamactor': 'dreamactor',
+    'openai_image': 'openai_image',
+    'openaiimage': 'openai_image',
+    'gptimage': 'openai_image',
+    'gpt_image': 'openai_image',
 }
 
 # Config file mapping
@@ -69,7 +73,8 @@ CONFIG_MAPPING = {
     'wan': 'config/batch_wan_config.yaml',
     'veo': 'config/batch_veo_config.yaml',
     'veo_itv': 'config/batch_veo_itv_config.yaml',
-    'dreamactor': 'config/batch_dreamactor_config.yaml'
+    'dreamactor': 'config/batch_dreamactor_config.yaml',
+    'openai_image': 'config/batch_openai_image_config.yaml'
 }
 
 
@@ -480,6 +485,7 @@ def show_usage():
     print("  nano - Google Flash/Nano Banana processing")
     print("  runway - Runway face swap processing")
     print("  genvideo - GenVideo image generation processing")
+    print("  openai_image - OpenAI Image (gpt-image-N) generation")
     print("  pixverse - Pixverse Effects processing")
     print("  pixverse_ttv - Pixverse Text-to-Video processing")
     print("  seedance_ttv - Seedance Text-to-Video processing")

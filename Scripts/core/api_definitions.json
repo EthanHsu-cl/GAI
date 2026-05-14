@@ -275,6 +275,89 @@
             "v2.1"
         ]
     },
+    "openai_image": {
+        "endpoint": "http://192.168.31.161/external-testbed/image_generation/",
+        "api_name": "/openai_image",
+        "file_types": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".bmp",
+            ".tiff",
+            ".webp"
+        ],
+        "validation": {
+            "max_size_mb": 32,
+            "min_dimension": 100
+        },
+        "folders": {
+            "input": "Source",
+            "output": "Generated_Output",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 12,
+        "task_delay": 10,
+        "max_retries": 1,
+        "max_retries_error429": 3,
+        "max_retries_timeout": 1,
+        "config_structure": "task_folders",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "comparison_template_path": "templates/I2V Comparison Template.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": true
+        },
+        "task_fields": [
+            "folder",
+            "prompt",
+            "model",
+            "quality",
+            "resolution",
+            "aspect_ratio",
+            "design_link",
+            "source_video_link",
+            "reference_folder",
+            "use_comparison_template"
+        ],
+        "api_params": {
+            "model": "gpt-image-2",
+            "quality": "auto",
+            "resolution": "1K",
+            "aspect_ratio": "auto"
+        },
+        "model_options": [
+            "gpt-image-1",
+            "gpt-image-2"
+        ],
+        "quality_options": [
+            "auto",
+            "low",
+            "medium",
+            "high"
+        ],
+        "resolution_options": [
+            "1K",
+            "2K"
+        ],
+        "aspect_ratio_options": [
+            "auto",
+            "1:1",
+            "2:3",
+            "3:2",
+            "3:4",
+            "4:3",
+            "4:5",
+            "5:4",
+            "9:16",
+            "16:9",
+            "21:9"
+        ],
+        "additional_features": {
+            "additional_images": true,
+            "testbed_url_override": true
+        }
+    },
     "nano_banana": {
         "endpoint": "http://192.168.31.161/external-testbed/image_generation/",
         "api_name": "/nano_banana",

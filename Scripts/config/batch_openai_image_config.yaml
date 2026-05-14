@@ -1,0 +1,123 @@
+template_path: templates/I2V templates.pptx
+comparison_template_path: templates/I2V Comparison Template.pptx
+testbed: http://192.168.31.161/external-testbed/image_generation/
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 1
+
+schedule:
+  start_time: ""
+  comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
+
+root_source_video_link: ""
+root_design_link: ""
+
+tasks:
+  - folder: Media Files/OpenAI Image/0514 NSFW Test
+    model: gpt-image-2
+    quality: auto
+    resolution: "1K"
+    aspect_ratio: "auto"
+    prompt: |
+      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME): Use the uploaded photo(s) as the ONLY and ABSOLUTE source of each SUBJECT’s face. The generated faces must be the SAME REAL SUBJECTS as in the input photos, copied directly from the input, NOT reconstructed, NOT reinterpreted. Do NOT beautify, optimize, stylize, idealize, or normalize the faces in any way. Do NOT adjust facial proportions, features, symmetry, skin texture, or age. Do NOT change ethnicity, race, or regional facial characteristics. If any face does not immediately look identical to the corresponding input SUBJECT, the result is INVALID and must be regenerated. The faces must remain structurally and texturally identical to the input photos.
+
+      SUBJECT & SOURCE IMAGE RULES: Use the uploaded user photos as the ONLY visual sources for all SUBJECTS. The number of SUBJECTS in the final image must EXACTLY match the number of uploaded photos (1–4 only). No extra SUBJECTS. No duplicated faces. No merged identities. No face swapping. All facial features must come ONLY from the input photos.
+
+      Realistic studio photography with a clean, light gray background and diffused lighting. Subjects are seated on the floor, positioned in close, intimate physical proximity. Prioritize placing the adult female subject (mother) in the central position among the grouping. If multiple subjects are present, they display warm, happy interactions with a deep sense of family connection, including gentle leaning, soft touches, and shared gazes. Facial expressions must clearly convey happiness and emotional warmth with soft, happy smiles. One subject casually holds a paintbrush. Soft, bright studio lighting evenly illuminates the scene with a clean and airy feel. The light is gently diffused while maintaining subtle highlights on the subjects, creating a luminous and warm appearance without strong directional shadows. The entire image remains consistently sharp and in focus, with no depth-of-field blur.
+
+      Foreground effect: Hand-painted acrylic illustrations appear directly integrated within the scene, as if freely drawn in the air around the subjects. These elements do not belong to any visible surface or physical medium, and no transparent panel, glass, or material is present. Hand-painted acrylic illustrations are placed sparingly (6-8 elements total) and must be related to Mother's Day themes, including: flowers, gift boxes, greeting cards, hearts, and ribbons. Elements vary in size (a mix of small, medium, and slightly larger accents) and are distributed in a naturally scattered, irregular manner, with loose spacing and non-uniform placement, creating a light, unstructured, and organic arrangement.These elements show translucency and visible brush strokes. Color palette includes moderately saturated warm tones (pink, coral, sunflower yellow, fresh green). These elements are rendered as clean, simple, stylized icons with limited internal detail, maintaining high transparency, luminous quality, and an airy feel. They reveal the subjects behind.
+
+      Placement: Illustrations are anchored in the lower portion of the composition, forming a clear visual base beneath the subjects. The majority of elements remain below the subjects’ seated position, with only minimal upward variation. Elements are distributed horizontally with slight irregularity, maintaining a grounded and stable composition. The upper area of the frame remains open and largely free of decorative elements, preserving visual focus on the subjects and heart line.
+
+      Primary graphic:  A clearly pink/ coral visible hand-painted heart line flows dynamically, encircling all subjects present as a cohesive group. This continuous heart line must physically intertwine with the subjects, creating explicit layered depth. Different segments are precisely rendered to pass in front of specific body parts (e.g., an arm or shoulder) and behind others (e.g., a subject's back), defining a clear, defined 3D woven pattern around the group.  The thin stroke remains painterly with visible acrylic texture and slight organic irregularity.
+
+      Styling: Female subjects wear white, cream, or pale yellow tulle dresses. Male subjects wear simple white shirt and beige pants. Overall styling is elegant and whimsical.
+
+      Color palette: moderately saturated tones with a soft, warm, and gentle appearance. Colors should feel slightly muted and blended rather than sharp or highly contrasted.
+
+      Composition: Medium shot, centered framing. Subjects occupy 80% of the frame. Color palette includes moderately saturated warm red, coral pink, sunflower yellow, and fresh green with a soft matte finish. Edges of painted elements are softly diffused, creating a warm and tender atmosphere. No text, logos, or furniture.
+    reference_folder: ""
+    use_comparison_template: false
+    use_random_source_selection: false
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 1
+    max_images: 4
+    num_iterations: 0
+    generations_per_source: 1
+    use_reference_images: false
+
+
+# Configuration Reference
+comments:
+  model: |
+    OpenAI image generation model.
+    Options: 'gpt-image-1', 'gpt-image-2'
+    Default: 'gpt-image-2'
+  quality: |
+    Output image quality.
+    Options: 'auto', 'low', 'medium', 'high'
+    Default: 'auto'
+  resolution: |
+    Output resolution. Options: '1K' (default), '2K'.
+  aspect_ratio: |
+    Output aspect ratio. Valid options:
+      'auto', '1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4',
+      '9:16', '16:9', '21:9'.
+    Default: 'auto' — let the API pick the best ratio.
+  prompt: |
+    Text prompt describing the desired image. Reference the input via
+    phrases like "the uploaded photo" or "the reference image".
+  folder: |
+    Path to the task folder. Must contain a 'Source' subfolder with input images.
+    For multi-image mode, may also contain an 'Additional' subfolder.
+    For reference mode, may also contain a 'Reference' subfolder.
+    Output is written to 'Generated_Output/' and metadata to 'Metadata/'
+    (both auto-created).
+  reference_folder: |
+    Optional folder containing reference images for comparison reports.
+  use_comparison_template: |
+    true uses comparison_template_path (3-media slides);
+    false uses template_path (2-media slides). Default: false.
+  output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N to group N tasks into one report."
+
+  random_source_selection:
+    description: "Mode for selecting N images from Source folder per API call (NO REPEATS until pool exhausted)"
+    use_random_source_selection: "Set to true to enable random source selection mode"
+    min_images: "Minimum images per API call (default: 1)"
+    max_images: "Maximum images per API call (default: 10)"
+    num_iterations: "Number of API calls. Defaults to number of source files if 0."
+    optimal_formula: "sources_needed = num_iterations × (min + max) / 2"
+    use_deterministic_random: |
+      true  -> shuffles source pool with a deterministic seed (reproducible randomness)
+      false -> sequential alphabetical order
+    random_seed: |
+      Optional integer seed. If omitted, seed is auto-derived from folder path.
+
+  reference_images:
+    description: "Prepend images from a 'Reference' subfolder to every API call"
+    use_reference_images: |
+      true: prepends every image from <folder>/Reference/ to the images list.
+            Reference images do NOT count toward min_images / max_images.
+    folder_structure: "Place reference images in <task_folder>/Reference/ (sibling of Source/). Auto-created when enabled."
+
+  generations_per_source:
+    description: "Number of times each iteration's source group is sent to the API"
+    default: 1
+    note: "Total API calls = num_iterations × generations_per_source. Output files get '_gen00', '_gen01' suffixes when > 1."
+
+  multi_image_config:
+    description: "Pair Source images with Additional/ images (advanced)"
+    enabled: "Must be true to use multi-image pairing features"
+    mode: "sequential | random_pairing"
+    folders: "List of folder paths to source additional images from"
+
+  folder_structure: |
+    Expected layout per task:
+      task_folder/
+      ├── Source/                 # input images
+      ├── Reference/              # optional, prepended to every call
+      ├── Additional/             # optional, paired in multi-image mode
+      ├── Generated_Output/       # auto-created
+      └── Metadata/               # auto-created

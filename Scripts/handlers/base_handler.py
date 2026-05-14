@@ -362,7 +362,7 @@ class BaseAPIHandler:
         """Get output folder name based on API type."""
         if self.api_name == "genvideo":
             return folder / "Generated_Image"
-        elif self.api_name == "nano_banana":
+        elif self.api_name in ("nano_banana", "openai_image"):
             return folder / "Generated_Output"
         else:
             return folder / "Generated_Video"
