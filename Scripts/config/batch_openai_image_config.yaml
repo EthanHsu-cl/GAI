@@ -10,11 +10,11 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: ""
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAdYIGf1HGgTZ7nt6yjKTFBAVczk_DyiGk_JvMZcSaYkkE?e=w1IXQf
 root_design_link: ""
 
 tasks:
-  - folder: Media Files/OpenAI Image/0514 NSFW Test
+  - folder: Media Files/OpenAI Image/0514 NSFW Test 2
     model: gpt-image-2
     quality: auto
     resolution: "1K"

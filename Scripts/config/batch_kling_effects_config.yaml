@@ -15,10 +15,10 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0513 1 Effect
+base_folder: Media Files/Kling Effects/0515 4 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147 
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBnXVybv3WNQo7HoR0CVGwmAR2D3yWg_f7P38IpiKl6aCQ?e=r0qQlj
+source_video_link: 
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -27,7 +27,13 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'korean_baseball'
+    custom_effect: 'football_live'
+  - effect:
+    custom_effect: 'spielberg_transition'
+  - effect:
+    custom_effect: 'korean_baseball_9_16'
+  - effect:
+    custom_effect: 'f1_live'
 
 
 comments:
