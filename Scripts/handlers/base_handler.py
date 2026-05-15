@@ -21,7 +21,11 @@ class ValidationError(Exception):
 class BaseAPIHandler:
     """Base handler with ALL common logic. Subclasses override only what's different."""
     
-    # Connection error patterns that warrant extended retry with backoff
+    # Connection error patterns that warrant extended retry with backoff.
+    # Includes both socket-level connection failures and transient HTTP 5xx
+    # responses (Bad Gateway / Service Unavailable / Gateway Timeout) — both
+    # represent "server temporarily unreachable" and benefit from the same
+    # exponential-backoff retry.
     CONNECTION_ERROR_PATTERNS = [
         'Connection refused',
         'ConnectionRefusedError',
@@ -35,6 +39,12 @@ class BaseAPIHandler:
         'BrokenPipeError',
         'Server disconnected',
         'Connection reset by peer',
+        '502 Bad Gateway',
+        '503 Service Unavailable',
+        '504 Gateway Timeout',
+        'Bad Gateway',
+        'Service Unavailable',
+        'Gateway Timeout',
     ]
     
     # Connection retry configuration

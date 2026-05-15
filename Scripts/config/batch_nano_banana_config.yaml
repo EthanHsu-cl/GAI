@@ -10,190 +10,42 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: 
-root_design_link: https://docs.google.com/presentation/d/1iI1l_m2z9b1QjNDqFC-ESUu6ZTMjjrIGPAZMxCiFShU/edit?slide=id.g3b9d25cdcf3_11_321#slide=id.g3b9d25cdcf3_11_321
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB_mZXKf5luQox9fm_YByiZAfZH0LGYOJQqGYi_qaOhYpg?e=OGVJQO
+root_design_link: https://docs.google.com/presentation/d/17w7lPv9rO6Ih3rdRCa78OhiOAd5fuC2Cz3L1AEpqTTI/edit?slide=id.g3de6aedf119_1_173#slide=id.g3de6aedf119_1_173
 
 tasks:
-  - folder: Media Files/Nano Banana/0414 Dear Mom
+  - folder: Media Files/Nano Banana/0515 NSFW Test
     model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "4:3"
+    resolution: "1K"
+    aspect_ratio: "3:4"
     prompt: |
-      Use the uploaded photo(s) as the ONLY source of people in the final image.
+      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME): Use the uploaded photo(s) as the ONLY and ABSOLUTE source of each SUBJECT’s face. The generated faces must be the SAME REAL SUBJECTS as in the input photos, copied directly from the input, NOT reconstructed, NOT reinterpreted. Do NOT beautify, optimize, stylize, idealize, or normalize the faces in any way. Do NOT adjust facial proportions, features, symmetry, skin texture, or age. Do NOT change ethnicity, race, or regional facial characteristics. If any face does not immediately look identical to the corresponding input SUBJECT, the result is INVALID and must be regenerated. The faces must remain structurally and texturally identical to the input photos.
 
-      The final image must contain EXACTLY the same number of people as the uploaded photo(s).
-      Do NOT add extra people.
-      Do NOT remove people.
-      Do NOT duplicate any person.
-      Do NOT generate repeated versions of the same person.
-      Do NOT copy any human figure from the reference image.
+      SUBJECT & SOURCE IMAGE RULES: Use the uploaded user photos as the ONLY visual sources for all SUBJECTS. The number of SUBJECTS in the final image must EXACTLY match the number of uploaded photos (1–4 only). No extra SUBJECTS. No duplicated faces. No merged identities. No face swapping. All facial features must come ONLY from the input photos.
 
-      IMPORTANT:
-      Reference image  is for STYLE, TEXTURE, COLOR PALETTE, and POSTCARD LAYOUT ONLY.
-      Reference image  must NOT be used as a source of people, faces, hairstyles, clothing, poses, age, gender, family members, or character composition.
-      Absolutely do NOT generate any person appearing in reference image .
+      Realistic studio photography with a clean, light gray background and diffused lighting. Subjects are seated on the floor, positioned in close, intimate physical proximity. Prioritize placing the adult female subject (mother) in the central position among the grouping. If multiple subjects are present, they display warm, happy interactions with a deep sense of family connection, including gentle leaning, soft touches, and shared gazes. Facial expressions must clearly convey happiness and emotional warmth with soft, happy smiles. One subject casually holds a paintbrush. Soft, bright studio lighting evenly illuminates the scene with a clean and airy feel. The light is gently diffused while maintaining subtle highlights on the subjects, creating a luminous and warm appearance without strong directional shadows. The entire image remains consistently sharp and in focus, with no depth-of-field blur.
 
-      The final illustration style must strictly match reference image in visual treatment only:
-      – Hand-drawn style of the reference image
-      – warm beige textured paper background
-      – gentle pastel color palette
-      – subtle brush texture
-      – soft natural shading
-      – delicate hand-drawn lines
-      – warm greeting-card feeling
-      – minimal, clean postcard design
+      Foreground effect: Hand-painted acrylic illustrations appear directly integrated within the scene, as if freely drawn in the air around the subjects. These elements do not belong to any visible surface or physical medium, and no transparent panel, glass, or material is present. Hand-painted acrylic illustrations are placed sparingly (6-8 elements total) and must be related to Mother's Day themes, including: flowers, gift boxes, greeting cards, hearts, and ribbons. Elements vary in size (a mix of small, medium, and slightly larger accents) and are distributed in a naturally scattered, irregular manner, with loose spacing and non-uniform placement, creating a light, unstructured, and organic arrangement.These elements show translucency and visible brush strokes. Color palette includes moderately saturated warm tones (pink, coral, sunflower yellow, fresh green). These elements are rendered as clean, simple, stylized icons with limited internal detail, maintaining high transparency, luminous quality, and an airy feel. They reveal the subjects behind.
 
-      STRICTLY FORBIDDEN:
-      – using any character from reference image 
-      – adding mother-and-child figures from the reference
-      – adding family members not present in the uploaded photo(s)
-      – repeating the same uploaded person twice
-      – mirrored duplicate people
-      – extra background people
-      – anime style
-      – flat cartoon style
-      – vector illustration
-      – chibi style
-      – sticker style
-      – thick black outlines
-      – glossy digital rendering
+      Placement: Illustrations are anchored in the lower portion of the composition, forming a clear visual base beneath the subjects. The majority of elements remain below the subjects’ seated position, with only minimal upward variation. Elements are distributed horizontally with slight irregularity, maintaining a grounded and stable composition. The upper area of the frame remains open and largely free of decorative elements, preserving visual focus on the subjects and heart line.
 
-      POSTCARD LAYOUT MUST BE FIXED:
+      Primary graphic:  A clearly pink/ coral visible hand-painted heart line flows dynamically, encircling all subjects present as a cohesive group. This continuous heart line must physically intertwine with the subjects, creating explicit layered depth. Different segments are precisely rendered to pass in front of specific body parts (e.g., an arm or shoulder) and behind others (e.g., a subject's back), defining a clear, defined 3D woven pattern around the group.  The thin stroke remains painterly with visible acrylic texture and slight organic irregularity.
 
-      Create a horizontal Mother's Day postcard.
-      The canvas must be split into two perfectly equal vertical halves.
+      Styling: Female subjects wear white, cream, or pale yellow tulle dresses. Male subjects wear simple white shirt and beige pants. Overall styling is elegant and whimsical.
 
-      LEFT HALF = illustration area
-      RIGHT HALF = writing/message area
+      Color palette: moderately saturated tones with a soft, warm, and gentle appearance. Colors should feel slightly muted and blended rather than sharp or highly contrasted.
 
-      The divider line must be:
-      – exactly centered
-      – perfectly vertical
-      – thin and straight
-
-      The left and right sections must be equal width: 50% / 50%.
-
-      LEFT HALF RULES:
-      – all people must appear only inside the left half
-      – no person may cross into the right half
-      – the illustration must stay compact and centered within the left half
-      – keep enough blank space above for the title
-      – keep enough blank space around the figures so the layout stays airy and balanced
-
-      CHARACTER RULES:
-      For 1 person:
-      – the person is smiling gently
-      – holding a bouquet of carnations
-
-      For 2 or more people:
-      – show only the uploaded people
-      – show warm family interaction such as hugging, leaning together, or giving carnations
-      – interaction must feel natural and gentle
-      – do not invent any additional family member
-      – do not clone or repeat any uploaded face
-
-      TEXT RULES:
-      The text “Happy Mother’s Day” must appear ONLY in the upper-left area of the LEFT HALF.
-      It must never appear on the right half.
-      It must never overlap with “TO:” or the writing lines.
-      It must remain as one title block at the top-left, above the illustrated people.
-
-      Correct title placement:
-      – top-left quadrant
-      – large and readable
-      – balanced above the character scene
-      – handwritten style
-      – warm brown color
-
-      Incorrect title placement, strictly forbidden:
-      – on the right half
-      – centered across both halves
-      – above the TO area
-      – broken into awkward spacing
-      – too low, touching the heads
-      – too far right
-
-      RIGHT HALF RULES:
-      Keep the right half clean and minimal.
-      Do not place any people on the right half.
-
-      Show only:
-
-      TO:
-      ____________
-
-      ____________
-
-      ____________
-
-      FROM:
-
-      Add a small carnation illustration in the bottom-right corner only.
-
-      BACKGROUND RULES:
-      – warm beige textured paper
-      – soft watercolor wash
-      – no realistic room
-      – no furniture
-      – no table
-      – no scenery
-      – no extra decorative objects beyond subtle floral accents and small sparkles
-
-      FINAL MANDATORY REQUIREMENTS:
-      1. Use uploaded photo(s) as the only source of people
-      2. Match reference image  only in style and postcard design language
-      3. Do not copy or generate any person from reference image 
-      4. Do not duplicate any uploaded person
-      5. Keep the title only at the top-left of the left half
-      6. Keep the postcard split exactly 50/50
-      7. Keep all people only in the left half
-
-      BACKGROUND LOCKING REQUIREMENT – ​​MUST MATCH THE POSTCARD EFFECT OF THE REFERENCE IMAGE.
-
-      The background must be:
-
-      clean  
-      smooth  
-      light beige  
-      flat  
-      soft neutral tone  
-      minimal  
-      uniform  
-
-      The background must NOT contain:
-
-      watercolor stains  
-      watercolor wash  
-      paper blotches  
-      dirty paper texture  
-      aged paper effect  
-      grain noise  
-      ink marks  
-      patchy color areas  
-      uneven color spots  
-      vintage paper texture  
-      rough paper fibers  
-      old paper effect  
-
-      The background must look:
-
-      fresh  
-      clean  
-      modern  
-      simple  
-      flat paper surface  
-
-      NOT artistic watercolor paper.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: true
+      Composition: Medium shot, centered framing. Subjects occupy 80% of the frame. Color palette includes moderately saturated warm red, coral pink, sunflower yellow, and fresh green with a soft matte finish. Edges of painted elements are softly diffused, creating a warm and tender atmosphere. No text, logos, or furniture.
+    reference_folder: Media Files/OpenAI Image/0514 NSFW Test 2
+    use_comparison_template: true
+    use_random_source_selection: false
     use_deterministic_random: true
     random_seed: 42
     min_images: 2
     max_images: 4
     num_iterations: 10
     generations_per_source: 5
-    use_reference_images: true
+    use_reference_images: false
 
 
 # Comments and documentation

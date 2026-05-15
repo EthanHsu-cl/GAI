@@ -391,13 +391,18 @@ class UnifiedReportGenerator:
         """Create a single slide for any API using configuration"""
         # Adjust media types for nano_banana / openai_image based on multi-image mode
         if self.api_name in ('nano_banana', 'openai_image'):
-            if pair.additional_source_paths:
+            if use_comparison:
+                # 3-media comparison layout (source, generated, reference)
+                slide_config = slide_config.copy()
+                slide_config['media_types'] = ['source', 'generated', 'reference']
+                slide_config['positions'] = self.LAYOUT_3_MEDIA['positions']
+            elif pair.additional_source_paths:
                 # Check if any additional source is a video
                 has_video_source = any(
-                    p.suffix.lower() in self.VIDEO_EXTS 
+                    p.suffix.lower() in self.VIDEO_EXTS
                     for p in pair.additional_source_paths if p
                 )
-                
+
                 if has_video_source:
                     # 1 image + 1 video: use 3-media layout (source, video, generated)
                     slide_config = slide_config.copy()
@@ -674,10 +679,36 @@ class UnifiedReportGenerator:
             # Sort the entire list if not grouped
             return {'default': self._sort_pairs(pairs)}
     
+    def _failure_group_key(self, pair, ref: bool = False) -> str:
+        """Normalized key used to cluster failed slides with the same error together.
+
+        Returns "" for non-failed pairs so their relative ordering is unaffected.
+        When ref=True, reads from pair.ref_metadata / pair.ref_failed instead.
+        """
+        if not pair:
+            return ""
+        failed = pair.ref_failed if ref else pair.failed
+        if not failed:
+            return ""
+        md = (pair.ref_metadata if ref else pair.metadata) or {}
+        err = (md.get('error') or '').strip()
+        if not err:
+            for resp in md.get('text_responses', []) or []:
+                if isinstance(resp, dict):
+                    content = (resp.get('content') or '').strip()
+                    if content:
+                        err = content
+                        break
+        if not err:
+            return "media_not_found"
+        first_line = next((l.strip() for l in err.splitlines() if l.strip()), err)
+        return first_line.lower()[:120]
+
     def _sort_pairs(self, pairs: List[MediaPair]) -> List[MediaPair]:
         """Sort pairs based on API type
-        
-        Failed slides are always placed first within each section.
+
+        Failed slides are always placed first within each section, and are
+        clustered by failure message so identical errors appear consecutively.
         Then:
         - For combination APIs (Wan, Runway): Group by video/reference, then sort by source filename
         - For nano_banana with random_source_selection: Sort by number of source images used (min to max)
@@ -685,7 +716,7 @@ class UnifiedReportGenerator:
         """
         if not pairs:
             return pairs
-        
+
         # Check if this is nano_banana / openai_image iteration mode (random_source_selection)
         if self.api_name in ('nano_banana', 'openai_image'):
             # Check if any pair has random_source_selection metadata
@@ -693,46 +724,88 @@ class UnifiedReportGenerator:
                 p.metadata.get('random_source_selection') for p in pairs
             )
             if has_random_selection:
-                # Sort by failed status first (failed slides at start),
-                # then by number of source images used (min to max),
+                # Tier 0: both failed (clustered by base error, then ref error)
+                # Tier 1: only base failed (clustered by base error)
+                # Tier 2: only reference failed (clustered by ref error)
+                # Tier 3: success
+                # Then by number of source images used (min to max),
                 # then by iteration index for stable ordering within same count
                 def get_sort_key(pair):
-                    # Primary: failed status (not failed so True=failed comes first)
-                    failed_priority = not pair.failed
-                    
-                    # Secondary: number of all_images_used
+                    if pair.failed and pair.ref_failed:
+                        tier = 0
+                        cluster = (self._failure_group_key(pair), self._failure_group_key(pair, ref=True))
+                    elif pair.failed:
+                        tier = 1
+                        cluster = (self._failure_group_key(pair), "")
+                    elif pair.ref_failed:
+                        tier = 2
+                        cluster = ("", self._failure_group_key(pair, ref=True))
+                    else:
+                        tier = 3
+                        cluster = ("", "")
+
                     all_images = pair.metadata.get('all_images_used', [])
                     num_images = len(all_images) if all_images else len(pair.additional_source_paths)
-                    
-                    # Tertiary: iteration index for stable ordering
+
                     iteration_idx = pair.metadata.get('_iteration_index', 0)
-                    
-                    return (failed_priority, num_images, iteration_idx)
-                
+
+                    return (tier, cluster, num_images, iteration_idx)
+
                 return sorted(pairs, key=get_sort_key)
-        
+
         if self.api_name in ['wan', 'runway', 'dreamactor', 'kling_motion']:
-            # Combination APIs: Failed slides first, then group by source video,
-            # then sort within groups by source file
+            # Combination APIs: tiered failure ordering, then group by source video,
+            # then sort within groups by source file.
+            # Tier 0: both failed (clustered by base error, then ref error)
+            # Tier 1: only base failed (clustered by base error)
+            # Tier 2: only reference failed (clustered by ref error)
+            # Tier 3: success
             def get_sort_key(pair):
-                # Primary key: failed status (not failed so True=failed comes first)
-                failed_priority = not pair.failed
-                
-                # Secondary key: source video name (or source file if no video)
+                if pair.failed and pair.ref_failed:
+                    tier = 0
+                    cluster = (self._failure_group_key(pair), self._failure_group_key(pair, ref=True))
+                elif pair.failed:
+                    tier = 1
+                    cluster = (self._failure_group_key(pair), "")
+                elif pair.ref_failed:
+                    tier = 2
+                    cluster = ("", self._failure_group_key(pair, ref=True))
+                else:
+                    tier = 3
+                    cluster = ("", "")
+
                 if pair.source_video_path:
                     video_name = pair.source_video_path.name
                 else:
                     video_name = ""
-                
-                # Tertiary key: source file name
+
                 source_name = pair.source_file or ""
-                
-                return (failed_priority, video_name, source_name)
-            
+
+                return (tier, cluster, video_name, source_name)
+
             return sorted(pairs, key=get_sort_key)
         else:
-            # Other APIs: Failed slides first, then sort by source filename
-            return sorted(pairs, key=lambda p: (not p.failed, p.source_file or ""))
+            # Other APIs: tiered failure ordering, then sort by source filename.
+            # Tier 0: both failed (clustered by base error, then ref error)
+            # Tier 1: only base failed (clustered by base error)
+            # Tier 2: only reference failed (clustered by ref error)
+            # Tier 3: success
+            def get_sort_key(pair):
+                if pair.failed and pair.ref_failed:
+                    tier = 0
+                    cluster = (self._failure_group_key(pair), self._failure_group_key(pair, ref=True))
+                elif pair.failed:
+                    tier = 1
+                    cluster = (self._failure_group_key(pair), "")
+                elif pair.ref_failed:
+                    tier = 2
+                    cluster = ("", self._failure_group_key(pair, ref=True))
+                else:
+                    tier = 3
+                    cluster = ("", "")
+                return (tier, cluster, pair.source_file or "")
+
+            return sorted(pairs, key=get_sort_key)
     
     # ================== UNIFIED MEDIA SYSTEM ==================
     
@@ -1018,28 +1091,37 @@ class UnifiedReportGenerator:
                 self.add_error_box(slide, l, t, w, h, f"Failed to load media: {e}", pair)
         else:
             # Extract failure message from metadata if available
-            error_msg = self.get_failure_message(pair) if pair else None
+            # Use ref_metadata for the reference slot so each box shows its own error
+            md_for_error = None
+            if pair:
+                md_for_error = pair.ref_metadata if media_type == 'reference' else pair.metadata
+            error_msg = self.get_failure_message(pair, metadata=md_for_error) if pair else None
             self.add_error_box(slide, l, t, w, h, error_msg or "Media not found", pair)
     
-    def get_failure_message(self, pair):
-        """Extract failure message from metadata"""
-        if not pair or not pair.metadata:
+    def get_failure_message(self, pair, metadata=None):
+        """Extract failure message from metadata.
+
+        Pass `metadata` explicitly to read from a specific dict (e.g. pair.ref_metadata
+        for the reference slot); defaults to pair.metadata otherwise.
+        """
+        md = metadata if metadata is not None else (pair.metadata if pair else None)
+        if not md:
             return None
-        
+
         # Check error field first (from handler)
-        error_msg = pair.metadata.get('error', '')
+        error_msg = md.get('error', '')
         if error_msg:
             return f"{error_msg}"
-        
+
         # Try to get text_responses for detailed error message
-        text_responses = pair.metadata.get('text_responses', [])
+        text_responses = md.get('text_responses', [])
         if text_responses and isinstance(text_responses, list):
             for response in text_responses:
                 if isinstance(response, dict) and 'content' in response:
                     content = response['content']
                     if content and content.strip():
                         return f"Media not found\n\nAPI Response:\n{content}"
-        
+
         # Fallback to generic message
         return "Media not found"
     
@@ -1291,6 +1373,7 @@ class UnifiedReportGenerator:
         
         # Get reference files
         ref_files = {}
+        ref_metadata_cache = {}
         if use_comparison and ref_folder:
             ref_generated_folder = ref_folder / ('Generated_Output' if self.api_name in ('nano_banana', 'openai_image') else 'Generated_Video')
             if ref_generated_folder.exists():
@@ -1305,6 +1388,11 @@ class UnifiedReportGenerator:
                             # Extract basename by splitting on '_generated' pattern
                             basename = f.stem.split('_generated')[0]
                             ref_files[self.normalize_key(basename)] = f
+
+            ref_metadata_folder = ref_folder / 'Metadata'
+            if ref_metadata_folder.exists():
+                _, _, ref_metadata_files = self._scan_directory_once(ref_metadata_folder)
+                ref_metadata_cache = self._load_json_batch(ref_metadata_files) if ref_metadata_files else {}
         
         # Pre-compute aspect ratios for all source images
         all_media = list(src.values()) + [p for paths in out.values() for p in paths if isinstance(paths, list)]
@@ -1316,6 +1404,7 @@ class UnifiedReportGenerator:
         for b in sorted(src.keys()):
             gen_paths = out.get(b, [])
             ref_paths = ref_files.get(b, []) if use_comparison else []
+            ref_md = ref_metadata_cache.get(b, {}) if use_comparison else {}
 
             if not isinstance(gen_paths, list):
                 gen_paths = [gen_paths] if gen_paths else []
@@ -1373,8 +1462,9 @@ class UnifiedReportGenerator:
                         reference_paths=ref_paths,
                         source_video_path=end_image_path,
                         metadata=md,
+                        ref_metadata=ref_md,
                         failed=not md.get('success', False),
-                        ref_failed=use_comparison and not ref_paths,
+                        ref_failed=use_comparison and (not ref_paths or (bool(ref_md) and not ref_md.get('success', True))),
                         effect_name=effect_name
                     )
                     pairs.append(pair)
@@ -1419,8 +1509,9 @@ class UnifiedReportGenerator:
                     additional_source_paths=additional_source_paths,
                     source_video_path=end_image_path,
                     metadata=md,
+                    ref_metadata=ref_md,
                     failed=not gen_paths or not md.get('success', False),
-                    ref_failed=use_comparison and not ref_paths,
+                    ref_failed=use_comparison and (not ref_paths or (bool(ref_md) and not ref_md.get('success', True))),
                     effect_name=effect_name
                 )
                 pairs.append(pair)
@@ -3018,8 +3109,14 @@ class UnifiedReportGenerator:
                     # Add individual link (no prefix, just the folder name)
                     links.append(("", folder_name, task_source_link or ""))
         else:
-            # Single task or base-folder API - use single source video link
-            source_link = self.config.get('source_video_link', '') if self.config.get('source_video_link', '') else task.get('source_video_link', '')
+            # Single task or base-folder API - use single source video link.
+            # Falls back to root_source_video_link so non-grouped runs (group_tasks_by <= 1)
+            # still pick up the root-level config setting, matching the design_link behavior above.
+            source_link = (
+                self.config.get('source_video_link', '')
+                or task.get('source_video_link', '')
+                or self.config.get('root_source_video_link', '')
+            )
             links.append(("Source + Video: ", "Link", source_link))
 
         for i, (pre, txt, url) in enumerate(links):

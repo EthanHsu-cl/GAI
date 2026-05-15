@@ -9,7 +9,7 @@ duration: 5
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 2
+  group_tasks_by: 4
 
 schedule:
   start_time: ''
@@ -18,7 +18,7 @@ schedule:
 base_folder: Media Files/Kling Effects/0515 4 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147 
-source_video_link: 
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAJAWpv2fTIT6sNYksnqUX2AXbkanX0mvllc2TJ5j73ffw?e=FAH77k
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
