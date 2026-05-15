@@ -453,8 +453,8 @@ class NanoBananaHandler(BaseAPIHandler):
         """Get reference images from the Reference folder if enabled.
 
         Reference images are placed in a 'Reference' folder at the same level
-        as the 'Source' folder. They are prepended to every API call and do NOT
-        count toward the min_images/max_images limits.
+        as the 'Source' folder. They are appended after the source images in
+        every API call and do NOT count toward the min_images/max_images limits.
 
         Args:
             task_config: Task configuration dictionary.
@@ -908,7 +908,8 @@ class NanoBananaHandler(BaseAPIHandler):
         """Process task using iteration-based loop (for num_iterations mode).
 
         Supports generations_per_source to repeat the same source group N times,
-        and use_reference_images to prepend reference images to every API call.
+        and use_reference_images to append reference images after source images
+        in every API call.
 
         Args:
             task: Task configuration dictionary.
@@ -1172,14 +1173,14 @@ class NanoBananaHandler(BaseAPIHandler):
             # Build images list from random selection
             # Use handle_file for each image to properly upload to Gradio API
             images_list = [handle_file(str(img)) for img in selected_images]
-            
-            # Prepend reference images if enabled
+
+            # Append reference images if enabled (source images come first)
             ref_image_paths = task_config.get('_reference_images', [])
             if ref_image_paths:
                 ref_handles = [handle_file(str(ref)) for ref in ref_image_paths]
-                images_list = ref_handles + images_list
-                self._current_all_images[str(file_path)] = ref_image_paths + [str(img) for img in selected_images]
-                self.logger.info(f" 📎 Prepended {len(ref_image_paths)} reference images")
+                images_list = images_list + ref_handles
+                self._current_all_images[str(file_path)] = [str(img) for img in selected_images] + ref_image_paths
+                self.logger.info(f" 📎 Appended {len(ref_image_paths)} reference images after sources")
             
             # Log the number of images being sent
             self.logger.info(f" 📷 Sending {len(images_list)} images to API: {[img.name for img in selected_images]}")
@@ -1200,13 +1201,13 @@ class NanoBananaHandler(BaseAPIHandler):
                 if img_path:
                     images_list.append(handle_file(img_path))
             
-            # Prepend reference images if enabled
+            # Append reference images if enabled (source images come first)
             ref_image_paths = task_config.get('_reference_images', [])
             if ref_image_paths:
                 ref_handles = [handle_file(str(ref)) for ref in ref_image_paths]
-                images_list = ref_handles + images_list
-                self._current_all_images[str(file_path)] = ref_image_paths + [str(file_path)] + additional_imgs
-                self.logger.info(f" 📎 Prepended {len(ref_image_paths)} reference images")
+                images_list = images_list + ref_handles
+                self._current_all_images[str(file_path)] = [str(file_path)] + additional_imgs + ref_image_paths
+                self.logger.info(f" 📎 Appended {len(ref_image_paths)} reference images after sources")
             
             # Get aspect ratio from config or auto-detect from source image
             aspect_ratio = str(self._get_aspect_ratio(file_path, task_config))

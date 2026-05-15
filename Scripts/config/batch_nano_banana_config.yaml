@@ -134,10 +134,10 @@ comments:
   
   reference_images:
     description: "Toggle to include reference images from a 'Reference' folder (sibling to 'Source' folder)"
-    use_reference_images: "Set to true to prepend reference images to every API call. Reference images do NOT count toward min_images/max_images limits."
+    use_reference_images: "Set to true to append reference images after source images in every API call. Reference images do NOT count toward min_images/max_images limits."
     folder_structure: "Place reference images in <task_folder>/Reference/ (same level as Source/). The folder is auto-created when use_reference_images is true."
     behavior: |
-      - Reference images are prepended to the images list before source images in every API call
+      - Reference images are appended after the source images in every API call
       - They do NOT count toward min_images / max_images limits
       - If use_reference_images is true but Reference/ folder is missing or empty, a warning is logged and processing continues without references
       - Reference images are sorted alphabetically and cached per task
