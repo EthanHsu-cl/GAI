@@ -2,7 +2,7 @@
 # Applies premade video effects to images using the Kling API
 
 testbed: http://192.168.31.161/external-testbed/kling/
-template_path: templates/I2V templates.pptx
+template_path: templates/I2V templates 3rd party.pptx
 
 # Global settings (can be overridden per task)
 duration: 5

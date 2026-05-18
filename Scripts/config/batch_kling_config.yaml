@@ -13,7 +13,39 @@ schedule:
 group_tasks_by: 4
 
 tasks:
-# Available configuration options reference
+- mode: std
+  folder: Media Files/Kling 2.5/0518 3 Effects/Police
+  prompt: |
+    she wear police uniform shirt and wear sunglasses in the same time. the main character stands confidently under a spotlight. Without taking a step, their outfit instantly transforms in place into a sleek, crisp blue police uniform. They smoothly put on a pair of black sunglasses, followed by placing a police hat on their head with precision. In one fluid motion, the character draws a handgun and strikes a dramatic pose. they quickly begin firing multiple precise shots in different directions. Each shot emits bright muzzle flashes that briefly light up the room. The scene is shot in a cinematic slow-motion style with realistic textures, subtle light reflections on the sunglasses, and sharp camera focus, highlighting the stylish and powerful transformation.
+  negative_prompt: ''
+  design_link: ''
+  source_video_link: ''
+  reference_folder: ''
+  use_comparison_template: false
+
+- mode: std
+  folder: Media Files/Kling 2.5/0518 3 Effects/Mystic Fox
+  prompt: |
+    The subject places both hands on their waist and performs rhythmic movements, especially focusing on hip twisting.
+    Requirements:
+    1. If there are multiple subjects in the image, all of them must perform the hip-twisting motion described above.
+    2. If the subject is a pet, it should be anthropomorphized to perform the hip-twisting motion.
+  negative_prompt: ''
+  design_link: ''
+  source_video_link: ''
+  reference_folder: ''
+  use_comparison_template: false
+
+- mode: std
+  folder: Media Files/Kling 2.5/0518 3 Effects/Bubbles
+  prompt: |
+    A dreamy cinematic scene with the main character in the center (e.g., a girl, a fairy, a cat, etc.), joyfully looking around at the magical, beautiful bubbles surrounding her. She raises both hands with palms facing up, expressing wonder and happiness. Her facial expression is a simple open-mouth smile (no lip movement), conveying delight without looking like she's speaking. The bubbles are translucent and shimmer with rainbow reflections as they gently drift in the air. The character remains fully visible and centered in the frame at all times. Soft lighting, bokeh background, magical atmosphere, smooth camera motion, elegant and stable composition.
+  negative_prompt: ''
+  design_link: ''
+  source_video_link: ''
+  reference_folder: ''
+  use_comparison_template: false
+
 comments:
   model_version: |
     Model version to use for video generation.
@@ -62,14 +94,3 @@ comments:
     Each task folder should have 'Source', 'Generated_Video', and 'Metadata' subfolders.
     Source folder contains input images to be animated.
 
-tasks:
-- mode: std
-  folder: Media Files/Kling 2.5/1226 Send flower v2
-  prompt: |
-    A soft and romantic two-person interaction that maintains the original facial features, outfits, and body proportions. Person A reaches behind their back, retrieves a red rose from behind them with a smooth, stable motion, and brings it forward while clearly holding it in their hand before offering it to Person B.After the rose is handed over, both characters pause and remain still for a brief, clear moment to look at the rose together. Person B shows a visible, gentle expression of happiness and emotional joy while holding the rose. This “seeing the rose” moment must last for several frames and should not immediately transition into kissing.After this extended moment of shared attention on the rose, Person B continues to move closer, and both characters advance until their lips make clear, full contact. The kiss must be fully completed with visible lip overlap and several frames of held contact—never stopping before touching and never cutting away. The entire movement should remain slow, natural, and emotionally expressive. After the kiss, their foreheads rest together in a tender moment.The background remains identical to the uploaded image, with no scene changes or camera movement.
-  negative_prompt: |
-    Face alteration, gender alteration, hairstyle changes, outfit inconsistencies, and body proportion changes.Additional people, duplicated characters, extra limbs, missing limbs, and abnormal anatomy.Hand or finger clipping, rose intersecting with hands, arms, clothing, or any objects.Scene replacement, lighting variation, or background mismatch.Flicker, jitter, noise, distortion, unnatural or exaggerated motion.Camera movement, zooming, added objects, added effects.Jump cuts, editing seams, frame breaks, timeline misalignment, abrupt transitions, motion interruption, loss of smooth continuity.
-  design_link: https://docs.google.com/presentation/d/1eIN91u_qLFNSW0n4XrXy8s7x9NjXIH4D_dibx5bMg0s/edit?slide=id.g3b142bf77d5_0_6#slide=id.g3b142bf77d5_0_6
-  source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDQY5WNbA70SI_jyMNl9XGsAYGjN4V1-ovkNTXujUMW-Zg?e=ce8Rrn
-  reference_folder: ''
-  use_comparison_template: false

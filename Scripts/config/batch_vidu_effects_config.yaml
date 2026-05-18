@@ -1,5 +1,5 @@
 testbed: http://192.168.31.161/external-testbed/video_effect/
-template_path: templates/I2V templates.pptx
+template_path: templates/I2V templates 3rd party.pptx
 prompt: ''
 
 output:

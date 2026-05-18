@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-batch-effects)",
+      "Skill(update-batch-effects:*)"
+    ]
+  }
+}
