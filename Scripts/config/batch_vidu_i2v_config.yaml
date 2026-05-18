@@ -1,0 +1,83 @@
+# Vidu Image-to-Video (I2V) Configuration
+# Uses the /submitI2V API endpoint
+# Each style folder under base_folder should contain a 'Source' subfolder with source images
+
+testbed: http://192.168.31.161/external-testbed/video_effect/
+template_path: templates/I2V templates 3rd party.pptx
+
+# Global defaults (per-task can override)
+model: viduq2-turbo
+resolution: 1080p
+movement: auto
+audio: true
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 3
+
+schedule:
+  start_time: ''
+  comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
+
+base_folder: Media Files/Vidu I2V/0518 3 Styles
+output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+
+design_link: ''
+source_video_link: ''
+
+tasks:
+  - custom_effect_name: Police
+    duration: 5
+    prompt: |
+      she wear police uniform shirt and wear sunglasses in the same time. the main character stands confidently under a spotlight. Without taking a step, their outfit instantly transforms in place into a sleek, crisp blue police uniform. They smoothly put on a pair of black sunglasses, followed by placing a police hat on their head with precision. In one fluid motion, the character draws a handgun and strikes a dramatic pose. they quickly begin firing multiple precise shots in different directions. Each shot emits bright muzzle flashes that briefly light up the room. The scene is shot in a cinematic slow-motion style with realistic textures, subtle light reflections on the sunglasses, and sharp camera focus, highlighting the stylish and powerful transformation.
+
+  - custom_effect_name: Mystic Fox
+    duration: 4
+    prompt: |
+      The subject places both hands on their waist and performs rhythmic movements, especially focusing on hip twisting.
+      Requirements:
+      1. If there are multiple subjects in the image, all of them must perform the hip-twisting motion described above.
+      2. If the subject is a pet, it should be anthropomorphized to perform the hip-twisting motion.
+
+  - custom_effect_name: Bubbles
+    duration: 4
+    prompt: |
+      A dreamy cinematic scene with the main character in the center (e.g., a girl, a fairy, a cat, etc.), joyfully looking around at the magical, beautiful bubbles surrounding her. She raises both hands with palms facing up, expressing wonder and happiness. Her facial expression is a simple open-mouth smile (no lip movement), conveying delight without looking like she's speaking. The bubbles are translucent and shimmer with rainbow reflections as they gently drift in the air. The character remains fully visible and centered in the frame at all times. Soft lighting, bokeh background, magical atmosphere, smooth camera motion, elegant and stable composition.
+
+
+comments:
+  base_folder: |
+    Root folder containing style subfolders. Each style folder should have
+    'Source', 'Generated_Video', and 'Metadata' subfolders.
+  custom_effect_name: |
+    Style name. Used as subfolder under base_folder and in output filenames.
+  prompt: |
+    Required text prompt guiding video generation.
+  model: |
+    Vidu model. Options:
+    'viduq1', 'viduq1-classic', 'viduq2-pro', 'viduq2-turbo',
+    'viduq2-pro-fast', 'viduq3-pro', 'viduq3-turbo'.
+    Default: 'viduq2-pro'.
+  duration: |
+    Output duration in seconds. Default: 5.
+  resolution: |
+    Output resolution. Options: '360p', '540p', '720p', '1080p', '2K'.
+    Default: '720p'.
+  movement: |
+    Object movement amplitude (not effective for q2/q3 models).
+    Options: 'auto', 'small', 'medium', 'large'. Default: 'auto'.
+  audio: |
+    Audio-visual sync (q3-pro and q3-turbo only). Default: true.
+  schedule: |
+    start_time: HH:MM (24-hour format). Leave empty to start immediately.
+    Allows delayed start for batch processing.
+  folder_structure: |
+    Expected structure:
+    base_folder/
+    ├── Style Name 1/
+    │   ├── Source/
+    │   │   └── image.jpg
+    │   ├── Generated_Video/  (created automatically)
+    │   └── Metadata/  (created automatically)
+    └── Style Name 2/
+        └── ...

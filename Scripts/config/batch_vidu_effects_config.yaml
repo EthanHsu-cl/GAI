@@ -4,28 +4,43 @@ prompt: ''
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 4
+  group_tasks_by: 9
 
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 model_version: viduq2-pro
 
-base_folder: Media Files/Vidu/0515 3 Effects
+base_folder: Media Files/Vidu/0518 8 Effects
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 
 design_link: https://docs.google.com/spreadsheets/d/119kFckXwKzzMkBEbaNssCHCG16ntBD83YnNfttdXViA/edit?usp=sharing
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAo1ZpnzO9XQacqe6PJSE37AZxGz9jIMxVPe5q4z_4bC4A?e=9Mgmti
+source_video_link: 
 
 tasks:
 - category: People
-  custom_effect_name: Kitchen_Penguin_Dance
+  custom_effect_name: claw_me
 
 - category: People
-  custom_effect_name: c_walk
+  custom_effect_name: zongzi_wrap
 
 - category: People
-  custom_effect_name: Hands_Up
+  custom_effect_name: emotionlab
+
+- category: People
+  custom_effect_name: mecha_x
+
+- category: People
+  custom_effect_name: split_stance_human
+
+- category: People
+  custom_effect_name: oscar_gala
+
+- category: People
+  custom_effect_name: hip_twist
+
+- category: People
+  custom_effect_name: motor_dance
 
   
 comments:

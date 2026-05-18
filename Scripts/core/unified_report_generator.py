@@ -167,6 +167,7 @@ class UnifiedReportGenerator:
             'runway': 'Runway',
             'vidu_effects': 'Vidu Effects',
             'vidu_reference': 'Vidu Reference',
+            'vidu_i2v': 'Vidu I2V',
             'genvideo': 'GenVideo',
             'openai_image': 'OpenAI Image',
             'pixverse': 'Pixverse',
@@ -225,6 +226,13 @@ class UnifiedReportGenerator:
                 **self.LAYOUT_2_MEDIA,
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['effect_name', 'category', 'task_id', 'processing_time_seconds', 'duration', 'success'],
+            },
+            'vidu_i2v': {
+                **base_config,
+                'media_types': ['source', 'generated'],
+                **self.LAYOUT_2_MEDIA,
+                'title_format': 'Generation {index}: {source_file}',
+                'metadata_fields': ['custom_effect_name', 'model', 'duration', 'resolution', 'movement', 'audio', 'task_id', 'processing_time_seconds', 'success'],
             },
             'vidu_reference': {
                 **base_config,
@@ -1261,7 +1269,7 @@ class UnifiedReportGenerator:
     
     def process_batch(self, task: Dict) -> List[MediaPair]:
         """Universal batch processing for all API types"""
-        if self.api_name in ["vidu_effects", "vidu_reference", "pixverse", "kling_effects", "veo_itv", "seedance_i2v"]:
+        if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "kling_effects", "veo_itv", "seedance_i2v"]:
             return self.process_base_folder_structure(task)
         elif self.api_name == "genvideo":
             return self.process_genvideo_batch(task)
@@ -1823,7 +1831,7 @@ class UnifiedReportGenerator:
             logger.info(f"Processing {self.api_name} base folder: {base_folder}")
             pairs = []
         
-        if self.api_name == "vidu_effects":
+        if self.api_name in ("vidu_effects", "vidu_i2v"):
             # Process each effect folder
             # Support single-task filtering for grouped processing
             tasks_to_process = [task] if (task.get('effect') or task.get('custom_effect_name')) else self.config.get('tasks', [])
@@ -1841,7 +1849,7 @@ class UnifiedReportGenerator:
                     logger.warning(f"Source folder not found for effect: {effect}")
                     continue
 
-                logger.info(f"Processing Vidu effect: {effect}")
+                logger.info(f"Processing {self.api_name} effect: {effect}")
 
                 # OPTIMIZED: Single-pass directory scanning
                 images, _, _ = self._scan_directory_once(folders['src'])
@@ -2989,7 +2997,7 @@ class UnifiedReportGenerator:
         if task.get('_is_grouped'):
             # For grouped tasks, pass the entire task dict as folder_name
             folder_name = task
-        elif self.api_name in ["vidu_effects", "vidu_reference", "pixverse"]:
+        elif self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse"]:
             folder_name = Path(self.config.get('base_folder', '')).name
         elif self.api_name == "veo_itv":
             # For veo_itv, get parent folder (e.g., "0130 6 Styles" from "0130 6 Styles/Street Rap")
@@ -3156,7 +3164,7 @@ class UnifiedReportGenerator:
             self._remove_template_slides(ppt)
             
             # Generate filename
-            if self.api_name in ["vidu_effects", "vidu_reference", "pixverse", "kling_effects"]:
+            if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "kling_effects"]:
                 folder_name = Path(self.config.get('base_folder', '')).name
             elif self.api_name == "veo_itv":
                 # For veo_itv, use parent folder (contains date like "0130 6 Styles")
@@ -3217,7 +3225,7 @@ class UnifiedReportGenerator:
             tasks = self.config.get('tasks', [])
             
             # Determine processing mode
-            if self.api_name in ["vidu_effects", "vidu_reference", "pixverse", "kling_effects", "veo_itv", "seedance_i2v"]:
+            if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "kling_effects", "veo_itv", "seedance_i2v"]:
                 # Base folder structure APIs
                 if group_tasks_by and group_tasks_by > 1 and tasks:
                     # Base-folder APIs with grouping - process tasks individually
@@ -3426,7 +3434,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -3435,7 +3443,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

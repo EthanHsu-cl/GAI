@@ -299,7 +299,7 @@
         "task_delay": 10,
         "max_retries": 1,
         "max_retries_error429": 3,
-        "max_retries_timeout": 1,
+        "max_retries_timeout": 3,
         "config_structure": "task_folders",
         "report": {
             "enabled": true,
@@ -455,6 +455,84 @@
             "effect",
             "prompt",
             "model"
+        ],
+        "additional_features": {
+            "design_link": true,
+            "source_video_link": true
+        }
+    },
+    "vidu_i2v": {
+        "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
+        "api_name": "/submitI2V",
+        "file_types": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".webp"
+        ],
+        "validation": {
+            "max_size_mb": 20,
+            "min_dimension": 128,
+            "max_dimension": 4000,
+            "aspect_ratio": [
+                0.25,
+                4.0
+            ]
+        },
+        "folders": {
+            "input": "Source",
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 3,
+        "task_delay": 10,
+        "max_retries": 3,
+        "max_retries_timeout": 5,
+        "api_params": {
+            "model": "viduq2-pro",
+            "duration": 5,
+            "resolution": "720p",
+            "movement": "auto",
+            "audio": true
+        },
+        "model_options": [
+            "viduq1",
+            "viduq1-classic",
+            "viduq2-pro",
+            "viduq2-turbo",
+            "viduq2-pro-fast",
+            "viduq3-pro",
+            "viduq3-turbo"
+        ],
+        "resolution_options": [
+            "360p",
+            "540p",
+            "720p",
+            "1080p",
+            "2K"
+        ],
+        "movement_options": [
+            "auto",
+            "small",
+            "medium",
+            "large"
+        ],
+        "structure_type": "base_folder",
+        "config_structure": "base_folder",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates 3rd party.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": false
+        },
+        "task_fields": [
+            "custom_effect_name",
+            "prompt",
+            "model",
+            "duration",
+            "resolution",
+            "movement",
+            "audio"
         ],
         "additional_features": {
             "design_link": true,

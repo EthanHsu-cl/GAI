@@ -118,6 +118,7 @@ When you select a platform, the Advanced Options section shows API-specific fiel
 | **DreamActor** | Use Base64, Cut Switch, Video URL |
 | **Vidu Effects** | Category, Effect, Model |
 | **Vidu Reference** | Model, Duration, Resolution, Movement |
+| **Vidu I2V** | Model, Duration, Resolution, Movement, Audio |
 
 These options override the corresponding values in the config file for the current run.
 
@@ -144,6 +145,7 @@ These options override the corresponding values in the config file for the curre
 | `nano` | Nano Banana/Google Flash | Multi-image generation with AI models |
 | `vidu` | Vidu Effects | Effect-based video generation with categories |
 | `viduref` | Vidu Reference | Multi-reference guided video generation |
+| `vidu_i2v` | Vidu I2V | Image-to-video generation (`/submitI2V`) with custom prompts |
 | `runway` | Runway Gen4 | Video processing with face swap and effects |
 | `wan` | Wan 2.2 | Image + video cross-matching with motion animation |
 | `dreamactor` | DreamActor | Image + video face reenactment via cross-matching |
@@ -169,6 +171,7 @@ GAI/                                    # Project root
     │   ├── batch_runway_config.yaml       # Runway configuration
     │   ├── batch_vidu_effects_config.yaml # Vidu Effects configuration
     │   ├── batch_vidu_reference_config.yaml # Vidu Reference configuration
+    │   ├── batch_vidu_i2v_config.yaml     # Vidu I2V configuration
     │   ├── batch_wan_config.yaml          # Wan 2.2 configuration
     │   ├── batch_dreamactor_config.yaml    # DreamActor configuration
     │   ├── batch_veo_config.yaml          # Google Veo configuration
@@ -487,6 +490,25 @@ tasks:
 ```
 
 **Options:** Duration (`4`/`5`/`8`s), Resolution (`720p`/`1080p`), up to 6 reference images per source
+
+### **Vidu I2V Configuration** (`config/batch_vidu_i2v_config.yaml`)
+
+```yaml
+base_folder: Media Files/Vidu I2V/0518 3 Styles
+testbed: http://192.168.31.161/external-testbed/video_effect/
+model: viduq2-pro
+resolution: 720p
+movement: auto
+audio: true
+
+tasks:
+  - custom_effect_name: Police
+    duration: 5
+    prompt: |
+      Custom prompt describing the desired motion / scene.
+```
+
+**Options:** Model (`viduq1`, `viduq1-classic`, `viduq2-pro`, `viduq2-turbo`, `viduq2-pro-fast`, `viduq3-pro`, `viduq3-turbo`), Duration (seconds), Resolution (`360p`/`540p`/`720p`/`1080p`/`2K`), Movement (`auto`/`small`/`medium`/`large`), Audio sync (q3 models only)
 
 ### **Pixverse Configuration** (`config/batch_pixverse_config.yaml`)
 
@@ -810,6 +832,7 @@ The app bundle will be created at `Scripts/dist/AI Video Suite.app` (macOS) or `
 | Nano Banana | I2I | Multi-image (up to 14), random source selection, deterministic random |
 | Vidu Effects | I2V | Category organization, viduq2-pro |
 | Vidu Reference | I2V | Up to 6 references, movement control |
+| Vidu I2V | I2V | `/submitI2V`, custom prompts, q1–q3 models, optional audio sync |
 | Runway | V2V | one_to_one/all_combinations pairing |
 | Wan 2.2 | I+V | Auto-cropping, video×image cross-match |
 | DreamActor | I+V | Image + video face reenactment, base64 encoding |

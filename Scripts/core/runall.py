@@ -32,8 +32,10 @@ API_MAPPING = {
     'kling_ttv': 'kling_ttv',
     'kling_motion': 'kling_motion',
     'klingmotion': 'kling_motion',
-    'vidu': 'vidu_effects', 
+    'vidu': 'vidu_effects',
     'viduref': 'vidu_reference',
+    'vidu_i2v': 'vidu_i2v',
+    'viduit2v': 'vidu_i2v',
     'nano': 'nano_banana',
     'runway': 'runway',
     'genvideo': 'genvideo',
@@ -62,7 +64,8 @@ CONFIG_MAPPING = {
     'kling_ttv': 'config/batch_kling_ttv_config.yaml',
     'kling_motion': 'config/batch_kling_motion_config.yaml',
     'vidu_effects': 'config/batch_vidu_effects_config.yaml',
-    'vidu_reference': 'config/batch_vidu_reference_config.yaml', 
+    'vidu_reference': 'config/batch_vidu_reference_config.yaml',
+    'vidu_i2v': 'config/batch_vidu_i2v_config.yaml',
     'nano_banana': 'config/batch_nano_banana_config.yaml',
     'runway': 'config/batch_runway_config.yaml',
     'genvideo': 'config/batch_genvideo_config.yaml',
@@ -482,6 +485,7 @@ def show_usage():
     print("  kling_ttv - Kling Text-to-Video processing")
     print("  vidu - Vidu Effects processing")
     print("  viduref - Vidu Reference processing")
+    print("  vidu_i2v - Vidu Image-to-Video (/submitI2V) processing")
     print("  nano - Google Flash/Nano Banana processing")
     print("  runway - Runway face swap processing")
     print("  genvideo - GenVideo image generation processing")
@@ -513,6 +517,7 @@ def show_usage():
     print("  python runall.py kling_ttv auto")
     print("  python runall.py vidu auto")
     print("  python runall.py viduref auto --verbose")
+    print("  python runall.py vidu_i2v auto")
     print("  python runall.py pixverse process")
     print("  python runall.py pixverse_ttv auto")
     print("  python runall.py seedance_ttv auto")

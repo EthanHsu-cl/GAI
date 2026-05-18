@@ -397,6 +397,26 @@ API_FIELD_SCHEMAS = {
              'options': ['auto', 'slow', 'normal', 'fast'], 'default': 'auto'},
         ]
     },
+    'vidu_i2v': {
+        'name': 'Vidu I2V',
+        'fields': [
+            {'key': 'custom_effect_name', 'label': 'Style Name', 'type': 'text', 'required': True,
+             'help': 'Style name (used as subfolder under base_folder)'},
+            {'key': 'prompt', 'label': 'Prompt', 'type': 'multiline', 'height': 3, 'required': True},
+            {'key': 'model', 'label': 'Model', 'type': 'dropdown',
+             'options': ['viduq1', 'viduq1-classic', 'viduq2-pro', 'viduq2-turbo',
+                         'viduq2-pro-fast', 'viduq3-pro', 'viduq3-turbo'],
+             'default': 'viduq2-pro'},
+            {'key': 'duration', 'label': 'Duration (sec)', 'type': 'dropdown',
+             'options': ['4', '5', '8'], 'default': '5'},
+            {'key': 'resolution', 'label': 'Resolution', 'type': 'dropdown',
+             'options': ['360p', '540p', '720p', '1080p', '2K'], 'default': '720p'},
+            {'key': 'movement', 'label': 'Movement', 'type': 'dropdown',
+             'options': ['auto', 'small', 'medium', 'large'], 'default': 'auto'},
+            {'key': 'audio', 'label': 'Audio Sync', 'type': 'checkbox', 'default': True,
+             'help': 'Audio-visual sync (q3-pro and q3-turbo only)'},
+        ]
+    },
 }
 
 
@@ -445,6 +465,10 @@ API_LINK_KEYS = {
     'vidu_reference': {
         'source_link': 'source_video_link',
         'design_link': 'root_design_link',
+    },
+    'vidu_i2v': {
+        'source_link': 'source_video_link',
+        'design_link': 'design_link',
     },
 }
 
