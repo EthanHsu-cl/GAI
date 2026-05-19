@@ -2780,8 +2780,8 @@ class UnifiedReportGenerator:
         
         stem = Path(filename).stem
         
-        # First remove the _effect suffix
-        stem = re.sub(r"_effect$", "", stem, flags=re.IGNORECASE)
+        # First remove the _effect / _i2v suffix
+        stem = re.sub(r"_(effect|i2v)$", "", stem, flags=re.IGNORECASE)
         
         # Create multiple possible effect patterns to match
         effect_variations = [
@@ -3386,16 +3386,23 @@ class UnifiedReportGenerator:
             return {}
         
         # Detect API type from task structure
-        # Check for effect or custom_effect (for kling_effects and vidu_effects), and no folder key
-        is_base_folder_api = ('effect' in tasks[0] or 'custom_effect' in tasks[0]) and 'folder' not in tasks[0]
+        # Check for effect or custom_effect / custom_effect_name (kling_effects, vidu_effects, pixverse), and no folder key
+        is_base_folder_api = (
+            ('effect' in tasks[0] or 'custom_effect' in tasks[0] or 'custom_effect_name' in tasks[0])
+            and 'folder' not in tasks[0]
+        )
         
         if is_base_folder_api:
             # Base folder API (vidu_effects, vidu_reference, pixverse, kling_effects)
             # Extract effect/category names for the combined title
             effect_names = []
             for task in tasks:
-                # custom_effect has priority over effect
-                effect_name = task.get('custom_effect') or task.get('effect', task.get('category', 'Unknown'))
+                # custom_effect / custom_effect_name has priority over effect
+                effect_name = (
+                    task.get('custom_effect')
+                    or task.get('custom_effect_name')
+                    or task.get('effect', task.get('category', 'Unknown'))
+                )
                 effect_names.append(effect_name)
             
             # Use config base folder and add grouped information

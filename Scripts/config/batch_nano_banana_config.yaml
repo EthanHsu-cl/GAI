@@ -10,34 +10,25 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB_mZXKf5luQox9fm_YByiZAfZH0LGYOJQqGYi_qaOhYpg?e=OGVJQO
-root_design_link: https://docs.google.com/presentation/d/17w7lPv9rO6Ih3rdRCa78OhiOAd5fuC2Cz3L1AEpqTTI/edit?slide=id.g3de6aedf119_1_173#slide=id.g3de6aedf119_1_173
+root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e17778162e_0_88#slide=id.g3e17778162e_0_88
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCV9C7TVkBoS52w7Sn2yXKAAY4f0W3smgHPujwz-eisRz0?e=Ah3uZk
 
 tasks:
-  - folder: Media Files/Nano Banana/0515 NSFW Test
-    model: gemini-3-pro-image-preview
+  - folder: Media Files/Nano Banana/0518 轉身舉獎盃
+    model: gemini-3.1-flash-image-preview
     resolution: "1K"
-    aspect_ratio: "3:4"
+    aspect_ratio: "16:9"
     prompt: |
-      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME): Use the uploaded photo(s) as the ONLY and ABSOLUTE source of each SUBJECT’s face. The generated faces must be the SAME REAL SUBJECTS as in the input photos, copied directly from the input, NOT reconstructed, NOT reinterpreted. Do NOT beautify, optimize, stylize, idealize, or normalize the faces in any way. Do NOT adjust facial proportions, features, symmetry, skin texture, or age. Do NOT change ethnicity, race, or regional facial characteristics. If any face does not immediately look identical to the corresponding input SUBJECT, the result is INVALID and must be regenerated. The faces must remain structurally and texturally identical to the input photos.
+      A 16:9 photorealistic image. Symmetrical, center-framed medium-wide shot from the waist up. Straight-on, eye-level camera angle with a deep focus, creating strong immersive depth. 
 
-      SUBJECT & SOURCE IMAGE RULES: Use the uploaded user photos as the ONLY visual sources for all SUBJECTS. The number of SUBJECTS in the final image must EXACTLY match the number of uploaded photos (1–4 only). No extra SUBJECTS. No duplicated faces. No merged identities. No face swapping. All facial features must come ONLY from the input photos.
+      Subject: A person sitting dead center, looking directly into the lens. They have an expression of pure, vibrant excitement, mouth wide open cheering, with both fists clenched and raised to shoulder level. They have simple light blue and white horizontal stripes painted on their cheeks. They are wearing a plain, completely unbranded light blue and white vertically striped short-sleeve t-shirt (no shoulder stripes, no chest logos). 
 
-      Realistic studio photography with a clean, light gray background and diffused lighting. Subjects are seated on the floor, positioned in close, intimate physical proximity. Prioritize placing the adult female subject (mother) in the central position among the grouping. If multiple subjects are present, they display warm, happy interactions with a deep sense of family connection, including gentle leaning, soft touches, and shared gazes. Facial expressions must clearly convey happiness and emotional warmth with soft, happy smiles. One subject casually holds a paintbrush. Soft, bright studio lighting evenly illuminates the scene with a clean and airy feel. The light is gently diffused while maintaining subtle highlights on the subjects, creating a luminous and warm appearance without strong directional shadows. The entire image remains consistently sharp and in focus, with no depth-of-field blur.
+      Foreground: A large glass coffee table spanning the bottom frame, filled to create depth. On the left: three unlabeled brown glass beer bottles (one near the viewer, two further back). In the center: a larger generic blue bowl overflowing with a mixture of tortilla chips and pretzels. On the right: a generic sports newspaper folded to show a headline like "HISTORIC WIN" and generic text, with a small generic sports photo.
 
-      Foreground effect: Hand-painted acrylic illustrations appear directly integrated within the scene, as if freely drawn in the air around the subjects. These elements do not belong to any visible surface or physical medium, and no transparent panel, glass, or material is present. Hand-painted acrylic illustrations are placed sparingly (6-8 elements total) and must be related to Mother's Day themes, including: flowers, gift boxes, greeting cards, hearts, and ribbons. Elements vary in size (a mix of small, medium, and slightly larger accents) and are distributed in a naturally scattered, irregular manner, with loose spacing and non-uniform placement, creating a light, unstructured, and organic arrangement.These elements show translucency and visible brush strokes. Color palette includes moderately saturated warm tones (pink, coral, sunflower yellow, fresh green). These elements are rendered as clean, simple, stylized icons with limited internal detail, maintaining high transparency, luminous quality, and an airy feel. They reveal the subjects behind.
+      Midground: They sit on a light beige sofa. Draped layered and deep over the sofa back and side arms are multiple unmarked sports scarves (no club logos, only colors like plain red, blue/white stripe, plain white) and the mustard yellow and dark red pillows.
 
-      Placement: Illustrations are anchored in the lower portion of the composition, forming a clear visual base beneath the subjects. The majority of elements remain below the subjects’ seated position, with only minimal upward variation. Elements are distributed horizontally with slight irregularity, maintaining a grounded and stable composition. The upper area of the frame remains open and largely free of decorative elements, preserving visual focus on the subjects and heart line.
-
-      Primary graphic:  A clearly pink/ coral visible hand-painted heart line flows dynamically, encircling all subjects present as a cohesive group. This continuous heart line must physically intertwine with the subjects, creating explicit layered depth. Different segments are precisely rendered to pass in front of specific body parts (e.g., an arm or shoulder) and behind others (e.g., a subject's back), defining a clear, defined 3D woven pattern around the group.  The thin stroke remains painterly with visible acrylic texture and slight organic irregularity.
-
-      Styling: Female subjects wear white, cream, or pale yellow tulle dresses. Male subjects wear simple white shirt and beige pants. Overall styling is elegant and whimsical.
-
-      Color palette: moderately saturated tones with a soft, warm, and gentle appearance. Colors should feel slightly muted and blended rather than sharp or highly contrasted.
-
-      Composition: Medium shot, centered framing. Subjects occupy 80% of the frame. Color palette includes moderately saturated warm red, coral pink, sunflower yellow, and fresh green with a soft matte finish. Edges of painted elements are softly diffused, creating a warm and tender atmosphere. No text, logos, or furniture.
-    reference_folder: Media Files/OpenAI Image/0514 NSFW Test 2
-    use_comparison_template: true
+      Background: A warm, rich, deep, and symmetrically lit room with architectural details like wainscoting. Flanking the sofa on both the exact left and right are four matching classic floor lamps with warm yellow shades, arranged symmetrically in pairs (two on each side), casting an immersive, deeply cinematic glow. The dark wooden bookshelf on the far left and beige curtains on the far right are retained and clearly visible due to deeper focus. The large, unbranded light blue and white horizontally striped flag remains pinned to the wall directly behind them.
+    use_comparison_template: false
     use_random_source_selection: false
     use_deterministic_random: true
     random_seed: 42

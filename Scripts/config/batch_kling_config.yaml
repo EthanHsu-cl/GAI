@@ -1,55 +1,40 @@
+# Kling Image-to-Video Configuration
+# Generates videos from input images using the Kling testbed.
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
+# Report Output Directory
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-comment_output_directory: 'Optional: Global output directory for all generated PPTX files. Can be overridden per task. Default
-  is current directory.'
 testbed: http://192.168.31.161/external-testbed/kling/
-model_version: v2.5-turbo
-comment_model_version: 'Model version to use for video generation. Options: ''v1.6'', ''v2.1''. Default is ''v2.1'' if not
-  specified.'
+model_version: v3
 schedule:
+  # Time format: HH:MM (24-hour format). Leave empty to start immediately
   start_time: ''
-  comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 group_tasks_by: 4
 
 tasks:
-- mode: std
-  folder: Media Files/Kling 2.5/0518 3 Effects/Police
+- mode: pro
+  folder: Media Files/Kling 3.0/0518 轉身舉獎盃
   prompt: |
-    she wear police uniform shirt and wear sunglasses in the same time. the main character stands confidently under a spotlight. Without taking a step, their outfit instantly transforms in place into a sleek, crisp blue police uniform. They smoothly put on a pair of black sunglasses, followed by placing a police hat on their head with precision. In one fluid motion, the character draws a handgun and strikes a dramatic pose. they quickly begin firing multiple precise shots in different directions. Each shot emits bright muzzle flashes that briefly light up the room. The scene is shot in a cinematic slow-motion style with realistic textures, subtle light reflections on the sunglasses, and sharp camera focus, highlighting the stylish and powerful transformation.
-  negative_prompt: ''
-  design_link: ''
-  source_video_link: ''
+    Start Frame: In a warm living room, a passionate fan leaps upward, their chest heaving, neck veins popping, and fists pumping aggressively as their jersey ripples with their energetic movements.
+    Camera Movement & Transition: Dynamic orbital tracking shot. The camera executes a smooth, cinematic 360-degree horizontal orbit around the person from left to right, keeping the subject dead center in the frame. During this orbital sweep, the camera maintains a strictly level horizon and tracks their head height. As they dynamically stand up, a seamless environment transition occurs: the warm living room lighting instantly flashes and shifts to bright stadium floodlights. 
+    End Frame: The camera completes its orbit and locks perfectly in front of them. They stand like a gladiator, hoisted securely on the shoulders of an ecstatic, hyper-realistic stadium. Their bare right arm punches through the hazy air, hoisting a fiercely gleaming golden soccer trophy that catches the stadium flares. The foreground is heavily framed by out-of-focus raised fans' hands and glowing smartphone screens capturing the moment. Their facial identity remains perfectly locked to the start frame, but is now raw with emotion, muscles tensed, roaring in absolute victory. 8k, photorealistic, IMAX aspect ratio. Their facial identity remains perfectly consistent with the start frame.
+  negative_prompt: |
+    logo, badge,  ghosting, double exposure, morphing background, blending environments, residual objects, lingering background, superimposition, fading transition, floating furniture, mutated architecture, indoor elements in outdoor stadium, structural inconsistency, transparent objects, crossfade. naked
+  design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e17778162e_0_88#slide=id.g3e17778162e_0_88
+  source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAt8LVngwnrTIdQuMJvX-NgAZDB-717vTMrnSi2cSC4x4I?e=aM1AQF
   reference_folder: ''
   use_comparison_template: false
 
-- mode: std
-  folder: Media Files/Kling 2.5/0518 3 Effects/Mystic Fox
-  prompt: |
-    The subject places both hands on their waist and performs rhythmic movements, especially focusing on hip twisting.
-    Requirements:
-    1. If there are multiple subjects in the image, all of them must perform the hip-twisting motion described above.
-    2. If the subject is a pet, it should be anthropomorphized to perform the hip-twisting motion.
-  negative_prompt: ''
-  design_link: ''
-  source_video_link: ''
-  reference_folder: ''
-  use_comparison_template: false
-
-- mode: std
-  folder: Media Files/Kling 2.5/0518 3 Effects/Bubbles
-  prompt: |
-    A dreamy cinematic scene with the main character in the center (e.g., a girl, a fairy, a cat, etc.), joyfully looking around at the magical, beautiful bubbles surrounding her. She raises both hands with palms facing up, expressing wonder and happiness. Her facial expression is a simple open-mouth smile (no lip movement), conveying delight without looking like she's speaking. The bubbles are translucent and shimmer with rainbow reflections as they gently drift in the air. The character remains fully visible and centered in the frame at all times. Soft lighting, bokeh background, magical atmosphere, smooth camera motion, elegant and stable composition.
-  negative_prompt: ''
-  design_link: ''
-  source_video_link: ''
-  reference_folder: ''
-  use_comparison_template: false
-
+# Comments and documentation
 comments:
+  output_directory: |
+    Optional: Global output directory for all generated PPTX files.
+    Can be overridden per task. Default is current directory.
+  testbed: |
+    Kling testbed endpoint used for video generation API calls.
   model_version: |
     Model version to use for video generation.
-    Options: 'v1.6', 'v2.1', 'v2.5-turbo'
+    Options: 'v1.6', 'v1.5', 'v2.0-master', 'v2.1', 'v2.1-master', 'v2.5-turbo', 'v2.6', 'v3'
     Default: 'v2.1' if not specified.
     Can be set globally or per-task.
   mode: |

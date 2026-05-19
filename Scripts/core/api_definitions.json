@@ -272,7 +272,13 @@
         ],
         "model_options": [
             "v1.6",
-            "v2.1"
+            "v1.5",
+            "v2.0-master",
+            "v2.1",
+            "v2.1-master",
+            "v2.5-turbo",
+            "v2.6",
+            "v3"
         ]
     },
     "openai_image": {
@@ -1207,9 +1213,13 @@
         },
         "model_options": [
             "v1.6",
+            "v1.5",
             "v2.0-master",
+            "v2.1",
             "v2.1-master",
-            "v2.5-turbo"
+            "v2.5-turbo",
+            "v2.6",
+            "v3"
         ],
         "mode_options": [
             "std",
@@ -1531,12 +1541,14 @@
             "seedance"
         ],
         "kling_model_options": [
-            "v2.6",
-            "v3",
-            "v2.5-turbo",
-            "v2.1",
+            "v1.6",
+            "v1.5",
             "v2.0-master",
-            "v1.6"
+            "v2.1",
+            "v2.1-master",
+            "v2.5-turbo",
+            "v2.6",
+            "v3"
         ]
     }
 }

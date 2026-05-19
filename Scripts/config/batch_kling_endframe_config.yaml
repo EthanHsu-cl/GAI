@@ -1,18 +1,16 @@
+# Kling EndFrame Configuration
+# Generates videos from pairs of start/end frame images using the Kling testbed.
 template_path: templates/I2V templates.pptx
 comparison_template_path: templates/I2V Comparison Template.pptx
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 3
-comment_output: Set group_tasks_by to 0 (or omit) to create individual reports per task. Set to N (e.g., 4) to group N tasks
-  into one combined report.
 testbed: http://192.168.31.161/external-testbed/kling/
 model_version: v2.1
-comment_model_version: 'Model version to use for video generation. Options: ''v1.6'', ''v2.1''. Default is ''v2.1''.'
 generation_count: 10
-comment_generation_count: 'Global default: Number of videos to generate per pair. Can be overridden per task. Default is 1.'
 schedule:
+  # Time format: HH:MM (24-hour format). Leave empty to start immediately
   start_time: ''
-  comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 tasks:
 - mode: pro
   folder: Media Files/Kling Endframe/1107 1 Style/Iron Raptor
@@ -39,7 +37,7 @@ comments:
     mode: Generation mode - 'pro' for higher quality (default)
     duration: Video duration in seconds - '5' or '10'
     cfg: 'CFG scale value (0.0-1.0) - controls how closely the generation follows the prompt. Default: 0.5'
-    model_version: Model version to use - 'v1.6' or 'v2.1'. Set globally or per task
+    model_version: Model version to use - 'v1.6', 'v1.5', 'v2.0-master', 'v2.1', 'v2.1-master', 'v2.5-turbo', 'v2.6', or 'v3'. Set globally or per task
     pairing_mode: Image pairing strategy - 'ab_naming' (default) or 'sequential'
     generation_count: 'Number of videos to generate per pair. Can be set globally (applies to all tasks) or per-task (overrides
       global). Default: 1'

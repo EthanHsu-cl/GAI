@@ -52,6 +52,11 @@ class KlingHandler(BaseAPIHandler):
             cfg=0.5,
             model=self.config.get('model_version', 'v2.1'),
             negative_prompt=task_config.get('negative_prompt', ''),
+            sound_enabled=task_config.get('sound_enabled', False),
+            voice_ids=task_config.get('voice_ids', ''),
+            multishot_type=task_config.get('multishot_type', 'none'),
+            multishot_df=task_config.get('multishot_df', {"headers": ["prompt", "duration"], "data": [], "metadata": None}),
+            end_frame_image=None,
             api_name=self.api_defs['api_name']
         )
     

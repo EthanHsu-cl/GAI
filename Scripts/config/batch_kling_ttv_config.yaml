@@ -231,7 +231,7 @@ tasks:
 comments:
   model: |
     Model version for text-to-video generation.
-    Options: 'v1.6', 'v2.0-master', 'v2.1-master', 'v2.5-turbo'
+    Options: 'v1.6', 'v1.5', 'v2.0-master', 'v2.1', 'v2.1-master', 'v2.5-turbo', 'v2.6', 'v3'
     Default: 'v1.6'. Set globally or per-task (task overrides global).
   mode: |
     Generation mode for video quality.
