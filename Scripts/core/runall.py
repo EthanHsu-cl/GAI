@@ -54,6 +54,8 @@ API_MAPPING = {
     'openaiimage': 'openai_image',
     'gptimage': 'openai_image',
     'gpt_image': 'openai_image',
+    'fifa_i2i2v': 'fifa_i2i2v',
+    'fifa': 'fifa_i2i2v',
 }
 
 # Config file mapping
@@ -77,7 +79,8 @@ CONFIG_MAPPING = {
     'veo': 'config/batch_veo_config.yaml',
     'veo_itv': 'config/batch_veo_itv_config.yaml',
     'dreamactor': 'config/batch_dreamactor_config.yaml',
-    'openai_image': 'config/batch_openai_image_config.yaml'
+    'openai_image': 'config/batch_openai_image_config.yaml',
+    'fifa_i2i2v': 'config/batch_fifa_i2i2v_config.yaml'
 }
 
 
@@ -497,6 +500,7 @@ def show_usage():
     print("  wan - Wan 2.2 image-video animation processing")
     print("  veo - Google Veo text-to-video processing")
     print("  veoitv - Google Veo image-to-video processing")
+    print("  fifa - FIFA image-to-image-to-video pipeline (start/end frame → video)")
     print("  all - Run all platforms")
     print()
     print("ACTIONS:")
@@ -524,6 +528,7 @@ def show_usage():
     print("  python runall.py seedance_i2v auto")
     print("  python runall.py wan auto")
     print("  python runall.py veo auto")
+    print("  python runall.py fifa auto")
     print("  python runall.py all auto --parallel")
     print("  python runall.py runway process --config custom_runway_config.json")
     print("  python runall.py genvideo process")

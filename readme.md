@@ -722,6 +722,50 @@ root_folder/
 
 **Output Naming:** `{source_image_name}_{generation_number}.mp4` (e.g., `selfie_1.mp4`, `selfie_2.mp4`)
 
+### **FIFA I2I2V Configuration** (`config/batch_fifa_i2i2v_config.yaml`)
+
+Image-to-image-to-video pipeline. Per source image, optionally generate a start frame and/or an end frame from prompts, then generate the final video from whichever frames were produced. Defaults to Kling 3.0 Pro for the video step.
+
+```yaml
+root_folder: Media Files/FIFA_I2I2V
+generation_count: 1
+
+default_settings:
+  frame_model: gemini-3-pro-image-preview
+  generate_start: true
+  generate_end: false
+  service: kling
+  model: v3              # Kling 3.0
+  kling_mode: pro
+  kling_duration: '5'
+  kling_ratio: '16:9'
+
+tasks:
+  - style_name: Statue Selfie
+    folder: Media Files/FIFA_I2I2V/0518 1 Styles/Statue Selfie
+    generate_start: true
+    generate_end: false
+    start_frame_prompt: "Person standing next to a marble statue in a museum, golden-hour light."
+    end_frame_prompt: ""
+    video_prompt: "Cinematic slow push-in; statue subtly comes alive."
+    video_negative_prompt: ""
+```
+
+**Pipeline:** `/on_generate_frame` (if `generate_start`) → `/on_generate_frame_1` (if `generate_end`) → `/on_generate_video`. At least one of `generate_start` / `generate_end` must be true. Supported video services: `kling`, `wan`, `pixverse`, `google_veo`, `seedance`.
+
+**Folder Structure:**
+
+```bash
+root_folder/
+├── {style_name}/
+│   ├── Source/             # Input images
+│   ├── Generated_Frames/   # {name}_{n}_start.png / {name}_{n}_end.png
+│   ├── Generated_Video/    # {name}_{n}.mp4
+│   └── Metadata/
+```
+
+**Output Naming:** Videos `{source_image_name}_{generation_number}.mp4`, frames `{source_image_name}_{generation_number}_{start|end}.png`.
+
 ## 📊 Report Generation
 
 PowerPoint reports auto-generated with title slides, side-by-side comparisons, metadata tracking, and hyperlinks.

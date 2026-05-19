@@ -1430,5 +1430,113 @@
             "480p",
             "720p"
         ]
+    },
+    "fifa_i2i2v": {
+        "endpoint": "http://192.168.31.161/external-testbed/fifa/",
+        "api_name": "/on_generate_video",
+        "file_types": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".bmp",
+            ".webp"
+        ],
+        "validation": {
+            "max_size_mb": 30,
+            "min_dimension": 256
+        },
+        "folders": {
+            "input": "Source",
+            "frames": "Generated_Frames",
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "rate_limit": 5,
+        "task_delay": 10,
+        "max_retries": 3,
+        "config_structure": "base_folder",
+        "structure_type": "base_folder",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": false
+        },
+        "task_fields": [
+            "folder",
+            "style_name",
+            "generate_start",
+            "generate_end",
+            "start_frame_prompt",
+            "end_frame_prompt",
+            "video_prompt",
+            "video_negative_prompt",
+            "frame_model",
+            "service",
+            "model",
+            "kling_mode",
+            "kling_duration",
+            "kling_ratio",
+            "wan_resolution",
+            "wan_duration",
+            "pv_duration",
+            "pv_motion",
+            "pv_quality",
+            "veo_duration",
+            "veo_aspect",
+            "veo_resolution",
+            "sd_duration",
+            "sd_ratio",
+            "sd_resolution",
+            "generation_count"
+        ],
+        "api_params": {
+            "frame_model": "gemini-3-pro-image-preview",
+            "generate_start": true,
+            "generate_end": false,
+            "service": "kling",
+            "model": "v3",
+            "kling_mode": "pro",
+            "kling_duration": "5",
+            "kling_ratio": "16:9",
+            "wan_resolution": "1080P",
+            "wan_duration": 5,
+            "pv_duration": 5,
+            "pv_motion": "normal",
+            "pv_quality": "540p",
+            "veo_duration": 8,
+            "veo_aspect": "16:9",
+            "veo_resolution": "1080p",
+            "sd_duration": 5,
+            "sd_ratio": "16:9",
+            "sd_resolution": "720p"
+        },
+        "frame_model_options": [
+            "flux-2-pro",
+            "flux-2-flex",
+            "gpt-image-2",
+            "gpt-image-1",
+            "kling-image-o1",
+            "kling-v3-omni",
+            "seedream-5-0-260128",
+            "gemini-2.5-flash-image",
+            "gemini-3-pro-image-preview",
+            "gemini-3.1-flash-image-preview"
+        ],
+        "service_options": [
+            "wan",
+            "pixverse",
+            "kling",
+            "google_veo",
+            "seedance"
+        ],
+        "kling_model_options": [
+            "v2.6",
+            "v3",
+            "v2.5-turbo",
+            "v2.1",
+            "v2.0-master",
+            "v1.6"
+        ]
     }
 }

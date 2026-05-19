@@ -1,0 +1,151 @@
+# FIFA Image-to-Image-to-Video Batch Configuration
+# Pipeline per source image:
+#   1. (optional) Generate a start frame from input image + start_frame_prompt
+#   2. (optional) Generate an end   frame from input image + end_frame_prompt
+#   3. Generate a video from start &/ end frame(s) + video_prompt
+#
+# Each style folder should contain a 'Source' subfolder with source images.
+# Generated assets are written to:
+#   - Generated_Frames/  (intermediate start/end frames)
+#   - Generated_Video/   (final mp4 videos)
+#   - Metadata/
+
+template_path: templates/I2V templates.pptx
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by:
+
+testbed: http://192.168.31.161/external-testbed/fifa/
+
+# Global generation count - how many videos per source image (overridable per task)
+generation_count: 1
+
+root_folder: Media Files/FIFA_I2I2V
+
+schedule:
+  start_time: ''
+
+root_source_video_link: ''
+root_design_link: ''
+
+# Defaults applied to every task (overridable per task)
+default_settings:
+  # Frame generation
+  frame_model: gemini-3.1-flash-image-preview
+  # Pipeline toggles
+  generate_start: true
+  generate_end: false
+
+  # Video service / model
+  service: kling
+  model: v3            # kling 3.0
+
+  # Per-service params (only the ones for the chosen service are used)
+  kling_mode: pro
+  kling_duration: 5
+  kling_ratio: '16:9'
+
+  wan_resolution: 1080P
+  wan_duration: 5
+
+  pv_duration: 5
+  pv_motion: normal
+  pv_quality: 540p
+
+  veo_duration: 8
+  veo_aspect: '16:9'
+  veo_resolution: 1080p
+
+  sd_duration: 5
+  sd_ratio: '16:9'
+  sd_resolution: 720p
+
+tasks:
+  - style_name: 轉身舉獎盃
+    folder: Media Files/FIFA_I2I2V/0518 1 Styles/轉身舉獎盃
+    generate_start: true
+    generate_end: false
+    start_frame_prompt: |
+      A 16:9 photorealistic image. Symmetrical, center-framed medium-wide shot from the waist up. Straight-on, eye-level camera angle with a deep focus, creating strong immersive depth. 
+
+      Subject: A person sitting dead center, looking directly into the lens. They have an expression of pure, vibrant excitement, mouth wide open cheering, with both fists clenched and raised to shoulder level. They have simple light blue and white horizontal stripes painted on their cheeks. They are wearing a plain, completely unbranded light blue and white vertically striped short-sleeve t-shirt (no shoulder stripes, no chest logos). 
+
+      Foreground: A large glass coffee table spanning the bottom frame, filled to create depth. On the left: three unlabeled brown glass beer bottles (one near the viewer, two further back). In the center: a larger generic blue bowl overflowing with a mixture of tortilla chips and pretzels. On the right: a generic sports newspaper folded to show a headline like "HISTORIC WIN" and generic text, with a small generic sports photo.
+
+      Midground: They sit on a light beige sofa. Draped layered and deep over the sofa back and side arms are multiple unmarked sports scarves (no club logos, only colors like plain red, blue/white stripe, plain white) and the mustard yellow and dark red pillows.
+
+      Background: A warm, rich, deep, and symmetrically lit room with architectural details like wainscoting. Flanking the sofa on both the exact left and right are four matching classic floor lamps with warm yellow shades, arranged symmetrically in pairs (two on each side), casting an immersive, deeply cinematic glow. The dark wooden bookshelf on the far left and beige curtains on the far right are retained and clearly visible due to deeper focus. The large, unbranded light blue and white horizontally striped flag remains pinned to the wall directly behind them.
+    end_frame_prompt: ''
+    video_prompt: |
+      Start Frame: In a warm living room, a passionate fan leaps upward, their chest heaving, neck veins popping, and fists pumping aggressively as their jersey ripples with their energetic movements.
+      Camera Movement & Transition: Dynamic orbital tracking shot. The camera executes a smooth, cinematic 360-degree horizontal orbit around the person from left to right, keeping the subject dead center in the frame. During this orbital sweep, the camera maintains a strictly level horizon and tracks their head height. As they dynamically stand up, a seamless environment transition occurs: the warm living room lighting instantly flashes and shifts to bright stadium floodlights. 
+      End Frame: The camera completes its orbit and locks perfectly in front of them. They stand like a gladiator, hoisted securely on the shoulders of an ecstatic, hyper-realistic stadium. Their bare right arm punches through the hazy air, hoisting a fiercely gleaming golden soccer trophy that catches the stadium flares. The foreground is heavily framed by out-of-focus raised fans' hands and glowing smartphone screens capturing the moment. Their facial identity remains perfectly locked to the start frame, but is now raw with emotion, muscles tensed, roaring in absolute victory. 8k, photorealistic, IMAX aspect ratio. Their facial identity remains perfectly consistent with the start frame.
+    video_negative_prompt: |
+      logo, badge,  ghosting, double exposure, morphing background, blending environments, residual objects, lingering background, superimposition, fading transition, floating furniture, mutated architecture, indoor elements in outdoor stadium, structural inconsistency, transparent objects, crossfade. naked
+
+# Example: generate both frames
+#  - style_name: Day To Night
+#    folder: Media Files/FIFA_I2I2V/0518 1 Styles/Day To Night
+#    generate_start: true
+#    generate_end: true
+#    start_frame_prompt: |
+#      Same scene as reference, captured at golden hour with warm sunlight.
+#    end_frame_prompt: |
+#      Same scene as reference, captured at night with neon city lights.
+#    video_prompt: |
+#      Smooth time-lapse transition from day to night, the sky shifts color, lights gradually turn on, fluid cinematic camera motion.
+#    video_negative_prompt: ''
+
+comments:
+  pipeline: |
+    For each source image, the handler runs up to three API calls:
+      1. /on_generate_frame   (only if generate_start: true)
+      2. /on_generate_frame_1 (only if generate_end: true)
+      3. /on_generate_video   (always — uses whichever frames were produced)
+    At least one of generate_start / generate_end must be true.
+
+  prompts: |
+    Each task may specify up to four prompts:
+      - start_frame_prompt   – image gen prompt for the start frame
+      - end_frame_prompt     – image gen prompt for the end   frame
+      - video_prompt         – motion / scene prompt for the video model
+      - video_negative_prompt – kept in metadata for traceability (not all video
+                                services accept a negative prompt parameter)
+
+  service_models: |
+    service: one of [kling, wan, pixverse, google_veo, seedance]
+    model values depend on service. For kling:
+      - v2.6 (Kling 2.6)
+      - v3   (Kling 3.0) — default
+      - v2.5-turbo
+      - v2.1
+      - v2.0-master
+      - v1.6
+    Run /on_service_change is handled implicitly by passing matching service+model.
+
+  frame_model: |
+    Image-generation model used for /on_generate_frame and /on_generate_frame_1.
+    Options:
+      - flux-2-pro
+      - flux-2-flex
+      - gpt-image-2
+      - gpt-image-1
+      - kling-image-o1
+      - kling-v3-omni
+      - seedream-5-0-260128
+      - gemini-2.5-flash-image
+      - gemini-3-pro-image-preview (default)
+      - gemini-3.1-flash-image-preview
+
+  output_naming: |
+    Videos:  {source_image_name}_{generation_number}.mp4
+    Frames:  {source_image_name}_{generation_number}_{start|end}.png
+
+  folder_structure: |
+    root_folder/
+    ├── {style_name}/
+    │   ├── Source/             # Input images
+    │   ├── Generated_Frames/   # {name}_{n}_start.png / {name}_{n}_end.png
+    │   ├── Generated_Video/    # {name}_{n}.mp4
+    │   └── Metadata/

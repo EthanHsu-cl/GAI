@@ -3,7 +3,10 @@
     "allow": [
       "Skill(update-batch-effects)",
       "Skill(update-batch-effects:*)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Skill(add-new-api)",
+      "Skill(add-new-api:*)",
+      "Bash(python3 -c \"import json; json.load\\(open\\('Scripts/core/api_definitions.json'\\)\\); print\\('JSON valid'\\)\")"
     ]
   }
 }
