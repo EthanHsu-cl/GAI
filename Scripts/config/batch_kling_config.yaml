@@ -13,15 +13,17 @@ group_tasks_by: 4
 
 tasks:
 - mode: pro
-  folder: Media Files/Kling 3.0/0518 轉身舉獎盃
+  folder: Media Files/Kling 3.0/0520 看球賽
   prompt: |
-    Start Frame: In a warm living room, a passionate fan leaps upward, their chest heaving, neck veins popping, and fists pumping aggressively as their jersey ripples with their energetic movements.
-    Camera Movement & Transition: Dynamic orbital tracking shot. The camera executes a smooth, cinematic 360-degree horizontal orbit around the person from left to right, keeping the subject dead center in the frame. During this orbital sweep, the camera maintains a strictly level horizon and tracks their head height. As they dynamically stand up, a seamless environment transition occurs: the warm living room lighting instantly flashes and shifts to bright stadium floodlights. 
-    End Frame: The camera completes its orbit and locks perfectly in front of them. They stand like a gladiator, hoisted securely on the shoulders of an ecstatic, hyper-realistic stadium. Their bare right arm punches through the hazy air, hoisting a fiercely gleaming golden soccer trophy that catches the stadium flares. The foreground is heavily framed by out-of-focus raised fans' hands and glowing smartphone screens capturing the moment. Their facial identity remains perfectly locked to the start frame, but is now raw with emotion, muscles tensed, roaring in absolute victory. 8k, photorealistic, IMAX aspect ratio. Their facial identity remains perfectly consistent with the start frame.
+    A person sitting in a sports stadium as a fan, wearing a light blue and white vertical striped jersey inspired by Argentine football colors — clean, plain fabric with absolutely no logos, badges, emblems, crests, brand marks, or text of any kind. The person is watching the game with a natural, relaxed expression — calm but quietly engaged, the kind of look someone has when genuinely absorbed in watching a match. Eyes gaze steadily upward and slightly to one side toward the field, never looking at the camera.
+    Natural micro-movements throughout the clip: subtle shifts in facial muscle tension as the game unfolds, a barely perceptible tightening of the jaw, occasional slow natural blinks, eyes making tiny unconscious tracking movements following the game, a soft natural swallow, lips slightly parted and relaxed. Hair moves gently and organically from stadium air and very slight head micro-adjustments. Shoulders rise and fall with slow natural breathing. All movements feel completely unstaged and human — the subject is unaware of the camera.
+    Camera movement: broadcast-style smooth, continuous, very subtle push-in zoom starting from a medium shot that clearly shows the upper body and jersey. The zoom is extremely gentle and minimal — barely perceptible in real time, only noticeable when comparing the first and last frames. In the final frame, the face occupies no more than 15–18% of the frame, with full upper body still visible. Perfectly smooth, linear, continuous motion — no shakiness, no abrupt cuts, no digital zoom artifacts.
+    Lighting remains completely constant and stable throughout — warm stadium floodlight tone, no flickering, no shadow shifting, no exposure changes from start to finish. Background crowd and fans remain softly blurred with consistent bokeh throughout. Shallow depth of field — face always in sharp focus.
+    Photorealistic, broadcast TV cinematic quality, 4K, smooth motion.
   negative_prompt: |
-    logo, badge,  ghosting, double exposure, morphing background, blending environments, residual objects, lingering background, superimposition, fading transition, floating furniture, mutated architecture, indoor elements in outdoor stadium, structural inconsistency, transparent objects, crossfade. naked
-  design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e17778162e_0_88#slide=id.g3e17778162e_0_88
-  source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAt8LVngwnrTIdQuMJvX-NgAZDB-717vTMrnSi2cSC4x4I?e=aM1AQF
+    shaky camera, handheld wobble, jump cut, abrupt zoom, fast zoom, aggressive push-in, digital zoom artifacts, extreme close-up, tight close-up, flickering light, shadow change, exposure shift, frozen expression, mannequin-like stillness, posed look, stiff face, over-acting, cheering, laughing, crying, sudden movement, head turning sharply, looking at camera, distorted face, low quality, watermark, logo, badge, emblem, brand mark, national crest, text on jersey, any symbol on jersey
+  design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e36c7d2e7a_9_0#slide=id.g3e36c7d2e7a_9_0
+  source_video_link: 
   reference_folder: ''
   use_comparison_template: false
 

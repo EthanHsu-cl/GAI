@@ -10,33 +10,26 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDlyXEJGp0mQ76zBnqySiMDAZN7B6VUvm8TRlrFesutDdM?e=agQVnx
-root_design_link: 
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDoTeDj99W_RI1r4UqmQjpqAaapi_01uNRocE-whe6ZgEA?e=Tgbd99
+root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e36c7d2e7a_9_0#slide=id.g3e36c7d2e7a_9_0
 
 tasks:
-  - folder: Media Files/OpenAI Image/0518 NSFW Test 3
+  - folder: Media Files/OpenAI Image/0520 看球賽
     model: gpt-image-2
     quality: auto
     resolution: "1K"
-    aspect_ratio: "auto"
+    aspect_ratio: "16:9"
     prompt: |
-      CRITICAL FACE ID LOCK — PRIORITY 1 (EXTREME): Use the uploaded photo(s) as the ONLY and ABSOLUTE source of each SUBJECT’s face. The generated faces must be the SAME REAL SUBJECTS as in the input photos, copied directly from the input, NOT reconstructed, NOT reinterpreted. Do NOT beautify, optimize, stylize, idealize, or normalize the faces in any way. Do NOT adjust facial proportions, features, symmetry, skin texture, or age. Do NOT change ethnicity, race, or regional facial characteristics. If any face does not immediately look identical to the corresponding input SUBJECT, the result is INVALID and must be regenerated. The faces must remain structurally and texturally identical to the input photos.
+      Photorealistic candid broadcast-style photo, the woman in this image 
+      [FACE REFERENCE] sitting as a fan at a live football soccer match, 
+      EXACT same face — identical facial structure, eye shape, nose, lips, 
+      skin tone, hair color, bangs style — reproduced with 100% fidelity, 
+      no alterations to facial features whatsoever.
 
-      SUBJECT & SOURCE IMAGE RULES: Use the uploaded user photos as the ONLY visual sources for all SUBJECTS. The number of SUBJECTS in the final image must EXACTLY match the number of uploaded photos (1–4 only). No extra SUBJECTS. No duplicated faces. No merged identities. No face swapping. All facial features must come ONLY from the input photos.
-
-      Realistic studio photography with a clean, light gray background and diffused lighting. Subjects are seated on the floor, positioned in close, intimate physical proximity. Prioritize placing the adult female subject (mother) in the central position among the grouping. If multiple subjects are present, they display warm, happy interactions with a deep sense of family connection, including gentle leaning, soft touches, and shared gazes. Facial expressions must clearly convey happiness and emotional warmth with soft, happy smiles. One subject casually holds a paintbrush. Soft, bright studio lighting evenly illuminates the scene with a clean and airy feel. The light is gently diffused while maintaining subtle highlights on the subjects, creating a luminous and warm appearance without strong directional shadows. The entire image remains consistently sharp and in focus, with no depth-of-field blur.
-
-      Foreground effect: Hand-painted acrylic illustrations appear directly integrated within the scene, as if freely drawn in the air around the subjects. These elements do not belong to any visible surface or physical medium, and no transparent panel, glass, or material is present. Hand-painted acrylic illustrations are placed sparingly (6-8 elements total) and must be related to Mother's Day themes, including: flowers, gift boxes, greeting cards, hearts, and ribbons. Elements vary in size (a mix of small, medium, and slightly larger accents) and are distributed in a naturally scattered, irregular manner, with loose spacing and non-uniform placement, creating a light, unstructured, and organic arrangement.These elements show translucency and visible brush strokes. Color palette includes moderately saturated warm tones (pink, coral, sunflower yellow, fresh green). These elements are rendered as clean, simple, stylized icons with limited internal detail, maintaining high transparency, luminous quality, and an airy feel. They reveal the subjects behind.
-
-      Placement: Illustrations are anchored in the lower portion of the composition, forming a clear visual base beneath the subjects. The majority of elements remain below the subjects’ seated position, with only minimal upward variation. Elements are distributed horizontally with slight irregularity, maintaining a grounded and stable composition. The upper area of the frame remains open and largely free of decorative elements, preserving visual focus on the subjects and heart line.
-
-      Primary graphic:  A clearly pink/ coral visible hand-painted heart line flows dynamically, encircling all subjects present as a cohesive group. This continuous heart line must physically intertwine with the subjects, creating explicit layered depth. Different segments are precisely rendered to pass in front of specific body parts (e.g., an arm or shoulder) and behind others (e.g., a subject's back), defining a clear, defined 3D woven pattern around the group.  The thin stroke remains painterly with visible acrylic texture and slight organic irregularity.
-
-      Styling: Female subjects wear white, cream, or pale yellow tulle dresses. Male subjects wear simple white shirt and beige pants. Overall styling is elegant and whimsical.
-
-      Color palette: moderately saturated tones with a soft, warm, and gentle appearance. Colors should feel slightly muted and blended rather than sharp or highly contrasted.
-
-      Composition: Medium shot, centered framing. Subjects occupy 80% of the frame. Color palette includes moderately saturated warm red, coral pink, sunflower yellow, and fresh green with a soft matte finish. Edges of painted elements are softly diffused, creating a warm and tender atmosphere. No text, logos, or furniture.
+      Wearing an Argentina national football jersey — light sky blue and white vertical stripes, three-stripe details on the shoulders and sleeves, classic crew neck collar, short sleeves, no badge, no crest, no logo on chest — clean striped fabric only, lightweight polyester with subtle sheen, authentic kit colors and stripe pattern. Light natural dewy makeup — soft foundation, subtle eyeliner, gentle blush, natural lip tint.  Expression: calm, focused, slightly tense, lips softly parted, eyes gazing forward and slightly upward toward the field.
+      BACKGROUND: sparse stadium crowd in the background wearing matching Argentina jerseys, same light sky blue and white stripes clearly visible on each person, crowd naturally spaced with only a few individuals visible, background rendered sharp and flat with no bokeh and no depth of field, all background elements in full focus at consistent sharpness throughout the entire frame, no blur, no distortion, no warping, background perspective straight and undistorted, same focal distance maintained across the entire image. Bright warm stadium floodlighting, luminous white-amber, constant stable light, no shadows, airy and clean.
+      Broadcast HUD top-left: football scoreboard with two national flags, country codes, score 0:0, match time, FIFA broadcast graphic style.
+      Photorealistic, 4K, broadcast TV quality, beauty editorial aesthetic, flat focus across entire frame, f/11 equivalent aperture, rectilinear lens, zero lens distortion, uniform sharpness from foreground to background.
     reference_folder: ""
     use_comparison_template: false
     use_random_source_selection: false

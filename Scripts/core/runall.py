@@ -56,6 +56,7 @@ API_MAPPING = {
     'gpt_image': 'openai_image',
     'fifa_i2i2v': 'fifa_i2i2v',
     'fifa': 'fifa_i2i2v',
+    'i2i2v': 'i2i2v',
 }
 
 # Config file mapping
@@ -80,7 +81,8 @@ CONFIG_MAPPING = {
     'veo_itv': 'config/batch_veo_itv_config.yaml',
     'dreamactor': 'config/batch_dreamactor_config.yaml',
     'openai_image': 'config/batch_openai_image_config.yaml',
-    'fifa_i2i2v': 'config/batch_fifa_i2i2v_config.yaml'
+    'fifa_i2i2v': 'config/batch_fifa_i2i2v_config.yaml',
+    'i2i2v': 'config/batch_i2i2v_config.yaml'
 }
 
 

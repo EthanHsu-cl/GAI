@@ -1,0 +1,130 @@
+# Image-to-Image-to-Video Batch Configuration
+#
+# Two-step pipeline per source image:
+#   1. Image generation via /nano_banana OR /openai_image (chosen per task)
+#   2. Video generation via Kling /Image2Video using the generated image
+#
+# Folder layout per task:
+#   {folder}/
+#   ├── Source/             # input reference images
+#   ├── Generated_Frames/   # intermediate generated images (reused on resume)
+#   ├── Generated_Video/    # final mp4 videos
+#   └── Metadata/
+
+template_path: templates/I2V templates.pptx
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by:
+
+testbed: http://192.168.31.161/external-testbed/image_generation/
+
+schedule:
+  start_time: ''
+
+root_source_video_link: ''
+root_design_link: ''
+
+tasks:
+  - style_name: 看球賽
+    folder: Media Files/I2I2V/0520 看球賽
+
+    # ---- Image generation step ----
+    image_service: openai_image
+    # nano_banana | openai_image
+    image_model: gpt-image-2
+    # nano: gemini-3.1-flash-image-preview, etc.
+    image_quality: auto
+    # openai_image only: auto | low | medium | high
+    image_resolution: '1K'
+    image_aspect_ratio: '16:9'
+    image_prompt: |
+      Photorealistic candid broadcast-style photo, the woman in this image
+      [FACE REFERENCE] sitting as a fan at a live football soccer match,
+      EXACT same face — identical facial structure, eye shape, nose, lips,
+      skin tone, hair color, bangs style — reproduced with 100% fidelity,
+      no alterations to facial features whatsoever.
+
+      Wearing an Argentina national football jersey — light sky blue and white vertical stripes, three-stripe details on the shoulders and sleeves, classic crew neck collar, short sleeves, no badge, no crest, no logo on chest — clean striped fabric only, lightweight polyester with subtle sheen, authentic kit colors and stripe pattern. Light natural dewy makeup — soft foundation, subtle eyeliner, gentle blush, natural lip tint.  Expression: calm, focused, slightly tense, lips softly parted, eyes gazing forward and slightly upward toward the field.
+      BACKGROUND: sparse stadium crowd in the background wearing matching Argentina jerseys, same light sky blue and white stripes clearly visible on each person, crowd naturally spaced with only a few individuals visible, background rendered sharp and flat with no bokeh and no depth of field, all background elements in full focus at consistent sharpness throughout the entire frame, no blur, no distortion, no warping, background perspective straight and undistorted, same focal distance maintained across the entire image. Bright warm stadium floodlighting, luminous white-amber, constant stable light, no shadows, airy and clean.
+      Broadcast HUD top-left: football scoreboard with two national flags, country codes, score 0:0, match time, FIFA broadcast graphic style.
+      Photorealistic, 4K, broadcast TV quality, beauty editorial aesthetic, flat focus across entire frame, f/11 equivalent aperture, rectilinear lens, zero lens distortion, uniform sharpness from foreground to background.
+
+    # ---- Video generation step (Kling) ----
+    video_model: v3
+    video_mode: pro
+    video_duration: 5
+    video_ratio: '16:9'
+    video_prompt: |
+      A person sitting in a sports stadium as a fan, wearing a light blue and white vertical striped jersey inspired by Argentine football colors — clean, plain fabric with absolutely no logos, badges, emblems, crests, brand marks, or text of any kind. The person is watching the game with a natural, relaxed expression — calm but quietly engaged, the kind of look someone has when genuinely absorbed in watching a match. Eyes gaze steadily upward and slightly to one side toward the field, never looking at the camera.
+      Natural micro-movements throughout the clip: subtle shifts in facial muscle tension as the game unfolds, a barely perceptible tightening of the jaw, occasional slow natural blinks, eyes making tiny unconscious tracking movements following the game, a soft natural swallow, lips slightly parted and relaxed. Hair moves gently and organically from stadium air and very slight head micro-adjustments. Shoulders rise and fall with slow natural breathing. All movements feel completely unstaged and human — the subject is unaware of the camera.
+      Camera movement: broadcast-style smooth, continuous, very subtle push-in zoom starting from a medium shot that clearly shows the upper body and jersey. The zoom is extremely gentle and minimal — barely perceptible in real time, only noticeable when comparing the first and last frames. In the final frame, the face occupies no more than 15–18% of the frame, with full upper body still visible. Perfectly smooth, linear, continuous motion — no shakiness, no abrupt cuts, no digital zoom artifacts.
+      Lighting remains completely constant and stable throughout — warm stadium floodlight tone, no flickering, no shadow shifting, no exposure changes from start to finish. Background crowd and fans remain softly blurred with consistent bokeh throughout. Shallow depth of field — face always in sharp focus.
+      Photorealistic, broadcast TV cinematic quality, 4K, smooth motion.
+    video_negative_prompt: |
+      shaky camera, handheld wobble, jump cut, abrupt zoom, fast zoom, aggressive push-in, digital zoom artifacts, extreme close-up, tight close-up, flickering light, shadow change, exposure shift, frozen expression, mannequin-like stillness, posed look, stiff face, over-acting, cheering, laughing, crying, sudden movement, head turning sharply, looking at camera, distorted face, low quality, watermark, logo, badge, emblem, brand mark, national crest, text on jersey, any symbol on jersey
+
+# Example: nano_banana variant
+#  - style_name: 看球賽 (nano)
+#    folder: Media Files/I2I2V/0520 看球賽 nano
+#    image_service: nano_banana
+#    image_model: gemini-3.1-flash-image-preview
+#    image_resolution: '1K'
+#    image_aspect_ratio: '16:9'
+#    image_prompt: |
+#      ...
+#    video_model: v3
+#    video_mode: pro
+#    video_duration: 5
+#    video_prompt: |
+#      ...
+#    video_negative_prompt: ''
+
+comments:
+  pipeline: |
+    Per source image, the handler runs two API calls:
+      1. Image generation via the testbed at `testbed` (default: image_generation),
+         using either /nano_banana or /openai_image based on `image_service`.
+      2. Video generation via the Kling testbed (kling_endpoint in api_definitions.json),
+         using /Image2Video with the freshly generated image.
+
+  resume_behaviour: |
+    If `Generated_Frames/{source_name}_image.{ext}` exists from a prior run,
+    the image step is skipped and the existing image is fed to Kling directly.
+    Delete the frame to force a re-generation.
+
+  image_service: |
+    Per-task selection of which image API to use.
+    Options:
+      - nano_banana   → Google Gemini Flash / Pro image models
+      - openai_image  → OpenAI gpt-image-1 / gpt-image-2
+
+  image_model: |
+    nano_banana options:
+      - gemini-2.5-flash-image
+      - gemini-3-pro-image-preview
+      - gemini-3.1-flash-image-preview (default for nano_banana)
+    openai_image options:
+      - gpt-image-1
+      - gpt-image-2 (default for openai_image)
+
+  image_quality: |
+    openai_image only.  Options: auto | low | medium | high.  Ignored for nano_banana.
+
+  image_aspect_ratio: |
+    Valid options: auto, 1:1, 2:3, 3:2, 3:4, 4:3, 4:5, 5:4, 9:16, 16:9, 21:9.
+
+  video_model: |
+    Kling model. Options: v1.6, v1.5, v2.0-master, v2.1, v2.1-master,
+    v2.5-turbo, v2.6, v3 (default).
+
+  video_mode: |
+    Kling generation mode. Options: std | pro (default).
+
+  video_duration: |
+    Video duration in seconds. Options: 5, 10.  Default: 5.
+
+  output_naming: |
+    Intermediate frame:  {source_name}_image.{ext}   in Generated_Frames/
+    Final video:          {source_name}.mp4           in Generated_Video/
+    Metadata:             {source_name}_metadata.json in Metadata/

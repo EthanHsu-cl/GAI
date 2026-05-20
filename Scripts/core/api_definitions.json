@@ -1441,6 +1441,93 @@
             "720p"
         ]
     },
+    "i2i2v": {
+        "endpoint": "http://192.168.31.161/external-testbed/image_generation/",
+        "api_name": "/i2i2v",
+        "file_types": [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".bmp",
+            ".webp"
+        ],
+        "validation": {
+            "max_size_mb": 32,
+            "min_dimension": 100
+        },
+        "folders": {
+            "input": "Source",
+            "frames": "Generated_Frames",
+            "output": "Generated_Video",
+            "metadata": "Metadata"
+        },
+        "kling_endpoint": "http://192.168.31.161/external-testbed/kling/",
+        "kling_api_name": "/Image2Video",
+        "image_api_names": {
+            "nano_banana": "/nano_banana",
+            "openai_image": "/openai_image"
+        },
+        "rate_limit": 5,
+        "task_delay": 10,
+        "max_retries": 3,
+        "config_structure": "base_folder",
+        "structure_type": "base_folder",
+        "report": {
+            "enabled": true,
+            "template_path": "templates/I2V templates.pptx",
+            "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+            "use_comparison": false
+        },
+        "task_fields": [
+            "folder",
+            "style_name",
+            "image_service",
+            "image_model",
+            "image_quality",
+            "image_resolution",
+            "image_aspect_ratio",
+            "image_prompt",
+            "video_mode",
+            "video_duration",
+            "video_ratio",
+            "video_prompt",
+            "video_negative_prompt"
+        ],
+        "api_params": {
+            "image_service": "nano_banana",
+            "image_model": "gemini-3.1-flash-image-preview",
+            "image_quality": "auto",
+            "image_resolution": "1K",
+            "image_aspect_ratio": "16:9",
+            "video_model": "v3",
+            "video_mode": "pro",
+            "video_duration": 5,
+            "video_ratio": "16:9"
+        },
+        "image_service_options": [
+            "nano_banana",
+            "openai_image"
+        ],
+        "nano_banana_model_options": [
+            "gemini-2.5-flash-image",
+            "gemini-3-pro-image-preview",
+            "gemini-3.1-flash-image-preview"
+        ],
+        "openai_image_model_options": [
+            "gpt-image-1",
+            "gpt-image-2"
+        ],
+        "video_model_options": [
+            "v1.6",
+            "v1.5",
+            "v2.0-master",
+            "v2.1",
+            "v2.1-master",
+            "v2.5-turbo",
+            "v2.6",
+            "v3"
+        ]
+    },
     "fifa_i2i2v": {
         "endpoint": "http://192.168.31.161/external-testbed/fifa/",
         "api_name": "/on_generate_video",
