@@ -22,8 +22,8 @@ testbed: http://192.168.31.161/external-testbed/image_generation/
 schedule:
   start_time: ''
 
-root_source_video_link: ''
-root_design_link: ''
+root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e36c7d2e7a_9_0#slide=id.g3e36c7d2e7a_9_0
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBbUo1VK_-ZRpyTq4mJxl4yAUr0O6pAley8PAFWf4CFH60?e=fh1PRa
 
 tasks:
   - style_name: 看球賽

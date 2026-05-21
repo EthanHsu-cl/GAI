@@ -2599,17 +2599,13 @@ class UnifiedReportGenerator:
             return self._get_grouped_filename(folder, model, effect_names)
         
         d = self._extract_date_from_folder(folder)
-        
-        # Use model (API name) as the primary identifier
-        # For APIs with many styles, show count instead of listing all names to avoid long filenames
-        if self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'veo_itv', 'fifa_i2i2v', 'i2i2v', 'wan', 'dreamactor', 'kling_motion'] and effect_names:
+
+        # Prefer listing actual style names; fall back to "X Styles" only when the joined string is too long
+        joined = ', '.join(effect_names) if effect_names else ''
+        if effect_names and len(joined) > 60:
             effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
         else:
-            # Effect names are the actual content description
-            effect_str = ', '.join(effect_names) if effect_names else 'Test'
-            # Only truncate very long effect strings (not short concatenations)
-            if len(effect_str) > 60:
-                effect_str = effect_str[:60] + '...'
+            effect_str = joined or 'Test'
         
         # Build API line (date + model)
         api_parts = [f"[{d}]"]
@@ -2638,29 +2634,30 @@ class UnifiedReportGenerator:
             
             # Use effect names from the grouped task
             effect_list = grouped_task.get('_effect_names', [])
-            # For APIs with many styles, show count instead of listing all names
-            if self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'veo_itv', 'fifa_i2i2v', 'i2i2v'] and effect_list:
+            joined = ', '.join(effect_list) if effect_list else ''
+            if effect_list and len(joined) > 60:
                 effect_str = f"{len(effect_list)} {'Style' if len(effect_list) == 1 else 'Styles'}"
             else:
-                effect_str = ', '.join(effect_list) if effect_list else 'Combined Effects'
+                effect_str = joined or 'Combined Effects'
         else:
             # Folder-based API (nano_banana, kling, etc.) - use folder names
             folder_names = grouped_task.get('_folder_names', [])
             
             # Extract date from first folder (prioritize folder date over current date)
             # For veo_itv / fifa_i2i2v, use parent folder name (contains date like "0130 6 Styles")
-            if self.api_name in ("veo_itv", "fifa_i2i2v", "i2i2v"):
+            # i2i2v has the date on the task folder itself, so it falls through to the default branch
+            if self.api_name in ("veo_itv", "fifa_i2i2v"):
                 parent_folder = grouped_task.get('_parent_folder_name', '')
                 d = self._extract_date_from_folder(parent_folder) if parent_folder else datetime.now().strftime("%m%d")
             else:
                 d = self._extract_date_from_folder(folder_names[0]) if folder_names else datetime.now().strftime("%m%d")
             
             # Build effect string - combine all unique effects
-            # For APIs with many styles, show count instead of listing all names
-            if self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'veo_itv', 'fifa_i2i2v', 'i2i2v', 'wan', 'dreamactor', 'kling_motion'] and effect_names:
+            joined = ', '.join(effect_names) if effect_names else ''
+            if effect_names and len(joined) > 60:
                 effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
             else:
-                effect_str = ', '.join(effect_names) if effect_names else 'Combined'
+                effect_str = joined or 'Combined'
         
         # Build API line (date + model)
         api_parts = [f"[{d}]"]
@@ -3089,11 +3086,16 @@ class UnifiedReportGenerator:
             folder_name = task
         elif self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse"]:
             folder_name = Path(self.config.get('base_folder', '')).name
-        elif self.api_name in ("veo_itv", "fifa_i2i2v", "i2i2v"):
+        elif self.api_name in ("veo_itv", "fifa_i2i2v"):
             # For veo_itv / fifa_i2i2v, get parent folder (e.g., "0130 6 Styles" from "0130 6 Styles/Street Rap")
-            # since the date prefix is in the parent, not the style folder
-            folder_path = Path(task.get('folder', ''))
-            folder_name = folder_path.parent.name
+            # since the date prefix is in the parent, not the style folder.
+            folder = task.get('folder') or (self.config.get('tasks') or [{}])[0].get('folder', '')
+            folder_name = Path(folder).parent.name
+        elif self.api_name == "i2i2v":
+            # i2i2v has the date on the task folder itself (e.g., "0520 看球賽").
+            # Non-grouped runs call create_title_slide with task={}, so fall back to the first config task's folder.
+            folder = task.get('folder') or (self.config.get('tasks') or [{}])[0].get('folder', '')
+            folder_name = Path(folder).name
         else:
             folder_name = task.get('folder', Path(self.config.get('base_folder', '')).name)
             if isinstance(folder_name, str):
@@ -3256,13 +3258,21 @@ class UnifiedReportGenerator:
             # Generate filename
             if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "kling_effects"]:
                 folder_name = Path(self.config.get('base_folder', '')).name
-            elif self.api_name in ("veo_itv", "fifa_i2i2v", "i2i2v"):
-                # For veo_itv / fifa_i2i2v, use parent folder (contains date like "0130 6 Styles")
+            elif self.api_name in ("veo_itv", "fifa_i2i2v"):
+                # For veo_itv / fifa_i2i2v, use parent folder (contains date like "0130 6 Styles").
                 if task.get('_is_grouped'):
                     folder_name = task
                 else:
-                    folder_path = Path(task.get('folder', ''))
-                    folder_name = folder_path.parent.name
+                    folder = task.get('folder') or (self.config.get('tasks') or [{}])[0].get('folder', '')
+                    folder_name = Path(folder).parent.name
+            elif self.api_name == "i2i2v":
+                # i2i2v has the date on the task folder itself.
+                # Non-grouped runs pass task={}, so fall back to the first config task's folder.
+                if task.get('_is_grouped'):
+                    folder_name = task
+                else:
+                    folder = task.get('folder') or (self.config.get('tasks') or [{}])[0].get('folder', '')
+                    folder_name = Path(folder).name
             else:
                 # Handle grouped tasks
                 if task.get('_is_grouped'):
@@ -3509,8 +3519,9 @@ class UnifiedReportGenerator:
                 if isinstance(folder, str):
                     folder_path = Path(folder)
                     folder_name = folder_path.name
-                    # For veo_itv / fifa_i2i2v, capture parent folder name (contains date like "0130 6 Styles")
-                    if self.api_name in ("veo_itv", "fifa_i2i2v", "i2i2v") and parent_folder_name is None:
+                    # For veo_itv / fifa_i2i2v, capture parent folder name (contains date like "0130 6 Styles").
+                    # i2i2v has the date on the task folder itself, so no parent capture is needed.
+                    if self.api_name in ("veo_itv", "fifa_i2i2v") and parent_folder_name is None:
                         parent_folder_name = folder_path.parent.name
                 else:
                     folder_name = folder.name if hasattr(folder, 'name') else str(folder)
