@@ -11,16 +11,37 @@ schedule:
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 model_version: viduq2-pro
 
-base_folder: Media Files/Vidu/0519 1 Effect
+base_folder: Media Files/Vidu/0521 8 Effects
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 
 design_link: https://docs.google.com/spreadsheets/d/1uhsTRRRXbU-PW99G8_GxqEKiVyLy6fAwImZ1zSjsVy8/edit?gid=1601579607#gid=1601579607
 template_link: https://platform.vidu.com/docs/templates
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDuJ9n5CQhLRZytOz8VrqnZAd1QdZNoSkui_YMnPiuwqDU?e=qdzAz7
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBrzJlCGUqgS4GkxyaweOC2AWFvhtLNOS-HhibRpBV88wM?e=y0eOrB
 
 tasks:
 - category: People
+  custom_effect_name: claw_me
+
+- category: People
   custom_effect_name: zongzi_wrap
+
+- category: People
+  custom_effect_name: emotionlab
+
+- category: People
+  custom_effect_name: mecha_x
+
+- category: People
+  custom_effect_name: split_stance_human
+
+- category: People
+  custom_effect_name: oscar_gala
+
+- category: People
+  custom_effect_name: hip_twist
+
+- category: People
+  custom_effect_name: motor_dance
 
   
 comments:
