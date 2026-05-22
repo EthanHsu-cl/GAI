@@ -22,69 +22,117 @@ testbed: http://192.168.31.161/external-testbed/image_generation/
 schedule:
   start_time: ''
 
-root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e9a32cbe83_0_79#slide=id.g3e9a32cbe83_0_79
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBfUqfjPmihR4Pp6Ml7Ebe6ATCnXnMC340foO7pUpd57ws?e=JWX1EH
+root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e3ddbb87a4_0_75#slide=id.g3e3ddbb87a4_0_75
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCTuBdoX7TrSZNaJbyRxUJ8AWESFjQ5p3SxKyOCo4eM8Jw?e=UDnQ6X
 
 tasks:
-  - style_name: 轉身舉獎盃 (巴西款)
-    folder: Media Files/I2I2V/0521 2 Styles/0521 轉身舉獎盃 (巴西款) 
-
+  - style_name: 滑草V10
+    folder: Media Files/I2I2V/0522 滑草V10
     # ---- Image generation step ----
     image_service: nano_banana
     # nano_banana | openai_image
-    image_model: gemini-3-pro-image-preview
+    image_model: gemini-3.1-flash-image-preview
     # nano: gemini-3.1-flash-image-preview | gemini-3-pro-image-preview | gemini-2.5-flash-image
     # openai: gpt-image-1 | gpt-image-1.5 | gpt-image-2
     image_quality: auto
     # openai_image only: auto | low | medium | high
     image_resolution: '1K'
-    image_aspect_ratio: '16:9'
+    image_aspect_ratio: '9:16'
     image_prompt: |
-      A 16:9 photorealistic image. Symmetrical, center-framed medium-wide shot from the waist up. Straight-on, eye-level camera angle with a deep focus, creating strong immersive depth.
+      === OUTPUT FORMAT (ABSOLUTE REQUIREMENT — READ FIRST) ===
+      The final image MUST be a STRICTLY VERTICAL 9:16 PORTRAIT format.
+      - Image height MUST be greater than image width
+      - Aspect ratio MUST be exactly 9:16 (vertical portrait, like a mobile phone screen held upright, like Instagram Reels or TikTok)
+      - DO NOT output horizontal / landscape format (16:9)
+      - DO NOT output square format (1:1)
+      - DO NOT output 4:3 or 3:4 or any other ratio
+      - The canvas itself must be a tall vertical rectangle
+      - If you generate horizontally by default, ROTATE or RECOMPOSE to vertical before finalizing
+      This is non-negotiable. The output format is 9:16 vertical portrait, period.
 
-      Subject: A person sitting dead center, looking directly into the lens. They have an expression of pure, vibrant excitement, mouth wide open cheering, with both fists clenched and raised to shoulder level. They have simple green and yellow horizontal stripes painted on their cheeks. They are wearing a modern professional football jersey in a green and yellow color scheme.The uniform must look realistic, premium, modern, and fully fictional(no shoulder stripes, no chest logos).
+      === IMAGE CONTENT ===
 
-      Foreground: A large glass coffee table spanning the bottom frame, filled to create depth. On the left: three unlabeled brown glass beer bottles (one near the viewer, two further back). In the center: a larger generic green bowl overflowing with a mixture of tortilla chips and pretzels. On the right: a generic sports newspaper folded to show a headline like "HISTORIC WIN" and generic text, with a small generic sports photo.
+      Using the uploaded photo as the EXACT identity reference, create a photorealistic cinematic sports photograph.
 
-      Midground: They sit on a light beige sofa. Draped layered and deep over the sofa back and side arms are multiple unmarked sports scarves (no club logos, only colors like plain green, green/yellow stripe, plain yellow) and the mustard yellow and dark red pillows.
+      IDENTITY LOCK (highest priority): Generate the same person from the uploaded photo with 100% identical FACE (same face shape, jawline, eyes, nose, lips, skin tone, skin texture) and 100% identical HAIRSTYLE (same length, color, texture, parting, fringe, sideburns, and overall shape — do not restyle, do not shorten, do not slick back). The face and hair must look exactly like the uploaded reference, just placed in this new scene.
 
-      Background: A warm, rich, deep, and symmetrically lit room with architectural details like wainscoting. Flanking the sofa on both the exact left and right are four matching classic floor lamps with warm yellow shades, arranged symmetrically in pairs (two on each side), casting an immersive, deeply cinematic glow. The dark wooden bookshelf on the far left and beige curtains on the far right are retained and clearly visible due to deeper focus. The large, unbranded flag featuring a solid vivid green background with a central yellow diamond remains pinned to the wall directly behind them.
+      FRAMING (designed for vertical 9:16 canvas): Tight medium close-up — show subject from mid-thigh/waist up to slightly above the head. Subject fills 70–80% of the TALL vertical frame, positioned slightly off-center, body tilted diagonally for dynamic composition. The composition is built for a portrait-oriented canvas — the subject's vertical body axis aligns with the tall vertical axis of the frame. Camera positioned slightly above head height, shooting downward at a moderate 15–30 degree angle.
+
+      POSE: The person is captured mid-action in a CLASSIC GOAL CELEBRATION RUN — standing upright and moving forward across the pitch, both arms extended OUTWARD and slightly BACKWARD behind the body (like an airplane / soaring posture), elbows almost straight, hands open. The torso leans slightly forward with the running momentum. Legs are in a natural running stride — one leg planted, the other lifted in motion. Head is turned to one side in three-quarter / profile view, looking sideways toward teammates or the crowd, with an intense focused expression — mouth open mid-shout, eyes wide with celebratory emotion. Body at a 45-degree diagonal angle to the camera. This is the energetic running-celebration moment right after scoring a goal — NOT a standing still pose, NOT a kneel, NOT a slide on the ground.
+
+      SCENE: Professional soccer pitch during golden hour. Green grass background with a thin strip of blurred stadium at the top of the tall vertical frame. Warm sunlight with soft rim light, 85mm lens, shallow depth of field, slight motion blur in the legs and background to convey forward momentum, sharp focus on face and hair. Natural broadcast sports photography style — like a freeze-frame from a live match — not AI-rendered, not over-stylized. NO soccer ball anywhere in the frame.
+
+      OUTFIT: Modern professional football jersey in a black and white color scheme. Realistic, premium, fully fictional.
+
+      ZERO LOGOS / ZERO BRANDING (absolute rule — applies to jersey, shorts, socks, cleats, gloves, wristbands, and ALL accessories):
+      - NO brand logos of any kind: no Nike swoosh, no Adidas three stripes, no Puma logo or formstrip, no Mizuno wave, no Under Armour, no New Balance, no Umbro, no Kappa, no Joma, no Macron, no Lotto, no Le Coq Sportif, no Hummel, no Castore, no any other sportswear brand mark
+      - NO check marks, swooshes, V-shapes, parallel stripe patterns, or any abstract shape that resembles a sportswear brand mark
+      - NO team crests, club badges, national flags, national emblems, federation marks, country names, country codes, or any team identity element
+      - NO sponsor logos, sponsor text, sponsor patches anywhere
+      - NO manufacturer tags, NO size labels, NO brand text on the neck, hem, sleeve, or any seam
+      - NO copyrighted icons, cultural symbols, or real-world identity references of any kind
+
+      The kit must be 100% clean, blank, and brand-free — as if it were a generic prototype jersey before any branding is applied. The ONLY text or marking allowed on the entire outfit is: (1) one random jersey number from 1–99 placed naturally on the chest, and (2) one fictional slogan selected from: "2026 IS OURS", "THE GREATEST STAGE", "THE WORLD IS WATCHING", or "ONE WORLD. ONE CUP."
+
+      NO overlays, NO scoreboard, NO graphics outside the jersey.
+
+      === FINAL FORMAT CHECK ===
+      Before outputting: confirm the image is 9:16 VERTICAL PORTRAIT (taller than wide). If the generated canvas is horizontal or square, REJECT and regenerate as vertical 9:16. Face and hairstyle must match the uploaded reference exactly — identity preservation overrides all other considerations.
 
     # ---- Video generation step (Kling) ----
     video_model: v3
     video_mode: pro
     video_duration: 5
-    video_ratio: '16:9'
+    video_ratio: '9:16'
     video_prompt: |
-      Start Frame: In a warm living room, a passionate fan leaps upward, their chest heaving, neck veins popping, and fists pumping aggressively as their jersey ripples with their energetic movements.
-      Camera Movement & Transition: Dynamic orbital tracking shot. The camera executes a smooth, cinematic 360-degree horizontal orbit around the person from left to right, keeping the subject dead center in the frame. During this orbital sweep, the camera maintains a strictly level horizon and tracks their head height. As they dynamically stand up, a seamless environment transition occurs: the warm living room lighting instantly flashes and shifts to bright stadium floodlights. 
-      End Frame: The camera completes its orbit and locks perfectly in front of them. They stand like a hero, hoisted securely on the shoulders of an ecstatic, hyper-realistic stadium. Their bare right arm punches through the hazy air, hoisting a fiercely gleaming golden soccer trophy that catches the stadium flares. The foreground is heavily framed by out-of-focus raised fans' hands and glowing smartphone screens capturing the moment. Their facial identity remains perfectly locked to the start frame, but is now raw with emotion, muscles tensed, roaring in absolute victory. 8k, photorealistic, IMAX aspect ratio. Their facial identity remains perfectly consistent with the start frame.
+      Use the reference image as frame 1. At frame 1 the subject is 
+      ALREADY on both knees and ALREADY sliding forward across the 
+      grass at full speed — no run-up, no running, no jogging, no 
+      standing position, no transition from standing to kneeling, no 
+      dropping down motion. The subject simply exists on his knees, 
+      already in mid-slide, from the very first frame.
+
+      The subject is in the celebration pose shown in the reference: 
+      both knees on the grass, calves tucked back, torso leaning 
+      slightly backward, both arms spread wide to the sides with palms 
+      open, head tilted slightly back, mouth slightly open in a 
+      natural, focused expression — relaxed, composed, slight intensity 
+      from the motion, eyes calmly looking forward or slightly upward. 
+      No smile required, no forced emotion, no exaggeration.
+
+      Hold this exact pose completely frozen and unchanged from start 
+      to finish. Only the body's position moves — sliding forward 
+      across the green turf on both knees at constant HIGH SPEED in 
+      real time, covering a long distance,As the film ended, he gradually stopped gliding. Two long sharp parallel trails carve 
+      continuously into the grass behind, small clippings and water 
+      droplets constantly spraying up from the friction.
+
+      No change in arm position, no change in head angle, no change in 
+      facial expression, no standing up, no looking down — pose stays 
+      identical to the reference throughout the entire shot.
+
+      CRITICAL — Identity lock: keep the subject's face shape, jawline, 
+      cheekbones, nose, eye shape, eyebrows, skin tone, beard shape 
+      and density, and hairstyle exactly identical to the reference 
+      image in every frame. No face morphing, no identity drift, no 
+      aging. Same person from start to end.
+
+      Expression stays natural and effortless throughout — calm, 
+      focused, alive with the motion but not theatrical. No forced 
+      expression, no distorted mouth, no exaggerated facial muscles, 
+      no screaming, no grimacing.
+
+      Camera: low-angle ground-level tracking shot at real-time speed, 
+      NO slow motion, fast smooth camera follow with subtle motion 
+      blur on the rushing background, shallow depth of field, the 
+      camera dollies backward at the same constant high speed as the 
+      subject, keeping the upper body centered in frame the whole time. 
+      Dynamic, kinetic, high-energy feel.
+
+      Single continuous take, one unbroken shot, no cuts, no transitions, 
+      no fades.
     video_negative_prompt: |
-      logo, badge,  ghosting, double exposure, morphing background, blending environments, residual objects, lingering background, superimposition, fading transition, floating furniture, mutated architecture, indoor elements in outdoor stadium, structural inconsistency, transparent objects, crossfade. naked
-
-  - style_name: 高舉獎杯慶祝
-    folder: Media Files/I2I2V/0521 2 Styles/0521 高舉獎杯慶祝
-
-    # ---- Image generation step ----
-    image_service: openai_image
-    image_model: gpt-image-2
-    image_quality: auto
-    image_resolution: '1K'
-    image_aspect_ratio: '16:9'
-    image_prompt: |
-      A high-resolution, ultra-realistic photojournalistic shot. A detailed waist-up medium close-up focusing closely on the face and torso of a victorious person being lifted high by a dense, celebrating crowd inside a magnificent stadium at night. The stadium has an intricate illuminated truss roof network, filled with bright lights and countless smartphone flashes creating a dramatic atmosphere. The main subject, positioned center-right, has an authentic-looking portrait expressing a genuine smiling expression that maintains strong character likeness and facial similarity to the input reference image, with the face's lighting, color tone, and shadows perfectly matched and seamlessly integrated into the complex stadium lighting environment, including realistic reflections from the surrounding harsh lights and blue stadium glows; looking towards the far left, while their right hand holds a victory cup high in the air. The trophy has plain light-blue and white ribbons tied to it.
-      The visible part of the subject, from the waist up, wears a white football jersey with clearly visible black OR black trim on the collar and sleeve cuffs. This fully fictional jersey is entirely free of any real-world branding or identity elements. It excludes all brand cues such as swooshes, check marks, V-shapes, three stripes, Puma formstrips, or Mizuno-style line motifs. The visible jersey portion includes only a single random number from 1–99 placed naturally on the chest, plus one fictional slogan selected from: "2026 IS OURS", "THE GREATEST STAGE", "THE WORLD IS WATCHING", or "ONE WORLD. ONE CUP.".
-      In the immediate foreground, numerous arms are reaching up holding smartphones; on the bottom left, a hand holds a white multi-lens smartphone surrounded by white celebration streamers. On the bottom right, a hand holds a black smartphone facing the subject, with excited faces below including a bald man and a man in a blue hat, now larger and more prominent in the lower frame. In the background right, another lifted player wearing the same white football outfit with black or black trim is emotionally covering their face. The scene is full of dynamic energy, hands, bracelets, and pure joy, with the sharpest focus on the main subject's face and the trophy.
-
-    # ---- Video generation step (Kling) ----
-    video_model: v3
-    video_mode: pro
-    video_duration: 5
-    video_ratio: '16:9'
-    video_prompt: |
-      Handheld camera simulation, dynamic camera shake. The protagonist triumphantly hoists the trophy. The entire stadium erupts in a massive visual cheer: the huge background crowd surges like waves, jumping and waving arms enthusiastically. Countless camera flashes go off continuously like a strobe. Confetti bursts into the air. Immersive and roaring stadium atmosphere. Depth of field keeping the background slightly blurred to maintain generation stability. Hyper-detailed, volumetric lighting.
-    video_negative_prompt: |
-      logo, badge,  ghosting,  morphing background, blending environments, blurry, Shaking up and down
+      face distortion, face swap, changed hairstyle, extra limbs, deformed hands, pose changing, arms lowering, standing up, body returning upright, sliding right, stopping, decelerating, falling, lying down, ball, sled, screaming, shaky camera, low quality, watermark, text,logo
     
 
 # Example: nano_banana variant

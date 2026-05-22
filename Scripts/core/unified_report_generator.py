@@ -474,7 +474,7 @@ class UnifiedReportGenerator:
         
         return title if title else None
     
-    def _compute_stacked_positions(self, pair, base_positions):
+    def _compute_stacked_positions(self, pair, base_positions, media_types=None):
         """Dynamically adjust stacked layout heights based on source aspect ratios.
 
         Redistributes the vertical space between the two stacked source boxes
@@ -482,8 +482,11 @@ class UnifiedReportGenerator:
         of whether sources are landscape, portrait, or square.
 
         Args:
-            pair: MediaPair with source_path and source_video_path.
+            pair: MediaPair providing media paths.
             base_positions: List of 3 position tuples from LAYOUT_3_MEDIA_STACKED.
+            media_types: List of media_type strings for the 3 boxes. The first
+                two entries drive the stacked aspect ratios. Defaults to
+                ['source', 'source_video', 'generated'] for backward compat.
 
         Returns:
             List of 3 adjusted position tuples (x, y, w, h).
@@ -491,16 +494,17 @@ class UnifiedReportGenerator:
         if len(base_positions) != 3:
             return base_positions
 
-        source_path = pair.source_path
-        source_video_path = pair.source_video_path
+        if not media_types or len(media_types) < 2:
+            media_types = ['source', 'source_video', 'generated']
+
+        path1, is_video1 = self.get_media_path_and_type(pair, media_types[0])
+        path2, is_video2 = self.get_media_path_and_type(pair, media_types[1])
 
         # Get actual aspect ratios (width / height). Default landscape if unreadable.
-        ar1 = (self.get_aspect_ratio(source_path, False)
-               if source_path and source_path.exists() else 16 / 9)
-        is_second_video = (source_video_path.suffix.lower() in self.VIDEO_EXTS
-                           if source_video_path and source_video_path.exists() else True)
-        ar2 = (self.get_aspect_ratio(source_video_path, is_second_video)
-               if source_video_path and source_video_path.exists() else 16 / 9)
+        ar1 = (self.get_aspect_ratio(path1, is_video1)
+               if path1 and path1.exists() else 16 / 9)
+        ar2 = (self.get_aspect_ratio(path2, is_video2)
+               if path2 and path2.exists() else 16 / 9)
 
         # Layout parameters derived from the base positions
         x = base_positions[0][0]         # Left x (0.42)
@@ -563,10 +567,10 @@ class UnifiedReportGenerator:
                     except Exception:
                         pass
             
-            positions = self._compute_stacked_positions(
-                pair, slide_config.get('positions', [])
-            )
             media_types = slide_config.get('media_types', ['source', 'generated'])
+            positions = self._compute_stacked_positions(
+                pair, slide_config.get('positions', []), media_types
+            )
             media_labels = slide_config.get('media_labels', [])
             
             for idx, (pos, media_type) in enumerate(zip(positions, media_types)):
@@ -616,9 +620,9 @@ class UnifiedReportGenerator:
         
         # Add media using positions
         positions = slide_config.get('positions', [(2.59, 3.26, 12.5, 12.5), (18.78, 3.26, 12.5, 12.5)])
-        if slide_config.get('override_positions', False):
-            positions = self._compute_stacked_positions(pair, positions)
         media_types = slide_config.get('media_types', ['source', 'generated'])
+        if slide_config.get('override_positions', False):
+            positions = self._compute_stacked_positions(pair, positions, media_types)
         media_labels = slide_config.get('media_labels', [])
         
         for idx, (pos, media_type) in enumerate(zip(positions, media_types)):

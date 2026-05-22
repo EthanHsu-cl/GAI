@@ -13,26 +13,46 @@ default_settings:
   generate_multi_clip: false
   thinking_type: auto
 
-base_folder: Media Files/Pixverse/0515 3 Styles
+base_folder: Media Files/Pixverse/0522 7 Styles
 template_path: templates/I2V templates 3rd party.pptx
 testbed: http://192.168.31.161/external-testbed/video_effect/
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
 source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCwBvSzbaNbSJC35kgVwDZ8AbRe6iZWy0Z5YvyXj-CJUYw?e=TnO2KY
 
 tasks:
-  - effect: Jamal step
+  - effect: Scuba Dance
     prompt: ''
-    custom_effect_id: '401820560876352'
+    custom_effect_id: '402364107875392'
     negative_prompt: ''
 
-  - effect: Two Dance
+  - effect: Own the Beat
     prompt: ''
-    custom_effect_id: '394175516120448'
+    custom_effect_id: '392415610586560'
     negative_prompt: ''
 
-  - effect: Pixie Passage
+  - effect: Live Spotlight
     prompt: ''
-    custom_effect_id: '395420814698432'
+    custom_effect_id: '402863106171904'
+    negative_prompt: ''
+
+  - effect: Stands Duo
+    prompt: ''
+    custom_effect_id: '402880241531072'
+    negative_prompt: ''
+
+  - effect: Eating Live
+    prompt: ''
+    custom_effect_id: '402885275072704'
+    negative_prompt: ''
+
+  - effect: OmniHero Forge
+    prompt: ''
+    custom_effect_id: '400222977706432'
+    negative_prompt: ''
+
+  - effect: Sticker Jive
+    prompt: ''
+    custom_effect_id: '402855499541504'
     negative_prompt: ''
 
 
