@@ -17,7 +17,8 @@ schedule:
 
 base_folder: Media Files/Kling Effects/0522 2 Effects
 
-design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147 
+design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
+provider_reference_link: https://app.klingai.com/global/dev/document-api/quickStart/productIntroduction/effectsCenter
 source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDxI_OzFySVS5lfJC7YctTxAY9z1-gUPslyYWudl0V6Z7g?e=34JJCx
 
 # Tasks - each represents a style/effect to apply

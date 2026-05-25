@@ -3180,11 +3180,17 @@ class UnifiedReportGenerator:
         is_base_folder_api = task.get('_is_base_folder_api', False)
         
         links = []
-        
+
         # Add design link (same for all)
         if design_link:
             links.append(("Design: ", "Link", design_link))
-        
+
+        # Add provider reference link (for effects-based APIs where prompts come
+        # from the provider's preset catalog, e.g. Kling Effects, Vidu Effects, Pixverse)
+        provider_reference_link = self.config.get('provider_reference_link', '')
+        if provider_reference_link:
+            links.append(("Provider Reference: ", "Link", provider_reference_link))
+
         # Add testbed link
         links.append(("Testbed: ", testbed_url, testbed_url))
         
