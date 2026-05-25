@@ -11,16 +11,34 @@ schedule:
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 model_version: viduq2-pro
 
-base_folder: Media Files/Vidu/0522 1 Effect
+base_folder: Media Files/Vidu/0525 7 Effects
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 
-design_link: https://docs.google.com/spreadsheets/d/1uhsTRRRXbU-PW99G8_GxqEKiVyLy6fAwImZ1zSjsVy8/edit?gid=1601579607#gid=1601579607
+design_link: https://docs.google.com/spreadsheets/d/1uhsTRRRXbU-PW99G8_GxqEKiVyLy6fAwImZ1zSjsVy8/edit?gid=1441759153#gid=1441759153
 template_link: https://platform.vidu.com/docs/templates
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDYITH1sJXJS5wSTUuuHQQ6AZvQkMPR5d50bNDkU0ye3qM?e=rN4X0X
+source_video_link: 
 
 tasks:
-- category: Fun
-  custom_effect_name: Little_Me_Mushroom
+- category: People
+  custom_effect_name: drive_yacht
+
+- category: People
+  custom_effect_name: shake_to_max
+
+- category: People
+  custom_effect_name: bjd_style
+
+- category: People
+  custom_effect_name: beast_chase_library
+
+- category: People
+  custom_effect_name: jump2pool
+
+- category: People
+  custom_effect_name: balloonman_explodes
+
+- category: People
+  custom_effect_name: hair_color_change
 
   
 comments:

@@ -378,6 +378,10 @@ class UnifiedReportGenerator:
                 **base_config,
                 'media_types': ['source', 'generated'],
                 **self.LAYOUT_2_MEDIA,
+                # Taller metadata box: fifa_i2i2v has 10 fields (vs 4-7 for single-model APIs),
+                # and model values can wrap to a second line.
+                'metadata_position': (35, 0, 7.29, 6),
+                'metadata_reference_position': (2.32, 15.26, 7.29, 6),
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['source_image', 'style_name', 'generation_number', 'service', 'model', 'frame_model', 'generate_start', 'generate_end', 'processing_time_seconds', 'success'],
             },
@@ -385,6 +389,10 @@ class UnifiedReportGenerator:
                 **base_config,
                 'media_types': ['source', 'reference', 'generated'],
                 **self.LAYOUT_3_MEDIA_STACKED,
+                # Taller metadata box: i2i2v has 9 fields (vs 4-7 for single-model APIs),
+                # and image_model values like "gemini-3.1-flash-image-preview" wrap to a second line.
+                'metadata_position': (35, 0, 7.29, 5.5),
+                'metadata_reference_position': (35, 0, 7.29, 5.5),
                 'media_labels': ['Source Image', 'Generated Frame', None],
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['source_image', 'style_name', 'image_service', 'image_model', 'video_model', 'video_mode', 'video_duration', 'processing_time_seconds', 'success'],
