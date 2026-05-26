@@ -1,10 +1,32 @@
 # Automated Processing & Reporting Automation Suite
 
-A Python automation framework for batch processing images/videos through 15 AI APIs with automated PowerPoint report generation.
+A Python automation framework for batch processing images/videos through 23 AI APIs with automated PowerPoint report generation.
 
-## 🚀 Quick Start (Command Line)
+## Contents
 
-### **Basic Usage**
+- [Quick Start](#-quick-start)
+- [Installation](#-installation)
+- [Testbed Cookie Setup](#-testbed-cookie-setup)
+- [Platforms at a Glance](#-platforms-at-a-glance)
+- [Folder Conventions](#-folder-conventions)
+- [Configuration Reference](#%EF%B8%8F-configuration-reference)
+  - [Kling family](#kling-family)
+  - [Pixverse family](#pixverse-family)
+  - [Vidu family](#vidu-family)
+  - [Seedance family](#seedance-family)
+  - [Google Veo family](#google-veo-family)
+  - [Image generation (Nano Banana, OpenAI Image, GenVideo)](#image-generation-nano-banana-openai-image-genvideo)
+  - [Pipelines (FIFA I2I2V, I2I2V)](#pipelines-fifa-i2i2v-i2i2v)
+  - [Other (Runway, Wan 2.2, DreamActor)](#other-runway-wan-22-dreamactor)
+- [Report Generation](#-report-generation)
+- [Desktop GUI](#%EF%B8%8F-desktop-gui)
+- [Building the Desktop App](#-building-the-desktop-app)
+- [Architecture](#-architecture)
+- [Project Structure](#-project-structure)
+
+---
+
+## 🚀 Quick Start
 
 ```bash
 cd Scripts
@@ -16,228 +38,198 @@ python core/runall.py pixverse report # Report only
 python core/runall.py all auto        # All APIs at once
 
 # Options
---parallel    # Run APIs in parallel
---config FILE # Custom config file
---verbose     # Debug logging
+--parallel       # Run APIs in parallel (with 'all')
+--config FILE    # Override the default config path
+--verbose        # Debug logging
 ```
 
-## 🖥️ Desktop GUI Usage
+`<action>` is one of `process` (run the API only), `report` (regenerate the PowerPoint from existing outputs), or `auto` (process then report).
 
-For non-technical users, a graphical desktop application is available that provides all the same functionality without using the command line.
-
-### **Launching the GUI**
+## 🔧 Installation
 
 ```bash
 cd Scripts
-python gui_app.py
+pip install -r requirements.txt
+brew install ffmpeg   # macOS — required for video processing
 ```
 
-Or run the packaged executable (see [build_executable.md](build_executable.md) for packaging instructions).
+**Requirements:** Python 3.8+, FFmpeg, 8 GB+ RAM
 
-### **GUI Controls**
+Key dependencies:
 
-| Control | Description |
-| :-- | :-- |
-| **Platform** | Select which AI API to use (Kling, Nano Banana, Veo, etc.) |
-| **Action** | Choose what to do: Process + Report (Auto), Process Only, or Report Only |
-| **Configuration File** | The YAML file containing settings for this job. Click "Use Default" to auto-select the standard config for the chosen platform |
-| **Task Folder** | (Optional) Override the folder path in the config file for this run |
-| **Run in Parallel** | When running "All Platforms", process multiple APIs simultaneously |
-| **Verbose Logging** | Show detailed debug messages in the log console |
+| Package | Purpose |
+| --- | --- |
+| `gradio_client` | Talks to the testbed APIs |
+| `ruamel.yaml` | Round-trip YAML editing that preserves formatting |
+| `python-pptx` | PowerPoint report generation |
+| `opencv-python` | Video / image processing |
+| `pillow-heif` | HEIC / HEIF support |
+| `wakepy` | Cross-platform sleep prevention (non-macOS) |
+| `tqdm` | Progress bars |
 
-### **Advanced Options**
+## 🔐 Testbed Cookie Setup
 
-Click "▶ Advanced Options" to expand the override section. Here you can temporarily change config values **without editing the YAML file on disk**.
+The testbed at `192.168.31.161` requires browser cookie authentication. Each user must provide their own cookie. **Cookies are never committed to Git.**
 
-**Override Format:**
+### Option 1 — `.env` file (recommended for CLI use)
 
 ```bash
-key = value
-key: value
+cd Scripts
+cp .env.example .env
 ```
 
-**Examples:**
+Edit `.env`:
+
+```env
+TESTBED_COOKIE=session_id=abc123; auth_token=xyz789
+```
+
+### Option 2 — GUI field
+
+Open the GUI → **Advanced Options** → **Testbed Cookie**. The field auto-loads from `.env` on launch; you can paste a different cookie there to use just for the current run.
+
+### Option 3 — Environment variable
 
 ```bash
-prompt = A cat dancing in the rain
-duration = 10
-model_version = v2.5-turbo
-tasks.0.prompt = Override the first task's prompt
+export TESTBED_COOKIE="session_id=abc123; auth_token=xyz789"
+python core/runall.py kling auto
 ```
 
-### **Workflow Examples**
+### How to get your cookie
 
-#### Example 1: Kling Image-to-Video
+1. Open the testbed URL in your browser and log in.
+2. Open DevTools (F12) → **Network** tab.
+3. Reload the page and click any request to the testbed host.
+4. Copy the full **Cookie** header value from the request headers.
 
-1. Select **Platform**: "kling" (Kling 2.1)
-2. Select **Action**: "Auto (Process + Report)"
-3. Click **"Use Default"** for config (loads `batch_kling_config.yaml`)
-4. (Optional) Enter a **Task Folder** to override the folder in config
-5. Click **"▶ Run"**
-6. Watch progress in the log console
-7. When complete, click **"📂 Open Report Folder"** to view the generated PowerPoint
+## 📋 Platforms at a Glance
 
-#### Example 2: Nano Banana Multi-Image
+### Command short names
 
-1. Select **Platform**: "nano" (Nano Banana / Google Flash)
-2. Select **Action**: "Auto"
-3. The default config `batch_nano_banana_config.yaml` is auto-selected
-4. Expand **Advanced Options** and enter:
+| Short name | Full name | Type | Key feature |
+| --- | --- | --- | --- |
+| `kling` | Kling I2V | I2V | Streaming downloads, negative prompts, v1.6 – v3.0 models |
+| `klingfx` | Kling Effects | I2V | 100+ preset effects, custom effects |
+| `kling_endframe` | Kling Endframe | I2V | A→B transitions, pairing modes |
+| `kling_ttv` | Kling TTV | T2V | Text-to-video, optional sound generation |
+| `klingmotion` | Kling Motion | I+V | Image × video motion cross-matching |
+| `pixverse` | Pixverse | I2V | v6 model, custom effect IDs, multi-clip |
+| `pixverse_multi` | Pixverse Multi | I2V | `/submit_5` multi-image templates (1–4 images), sequential / deterministic-random source picking |
+| `pixversettv` | Pixverse TTV | T2V | Text-to-video, v6 model, effects |
+| `vidu` | Vidu Effects | I2V | Category-organized presets, viduq2-pro |
+| `viduref` | Vidu Reference | I2V | Up to 6 references per source |
+| `vidu_i2v` | Vidu I2V | I2V | `/submitI2V`, custom prompts, q1 – q3 models, optional audio |
+| `seedance_ttv` | Seedance TTV | T2V | Text-to-video, dreamina-seedance-2.0 models |
+| `seedance_i2v` | Seedance I2V | I2V | Image-to-video with custom prompts |
+| `veo` | Google Veo | T2V | Veo 2.0 – 3.1, audio generation, compression options |
+| `veoitv` | Google Veo ITV | I2V | Image-to-video, multi-generation per image |
+| `nano` | Nano Banana | I2I | Multi-image (up to 14), random source selection |
+| `openai_image` | OpenAI Image | I2I | `gpt-image-1` / `gpt-image-2`, multi-image, reference images |
+| `genvideo` | GenVideo | I2I | Gashapon-style image transformation |
+| `runway` | Runway Gen4 | V2V | Face swap / motion, `one_to_one` or `all_combinations` pairing |
+| `wan` | Wan 2.2 | I+V | Auto-cropping, video × image cross-match |
+| `dreamactor` | DreamActor | I+V | Face reenactment via image × video cross-match |
+| `fifa` | FIFA I2I2V | I2I2V | Per-image start/end-frame generation → video |
+| `i2i2v` | I2I2V | I2I2V | Generic image → image → video pipeline (Nano Banana / OpenAI Image + Kling) |
+| `all` | All Platforms | — | Run every API in sequence (or `--parallel`) |
 
-   ```bash
-   prompt = Generate a magical forest scene
-   ```
+### File limits
 
-5. Click **"▶ Run"**
+| API | Max size | Min / max dim | Formats |
+| --- | --- | --- | --- |
+| Kling | 10 MB | 300 px / — | JPG, PNG, WebP |
+| Kling Effects | 30 MB | 300 px / — | JPG, PNG, BMP, TIFF |
+| Kling Endframe | 10 MB | 300 px / — | JPG, PNG, BMP, TIFF |
+| Kling Motion | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
+| Pixverse | 20 MB | 128 px / 4000 px | JPG, PNG, BMP, TIFF, WebP |
+| Pixverse Multi | 20 MB | 128 px / 10000 px | JPG, PNG, WebP |
+| Vidu Effects / I2V | 20 MB | 128 px / 4000 px | JPG, PNG, WebP |
+| Vidu Reference | 50 MB | 128 px / — | JPG, PNG, WebP |
+| Seedance I2V | 30 MB | 300 px / — | JPG, PNG, WebP |
+| Veo ITV | 30 MB | 300 px / — | JPG, PNG, WebP |
+| Nano Banana | 32 MB | 300 px / — | JPG, PNG, WebP |
+| OpenAI Image | 32 MB | 100 px / — | JPG, PNG, WebP |
+| GenVideo | 50 MB | 128 px / — | JPG, PNG, WebP |
+| Runway | image 500 MB / video 500 MB | 320 px / — | image: JPG, PNG, BMP; video: MP4, MOV, AVI, MKV, WebM |
+| Wan 2.2 | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
+| DreamActor | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
+| FIFA I2I2V / I2I2V | 30 MB | 256 px / — | JPG, PNG, WebP |
 
-#### Example 3: Veo ITV (Image-to-Video)
+(Text-to-video APIs — Kling TTV, Pixverse TTV, Seedance TTV, Veo — take no source files.)
 
-1. Select **Platform**: "veoitv" (Veo ITV)
-2. Select **Action**: "Process Only" (generate videos without report)
-3. Click **Browse...** and select your custom YAML config
-4. Click **"▶ Run"**
-5. Videos will be saved to `Generated_Video/` in each style folder
+### Output filenames
 
-### **API-Specific Advanced Options**
+| API | Output pattern |
+| --- | --- |
+| Kling | `{filename}_generated.mp4` |
+| Kling Effects / Pixverse / Vidu | `{filename}_{effect}_effect.mp4` |
+| Kling Endframe | `{filename}_generated_{n}.mp4` |
+| Kling TTV / Pixverse TTV / Seedance TTV | `{style}-{n}_generated.mp4` |
+| Kling Motion | `{video}_{image}_motion.mp4` |
+| Veo / Veo ITV | `{style}-{n}_generated.mp4` / `{source_image}_{n}.mp4` |
+| Pixverse Multi | `iter{NNN}_{img1_stem}_{img2_stem}_..._{Effect}_effect.mp4` |
+| Runway | `{filename}_ref_{ref}_runway_generated.mp4` |
+| Wan 2.2 / DreamActor | `{video}_{image}_{mode}.mp4` |
+| Nano Banana | `{filename}_image_{n}.{ext}` |
+| OpenAI Image | `{filename}_image_{n}.{ext}` |
+| GenVideo | `{filename}_generated.{ext}` |
+| Seedance I2V | `{source_image}_{n}.mp4` |
+| FIFA I2I2V | video `{source_image}_{n}.mp4`, frames `{source_image}_{n}_{start\|end}.png` |
+| I2I2V | video `{source_image}_{n}.mp4`, frames `{source_image}_{n}.{ext}` |
 
-When you select a platform, the Advanced Options section shows API-specific fields that can be configured:
+All metadata is stored alongside the outputs as `{filename}_metadata.json` (includes success, processing time, API params, attempt count).
 
-| API | Available Options |
-| :-- | :-- |
-| **Kling** | Mode, Duration (5/10s), CFG Scale (0.0-1.0) |
-| **Kling Effects** | Duration, Effect Name, Preset Effect |
-| **Kling Endframe** | Duration, CFG, Generation Count, Pairing Mode |
-| **Kling TTV** | Mode, Duration, Ratio, CFG Scale, Generation Count, Sound |
-| **Kling Motion** | Model, Character Orientation, Mode, Keep Original Sound, Element IDs |
-| **Nano Banana** | Model, Resolution, Aspect Ratio, Random Source Selection, Deterministic Random, Seed, Min/Max Images, Iterations, Generations per Source, Reference Images |
-| **Veo / Veo ITV** | Model, Duration, Aspect Ratio, Resolution, Person Generation, Enhance Prompt, Generate Audio |
-| **Pixverse** | Model, Duration, V6 Duration, Quality, Motion Mode, Style, Seed, Generate Audio, Multi Clip, Thinking Type |
-| **Pixverse TTV** | Model, Aspect Ratio, Duration, V6 Duration, Quality, Motion Mode, Style, Seed, Generate Audio, Multi Clip, Thinking Type |
-| **Runway** | Model, Aspect Ratio, Pairing Strategy, Public Figure Moderation |
-| **Wan** | Animation Mode, Num Outputs, Seed, Embed |
-| **DreamActor** | Use Base64, Cut Switch, Video URL |
-| **Vidu Effects** | Category, Effect, Model |
-| **Vidu Reference** | Model, Duration, Resolution, Movement |
-| **Vidu I2V** | Model, Duration, Resolution, Movement, Audio |
+## 📂 Folder Conventions
 
-These options override the corresponding values in the config file for the current run.
-
-### **Important Notes**
-
-- **Runtime overrides are temporary** — they only apply to the current run and do NOT modify your YAML config files
-- **FFmpeg required** — video processing requires FFmpeg to be installed on your system
-- **Network required** — the app connects to API servers defined in your config files
-- **Reports saved to** `Report/` folder with date-prefixed filenames
-- **Bundled app working directory** — when running the packaged `.app`, the working directory defaults to your home folder; use absolute paths or the folder picker for config paths
-
-## 📋 Platform Commands
-
-| Short Name | Full Name | Description |
-| :-- | :-- | :-- |
-| `kling` | Kling 2.5 | Image-to-video generation with v2.5-turbo model |
-| `klingfx` | Kling Effects | Apply premade video effects to images |
-| `kling_endframe` | Kling Endframe | Start/end frame video generation (A→B transitions) |
-| `kling_ttv` | Kling TTV | Text-to-video generation (no input images) |
-| `klingmotion` | Kling Motion | Image + video motion control via cross-matching |
-| `pixverse` | Pixverse v6 | Effect-based video generation with custom effects |
-| `pixversettv` | Pixverse TTV | Text-to-video generation (no input images) |
-| `genvideo` | GenVideo | Image-to-image transformation (Gashapon style) |
-| `nano` | Nano Banana/Google Flash | Multi-image generation with AI models |
-| `vidu` | Vidu Effects | Effect-based video generation with categories |
-| `viduref` | Vidu Reference | Multi-reference guided video generation |
-| `vidu_i2v` | Vidu I2V | Image-to-video generation (`/submitI2V`) with custom prompts |
-| `runway` | Runway Gen4 | Video processing with face swap and effects |
-| `wan` | Wan 2.2 | Image + video cross-matching with motion animation |
-| `dreamactor` | DreamActor | Image + video face reenactment via cross-matching |
-| `veo` | Google Veo | Text-to-video generation with AI models |
-| `veoitv` | Google Veo ITV | Image-to-video generation with AI models |
-| `all` | All Platforms | Process all APIs sequentially or in parallel |
-
-## 📁 Project Structure
-
-```bash
-GAI/                                    # Project root
-└── Scripts/                           # Main scripts directory
-    ├── config/                        # Configuration files (YAML format)
-    │   ├── batch_kling_config.yaml        # Kling I2V configuration
-    │   ├── batch_kling_effects_config.yaml # Kling Effects configuration
-    │   ├── batch_kling_endframe_config.yaml # Kling Endframe configuration
-    │   ├── batch_kling_ttv_config.yaml    # Kling TTV configuration
-    │   ├── batch_kling_motion_config.yaml  # Kling Motion configuration
-    │   ├── batch_pixverse_config.yaml     # Pixverse configuration
-    │   ├── batch_pixverse_ttv_config.yaml  # Pixverse TTV configuration
-    │   ├── batch_genvideo_config.yaml     # GenVideo configuration
-    │   ├── batch_nano_banana_config.yaml  # Nano Banana configuration
-    │   ├── batch_runway_config.yaml       # Runway configuration
-    │   ├── batch_vidu_effects_config.yaml # Vidu Effects configuration
-    │   ├── batch_vidu_reference_config.yaml # Vidu Reference configuration
-    │   ├── batch_vidu_i2v_config.yaml     # Vidu I2V configuration
-    │   ├── batch_wan_config.yaml          # Wan 2.2 configuration
-    │   ├── batch_dreamactor_config.yaml    # DreamActor configuration
-    │   ├── batch_veo_config.yaml          # Google Veo configuration
-    │   └── batch_veo_itv_config.yaml      # Google Veo ITV configuration
-    ├── core/                          # Core automation framework
-    │   ├── api_definitions.json      # API specifications
-    │   ├── runall.py                 # Main execution script
-    │   ├── unified_api_processor.py  # API processing engine
-    │   └── unified_report_generator.py # Report generation engine
-    ├── handlers/                      # API-specific handlers
-    │   ├── base_handler.py           # Base handler class
-    │   ├── handler_registry.py       # Auto-discovery registry
-    │   ├── kling_handler.py          # Kling I2V handler
-    │   ├── kling_effects_handler.py  # Kling Effects handler
-    │   ├── kling_endframe_handler.py # Kling Endframe handler
-    │   ├── kling_ttv_handler.py      # Kling TTV handler
-    │   ├── kling_motion_handler.py   # Kling Motion handler
-    │   └── ...                       # Other API handlers
-    ├── processors/                    # Legacy individual processors
-    ├── reports/                       # Legacy individual report generators
-    ├── templates/                     # PowerPoint templates
-    │   ├── I2V Comparison Template.pptx
-    │   └── I2V templates.pptx
-    └── requirements.txt
-```
-
-### **Folder Structure**
+Most APIs follow a per-task folder structure with a `Source/` input subfolder. Output and metadata subfolders are auto-created on first run.
 
 ```bash
 TaskFolder/
-├── Source/              # Input images/videos (most APIs)
-├── Source Image/        # Wan 2.2: source images
-├── Source Video/        # Wan 2.2: source videos  
-├── Additional/          # Nano Banana: extra images
-├── Reference/           # Runway, Vidu Reference, Nano Banana (with use_reference_images): reference images
-├── Generated_Video/     # Auto-created video outputs
-├── Generated_Output/    # Auto-created outputs (Nano Banana)
+├── Source/              # Input images / videos (most APIs)
+├── Source Image/        # Wan 2.2, DreamActor, Kling Motion: source images
+├── Source Video/        # Wan 2.2, DreamActor, Kling Motion: source videos
+├── Additional/          # Nano Banana / OpenAI Image: extra images for multi-image mode
+├── Reference/           # Runway, Vidu Reference, Nano Banana, OpenAI Image: reference images
+├── Generated_Video/     # Auto-created video outputs (video APIs)
+├── Generated_Output/    # Auto-created outputs (Nano Banana, OpenAI Image)
 ├── Generated_Image/     # Auto-created outputs (GenVideo)
-└── Metadata/            # Auto-created metadata
+├── Generated_Frames/    # Auto-created intermediate frames (FIFA I2I2V, I2I2V)
+└── Metadata/            # Auto-created metadata JSONs
 ```
 
-**API-specific input folders:**
+API-specific input layouts:
 
-- Most APIs: `Source/`
-- Wan 2.2: `Source Image/` + `Source Video/` (cross-matched)
-- DreamActor: `Source Image/` + `Source Video/` (cross-matched)
-- Kling Motion: `Source Image/` + `Source Video/` (cross-matched)
-- Nano Banana multi-image: `Source/` + `Additional/` (or `Source/` only with random selection mode) + optional `Reference/`
-- Runway/Vidu Reference: `Source/` + `Reference/`
+- Most APIs → `Source/`
+- Wan 2.2 / DreamActor / Kling Motion → `Source Image/` + `Source Video/` (cross-matched)
+- Nano Banana multi-image → `Source/` + `Additional/` (or `Source/` only with random selection) + optional `Reference/`
+- OpenAI Image → same as Nano Banana
+- Runway → `Source/` (videos) + `Reference/` (images)
+- Vidu Reference → `Source/` + `Reference/`
+- Pixverse Multi → `Source/` (Source pool is consumed in chunks of `image_count`)
+- FIFA I2I2V / I2I2V → `Source/` (frames in `Generated_Frames/`, videos in `Generated_Video/`)
 
-## ⚙️ Configuration Files
+## ⚙️ Configuration Reference
 
-All configuration files are located in the `Scripts/config/` directory and follow API-specific naming conventions.
+All configs live in `Scripts/config/` and follow the `batch_{api}_config.yaml` naming convention.
 
-**Common Configuration Fields** (applicable to most APIs):
+### Common fields
 
-- **`design_link`**: URL to design reference materials (optional)
-- **`source_video_link`**: URL to source video reference (optional)
-- **`reference_folder`**: Path to reference comparison folder (optional)
-- **`use_comparison_template`**: Enable comparison template for reports (boolean)
-- **`schedule.start_time`**: Delayed start in `HH:MM` 24-hour format (leave empty for immediate)
-- **`output.group_tasks_by`**: Group N tasks into one combined report (0 = individual reports)
-- **`template_path`**: Path to the PowerPoint template file
-- **`output_directory`**: Directory for generated PPTX report files
+These apply across most config files (each API will only use the subset relevant to it):
 
-### **Kling Configuration** (`config/batch_kling_config.yaml`)
+- **`design_link`** — URL to design reference material (used in report titles)
+- **`source_video_link`** — URL to source video reference (used in report titles)
+- **`reference_folder`** — Path to a reference comparison folder
+- **`use_comparison_template`** — Enable the 3-media comparison template
+- **`schedule.start_time`** — Delayed start in `HH:MM` 24-hour format; empty = immediate
+- **`output.directory`** — Directory for generated PPTX reports
+- **`output.group_tasks_by`** — Group N tasks into one combined report (0 = individual)
+- **`template_path`** — Path to the PowerPoint template
+
+---
+
+### Kling family
+
+#### Kling I2V (`config/batch_kling_config.yaml`)
 
 ```yaml
 testbed: http://192.168.31.161/external-testbed/kling/
@@ -254,87 +246,78 @@ tasks:
     negative_prompt: "blurry, low quality"
 ```
 
-**Options:** Model (`v1.6`/`v2.1`/`v2.5-turbo`), Mode (`std`/`pro`), Duration (`5`/`10`), CFG (`0.0`-`1.0`)
+**Options:** Model (`v1.6` / `v2.1` / `v2.5-turbo` / `v3`), Mode (`std` / `pro`), Duration (`5` / `10`), CFG (`0.0` – `1.0`).
 
-### **Kling Effects Configuration** (`config/batch_kling_effects_config.yaml`)
+#### Kling Effects (`config/batch_kling_effects_config.yaml`)
 
 Applies premade video effects to images. Supports both preset effects and custom effect names.
 
 ```yaml
 base_folder: Media Files/Kling Effects/1127 Test
 testbed: http://192.168.31.161/external-testbed/kling/
-
-# Global settings
 duration: '5'
-
-# Effect selection (custom_effect has priority over effect)
-effect: 3d_cartoon_1      # Preset effect from dropdown
-custom_effect: ''          # Custom effect name (priority if specified)
+effect: 3d_cartoon_1       # Preset effect from dropdown
+custom_effect: ''           # Custom effect name (takes priority if specified)
 
 tasks:
   - style_name: 3D Cartoon
     effect: 3d_cartoon_1
-    custom_effect: ''       # Leave empty to use preset 'effect'
-  
+    custom_effect: ''
   - style_name: Custom Style
     effect: ''
-    custom_effect: my_custom_effect  # Custom effect takes priority
+    custom_effect: my_custom_effect
 ```
 
-**Effect Selection:**
+Effect selection:
 
-- Use `effect` to select from 100+ preset effects (e.g., `3d_cartoon_1`, `anime_figure`, `japanese_anime_1`)
-- Use `custom_effect` to specify a custom effect name (takes priority over `effect`)
+- Use `effect` to pick from 100+ presets (e.g., `3d_cartoon_1`, `anime_figure`, `japanese_anime_1`, `american_comics`, `angel_wing`, `baseball`, `boss_coming`, `car_explosion`, `celebration`, `demon_transform`, `disappear`, `emoji`, `firework`, `gallery_ring`, `halloween_escape`, `jelly_jiggle`, `magic_broom`, `mushroom`, `pixelpixel`, `santa_gifts`, `steampunk`, `vampire_transform`, `zombie_transform`, …).
+- Use `custom_effect` to specify a custom name (takes priority over `effect`).
 
-**Available Preset Effects (partial list):**
-`3d_cartoon_1`, `3d_cartoon_2`, `anime_figure`, `japanese_anime_1`, `american_comics`, `angel_wing`, `baseball`, `boss_coming`, `car_explosion`, `celebration`, `demon_transform`, `disappear`, `emoji`, `firework`, `gallery_ring`, `halloween_escape`, `jelly_jiggle`, `magic_broom`, `mushroom`, `pixelpixel`, `santa_gifts`, `steampunk`, `vampire_transform`, `zombie_transform`, and many more.
-
-**Folder Structure:**
+Folder layout:
 
 ```bash
 BaseFolder/
 ├── StyleName1/
 │   ├── Source/              # Input images
-│   ├── Generated_Video/     # Auto-created output folder
-│   └── Metadata/            # Auto-created metadata folder
+│   ├── Generated_Video/     # auto-created
+│   └── Metadata/            # auto-created
 ├── StyleName2/
 │   └── ...
 ```
 
-### **Kling Endframe Configuration** (`config/batch_kling_endframe_config.yaml`)
+#### Kling Endframe (`config/batch_kling_endframe_config.yaml`)
 
-Generates videos from start and end frame image pairs, creating smooth A→B transitions.
+Generates videos from start/end image pairs, producing smooth A→B transitions.
 
 ```yaml
 testbed: http://192.168.31.161/external-testbed/kling/
 model_version: v2.1
-generation_count: 1  # Global default, can override per task
+generation_count: 1
 
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 3  # Combine N tasks into one report (0 = individual)
+  group_tasks_by: 3
 
 tasks:
   - mode: pro
     folder: Media Files/Kling Endframe/1030 3 Styles/Anime Awakening
     prompt: "Smooth transition from start to end frame"
-    negative_prompt: ""
     duration: 5
     cfg: 0.5
-    pairing_mode: ab_naming  # or 'sequential'
-    generation_count: 3      # Override global setting
+    pairing_mode: ab_naming     # 'ab_naming' or 'sequential'
+    generation_count: 3
 ```
 
-**Pairing Modes:**
+Pairing modes:
 
-- **`ab_naming`** (default): Pairs `Style_A.jpg` with `Style_B.jpg`
-- **`sequential`**: First half = start frames, second half = end frames
+- `ab_naming` (default) — `Style_A.jpg` ↔ `Style_B.jpg`
+- `sequential` — first half = start frames, second half = end frames
 
-**Parameters:** `mode` (pro/std), `duration` (5/10), `cfg` (0.0-1.0), `model_version` (v1.6/v2.1), `generation_count`
+**Options:** `mode` (`pro` / `std`), `duration` (`5` / `10`), `cfg` (`0.0` – `1.0`), `model_version` (`v1.6` / `v2.1`).
 
-### **Kling TTV Configuration** (`config/batch_kling_ttv_config.yaml`)
+#### Kling TTV (`config/batch_kling_ttv_config.yaml`)
 
-Text-to-video generation (no input images required).
+Text-to-video — no source images needed.
 
 ```yaml
 testbed: http://192.168.31.161/external-testbed/kling/
@@ -351,15 +334,13 @@ tasks:
     duration: 5
     ratio: "1:1"
     cfg: 0.5
-    generation_count: 1
-    sound_enabled: true
 ```
 
-**Options:** Model (`v1.6`/`v2.0-master`/`v2.1-master`/`v2.5-turbo`), Mode (`std`/`pro`), Ratio (`16:9`/`9:16`/`1:1`), `sound_enabled` (true/false), `generation_count`
+**Options:** Model (`v1.6` / `v2.0-master` / `v2.1-master` / `v2.5-turbo`), Mode (`std` / `pro`), Ratio (`16:9` / `9:16` / `1:1`), `sound_enabled`, `generation_count`.
 
-### **Kling Motion Configuration** (`config/batch_kling_motion_config.yaml`)
+#### Kling Motion (`config/batch_kling_motion_config.yaml`)
 
-Image + video motion control generation. Cross-matches all reference images with all motion source videos.
+Cross-matches all reference images with all motion source videos.
 
 ```yaml
 testbed: http://192.168.31.161/external-testbed/kling/
@@ -374,143 +355,25 @@ default_params:
 
 tasks:
   - folder: Media Files/Kling Motion/Style1
-    prompt: ''
-    model: v3
-    character_orientation: video
-    mode: pro
-    keep_original_sound: true
-    element_list_str: ''
 ```
 
-**Folder Structure:**
+Folder layout:
 
 ```bash
 TaskFolder/
 ├── Source Image/        # Reference images (character appearance)
 ├── Source Video/        # Motion source videos
-├── Generated_Video/     # Auto-created output folder
-└── Metadata/            # Auto-created metadata folder
+├── Generated_Video/
+└── Metadata/
 ```
 
-**Options:** Model (`v2.6`/`v3`), Character Orientation (`image`/`video`), Mode (`std`/`pro`), `keep_original_sound` (true/false), `element_list_str` (comma-separated IDs)
+**Options:** Model (`v2.6` / `v3`), Character Orientation (`image` / `video`), Mode (`std` / `pro`), `keep_original_sound`, `element_list_str` (comma-separated IDs).
 
-### **Nano Banana Configuration** (`config/batch_nano_banana_config.yaml`)
+---
 
-Supports two modes: **Random Source Selection** (select N random images from Source folder per API call) and **Multi-Image** (Source + Additional folder pairing).
+### Pixverse family
 
-```yaml
-testbed: http://192.168.31.161/external-testbed/image_generation/
-
-output:
-  group_tasks_by: 2
-
-schedule:
-  start_time: ""  # HH:MM or empty for immediate
-
-tasks:
-  # Random Source Selection mode (recommended)
-  - folder: /path/to/TaskName1
-    model: gemini-3-pro-image-preview
-    resolution: "2K"
-    aspect_ratio: "3:4"
-    prompt: "Your prompt here"
-    use_random_source_selection: true
-    use_deterministic_random: true
-    random_seed: 42
-    min_images: 1
-    max_images: 4
-    num_iterations: 50
-    generations_per_source: 1
-    use_reference_images: false
-
-  # Multi-Image mode (Source + Additional folder)
-  - folder: /path/to/TaskName2
-    model: gemini-2.5-flash-image
-    prompt: "Generate variations"
-    use_multi_image: true
-    multi_image_config:
-      mode: sequential  # or 'random_pairing'
-      folders: ["/path/to/Additional/"]
-```
-
-**Per-task fields:** `model`, `resolution` (`1K`/`2K`), `aspect_ratio` (`1:1`/`2:3`/`3:2`/`3:4`/`4:3`/`4:5`/`5:4`/`9:16`/`16:9`/`21:9` — auto-detected from source if omitted)
-
-**Model limits:** `gemini-2.5-flash-image` (max 3 images), `gemini-3-pro-image-preview` (max 14 images)
-
-**Random Source Selection:**
-
-- `use_random_source_selection`: Enable selecting N images from Source folder per API call
-- `use_deterministic_random`: Same seed = same selections every run (reproducible)
-- `random_seed`: Explicit seed for deterministic mode (auto-generated from folder path if omitted)
-- `min_images` / `max_images`: Range of images per API call
-- `num_iterations`: Number of API calls to make (defaults to source file count)
-- `generations_per_source`: Number of generations per source group (default: `1`). Each iteration's selected images are sent N times. Example: 50 iterations × 5 generations = 250 total API calls.
-- Optimal formula: `sources_needed = num_iterations × (min_images + max_images) / 2`
-
-**Reference Images:**
-
-- `use_reference_images`: Set to `true` to prepend reference images to every API call
-- Place reference images in `<task_folder>/Reference/` (same level as `Source/`)
-- Reference images do **not** count toward `min_images` / `max_images` limits
-- Example: With 1 reference image and `min_images=1`, `max_images=4`, the API receives 2–5 images (1 ref + 1–4 source)
-
-#### Error 429 (Resource Exhausted) Retry
-
-Nano Banana has built-in handling for Google API `429 RESOURCE_EXHAUSTED` errors. When this error occurs, the retry count is saved to the file's metadata and the file is retried on the next script run.
-
-- **`max_retries_error429`** (default: `3`) — Set in `api_definitions.json` under the `nano_banana` entry. Controls how many re-runs will retry a 429-failed file.
-- The count is persisted in each file's `_metadata.json` as `error429_retries` and increments on each 429 failure.
-- On re-run, files with 429 errors below the limit are retried; once the limit is reached they are skipped.
-
-### **Vidu Effects Configuration** (`config/batch_vidu_effects_config.yaml`)
-
-```yaml
-base_folder: Media Files/Vidu/1027 Product
-testbed: http://192.168.31.161/external-testbed/video_effect/
-model_version: viduq2-pro
-
-tasks:
-  - category: Product
-    effect: Auto Spin
-```
-
-### **Vidu Reference Configuration** (`config/batch_vidu_reference_config.yaml`)
-
-```yaml
-base_folder: Media Files/Vidu_Ref/1201 1 Style
-testbed: http://192.168.31.161/external-testbed/video_effect/
-model: viduq1
-duration: 5
-resolution: 1080p
-movement: auto
-
-tasks:
-  - effect: Style Transfer
-    prompt: "Apply artistic style"
-```
-
-**Options:** Duration (`4`/`5`/`8`s), Resolution (`720p`/`1080p`), up to 6 reference images per source
-
-### **Vidu I2V Configuration** (`config/batch_vidu_i2v_config.yaml`)
-
-```yaml
-base_folder: Media Files/Vidu I2V/0518 3 Styles
-testbed: http://192.168.31.161/external-testbed/video_effect/
-model: viduq2-pro
-resolution: 720p
-movement: auto
-audio: true
-
-tasks:
-  - custom_effect_name: Police
-    duration: 5
-    prompt: |
-      Custom prompt describing the desired motion / scene.
-```
-
-**Options:** Model (`viduq1`, `viduq1-classic`, `viduq2-pro`, `viduq2-turbo`, `viduq2-pro-fast`, `viduq3-pro`, `viduq3-turbo`), Duration (seconds), Resolution (`360p`/`540p`/`720p`/`1080p`/`2K`), Movement (`auto`/`small`/`medium`/`large`), Audio sync (q3 models only)
-
-### **Pixverse Configuration** (`config/batch_pixverse_config.yaml`)
+#### Pixverse (`config/batch_pixverse_config.yaml`)
 
 ```yaml
 base_folder: Media Files/Pixverse
@@ -534,9 +397,44 @@ tasks:
     custom_effect_id: ""
 ```
 
-**Defaults:** Model v6, Duration 5s, Quality 540p, Motion Mode normal, Seed -1
+**Defaults:** Model v6, Duration 5 s, Quality 540p, Motion Mode `normal`, Seed `-1`.
 
-### **Pixverse TTV Configuration** (`config/batch_pixverse_ttv_config.yaml`)
+#### Pixverse Multi (`config/batch_pixverse_multi_config.yaml`)
+
+Multi-image PixVerse templates via `/submit_5`. Each task consumes images from `base_folder/<effect>/Source` in groups of `image_count` (1 – 4) per API call.
+
+```yaml
+base_folder: Media Files/Pixverse Multi/0526 Multi Input
+testbed: http://192.168.31.161/external-testbed/video_effect/
+
+default_settings:
+  model: v6
+  duration: 5
+  quality: 1080p
+  sound_effect_switch: true
+  image_count: 2
+  selection_mode: sequential   # 'sequential' or 'random'
+  # random_seed: 42            # optional; auto-derived from folder path if omitted
+  num_iterations: 0            # 0 = floor(len(source) / image_count), one full pass
+
+tasks:
+  - effect: Stands Duo
+    custom_effect_id: '402880241531072'   # PixVerse Template ID (required)
+    image_count: 2
+    selection_mode: sequential
+```
+
+**Defaults:** Model v6, Quality 1080p, Sound effect on, Image count 1, Sequential selection.
+
+Notes from the PixVerse testbed page:
+
+- A PixVerse Template ID is **required** (enable the template on the PixVerse platform first).
+- `image_count` (1 – 4) controls how many images are sent. Multi-image templates require multiple images; single-image templates should use 1.
+- Image formats: JPG / JPEG / PNG / WebP. Max 10000 × 10000 px. Size < 20 MB.
+- The template controls the actual duration and aspect ratio. PixVerse ignores any prompt, so this config does not expose one.
+- `selection_mode: random` shuffles the Source pool with a deterministic seed (auto-derived from the folder path, or set `random_seed` explicitly).
+
+#### Pixverse TTV (`config/batch_pixverse_ttv_config.yaml`)
 
 ```yaml
 output_folder: Media Files/Pixverse TTV
@@ -566,9 +464,65 @@ tasks:
     generation_count: 1
 ```
 
-**Defaults:** Model v6, Aspect Ratio 16:9, Duration 5s, Quality 540p, Seed -1
+**Defaults:** Model v6, Aspect Ratio 16:9, Duration 5 s, Quality 540p, Seed `-1`.
 
-### **Seedance TTV Configuration** (`config/batch_seedance_ttv_config.yaml`)
+---
+
+### Vidu family
+
+#### Vidu Effects (`config/batch_vidu_effects_config.yaml`)
+
+```yaml
+base_folder: Media Files/Vidu/1027 Product
+testbed: http://192.168.31.161/external-testbed/video_effect/
+model_version: viduq2-pro
+
+tasks:
+  - category: Product
+    effect: Auto Spin
+```
+
+#### Vidu Reference (`config/batch_vidu_reference_config.yaml`)
+
+```yaml
+base_folder: Media Files/Vidu_Ref/1201 1 Style
+testbed: http://192.168.31.161/external-testbed/video_effect/
+model: viduq1
+duration: 5
+resolution: 1080p
+movement: auto
+
+tasks:
+  - effect: Style Transfer
+    prompt: "Apply artistic style"
+```
+
+**Options:** Duration (`4` / `5` / `8` s), Resolution (`720p` / `1080p`), up to 6 reference images per source.
+
+#### Vidu I2V (`config/batch_vidu_i2v_config.yaml`)
+
+```yaml
+base_folder: Media Files/Vidu I2V/0518 3 Styles
+testbed: http://192.168.31.161/external-testbed/video_effect/
+model: viduq2-pro
+resolution: 720p
+movement: auto
+audio: true
+
+tasks:
+  - custom_effect_name: Police
+    duration: 5
+    prompt: |
+      Custom prompt describing the desired motion / scene.
+```
+
+**Options:** Model (`viduq1`, `viduq1-classic`, `viduq2-pro`, `viduq2-turbo`, `viduq2-pro-fast`, `viduq3-pro`, `viduq3-turbo`), Duration (seconds), Resolution (`360p` / `540p` / `720p` / `1080p` / `2K`), Movement (`auto` / `small` / `medium` / `large`), Audio sync (q3 models only).
+
+---
+
+### Seedance family
+
+#### Seedance TTV (`config/batch_seedance_ttv_config.yaml`)
 
 ```yaml
 output_folder: Media Files/Seedance TTV
@@ -594,9 +548,9 @@ tasks:
     generation_count: 1
 ```
 
-**Defaults:** Model dreamina-seedance-2-0-260128, Aspect Ratio adaptive, Duration 5s, Resolution 720p, Seed -1, Audio enabled
+**Defaults:** Model `dreamina-seedance-2-0-260128`, Aspect Ratio `adaptive`, Duration 5 s, Resolution 720p, Seed `-1`, Audio enabled.
 
-### **Seedance I2V Configuration** (`config/batch_seedance_i2v_config.yaml`)
+#### Seedance I2V (`config/batch_seedance_i2v_config.yaml`)
 
 ```yaml
 root_folder: Media Files/Seedance I2V
@@ -622,56 +576,15 @@ tasks:
     aspect_ratio: adaptive
 ```
 
-**Defaults:** Model dreamina-seedance-2-0-260128, Aspect Ratio adaptive, Duration 5s, Resolution 720p, Seed -1, Audio enabled. Each task folder must contain a `Source` subfolder with input images.
+Each task folder must contain a `Source/` subfolder with input images.
 
-### **GenVideo Configuration** (`config/batch_genvideo_config.yaml`)
+---
 
-```yaml
-testbed: http://192.168.31.161/external-testbed/genvideo/
+### Google Veo family
 
-tasks:
-  - folder: /path/to/TaskName1
-    img_prompt: "Generate a gashapon capsule"
-    model: gpt-image-1
-    quality: low
-```
+#### Veo (`config/batch_veo_config.yaml`)
 
-**Models:** `gpt-image-1`, `gemini-2.5-flash-image-preview` | **Quality:** `low`/`medium`/`high`
-
-### **Runway Configuration** (`config/batch_runway_config.yaml`)
-
-```yaml
-testbed: http://192.168.31.161/external-testbed/runway/
-model: gen4_aleph
-ratio: 1280:720
-public_figure_moderation: low  # low/medium/high
-
-tasks:
-  - folder: /path/to/TaskName1
-    prompt: "Face swap effect"
-    pairing_strategy: all_combinations  # or 'one_to_one'
-```
-
-**Pairing:** `one_to_one` (1:1 mapping) or `all_combinations` (N×M outputs)
-**Ratios:** `1280:720`, `720:1280`, `1104:832`, `960:960`, `832:1104`, `1584:672`, `848:480`, `640:480`
-
-### **Wan 2.2 Configuration** (`config/batch_wan_config.yaml`)
-
-```yaml
-testbed: http://210.244.31.18:7007/
-
-tasks:
-  - folder: Media Files/Wan 2.2/Test
-    prompt: "The person is dancing"
-    animation_mode: move  # or 'mix'
-```
-
-**Cross-matching:** All videos × all images (e.g., 5 videos × 4 images = 20 outputs)
-**Requires:** `Source Image/` and `Source Video/` folders
-
-### **Veo Configuration** (`config/batch_veo_config.yaml`)
-
-Text-to-video generation (no input images required).
+Text-to-video — no source images needed.
 
 ```yaml
 testbed: http://192.168.31.161/external-testbed/google_veo/
@@ -691,16 +604,17 @@ tasks:
     output_folder: Media Files/Veo/Test1/Generated_Video
 ```
 
-**Models:** `veo-2.0-generate-001`, `veo-3.0-generate-001`, `veo-3.0-fast-generate-001`, `veo-3.0-generate-preview`, `veo-3.1-generate-preview`, `veo-3.1-fast-generate-preview`, `veo-3.1-generate-001`, `veo-3.1-fast-generate-001`
-**Options:** Ratio (`16:9`/`9:16`), Resolution (`720p`/`1080p`), `compression_quality` (`optimized`/`lossless`), `enhance_prompt`, `generate_audio`, `person_generation` (`allow_all`/`allow_adult`/`dont_allow`)
+**Models:** `veo-2.0-generate-001`, `veo-3.0-generate-001`, `veo-3.0-fast-generate-001`, `veo-3.0-generate-preview`, `veo-3.1-generate-preview`, `veo-3.1-fast-generate-preview`, `veo-3.1-generate-001`, `veo-3.1-fast-generate-001`.
 
-### **Veo ITV Configuration** (`config/batch_veo_itv_config.yaml`)
+**Options:** Ratio (`16:9` / `9:16`), Resolution (`720p` / `1080p`), `compression_quality` (`optimized` / `lossless`), `enhance_prompt`, `generate_audio`, `person_generation` (`allow_all` / `allow_adult` / `dont_allow`).
 
-Image-to-video generation with source images.
+#### Veo ITV (`config/batch_veo_itv_config.yaml`)
+
+Image-to-video with source images.
 
 ```yaml
 root_folder: Media Files/Veo_ITV
-generation_count: 2  # Videos per source image
+generation_count: 2   # videos per source image
 
 tasks:
   - style_name: Style 11_Statue Selfie
@@ -710,21 +624,144 @@ tasks:
     duration_seconds: 8
 ```
 
-**Folder Structure:**
+Folder layout:
 
 ```bash
 root_folder/
 ├── Style 11_Statue Selfie/
-│   ├── Source/           # Input images
-│   ├── Generated_Video/  # {image_name}_{n}.mp4
+│   ├── Source/
+│   ├── Generated_Video/    # {image_name}_{n}.mp4
 │   └── Metadata/
 ```
 
-**Output Naming:** `{source_image_name}_{generation_number}.mp4` (e.g., `selfie_1.mp4`, `selfie_2.mp4`)
+---
 
-### **FIFA I2I2V Configuration** (`config/batch_fifa_i2i2v_config.yaml`)
+### Image generation (Nano Banana, OpenAI Image, GenVideo)
 
-Image-to-image-to-video pipeline. Per source image, optionally generate a start frame and/or an end frame from prompts, then generate the final video from whichever frames were produced. Defaults to Kling 3.0 Pro for the video step.
+#### Nano Banana (`config/batch_nano_banana_config.yaml`)
+
+Two modes: **Random Source Selection** (pick N random images from Source folder per call) and **Multi-Image** (Source + Additional folder pairing).
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/image_generation/
+
+output:
+  group_tasks_by: 2
+
+tasks:
+  # Random Source Selection (recommended)
+  - folder: /path/to/TaskName1
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "3:4"
+    prompt: "Your prompt here"
+    use_random_source_selection: true
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 1
+    max_images: 4
+    num_iterations: 50
+    generations_per_source: 1
+    use_reference_images: false
+
+  # Multi-Image (Source + Additional folder)
+  - folder: /path/to/TaskName2
+    model: gemini-2.5-flash-image
+    prompt: "Generate variations"
+    use_multi_image: true
+    multi_image_config:
+      mode: sequential   # or 'random_pairing'
+      folders: ["/path/to/Additional/"]
+```
+
+**Per-task fields:** `model`, `resolution` (`1K` / `2K`), `aspect_ratio` (`1:1` / `2:3` / `3:2` / `3:4` / `4:3` / `4:5` / `5:4` / `9:16` / `16:9` / `21:9` — auto-detected from source if omitted).
+
+Model limits:
+
+- `gemini-2.5-flash-image` — max 3 images
+- `gemini-3-pro-image-preview` — max 14 images
+- `gemini-3.1-flash-image-preview` — max 14 images
+
+Random Source Selection:
+
+- `use_random_source_selection` — enable selecting N images per call from `Source/`
+- `use_deterministic_random` — same seed ⇒ same selections every run (reproducible)
+- `random_seed` — explicit seed (auto-generated from folder path if omitted)
+- `min_images` / `max_images` — range per call
+- `num_iterations` — how many calls (defaults to source file count)
+- `generations_per_source` — calls per source group (default 1); e.g., 50 iterations × 5 generations = 250 total calls
+- Optimal formula: `sources_needed = num_iterations × (min_images + max_images) / 2`
+
+Reference images:
+
+- `use_reference_images: true` — prepend reference images from `<task_folder>/Reference/` to every call
+- Reference images **do not** count toward `min_images` / `max_images`
+- E.g., with 1 reference and `min_images=1, max_images=4`, the API receives 2 – 5 images per call
+
+Error 429 retry:
+
+Nano Banana retries `429 RESOURCE_EXHAUSTED` errors across runs. The count persists in each file's `_metadata.json` as `error429_retries`; cap is `max_retries_error429` (default `3`) in `api_definitions.json`.
+
+#### OpenAI Image (`config/batch_openai_image_config.yaml`)
+
+Image generation using OpenAI's `gpt-image-N` family — same multi-image / random-source / reference-image features as Nano Banana.
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/image_generation/
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 1
+
+tasks:
+  - folder: Media Files/OpenAI Image/0520 Sample
+    model: gpt-image-2
+    quality: auto
+    resolution: "1K"
+    aspect_ratio: "16:9"
+    prompt: |
+      Photorealistic broadcast-style portrait...
+    use_random_source_selection: false
+    use_deterministic_random: true
+    random_seed: 42
+    min_images: 1
+    max_images: 4
+    num_iterations: 0
+    generations_per_source: 1
+    use_reference_images: false
+```
+
+Options:
+
+- **Models:** `gpt-image-1`, `gpt-image-2`
+- **Quality:** `auto` / `low` / `medium` / `high`
+- **Resolution:** `1K` / `2K`
+- **Aspect ratio:** `auto`, `1:1`, `2:3`, `3:2`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, `21:9`
+- Reuses the **Random Source Selection** and **Reference Images** behavior from Nano Banana.
+
+#### GenVideo (`config/batch_genvideo_config.yaml`)
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/genvideo/
+
+tasks:
+  - folder: /path/to/TaskName1
+    img_prompt: "Generate a gashapon capsule"
+    model: gpt-image-1
+    quality: low
+```
+
+**Models:** `gpt-image-1`, `gemini-2.5-flash-image-preview` | **Quality:** `low` / `medium` / `high`.
+
+---
+
+### Pipelines (FIFA I2I2V, I2I2V)
+
+Two image-to-image-to-video pipelines that chain an image-generation step with a video-generation step.
+
+#### FIFA I2I2V (`config/batch_fifa_i2i2v_config.yaml`)
+
+Per source image, optionally generate a start frame and/or end frame from prompts, then generate the final video from whichever frames were produced. Defaults to Kling 3.0 Pro for the video step.
 
 ```yaml
 root_folder: Media Files/FIFA_I2I2V
@@ -751,91 +788,172 @@ tasks:
     video_negative_prompt: ""
 ```
 
-**Pipeline:** `/on_generate_frame` (if `generate_start`) → `/on_generate_frame_1` (if `generate_end`) → `/on_generate_video`. At least one of `generate_start` / `generate_end` must be true. Supported video services: `kling`, `wan`, `pixverse`, `google_veo`, `seedance`.
+**Pipeline:** `/on_generate_frame` (if `generate_start`) → `/on_generate_frame_1` (if `generate_end`) → `/on_generate_video`. At least one of `generate_start` / `generate_end` must be true.
 
-**Folder Structure:**
+**Supported video services:** `kling`, `wan`, `pixverse`, `google_veo`, `seedance`.
+
+Folder layout:
 
 ```bash
 root_folder/
 ├── {style_name}/
-│   ├── Source/             # Input images
+│   ├── Source/             # input images
 │   ├── Generated_Frames/   # {name}_{n}_start.png / {name}_{n}_end.png
 │   ├── Generated_Video/    # {name}_{n}.mp4
 │   └── Metadata/
 ```
 
-**Output Naming:** Videos `{source_image_name}_{generation_number}.mp4`, frames `{source_image_name}_{generation_number}_{start|end}.png`.
+#### I2I2V (`config/batch_i2i2v_config.yaml`)
+
+Generic two-step pipeline: **image generation** (Nano Banana **or** OpenAI Image) **→ video generation** (Kling). Each task chooses its image service and video model.
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/image_generation/
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 2
+
+tasks:
+  - style_name: 滑草V10
+    folder: Media Files/I2I2V/0522 滑草V10
+    # ---- Image generation step ----
+    image_service: nano_banana             # 'nano_banana' or 'openai_image'
+    image_model: gemini-3.1-flash-image-preview
+    image_quality: auto                    # openai_image only: auto / low / medium / high
+    image_resolution: '1K'
+    image_aspect_ratio: '9:16'
+    image_prompt: |
+      ...
+    # ---- Video generation step (Kling) ----
+    video_model: v3
+    video_mode: pro
+    video_duration: 5
+    video_ratio: '9:16'
+    video_prompt: |
+      ...
+    video_negative_prompt: ''
+```
+
+Image-step models:
+
+- `nano_banana`: `gemini-3.1-flash-image-preview`, `gemini-3-pro-image-preview`, `gemini-2.5-flash-image`
+- `openai_image`: `gpt-image-1`, `gpt-image-2`
+
+**Video-step models:** Kling `v1.6`, `v1.5`, `v2.0-master`, `v2.1`, `v2.1-master`, `v2.5-turbo`, `v2.6`, `v3`.
+
+Folder layout:
+
+```bash
+{folder}/
+├── Source/              # input reference images
+├── Generated_Frames/    # intermediate generated images (reused on resume)
+├── Generated_Video/     # final mp4s
+└── Metadata/
+```
+
+---
+
+### Other (Runway, Wan 2.2, DreamActor)
+
+#### Runway (`config/batch_runway_config.yaml`)
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/runway/
+model: gen4_aleph
+ratio: 1280:720
+public_figure_moderation: low   # low / medium / high
+
+tasks:
+  - folder: /path/to/TaskName1
+    prompt: "Face swap effect"
+    pairing_strategy: all_combinations   # or 'one_to_one'
+```
+
+**Pairing:** `one_to_one` (1:1 mapping) or `all_combinations` (N × M outputs).
+**Ratios:** `1280:720`, `720:1280`, `1104:832`, `960:960`, `832:1104`, `1584:672`, `848:480`, `640:480`.
+
+#### Wan 2.2 (`config/batch_wan_config.yaml`)
+
+```yaml
+testbed: http://210.244.31.18:7007/
+
+tasks:
+  - folder: Media Files/Wan 2.2/Test
+    prompt: "The person is dancing"
+    animation_mode: move   # or 'mix'
+```
+
+**Cross-matching:** all videos × all images (e.g., 5 videos × 4 images = 20 outputs). Requires `Source Image/` and `Source Video/` folders.
+
+#### DreamActor (`config/batch_dreamactor_config.yaml`)
+
+Same `Source Image/` + `Source Video/` cross-match pattern as Wan 2.2; targets face reenactment.
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/video_effect/
+
+tasks:
+  - folder: Media Files/DreamActor/Style1
+    use_base64: true
+    cut_switch: true
+```
+
+**Options:** `use_base64`, `cut_switch`, `video_url_direct`.
+
+---
 
 ## 📊 Report Generation
 
-PowerPoint reports auto-generated with title slides, side-by-side comparisons, metadata tracking, and hyperlinks.
+PowerPoint reports are generated automatically with title slides, side-by-side comparisons, per-slide metadata boxes, and hyperlinks.
 
-**Templates:** `Scripts/templates/I2V templates.pptx`, `I2V Comparison Template.pptx`
-**Output:** `Report/[MMDD] API Name Task Name.pptx`
+- **Templates:** `Scripts/templates/I2V templates.pptx`, `I2V Comparison Template.pptx`
+- **Output:** `Report/[MMDD] API Name Task Name.pptx`
 
-## 🔧 Installation
+Run `python core/runall.py <platform> report` to regenerate the report from existing media (no re-processing).
 
-```bash
-cd Scripts
-pip install -r requirements.txt
-brew install ffmpeg  # macOS (required for video processing)
-```
+## 🖥️ Desktop GUI
 
-**Requirements:** Python 3.8+, FFmpeg, 8GB+ RAM
-
-**Key Dependencies:**
-
-- `ruamel.yaml` - Round-trip YAML parsing that preserves formatting when saving config files
-- `gradio_client` - API client for AI services
-- `python-pptx` - PowerPoint report generation
-- `opencv-python` - Video/image processing
-- `pillow-heif` - HEIF/HEIC image format support
-- `wakepy` - Cross-platform sleep prevention (used on non-macOS)
-- `tqdm` - Progress bars for batch processing
-
-## � Testbed Cookie Setup
-
-The testbed at `192.168.31.161` requires browser cookie authentication. Each
-user must provide their own cookie. The cookie is **never committed to Git**.
-
-### Option 1: `.env` File (recommended for CLI / code usage)
+A graphical desktop app provides the same functionality without using the command line.
 
 ```bash
 cd Scripts
-cp .env.example .env
+python gui_app.py
 ```
 
-Edit `.env` and paste your cookie:
+Or run the packaged executable — see [build_executable.md](build_executable.md).
 
-```env
-TESTBED_COOKIE=session_id=abc123; auth_token=xyz789
+### GUI controls
+
+| Control | Description |
+| --- | --- |
+| **Platform** | Select which AI API to use |
+| **Action** | Process + Report (Auto) / Process Only / Report Only |
+| **Configuration File** | The YAML file with settings; click **Use Default** to auto-select the standard one for the chosen platform |
+| **Task Folder** | (Optional) override the folder path in the config for this run |
+| **Run in Parallel** | When running "All Platforms", process multiple APIs simultaneously |
+| **Verbose Logging** | Show debug messages in the log console |
+
+### Advanced Options
+
+Click **▶ Advanced Options** to expand the override section. You can temporarily change config values **without editing the YAML file on disk**.
+
+Format:
+
+```text
+key = value
+key: value
+tasks.0.prompt = Override the first task's prompt
 ```
 
-### Option 2: GUI Field
+### Important notes
 
-Open the GUI → Advanced Options → **Testbed Cookie** field. The field
-auto-loads the value from `.env` on launch. You can paste a different cookie
-here and it will be used for the current run only.
+- Runtime overrides are temporary — they apply to the current run only.
+- FFmpeg must be installed locally for video processing.
+- Reports are saved to the `Report/` folder with date-prefixed filenames.
+- For the bundled `.app`, the working directory defaults to your home folder; use absolute paths or the folder picker.
 
-### Option 3: Environment Variable
-
-Export the variable before running:
-
-```bash
-export TESTBED_COOKIE="session_id=abc123; auth_token=xyz789"
-python core/runall.py kling auto
-```
-
-### How to Get Your Cookie
-
-1. Open the testbed URL in your browser and log in.
-2. Open DevTools (F12) → **Network** tab.
-3. Reload the page and click any request to the testbed host.
-4. Copy the full **Cookie** header value from the request headers.
-
-## �📦 Building the Desktop App
-
-To package the application as a standalone executable for distribution:
+## 📦 Building the Desktop App
 
 ```bash
 cd Scripts
@@ -846,75 +964,91 @@ pyinstaller --name "AI Video Suite" --onedir --windowed \
     --hidden-import ruamel.yaml --collect-data gradio_client gui_app.py
 ```
 
-The app bundle will be created at `Scripts/dist/AI Video Suite.app` (macOS) or `Scripts/dist/AI Video Suite.exe` (Windows).
+The app bundle is created at `Scripts/dist/AI Video Suite.app` (macOS) or `Scripts/dist/AI Video Suite.exe` (Windows).
 
-**For detailed instructions** including troubleshooting, distribution, and platform-specific options, see [build_executable.md](build_executable.md).
-
-## 📈 File Requirements
-
-| API | Max Size | Min Dimensions | Formats |
-| ----- | ---------- | ---------------- | --------- |
-| Kling | 10MB | 300px | JPG, PNG, WebP |
-| Pixverse | 20MB | 128px | JPG, PNG |
-| Nano Banana | 32MB | 100px | JPG, PNG, WebP |
-| GenVideo/Vidu | 50MB | 128px | JPG, PNG |
-| Runway | 500MB | 320px | JPG, PNG + MP4, MOV |
-| Veo ITV | 30MB | 300px | JPG, PNG, WebP |
-
-## 🎯 API Features Summary
-
-| API | Type | Key Features |
-| ----- | ------ | -------------- |
-| Kling 2.5 | I2V | Streaming downloads, v2.5-turbo model, negative prompts |
-| Kling Effects | I2V | 100+ preset effects, custom effects |
-| Kling Endframe | I2V | A→B transitions, pairing modes |
-| Kling TTV | T2V | Text-to-video, sound generation, multiple models |
-| Kling Motion | I+V | Image + video motion control, cross-matching |
-| Pixverse | I2V | v6 model, custom effect IDs, multi-clip |
-| Pixverse TTV | T2V | Text-to-video, v6 model, effects, multi-clip |
-| GenVideo | I2I | Gashapon style, GPT/Gemini models |
-| Nano Banana | I2I | Multi-image (up to 14), random source selection, deterministic random |
-| Vidu Effects | I2V | Category organization, viduq2-pro |
-| Vidu Reference | I2V | Up to 6 references, movement control |
-| Vidu I2V | I2V | `/submitI2V`, custom prompts, q1–q3 models, optional audio sync |
-| Runway | V2V | one_to_one/all_combinations pairing |
-| Wan 2.2 | I+V | Auto-cropping, video×image cross-match |
-| DreamActor | I+V | Image + video face reenactment, base64 encoding |
-| Veo | T2V | Veo 2.0–3.1, audio generation, compression quality |
-| Veo ITV | I2V | Image-to-video, multi-generation per image |
-
-**All APIs use deterministic file sorting for reproducible results.**
-
-## 📝 Output Naming
-
-| API | Output Pattern |
-| ----- | ---------------- |
-| Kling | `{filename}_generated.mp4` |
-| Kling Effects | `{filename}_{effect}_effect.mp4` |
-| Kling Endframe | `{filename}_generated_{n}.mp4` |
-| Kling TTV/Veo | `{style}-{n}_generated.mp4` |
-| Pixverse TTV | `{style}-{n}_generated.mp4` |
-| Kling Motion | `{video}_{image}_motion.mp4` |
-| Veo ITV | `{source_image}_{n}.mp4` |
-| Pixverse/Vidu | `{filename}_{effect}_effect.mp4` |
-| Runway | `{filename}_ref_{ref}_runway_generated.mp4` |
-| Wan 2.2 | `{video}_{image}_{mode}.mp4` |
-| Nano Banana | `{filename}_image_{n}.{ext}` |
-| GenVideo | `{filename}_generated.{ext}` |
-
-**Metadata:** `{filename}_metadata.json` (includes success status, processing time, API params, attempt count)
+For detailed instructions including troubleshooting, distribution, and platform-specific options, see [build_executable.md](build_executable.md).
 
 ## 🔧 Architecture
 
-The framework uses an auto-discovery handler system:
+The framework uses an auto-discovery handler system.
 
-- **`HandlerRegistry`** - Auto-discovers and registers API handlers
-- **`BaseAPIHandler`** - Common processing logic (validation, metadata, retries)
-- **`UnifiedAPIProcessor`** - Image conversion, video extraction, optimal ratio matching
-  - **Sleep prevention** – On macOS, uses native `caffeinate -di` subprocess tracked by PID. On other platforms, uses `wakepy` library. Cleanup is guaranteed via `finally`, `atexit`, and `SIGINT`/`SIGTERM` signal handlers so orphaned processes cannot block system sleep. Multiple concurrent script instances are safe.
-- **`UnifiedReportGenerator`** - PowerPoint generation with parallel metadata loading
+- **`HandlerRegistry`** — auto-discovers and registers API handlers by scanning `handlers/*_handler.py`
+- **`BaseAPIHandler`** — common processing logic (validation, metadata, retries, connection backoff, 429/timeout handling)
+- **`UnifiedAPIProcessor`** — image conversion, video extraction, optimal ratio matching, file downloads
+  - **Sleep prevention** — on macOS uses native `caffeinate -di` subprocess tracked by PID; on other platforms uses `wakepy`. Cleanup is guaranteed via `finally`, `atexit`, and `SIGINT` / `SIGTERM` handlers so orphaned processes can't block sleep. Multiple concurrent script instances are safe.
+- **`UnifiedReportGenerator`** — PowerPoint generation with parallel metadata loading
 
-**16 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, KlingMotion, Pixverse, PixverseTTV, Genvideo, NanoBanana, ViduEffects, ViduReference, Runway, Wan, DreamActor, Veo, VeoItv
+**23 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, KlingMotion, Pixverse, PixverseMulti, PixverseTTV, ViduEffects, ViduReference, ViduI2v, SeedanceTtv, SeedanceI2v, Veo, VeoItv, NanoBanana, OpenaiImage, Genvideo, Runway, Wan, DreamActor, FifaI2i2v, I2i2v.
+
+All APIs use deterministic file sorting for reproducible results.
+
+## 📁 Project Structure
+
+```bash
+GAI/
+└── Scripts/
+    ├── config/                              # YAML configs (one per API)
+    │   ├── batch_kling_config.yaml
+    │   ├── batch_kling_effects_config.yaml
+    │   ├── batch_kling_endframe_config.yaml
+    │   ├── batch_kling_ttv_config.yaml
+    │   ├── batch_kling_motion_config.yaml
+    │   ├── batch_pixverse_config.yaml
+    │   ├── batch_pixverse_multi_config.yaml
+    │   ├── batch_pixverse_ttv_config.yaml
+    │   ├── batch_vidu_effects_config.yaml
+    │   ├── batch_vidu_reference_config.yaml
+    │   ├── batch_vidu_i2v_config.yaml
+    │   ├── batch_seedance_ttv_config.yaml
+    │   ├── batch_seedance_i2v_config.yaml
+    │   ├── batch_veo_config.yaml
+    │   ├── batch_veo_itv_config.yaml
+    │   ├── batch_nano_banana_config.yaml
+    │   ├── batch_openai_image_config.yaml
+    │   ├── batch_genvideo_config.yaml
+    │   ├── batch_runway_config.yaml
+    │   ├── batch_wan_config.yaml
+    │   ├── batch_dreamactor_config.yaml
+    │   ├── batch_fifa_i2i2v_config.yaml
+    │   └── batch_i2i2v_config.yaml
+    ├── core/
+    │   ├── api_definitions.json            # API specifications (endpoints, params, defaults)
+    │   ├── runall.py                       # Main CLI entry point
+    │   ├── unified_api_processor.py        # Processing engine
+    │   └── unified_report_generator.py     # Report generation engine
+    ├── handlers/                            # One handler per API (auto-discovered)
+    │   ├── base_handler.py
+    │   ├── handler_registry.py
+    │   ├── kling_handler.py
+    │   ├── kling_effects_handler.py
+    │   ├── kling_endframe_handler.py
+    │   ├── kling_ttv_handler.py
+    │   ├── kling_motion_handler.py
+    │   ├── pixverse_handler.py
+    │   ├── pixverse_multi_handler.py
+    │   ├── pixverse_ttv_handler.py
+    │   ├── vidu_effects_handler.py
+    │   ├── vidu_reference_handler.py
+    │   ├── vidu_i2v_handler.py
+    │   ├── seedance_ttv_handler.py
+    │   ├── seedance_i2v_handler.py
+    │   ├── veo_handler.py
+    │   ├── veo_itv_handler.py
+    │   ├── nano_banana_handler.py
+    │   ├── openai_image_handler.py
+    │   ├── genvideo_handler.py
+    │   ├── runway_handler.py
+    │   ├── wan_handler.py
+    │   ├── dreamactor_handler.py
+    │   ├── fifa_i2i2v_handler.py
+    │   └── i2i2v_handler.py
+    ├── templates/                           # PowerPoint templates
+    │   ├── I2V templates.pptx
+    │   ├── I2V templates 3rd party.pptx
+    │   └── I2V Comparison Template.pptx
+    ├── gui_app.py                           # Tk-based GUI
+    └── requirements.txt
+```
 
 ---
 

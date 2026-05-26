@@ -1,0 +1,104 @@
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 4
+default_settings:
+  model: v6
+  duration: 5                  
+  # Template decides actual duration; this is just the slider value
+  quality: 1080p
+  sound_effect_switch: true    
+  # Background sound effect on by default
+  image_count: 2
+  selection_mode: sequential   
+  # 'sequential' or 'random'
+  # random_seed: 42            
+  # optional; auto-derived from folder path if omitted
+  num_iterations: 0
+  # 0 = floor(len(source) / image_count) full pass
+
+base_folder: Media Files/Pixverse Multi/0526 1 Style
+template_path: templates/I2V templates 3rd party.pptx
+testbed: http://192.168.31.161/external-testbed/video_effect/
+design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
+provider_reference_link: https://aisphere.feishu.cn/wiki/GKwywQM3oixt4EkOM1IceWw8n5f?table=tblfxIxbTQwb57kk&view=vewTVy4A0p
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDy4ORyxsvfSLw4CnT707mVAUWqidCOc-RhI4DA-VSa1o4?e=woCiaL
+
+tasks:
+  - effect: Stands Duo
+    custom_effect_id: '402880241531072'
+    image_count: 2
+    selection_mode: sequential
+    num_iterations: 20
+
+
+comments:
+  base_folder: |
+    Root folder containing effect subfolders. Each effect folder should have
+    'Source', 'Generated_Video', and 'Metadata' subfolders.
+  tasks: |
+    Each task represents a Pixverse template that accepts multiple image inputs
+    (up to 4). The effect name must match the subfolder name in base_folder.
+  effect: |
+    Human-readable effect / template name. Also used as the Source subfolder name
+    and embedded in output filenames.
+  custom_effect_id: |
+    Pixverse template ID (the API's template_id parameter). Required.
+    Obtain from the Pixverse platform.
+  image_count: |
+    Number of source images to feed into each API call (1-4).
+    Default: 1. Must match the template's expected input count.
+  selection_mode: |
+    How images are picked from the Source folder for each iteration.
+      sequential: alphabetical order, consumed in chunks of image_count
+      random:     shuffled with a deterministic seed, then consumed
+    Default: sequential.
+  random_seed: |
+    Optional integer seed for random mode. If omitted, the handler derives a
+    stable seed from the task's folder path so reruns produce identical groupings.
+  num_iterations: |
+    Number of API calls to make for this effect.
+    0 (default) → floor(len(source_images) / image_count), i.e. one full pass
+    without reusing any images. Set higher to cycle through the pool.
+  default_settings: |
+    Defaults applied to every task; per-task fields override them.
+  model: |
+    Pixverse model version.
+    Options: 'v3.5', 'v4.5', 'v5', 'v5.5', 'v5.6', 'v6'
+    Default: 'v6'
+  duration: |
+    Video duration in seconds passed to the slider (template determines actual length).
+    Default: 5
+  quality: |
+    Output video quality/resolution.
+    Options: '360p', '540p', '720p', '1080p'
+    Default: '540p'
+  sound_effect_switch: |
+    Whether to enable background sound effect.
+    Default: false
+  output_group_tasks_by: |
+    Set to 0 (or omit) to create one report with all effects.
+    Set to N (e.g. 4) to group N effects per combined report.
+  folder_structure: |
+    Expected structure:
+    base_folder/
+    ├── Effect Name 1/
+    │   ├── Source/             # All inputs for this effect; chunked by image_count
+    │   ├── Generated_Video/    # (created automatically)
+    │   └── Metadata/           # (created automatically)
+    └── Effect Name 2/
+        └── ...
+  multi_input_note: |
+    Uses the /submit_5 endpoint, which accepts up to 4 image inputs per call.
+    Behind the scenes, unused image slots are padded with the first selected
+    image (the API ignores everything past image_count). URL slots are sent
+    empty since use_url is always false.
+  platform_notes: |
+    From the PixVerse testbed page:
+    - Applies a PixVerse Template to generate the video; Template ID is required
+      (enable the template on the PixVerse platform first).
+    - Image Count selects how many images to send (1–4).
+    - Multi-image input only works on multi-image templates; single-image
+      templates should use image_count: 1.
+    - Image formats: jpg, jpeg, png, webp. Max dimensions 10000x10000px. Size < 20MB.
+    - The Template controls the actual duration and aspect ratio. PixVerse ignores
+      any prompt, so this config does not expose one.

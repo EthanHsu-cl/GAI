@@ -171,6 +171,7 @@ class UnifiedReportGenerator:
             'genvideo': 'GenVideo',
             'openai_image': 'OpenAI Image',
             'pixverse': 'Pixverse',
+            'pixverse_multi': 'Pixverse Multi',
             'wan': 'Wan 2.2',
             'dreamactor': 'DreamActor',
             'kling_motion': 'Kling Motion',
@@ -272,6 +273,16 @@ class UnifiedReportGenerator:
                 **self.LAYOUT_2_MEDIA,
                 'title_format': 'pixverse_{index}_{source_file}',
                 'metadata_fields': ['effect_name', 'video_id', 'processing_time_seconds', 'success'],
+            },
+            'pixverse_multi': {
+                **base_config,
+                'media_types': ['source', 'generated'],
+                **self.LAYOUT_2_MEDIA,
+                'title_format': 'pixverse_multi_{index}_{source_file}',
+                'metadata_fields': ['effect_name', 'image_count', 'source_images_used',
+                                    'selection_mode', 'video_id',
+                                    'processing_time_seconds', 'success'],
+                'supports_multi_image': True,
             },
             'kling': {
                 **base_config,
@@ -659,10 +670,11 @@ class UnifiedReportGenerator:
         when all additional sources are images.
         """
         # For multi-image APIs: create composite from all source images
-        # nano_banana: source + additional images from Additional folder
+        # nano_banana / openai_image: source + Additional folder images (or random pool)
         # vidu_reference: source + reference images from Reference folder
-        if (media_type == 'source' and 
-            self.api_name in ('nano_banana', 'openai_image', 'vidu_reference') and
+        # pixverse_multi: all source images used in a single /submit_5 iteration
+        if (media_type == 'source' and
+            self.api_name in ('nano_banana', 'openai_image', 'vidu_reference', 'pixverse_multi') and
             pair.additional_source_paths):
             # Check if all additional sources are images (not videos)
             all_images = all(
@@ -1254,7 +1266,7 @@ class UnifiedReportGenerator:
             self._add_metadata_field(field, pair, meta_lines)
         
         # Add source file name for some APIs
-        if self.api_name in ['nano_banana', 'genvideo', 'openai_image', 'pixverse', 'kling_endframe']:
+        if self.api_name in ['nano_banana', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'kling_endframe']:
             meta_lines.insert(0, f"File: {pair.source_file}")
         
         if not meta_lines:
@@ -1298,7 +1310,7 @@ class UnifiedReportGenerator:
     
     def process_batch(self, task: Dict) -> List[MediaPair]:
         """Universal batch processing for all API types"""
-        if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "kling_effects", "veo_itv", "seedance_i2v", "fifa_i2i2v", "i2i2v"]:
+        if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "pixverse_multi", "kling_effects", "veo_itv", "seedance_i2v", "fifa_i2i2v", "i2i2v"]:
             return self.process_base_folder_structure(task)
         elif self.api_name == "genvideo":
             return self.process_genvideo_batch(task)
@@ -2056,6 +2068,70 @@ class UnifiedReportGenerator:
                     )
                     pairs.append(pair)
         
+        elif self.api_name == "pixverse_multi":
+            # One MediaPair per iteration (per metadata file). Multiple source
+            # images per iteration are exposed via additional_source_paths.
+            tasks_to_process = [task] if task.get('effect') else self.config.get('tasks', [])
+
+            for task_config in tasks_to_process:
+                effect = task_config.get('effect', '')
+                category = task_config.get('category', 'Unknown')
+                if not effect:
+                    continue
+
+                effect_root = base_folder / effect
+                folders = {k: effect_root / v for k, v in
+                           {'src': 'Source', 'vid': 'Generated_Video', 'meta': 'Metadata'}.items()}
+
+                if not folders['src'].exists() or not folders['meta'].exists():
+                    continue
+
+                src_images, _, _ = self._scan_directory_once(folders['src'])
+                src_by_name = {p.name: p for p in src_images.values()}
+
+                _, raw_videos, _ = self._scan_directory_once(folders['vid'])
+
+                _, _, metadata_files = self._scan_directory_once(folders['meta'])
+                metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
+
+                all_media = list(src_images.values()) + list(raw_videos.values())
+                if all_media:
+                    self._compute_aspect_ratios_batch(
+                        all_media, are_videos={p: True for p in raw_videos.values()})
+
+                for meta_key, meta in metadata_cache.items():
+                    used_names = meta.get('source_images_used') or []
+                    used_paths = [src_by_name[n] for n in used_names if n in src_by_name]
+                    if not used_paths:
+                        # Fallback: pull any single image from the source folder
+                        fallback = next(iter(src_images.values()), None)
+                        if fallback is None:
+                            continue
+                        used_paths = [fallback]
+
+                    primary = used_paths[0]
+                    additional_sources = used_paths[1:]
+
+                    vid = raw_videos.get(meta_key)
+                    if vid is None:
+                        # Match by base_name prefix (video filename is {base_name}_{effect}_effect.mp4)
+                        base_name = meta.get('_base_name') or meta_key
+                        vid = self.find_matching_video(base_name, raw_videos)
+
+                    pair = MediaPair(
+                        source_file=primary.name,
+                        source_path=primary,
+                        api_type=self.api_name,
+                        generated_paths=[vid] if vid else [],
+                        reference_paths=[],
+                        additional_source_paths=additional_sources,
+                        effect_name=effect,
+                        category=category,
+                        metadata=meta,
+                        failed=not vid or not meta.get('success', False),
+                    )
+                    pairs.append(pair)
+
         elif self.api_name == "kling_effects":
             # Process kling effects - uses custom_effect or effect as folder name
             # Support single-task filtering for grouped processing
@@ -3096,7 +3172,7 @@ class UnifiedReportGenerator:
         if task.get('_is_grouped'):
             # For grouped tasks, pass the entire task dict as folder_name
             folder_name = task
-        elif self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse"]:
+        elif self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "pixverse_multi"]:
             folder_name = Path(self.config.get('base_folder', '')).name
         elif self.api_name in ("veo_itv", "fifa_i2i2v"):
             # For veo_itv / fifa_i2i2v, get parent folder (e.g., "0130 6 Styles" from "0130 6 Styles/Street Rap")
@@ -3274,7 +3350,7 @@ class UnifiedReportGenerator:
             self._remove_template_slides(ppt)
             
             # Generate filename
-            if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "kling_effects"]:
+            if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "pixverse_multi", "kling_effects"]:
                 folder_name = Path(self.config.get('base_folder', '')).name
             elif self.api_name in ("veo_itv", "fifa_i2i2v"):
                 # For veo_itv / fifa_i2i2v, use parent folder (contains date like "0130 6 Styles").
@@ -3343,7 +3419,7 @@ class UnifiedReportGenerator:
             tasks = self.config.get('tasks', [])
             
             # Determine processing mode
-            if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "kling_effects", "veo_itv", "seedance_i2v", "fifa_i2i2v", "i2i2v"]:
+            if self.api_name in ["vidu_effects", "vidu_i2v", "vidu_reference", "pixverse", "pixverse_multi", "kling_effects", "veo_itv", "seedance_i2v", "fifa_i2i2v", "i2i2v"]:
                 # Base folder structure APIs
                 if group_tasks_by and group_tasks_by > 1 and tasks:
                     # Base-folder APIs with grouping - process tasks individually
@@ -3560,7 +3636,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -3569,7 +3645,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

@@ -669,7 +669,7 @@ class UnifiedAPIProcessor:
         # Determine source field name based on API
         if self.api_name == "runway":
             source_field = "source_video"
-        elif self.api_name in ["kling", "nano_banana", "vidu_effects", "vidu_i2v", "vidu_reference", "genvideo", "openai_image", "pixverse"]:
+        elif self.api_name in ["kling", "nano_banana", "vidu_effects", "vidu_i2v", "vidu_reference", "genvideo", "openai_image", "pixverse", "pixverse_multi"]:
             source_field = "source_image"
         else:
             source_field = "source_file"
