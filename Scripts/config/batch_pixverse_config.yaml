@@ -6,7 +6,7 @@ default_settings:
   duration: 5s
   v6_duration: 5
   motion_mode: normal
-  quality: 540p
+  quality: 1080p
   style: none
   seed: -1
   generate_audio: false

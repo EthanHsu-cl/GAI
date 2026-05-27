@@ -2089,21 +2089,26 @@ class UnifiedReportGenerator:
                 src_images, _, _ = self._scan_directory_once(folders['src'])
                 src_by_name = {p.name: p for p in src_images.values()}
 
+                # Video filenames are {base_name}_{effect}_effect.mp4. Key the
+                # dict by the iteration's base_name (effect suffix stripped) so
+                # we can look videos up directly by the metadata's normalized key.
                 _, raw_videos, _ = self._scan_directory_once(folders['vid'])
+                videos = {}
+                for f in raw_videos.values():
+                    videos[self.extract_video_key(f.name, effect)] = f
 
                 _, _, metadata_files = self._scan_directory_once(folders['meta'])
                 metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
 
-                all_media = list(src_images.values()) + list(raw_videos.values())
+                all_media = list(src_images.values()) + list(videos.values())
                 if all_media:
                     self._compute_aspect_ratios_batch(
-                        all_media, are_videos={p: True for p in raw_videos.values()})
+                        all_media, are_videos={p: True for p in videos.values()})
 
                 for meta_key, meta in metadata_cache.items():
                     used_names = meta.get('source_images_used') or []
                     used_paths = [src_by_name[n] for n in used_names if n in src_by_name]
                     if not used_paths:
-                        # Fallback: pull any single image from the source folder
                         fallback = next(iter(src_images.values()), None)
                         if fallback is None:
                             continue
@@ -2112,11 +2117,11 @@ class UnifiedReportGenerator:
                     primary = used_paths[0]
                     additional_sources = used_paths[1:]
 
-                    vid = raw_videos.get(meta_key)
+                    vid = videos.get(meta_key)
                     if vid is None:
-                        # Match by base_name prefix (video filename is {base_name}_{effect}_effect.mp4)
+                        # Fallback: prefix-match against the stored base_name (normalized)
                         base_name = meta.get('_base_name') or meta_key
-                        vid = self.find_matching_video(base_name, raw_videos)
+                        vid = self.find_matching_video(self.normalize_key(base_name), videos)
 
                     pair = MediaPair(
                         source_file=primary.name,
