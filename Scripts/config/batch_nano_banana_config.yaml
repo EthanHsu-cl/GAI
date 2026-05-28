@@ -6,6 +6,10 @@ output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 1
 
+# Number of API requests to run in parallel (1 = sequential, max = 10).
+# Applies to nano_banana only. Per-task `concurrent_requests` overrides this default.
+concurrent_requests: 1
+
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
@@ -14,29 +18,45 @@ root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU
 root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCV9C7TVkBoS52w7Sn2yXKAAY4f0W3smgHPujwz-eisRz0?e=Ah3uZk
 
 tasks:
-  - folder: Media Files/Nano Banana/0518 轉身舉獎盃
+  - folder: Media Files/Nano Banana/0528 Love Script
     model: gemini-3.1-flash-image-preview
-    resolution: "1K"
-    aspect_ratio: "16:9"
+    resolution: "2K"
+    aspect_ratio: "3:4"
     prompt: |
-      A 16:9 photorealistic image. Symmetrical, center-framed medium-wide shot from the waist up. Straight-on, eye-level camera angle with a deep focus, creating strong immersive depth. 
+      Photo usage rules (strict): Each input photo must be used exactly once. Every tile must contain a different photo. NO photo may appear more than once in the entire layout. Duplicating or cloning photos across tiles is strictly forbidden. One tile contains exactly one photo only. A single photo cannot be split or reused across multiple tiles. 
 
-      Subject: A person sitting dead center, looking directly into the lens. They have an expression of pure, vibrant excitement, mouth wide open cheering, with both fists clenched and raised to shoulder level. They have simple light blue and white horizontal stripes painted on their cheeks. They are wearing a plain, completely unbranded light blue and white vertically striped short-sleeve t-shirt (no shoulder stripes, no chest logos). 
+      Layout locking rules (strict): The total number of photos in the final layout must be exactly equal to the number of user-uploaded photos (1:1 correspondence, no more, no less). It is strictly forbidden to duplicate, reuse, clone, or replicate any user photo to fill space. It is strictly forbidden to generate any additional AI-created photos, placeholders, or synthetic images. Only and exactly the provided user photos may appear in the layout. If fewer photos are provided, the layout must adapt by scaling, spacing, or cropping (without distortion) rather than adding or repeating images. Empty space is allowed if necessary; filling space by duplication or generation is strictly prohibited.
 
-      Foreground: A large glass coffee table spanning the bottom frame, filled to create depth. On the left: three unlabeled brown glass beer bottles (one near the viewer, two further back). In the center: a larger generic blue bowl overflowing with a mixture of tortilla chips and pretzels. On the right: a generic sports newspaper folded to show a headline like "HISTORIC WIN" and generic text, with a small generic sports photo.
+      Polaroid content rules (strict): Every Polaroid instant print must contain exactly one valid user photo. Blank, empty, white, transparent, or placeholder Polaroid frames are strictly forbidden. It is strictly prohibited to generate Polaroid frames without real photo content inside. It is strictly prohibited to simulate fake or AI-generated photo content inside a Polaroid. Every Polaroid must display a real, complete user-provided image with no empty interior area.
 
-      Midground: They sit on a light beige sofa. Draped layered and deep over the sofa back and side arms are multiple unmarked sports scarves (no club logos, only colors like plain red, blue/white stripe, plain white) and the mustard yellow and dark red pillows.
+      Photo integrity rules: User photos must preserve their original colors, lighting, subjects, and facial details. Photos may be cropped when necessary to achieve a clean and balanced layout, but the subject’s face and key subjects must remain fully visible and unobstructed. NO STRETCH, SQUEEZE, WARP, DISTORTION, recoloring, filtering, or retouching is allowed. No graphic elements, text, or decorations may cover a person’s face.
 
-      Background: A warm, rich, deep, and symmetrically lit room with architectural details like wainscoting. Flanking the sofa on both the exact left and right are four matching classic floor lamps with warm yellow shades, arranged symmetrically in pairs (two on each side), casting an immersive, deeply cinematic glow. The dark wooden bookshelf on the far left and beige curtains on the far right are retained and clearly visible due to deeper focus. The large, unbranded light blue and white horizontally striped flag remains pinned to the wall directly behind them.
+      Flat graphic collage design. Soft neutral color (#eee6e3) full-bleed paper background with subtle paper fiber texture and faint natural speckles, resembling clean premium stationery.
+
+      User photos appear as classic square Polaroid instant prints with soft white instant-film borders and a slightly wider bottom margin. Each photo preserves its original aspect ratio and appears as an intact photograph placed within the Polaroid frame. The Polaroids are arranged in a casual, slightly tilted scrapbook composition with natural spacing between them, avoiding perfect alignment or grid structure. Each print is visually “attached” to the background with a short strip of semi-transparent white-grey masking tape placed along the top edge of the frame, creating a realistic taped-to-paper look. Each tape strip must vary in angle, length, and slight placement, ensuring every piece of tape appears different to enhance a natural, random handmade feeling. No two tape strips should look identical; the angles, lengths, and placements must vary to create a natural, imperfect handmade appearance.
+
+      If any shadow is present, it must be an extremely subtle contact shadow where the photo touches the paper surface. The shadow should be very faint, soft, and close to the photo edge, nearly imperceptible, with no visible drop shadow effect. Avoid floating shadows, hard edge shadows, or strong depth effects so the photos appear naturally resting on the paper background. The photos are randomly placed across the layout with slight natural tilts, resembling casually arranged instant photos in a scrapbook. The placement should feel balanced but informal, with clear spacing between photos and no forced grid, row, or diagonal alignment. Photos remain the visual focal point.
+
+      One photo must be noticeably larger than the others. If any uploaded photo contains multiple people, prioritize selecting that group photo for the largest mask.
+
+      The photo cluster should occupy approximately 80% of the canvas area and be positioned in the upper portion of the composition.
+
+      Typography appears below the photo cluster as a handwritten cursive Happy Mother's Day in bold red ink. The lettering resembles elegant natural pen handwriting with smooth connected strokes, slightly irregular line flow, and a refined signature-style appearance rather than a digital font. The text must be left-aligned and positioned toward the lower area of the canvas. The quote should contain approximately 15–20 English letters in total and be arranged in multiple short lines while maintaining a clean left-aligned edge.
+
+      A big hand-drawn heart must be added in the top-right area of the canvas. The heart must be drawn using bold red ink, matching the same ink style, color, and stroke quality as the handwritten text below. The heart must be a single-line outline heart (strictly one continuous stroke, no double lines). The heart must appear as a natural freehand sketch with slightly imperfect, organic line curves, not a perfect geometric shape. The heart must be placed strictly near the top-right corner area of the canvas. The heart can overlap or cover a photo.
     use_comparison_template: false
-    use_random_source_selection: false
+    use_random_source_selection: true
     use_deterministic_random: true
     random_seed: 42
     min_images: 2
-    max_images: 4
-    num_iterations: 10
-    generations_per_source: 5
+    max_images: 5
+    num_iterations: 50
+    generations_per_source: 1
     use_reference_images: false
+    # Override the root-level concurrent_requests for this task (1-10).
+    # Skips the inter-request rate_limit sleep when > 1; connection-retry
+    # backoff still applies per worker.
+    concurrent_requests: 10
 
 
 # Comments and documentation
@@ -192,6 +212,29 @@ comments:
       generations_per_source: 3
       use_reference_images: true
       model: gemini-3-pro-image-preview
+
+  concurrent_requests:
+    description: "Number of API requests to send in parallel for a task (1-10)"
+    default: "1 (sequential, preserves existing behavior)"
+    upper_limit: "10 (hard cap enforced by NanoBananaHandler.MAX_CONCURRENT_REQUESTS)"
+    resolution_order: "per-task `concurrent_requests` → root-level `concurrent_requests` → 1"
+    behavior: |
+      - Applies to both random source selection mode and standard (Source-folder) mode
+      - In random source mode, parallelizes across (iteration × generation) calls
+      - In standard mode, parallelizes across source files
+      - Inter-request `rate_limit` sleep is SKIPPED when concurrent_requests > 1
+        (concurrency itself is the throttle); per-thread connection-retry backoff
+        and 429 retry waits still apply
+      - Already-processed iterations/files are filtered out single-threaded before
+        dispatch, so workers only do API I/O
+      - Selection plan, image pool caches, and reference/source caches are
+        pre-built single-threaded before dispatch to avoid race conditions
+    example: |
+      # Send up to 5 requests in parallel for this task
+      concurrent_requests: 5
+    notes: |
+      - Values above 10 are clamped to 10
+      - Server-side queue limits may further constrain effective parallelism
 
   multi_image_config:
     description: "Configuration for multi-image generation (Source + Additional folders mode)"

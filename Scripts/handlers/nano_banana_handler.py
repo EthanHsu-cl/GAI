@@ -1,4 +1,6 @@
 """Nano Banana API Handler - Multi-Image Support."""
+import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from gradio_client import handle_file
 import time
@@ -42,7 +44,10 @@ class NanoBananaHandler(BaseAPIHandler):
         'RESOURCE_EXHAUSTED',
         'Resource exhausted',
     ]
-    
+
+    # Upper bound on parallel API requests (server-side queue safety)
+    MAX_CONCURRENT_REQUESTS = 10
+
     def __init__(self, processor):
         """Initialize handler with multi-image support."""
         super().__init__(processor)
@@ -51,12 +56,12 @@ class NanoBananaHandler(BaseAPIHandler):
         self._source_file_indices = {}  # Track source file index for sequential matching
         self._random_source_selections = {}  # Track random source selections for reproducibility
         self._source_image_cache = {}  # Cache source images per task
-        self._last_error_is_429 = False  # Track if last failure was a 429
         self._reference_image_cache = {}  # Cache reference images per task
         self._selection_modes = {}  # Track selection modes per task
         self._selection_plans = {}  # Pre-built selection plans per task
-        self._current_additional_images = {}  # Current additional images for metadata
-        self._current_all_images = {}  # Current all images for metadata
+        # Per-call state (additional/all images, 429 flag) is stored on the per-call
+        # task_config copy rather than on `self` so concurrent threads don't collide.
+        self._combinations_lock = threading.Lock()  # guards _used_combinations
 
     def validate_file(self, file_path, file_type='image'):
         """Nano Banana specific validation with 32MB limit.
@@ -166,6 +171,23 @@ class NanoBananaHandler(BaseAPIHandler):
             return False
         error_lower = error_str.lower()
         return any(p.lower() in error_lower for p in self.ERROR_429_PATTERNS)
+
+    def _get_concurrent_requests(self, task_config):
+        """Resolve concurrent_requests setting (per-task → root config → 1), capped at MAX.
+
+        Args:
+            task_config: Task configuration dictionary.
+
+        Returns:
+            int: Number of concurrent requests to use (1-MAX_CONCURRENT_REQUESTS).
+        """
+        val = task_config.get('concurrent_requests',
+                              self.config.get('concurrent_requests', 1))
+        try:
+            val = int(val)
+        except (TypeError, ValueError):
+            val = 1
+        return max(1, min(val, self.MAX_CONCURRENT_REQUESTS))
 
     def _read_error429_retries(self, base_name, metadata_folder):
         """Read existing error 429 retry count from a metadata file.
@@ -386,17 +408,19 @@ class NanoBananaHandler(BaseAPIHandler):
             if allow_duplicates:
                 selected.append(str(random.choice(pool)))
             else:
-                # Try to find unused combination
-                for _ in range(max_attempts):
-                    candidate = random.choice(pool)
-                    combo_key = (str(file_path), str(candidate))
-                    if combo_key not in self._used_combinations:
-                        self._used_combinations.add(combo_key)
-                        selected.append(str(candidate))
-                        break
-                else:
-                    # If we can't find unused after max_attempts, just use random
-                    selected.append(str(random.choice(pool)))
+                # Try to find unused combination (lock guards shared _used_combinations
+                # against concurrent reads/writes when concurrent_requests > 1)
+                with self._combinations_lock:
+                    for _ in range(max_attempts):
+                        candidate = random.choice(pool)
+                        combo_key = (str(file_path), str(candidate))
+                        if combo_key not in self._used_combinations:
+                            self._used_combinations.add(combo_key)
+                            selected.append(str(candidate))
+                            break
+                    else:
+                        # If we can't find unused after max_attempts, just use random
+                        selected.append(str(random.choice(pool)))
         
         return selected[:max_additional]
     
@@ -779,20 +803,25 @@ class NanoBananaHandler(BaseAPIHandler):
             # Default num_iterations to number of source files if not specified
             source_images = self._get_source_images_for_task(task)
             num_iterations = task.get('num_iterations') or len(source_images)
-            
+
             if num_iterations <= 0:
                 self.logger.warning(f" ⚠️ No source images found, skipping task")
                 return
-            
+
             # Update task with resolved num_iterations
             task_with_iterations = task.copy()
             task_with_iterations['num_iterations'] = num_iterations
-            
-            self._process_iterations(task_with_iterations, task_num, total_tasks, 
+
+            self._process_iterations(task_with_iterations, task_num, total_tasks,
                                     output_folder, metadata_folder)
         else:
-            # Use standard file-by-file processing from base class
-            super().process_task(task, task_num, total_tasks)
+            # Standard file-by-file mode. Use the parallel path when
+            # concurrent_requests > 1, otherwise defer to the sequential base impl.
+            if self._get_concurrent_requests(task) > 1:
+                self._process_standard_concurrent(task, task_num, total_tasks,
+                                                  output_folder, metadata_folder)
+            else:
+                super().process_task(task, task_num, total_tasks)
     
     def process(self, file_path, task_config, output_folder, metadata_folder, attempt, max_retries):
         """Process a single file with iteration-based naming support.
@@ -810,33 +839,38 @@ class NanoBananaHandler(BaseAPIHandler):
         Returns:
             bool: True if processing succeeded, False otherwise.
         """
+        # Shallow-copy task_config so per-call state (additional/all images, 429 flag)
+        # stays local to this thread and doesn't leak between concurrent calls
+        # sharing the same parent task dict.
+        task_config = dict(task_config)
+        task_config['_last_error_is_429'] = False
+
         # Use custom base_name if provided (from iteration mode)
         base_name = task_config.get('_base_name') or Path(file_path).stem
         file_name = Path(file_path).name
         start_time = time.time()
-        self._last_error_is_429 = False
         metadata_saved = False
         success = False
-        
+
         try:
             # Make API-specific call with connection retry wrapper
             result = self._make_api_call_with_connection_retry(file_path, task_config, attempt)
-            
+
             # Parse and save result (_handle_result always saves metadata)
             success = self._handle_result(result, file_path, task_config, output_folder,
                                          metadata_folder, base_name, file_name, start_time, attempt)
             metadata_saved = True
-            
+
             # Retry loop for 429 Resource Exhausted errors (independent of max_retries)
             max_429 = self.api_defs.get('max_retries_error429', 0)
-            while not success and self._last_error_is_429 and max_429 > 0:
+            while not success and task_config.get('_last_error_is_429') and max_429 > 0:
                 count = self._read_error429_retries(base_name, metadata_folder)
                 if count >= max_429:
                     self.logger.info(f" ⏭️ 429 retry limit reached ({count}/{max_429})")
                     break
                 self.logger.info(f" ⏳ 429 retry {count}/{max_429} (waiting {30 * count}s)")
                 time.sleep(30 * count)
-                self._last_error_is_429 = False
+                task_config['_last_error_is_429'] = False
                 start_time = time.time()
                 try:
                     result = self._make_api_call_with_connection_retry(file_path, task_config, attempt)
@@ -845,22 +879,22 @@ class NanoBananaHandler(BaseAPIHandler):
                     metadata_saved = True
                 except Exception:
                     break
-            
+
             if not success and attempt < max_retries - 1:
                 time.sleep(5)
                 return False
-            
+
             return success
-            
+
         except Exception as e:
             self.logger.error(f" ❌ Error processing {base_name}: {e}")
             if not metadata_saved:
                 # Save failure metadata so every attempt produces a metadata file
                 processing_time = time.time() - start_time
                 use_random_source = task_config.get('use_random_source_selection', False)
-                all_imgs = getattr(self, '_current_all_images', {}).get(str(file_path), [])
+                all_imgs = task_config.get('_call_all_images', [])
                 all_imgs_info = [Path(img).name for img in all_imgs if img]
-                additional_imgs = getattr(self, '_current_additional_images', {}).get(str(file_path), [])
+                additional_imgs = task_config.get('_call_additional_images', [])
                 additional_imgs_info = [Path(img).name for img in additional_imgs if img]
                 error_str = str(e)
 
@@ -873,7 +907,7 @@ class NanoBananaHandler(BaseAPIHandler):
                     'api_name': self.api_name
                 }
                 if self._is_error_429(error_str):
-                    self._last_error_is_429 = True
+                    task_config['_last_error_is_429'] = True
                     metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
                 if use_random_source and all_imgs_info:
                     metadata['all_images_used'] = all_imgs_info
@@ -927,35 +961,39 @@ class NanoBananaHandler(BaseAPIHandler):
         max_images = task.get('max_images', self.MODEL_MAX_IMAGES.get(
             task.get('model', 'gemini-2.5-flash-image'), self.DEFAULT_MAX_IMAGES))
         total_api_calls = num_iterations * generations_per_source
-        
+        concurrent_requests = self._get_concurrent_requests(task)
+
         gen_info = f", {generations_per_source} gen/source" if generations_per_source > 1 else ""
         ref_info = f", {len(reference_images)} ref images" if reference_images else ""
+        conc_info = f", up to {concurrent_requests} concurrent" if concurrent_requests > 1 else ""
         self.logger.info(
             f"📁 Task {task_num}/{total_tasks}: {task_name} "
-            f"({num_iterations} iterations{gen_info}{ref_info}, {len(source_images)} source images, "
+            f"({num_iterations} iterations{gen_info}{ref_info}{conc_info}, {len(source_images)} source images, "
             f"images per call: {min_images}-{max_images}, total API calls: {total_api_calls})"
         )
-        
-        successful = 0
-        skipped = 0
+
         max_retries = self.api_defs.get('max_retries', 3)
-        
+
         # Pre-build selection plan to get actual selected images for naming
+        # (single-threaded init prevents concurrent cache races later)
         task_key = str(task.get('folder', ''))
         if task_key not in self._selection_plans:
             self._selection_plans[task_key] = self._build_selection_plan(task)
         selection_plan = self._selection_plans.get(task_key, [])
-        
+
+        # Build the list of work items first, skipping already-processed iterations.
+        # Each item is a self-contained tuple so it can be dispatched to a worker thread.
+        work_items = []  # (call_index, base_name, primary_image, task_with_iteration)
+        successful = 0
+        skipped = 0
         call_index = 0
+
         for iteration_idx in range(num_iterations):
-            # Get the actual selected images for this iteration from pre-built plan
             selected_images = selection_plan[iteration_idx] if iteration_idx < len(selection_plan) else []
-            
             if not selected_images:
                 self.logger.warning(f" ⚠️ No source images for iteration {iteration_idx}")
                 continue
-            
-            # Create base identifier from selected image names
+
             primary_image = selected_images[0]
             if len(selected_images) == 1:
                 iter_base = f"iter{iteration_idx:03d}_{primary_image.stem}"
@@ -964,17 +1002,11 @@ class NanoBananaHandler(BaseAPIHandler):
                 if len(image_names) > 150:
                     image_names = image_names[:147] + "..."
                 iter_base = f"iter{iteration_idx:03d}_{image_names}"
-            
+
             for gen_idx in range(generations_per_source):
-                # Append generation index to base_name when generations_per_source > 1
-                if generations_per_source > 1:
-                    base_name = f"{iter_base}_gen{gen_idx:02d}"
-                else:
-                    base_name = iter_base
-                
+                base_name = f"{iter_base}_gen{gen_idx:02d}" if generations_per_source > 1 else iter_base
                 call_index += 1
-                
-                # Check if already processed (success or failed with exhausted retries)
+
                 is_complete, status = self._get_iteration_status(base_name, metadata_folder)
                 if is_complete:
                     if status == 'success':
@@ -982,55 +1014,146 @@ class NanoBananaHandler(BaseAPIHandler):
                         successful += 1
                     elif status == 'failed_error429_exhausted':
                         self.logger.info(f" ⏭️ {call_index}/{total_api_calls}: {base_name} (failed - 429 retries exhausted)")
-                    else:  # failed_exhausted
+                    else:
                         self.logger.info(f" ⏭️ {call_index}/{total_api_calls}: {base_name} (failed - max retries reached)")
                     skipped += 1
                     continue
-                
-                self.logger.info(f" 🎲 {call_index}/{total_api_calls}: Processing {base_name}")
-                
-                # Inject iteration_index, base_name, generation info, and reference images into task config
+
                 task_with_iteration = task.copy()
                 task_with_iteration['_iteration_index'] = iteration_idx
                 task_with_iteration['_base_name'] = base_name
                 task_with_iteration['_generation_index'] = gen_idx
                 task_with_iteration['_generations_per_source'] = generations_per_source
                 task_with_iteration['_reference_images'] = [str(img) for img in reference_images]
-                
-                # Process with retries
-                for attempt in range(max_retries):
+
+                work_items.append((call_index, base_name, primary_image,
+                                   task_with_iteration, len(selected_images)))
+
+        def run_one(item):
+            call_idx, base_name, primary_image, task_with_iteration, _ = item
+            self.logger.info(f" 🎲 {call_idx}/{total_api_calls}: Processing {base_name}")
+            for attempt in range(max_retries):
+                try:
+                    if self.process(primary_image, task_with_iteration, output_folder,
+                                    metadata_folder, attempt, max_retries):
+                        return True
+                except Exception as e:
+                    if attempt < max_retries - 1:
+                        self.logger.warning(f" ⚠️ Attempt {attempt+1} failed for {base_name}: {e}")
+                        time.sleep(5)
+                    else:
+                        self.logger.error(f" ❌ All {max_retries} attempts failed for {base_name}: {e}")
+            return False
+
+        if concurrent_requests > 1 and work_items:
+            self.logger.info(
+                f" 🚀 Dispatching {len(work_items)} API calls with up to "
+                f"{concurrent_requests} in parallel"
+            )
+            with ThreadPoolExecutor(max_workers=concurrent_requests) as executor:
+                futures = [executor.submit(run_one, item) for item in work_items]
+                for future in as_completed(futures):
                     try:
-                        success = self.process(
-                            primary_image,
-                            task_with_iteration,
-                            output_folder,
-                            metadata_folder,
-                            attempt,
-                            max_retries
-                        )
-                        if success:
+                        if future.result():
                             successful += 1
-                            break
                     except Exception as e:
-                        if attempt < max_retries - 1:
-                            self.logger.warning(f" ⚠️ Attempt {attempt+1} failed: {e}")
-                            time.sleep(5)
-                        else:
-                            self.logger.error(f" ❌ All {max_retries} attempts failed: {e}")
-                
-                # Rate limit — scale proportionally by number of images used
-                if call_index < total_api_calls:
+                        self.logger.error(f" ❌ Worker raised: {e}")
+        else:
+            for idx, item in enumerate(work_items):
+                if run_one(item):
+                    successful += 1
+                # Inter-request rate limit (sequential mode only — concurrency is the
+                # throttle when concurrent_requests > 1). Scaled by images used.
+                if idx < len(work_items) - 1:
                     base_rate = self.api_defs.get('rate_limit', 3)
-                    num_images_used = len(selected_images) + len(reference_images)
+                    num_images_used = item[4] + len(reference_images)
                     effective_max = max_images if max_images > 0 else 1
                     scaled_wait = max(1, base_rate * num_images_used / effective_max)
                     self.logger.info(f" ⏳ Rate limit: {scaled_wait:.0f}s ({num_images_used}/{effective_max} images)")
                     time.sleep(scaled_wait)
-        
+
         self.logger.info(
             f"✓ Task {task_num}: {successful}/{total_api_calls} successful ({skipped} skipped)"
         )
     
+    def _process_standard_concurrent(self, task, task_num, total_tasks,
+                                     output_folder, metadata_folder):
+        """Standard (file-by-file) mode with parallel API calls.
+
+        Mirrors BaseAPIHandler.process_task but dispatches per-file work to a
+        ThreadPoolExecutor when concurrent_requests > 1. Skip checks and image
+        pool initialization run single-threaded before submission so each worker
+        only does API I/O.
+
+        Args:
+            task: Task configuration dictionary.
+            task_num: Current task number (for logging).
+            total_tasks: Total number of tasks (for logging).
+            output_folder: Path to output folder.
+            metadata_folder: Path to metadata folder.
+        """
+        folder = Path(task.get('folder', ''))
+        source_folder = folder / "Source"
+        output_folder.mkdir(parents=True, exist_ok=True)
+        metadata_folder.mkdir(parents=True, exist_ok=True)
+
+        concurrent_requests = self._get_concurrent_requests(task)
+        task_name = task.get('effect', '') or folder.name
+        self.logger.info(
+            f"📁 Task {task_num}/{total_tasks}: {task_name} "
+            f"(standard mode, up to {concurrent_requests} concurrent)"
+        )
+
+        # Single-threaded discovery/conversion of source images (HEIF→JPG,
+        # oversize resize) so worker threads only do API calls.
+        files = self.processor._get_files_by_type(source_folder, 'image')
+
+        # Pre-load additional-image pools so the lazy cache init in
+        # _load_image_pools doesn't race across threads.
+        self._load_image_pools(task)
+
+        successful = 0
+        skipped = 0
+        work_files = []
+
+        for file_path in files:
+            is_complete, status = self._get_processing_status(file_path, metadata_folder)
+            if is_complete:
+                if status == 'success':
+                    self.logger.info(f" ⏭️ {file_path.name} (already processed)")
+                    successful += 1
+                elif status == 'failed_timeout_exhausted':
+                    self.logger.info(f" ⏭️ {file_path.name} (failed - timeout retries exhausted)")
+                else:
+                    self.logger.info(f" ⏭️ {file_path.name} (failed - max retries reached)")
+                skipped += 1
+                continue
+            work_files.append(file_path)
+
+        def run_one(file_path):
+            self.logger.info(f" 🖼️ Processing {file_path.name}")
+            # Pass a per-call copy so concurrent threads don't mutate the same dict
+            return self.processor.process_file(file_path, dict(task),
+                                               output_folder, metadata_folder)
+
+        if work_files:
+            self.logger.info(
+                f" 🚀 Dispatching {len(work_files)} API calls with up to "
+                f"{concurrent_requests} in parallel"
+            )
+            with ThreadPoolExecutor(max_workers=concurrent_requests) as executor:
+                futures = [executor.submit(run_one, fp) for fp in work_files]
+                for future in as_completed(futures):
+                    try:
+                        if future.result():
+                            successful += 1
+                    except Exception as e:
+                        self.logger.error(f" ❌ Worker raised: {e}")
+
+        self.logger.info(
+            f"✓ Task {task_num}: {successful}/{len(files)} successful ({skipped} skipped)"
+        )
+
     def _get_iteration_status(self, base_name, metadata_folder):
         """Get detailed processing status for an iteration.
         
@@ -1166,10 +1289,11 @@ class NanoBananaHandler(BaseAPIHandler):
                 self.logger.error(" ❌ No images selected for API call")
                 return (None, "No images selected", [])
             
-            # Store all selected images for metadata
-            self._current_all_images[str(file_path)] = [str(img) for img in selected_images]
-            self._current_additional_images[str(file_path)] = []  # No "additional" in this mode
-            
+            # Store all selected images for metadata (per-call state on task_config
+            # so concurrent threads don't overwrite each other's selections)
+            task_config['_call_all_images'] = [str(img) for img in selected_images]
+            task_config['_call_additional_images'] = []  # No "additional" in this mode
+
             # Build images list from random selection
             # Use handle_file for each image to properly upload to Gradio API
             images_list = [handle_file(str(img)) for img in selected_images]
@@ -1179,7 +1303,7 @@ class NanoBananaHandler(BaseAPIHandler):
             if ref_image_paths:
                 ref_handles = [handle_file(str(ref)) for ref in ref_image_paths]
                 images_list = images_list + ref_handles
-                self._current_all_images[str(file_path)] = [str(img) for img in selected_images] + ref_image_paths
+                task_config['_call_all_images'] = [str(img) for img in selected_images] + ref_image_paths
                 self.logger.info(f" 📎 Appended {len(ref_image_paths)} reference images after sources")
             
             # Log the number of images being sent
@@ -1190,23 +1314,23 @@ class NanoBananaHandler(BaseAPIHandler):
         else:
             # Standard mode: source image + additional images
             additional_imgs = self._get_additional_images(file_path, task_config)
-            
-            # Store for metadata
-            self._current_additional_images[str(file_path)] = additional_imgs
-            self._current_all_images[str(file_path)] = [str(file_path)] + additional_imgs
-            
+
+            # Store for metadata (per-call state on task_config; see comment above)
+            task_config['_call_additional_images'] = additional_imgs
+            task_config['_call_all_images'] = [str(file_path)] + additional_imgs
+
             # Build images list: source image first, then additional images
             images_list = [handle_file(str(file_path))]
             for img_path in additional_imgs:
                 if img_path:
                     images_list.append(handle_file(img_path))
-            
+
             # Append reference images if enabled (source images come first)
             ref_image_paths = task_config.get('_reference_images', [])
             if ref_image_paths:
                 ref_handles = [handle_file(str(ref)) for ref in ref_image_paths]
                 images_list = images_list + ref_handles
-                self._current_all_images[str(file_path)] = [str(file_path)] + additional_imgs + ref_image_paths
+                task_config['_call_all_images'] = [str(file_path)] + additional_imgs + ref_image_paths
                 self.logger.info(f" 📎 Appended {len(ref_image_paths)} reference images after sources")
             
             # Get aspect ratio from config or auto-detect from source image
@@ -1252,17 +1376,18 @@ class NanoBananaHandler(BaseAPIHandler):
         
         # Check if using random source selection mode
         use_random_source = task_config.get('use_random_source_selection', False)
-        
-        # Get images info for metadata
-        additional_imgs = getattr(self, '_current_additional_images', {}).get(str(file_path), [])
+
+        # Get images info for metadata (per-call state stored on task_config for
+        # thread safety; falls back to empty list if _make_api_call hasn't run yet)
+        additional_imgs = task_config.get('_call_additional_images', [])
         additional_imgs_info = [Path(img).name for img in additional_imgs if img]
-        
+
         # Get reference images info for metadata
         ref_image_paths = task_config.get('_reference_images', [])
         ref_imgs_info = [Path(img).name for img in ref_image_paths if img]
-        
+
         # Get all images used (for random source selection mode)
-        all_imgs = getattr(self, '_current_all_images', {}).get(str(file_path), [])
+        all_imgs = task_config.get('_call_all_images', [])
         all_imgs_info = [Path(img).name for img in all_imgs if img]
         
         # Check for failure patterns in response_data
@@ -1348,7 +1473,7 @@ class NanoBananaHandler(BaseAPIHandler):
             # Track 429 error retries for cross-run persistence
             combined_errors = str(failure_reason or '') + ' '.join(str(e) for e in all_error_messages)
             if self._is_error_429(combined_errors):
-                self._last_error_is_429 = True
+                task_config['_last_error_is_429'] = True
                 metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
             if use_random_source and all_imgs_info:
                 metadata['all_images_used'] = all_imgs_info
@@ -1410,7 +1535,7 @@ class NanoBananaHandler(BaseAPIHandler):
                 metadata['text_responses'] = text_responses
             # Track 429 error retries for cross-run persistence
             if self._is_error_429(error_reason):
-                self._last_error_is_429 = True
+                task_config['_last_error_is_429'] = True
                 metadata['error429_retries'] = self._read_error429_retries(base_name, metadata_folder) + 1
             if use_random_source and all_imgs_info:
                 metadata['all_images_used'] = all_imgs_info
