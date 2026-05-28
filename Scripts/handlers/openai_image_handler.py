@@ -1,13 +1,15 @@
 """OpenAI Image API Handler.
 
-Wraps the /openai_image gradio endpoint (gpt-image-N models). Inherits the
-full nano_banana feature set — multi-image input, random source selection,
+Wraps the /openai_image gradio endpoint (gpt-image-N models). Builds on the
+shared image-generation base (multi-image input, random source selection,
 reference images, generations-per-source, iteration-based processing, and
-429-error retry — and only differs in:
+429-error retry) and adds the parts unique to this endpoint:
 
+* its own model/quality/resolution parameters (independent of Nano Banana)
 * the predict() signature (adds ``quality``)
 * the response format (``(list[str], str)`` of file paths + status text
-  instead of nano_banana's base64-in-response_data tuple).
+  instead of Nano Banana's base64-in-response_data tuple)
+* server-side timeout retry.
 """
 import base64
 import shutil
@@ -17,10 +19,10 @@ from datetime import datetime
 
 from gradio_client import handle_file
 
-from .nano_banana_handler import NanoBananaHandler
+from .image_generation_base import BaseImageGenerationHandler
 
 
-class OpenaiImageHandler(NanoBananaHandler):
+class OpenaiImageHandler(BaseImageGenerationHandler):
     """Handler for the /openai_image endpoint."""
 
     # Conservative per-call image cap; can be overridden per-task with max_images.
