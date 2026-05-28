@@ -7,7 +7,7 @@ output:
   group_tasks_by: 1
 
 # Number of API requests to run in parallel (1 = sequential, max = 10).
-# Applies to nano_banana only. Per-task `concurrent_requests` overrides this default.
+# Supported by all APIs. Per-task `concurrent_requests` overrides this default.
 concurrent_requests: 1
 
 schedule:
@@ -53,9 +53,6 @@ tasks:
     num_iterations: 50
     generations_per_source: 1
     use_reference_images: false
-    # Override the root-level concurrent_requests for this task (1-10).
-    # Skips the inter-request rate_limit sleep when > 1; connection-retry
-    # backoff still applies per worker.
     concurrent_requests: 10
 
 
@@ -216,7 +213,7 @@ comments:
   concurrent_requests:
     description: "Number of API requests to send in parallel for a task (1-10)"
     default: "1 (sequential, preserves existing behavior)"
-    upper_limit: "10 (hard cap enforced by NanoBananaHandler.MAX_CONCURRENT_REQUESTS)"
+    upper_limit: "10 (hard cap enforced in BaseAPIHandler.MAX_CONCURRENT_REQUESTS)"
     resolution_order: "per-task `concurrent_requests` → root-level `concurrent_requests` → 1"
     behavior: |
       - Applies to both random source selection mode and standard (Source-folder) mode

@@ -5,7 +5,7 @@ New APIs only need to implement the unique parts.
 import time
 from pathlib import Path
 from datetime import datetime
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from PIL import Image
 
 
@@ -47,6 +47,9 @@ class BaseAPIHandler:
         'Gateway Timeout',
     ]
     
+    # Upper bound on parallel API requests (server-side queue safety)
+    MAX_CONCURRENT_REQUESTS = 10
+
     # Connection retry configuration
     CONNECTION_RETRY_MAX_DURATION = 240  # 4 minutes max wait
     CONNECTION_RETRY_INITIAL_WAIT = 10   # Start with 10 seconds
@@ -64,7 +67,104 @@ class BaseAPIHandler:
         self.client = processor.client
         self.logger = processor.logger
         self.api_name = processor.api_name
-    
+
+    def _get_concurrent_requests(self, task_config):
+        """Resolve concurrent_requests setting (per-task → root config → 1), capped at MAX.
+
+        Args:
+            task_config: Task configuration dictionary.
+
+        Returns:
+            int: Number of concurrent requests to use (1-MAX_CONCURRENT_REQUESTS).
+        """
+        val = task_config.get('concurrent_requests',
+                              self.config.get('concurrent_requests', 1))
+        try:
+            val = int(val)
+        except (TypeError, ValueError):
+            val = 1
+        return max(1, min(val, self.MAX_CONCURRENT_REQUESTS))
+
+    def _setup_concurrent_task(self, task):
+        """Hook for subclasses to perform single-threaded pre-concurrent setup.
+
+        Called once before worker threads are dispatched. Override to preload
+        caches or pools that must not race across threads (e.g., image pools).
+
+        Args:
+            task: Task configuration dictionary.
+        """
+        pass
+
+    def _process_standard_concurrent(self, task, task_num, total_tasks,
+                                     source_folder, output_folder, metadata_folder):
+        """Process task files with parallel API calls when concurrent_requests > 1.
+
+        File discovery, skip-checks, and subclass setup run single-threaded before
+        workers are dispatched so each worker thread only performs API I/O.
+
+        Args:
+            task: Task configuration dictionary.
+            task_num: Current task number (for logging).
+            total_tasks: Total number of tasks (for logging).
+            source_folder: Path to the source folder.
+            output_folder: Path to the output folder.
+            metadata_folder: Path to the metadata folder.
+        """
+        folder = Path(task.get('folder', task.get('folder_path', '')))
+        concurrent_requests = self._get_concurrent_requests(task)
+        task_name = task.get('effect', '') or task.get('custom_effect_name', '') or folder.name
+        self.logger.info(
+            f"📁 Task {task_num}/{total_tasks}: {task_name} "
+            f"(up to {concurrent_requests} concurrent)"
+        )
+
+        # Single-threaded file discovery and subclass setup before dispatching threads
+        files = self._get_task_files(task, source_folder)
+        self._setup_concurrent_task(task)
+
+        successful = 0
+        skipped = 0
+        work_files = []
+
+        for file_path in files:
+            is_complete, status = self._get_processing_status(file_path, metadata_folder)
+            if is_complete:
+                if status == 'success':
+                    self.logger.info(f" ⏭️ {file_path.name} (already processed)")
+                    successful += 1
+                elif status == 'failed_timeout_exhausted':
+                    self.logger.info(f" ⏭️ {file_path.name} (failed - timeout retries exhausted)")
+                else:
+                    self.logger.info(f" ⏭️ {file_path.name} (failed - max retries reached)")
+                skipped += 1
+                continue
+            work_files.append(file_path)
+
+        def run_one(file_path):
+            self.logger.info(f" 🖼️ Processing {file_path.name}")
+            # Pass a per-call copy so concurrent threads don't mutate the same dict
+            return self.processor.process_file(file_path, dict(task),
+                                               output_folder, metadata_folder)
+
+        if work_files:
+            self.logger.info(
+                f" 🚀 Dispatching {len(work_files)} API calls with up to "
+                f"{concurrent_requests} in parallel"
+            )
+            with ThreadPoolExecutor(max_workers=concurrent_requests) as executor:
+                futures = [executor.submit(run_one, fp) for fp in work_files]
+                for future in as_completed(futures):
+                    try:
+                        if future.result():
+                            successful += 1
+                    except Exception as e:
+                        self.logger.error(f" ❌ Worker raised: {e}")
+
+        self.logger.info(
+            f"✓ Task {task_num}: {successful}/{len(files)} successful ({skipped} skipped)"
+        )
+
     def _is_connection_error(self, error_str):
         """Check if an error is a connection-related error."""
         error_lower = error_str.lower()
@@ -320,7 +420,7 @@ class BaseAPIHandler:
     def process_task(self, task, task_num, total_tasks):
         """Process entire task - common structure for most APIs."""
         folder = Path(task.get('folder', task.get('folder_path', '')))
-        
+
         # Get folder paths (handles both structures)
         if 'source_dir' in task:
             source_folder = Path(task['source_dir'])
@@ -330,18 +430,24 @@ class BaseAPIHandler:
             source_folder = folder / "Source"
             output_folder = self._get_output_folder(folder)
             metadata_folder = folder / "Metadata"
-        
+
         # Ensure output and metadata folders exist
         output_folder.mkdir(parents=True, exist_ok=True)
         metadata_folder.mkdir(parents=True, exist_ok=True)
-        
+
+        # Route to concurrent path when multiple workers are requested
+        if self._get_concurrent_requests(task) > 1:
+            self._process_standard_concurrent(task, task_num, total_tasks,
+                                              source_folder, output_folder, metadata_folder)
+            return
+
         task_name = task.get('effect', '') or task.get('custom_effect_name', '') or folder.name
         self.logger.info(f"📁 Task {task_num}/{total_tasks}: {task_name}")
-        
+
         # Get files to process
         files = self._get_task_files(task, source_folder)
-        
-        # Process files
+
+        # Process files sequentially
         successful = 0
         skipped = 0
         for i, file_path in enumerate(files, 1):
@@ -357,15 +463,15 @@ class BaseAPIHandler:
                     self.logger.info(f" ⏭️ {i}/{len(files)}: {file_path.name} (failed - max retries reached)")
                 skipped += 1
                 continue
-            
+
             self.logger.info(f" 🖼️ {i}/{len(files)}: {file_path.name}")
-            
+
             if self.processor.process_file(file_path, task, output_folder, metadata_folder):
                 successful += 1
-            
+
             if i < len(files):
                 time.sleep(self.api_defs.get('rate_limit', 3))
-        
+
         self.logger.info(f"✓ Task {task_num}: {successful}/{len(files)} successful ({skipped} skipped)")
     
     def _get_output_folder(self, folder):

@@ -6,6 +6,10 @@ output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
   group_tasks_by: 1
 
+# Number of API requests to run in parallel (1 = sequential, max = 10).
+# Supported by all APIs. Per-task `concurrent_requests` overrides this default.
+concurrent_requests: 1
+
 schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
@@ -14,7 +18,7 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e36c7d2e7a_9_0#slide=id.g3e36c7d2e7a_9_0
 
 tasks:
-  - folder: Media Files/OpenAI Image/0520 看球賽
+  - folder: Media Files/OpenAI Image/0528 看球賽
     model: gpt-image-2
     quality: auto
     resolution: "1K"
@@ -40,6 +44,7 @@ tasks:
     num_iterations: 0
     generations_per_source: 1
     use_reference_images: false
+    concurrent_requests: 5
 
 
 # Configuration Reference
@@ -74,6 +79,29 @@ comments:
     true uses comparison_template_path (3-media slides);
     false uses template_path (2-media slides). Default: false.
   output_group_tasks_by: "Set to 0 (or omit) to create individual reports per task. Set to N to group N tasks into one report."
+
+  concurrent_requests:
+    description: "Number of API requests to send in parallel for a task (1-10)"
+    default: "1 (sequential, preserves existing behavior)"
+    upper_limit: "10 (hard cap enforced in BaseAPIHandler.MAX_CONCURRENT_REQUESTS)"
+    resolution_order: "per-task `concurrent_requests` → root-level `concurrent_requests` → 1"
+    behavior: |
+      - Applies to both random source selection mode and standard (Source-folder) mode
+      - In random source mode, parallelizes across (iteration × generation) calls
+      - In standard mode, parallelizes across source files
+      - Inter-request `rate_limit` sleep is SKIPPED when concurrent_requests > 1
+        (concurrency itself is the throttle); per-thread connection-retry backoff
+        and timeout retry waits still apply
+      - Already-processed iterations/files are filtered out single-threaded before
+        dispatch, so workers only do API I/O
+      - Selection plan, image pool caches, and reference/source caches are
+        pre-built single-threaded before dispatch to avoid race conditions
+    example: |
+      # Send up to 5 requests in parallel for this task
+      concurrent_requests: 5
+    notes: |
+      - Values above 10 are clamped to 10
+      - Server-side queue limits may further constrain effective parallelism
 
   random_source_selection:
     description: "Mode for selecting N images from Source folder per API call (NO REPEATS until pool exhausted)"

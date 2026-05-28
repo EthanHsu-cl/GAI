@@ -29,6 +29,12 @@ class OpenaiImageHandler(NanoBananaHandler):
         'gpt-image-2': 10,
     }
 
+    def __init__(self, processor):
+        """Initialize handler with per-file image tracking dicts."""
+        super().__init__(processor)
+        self._current_additional_images = {}  # file_path -> list of additional image paths
+        self._current_all_images = {}          # file_path -> list of all image paths sent to API
+
     def _check_metadata_status(self, metadata):
         """Check completion status, accounting for timeout retries.
 
