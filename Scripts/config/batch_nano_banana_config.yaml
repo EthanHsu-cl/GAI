@@ -18,41 +18,47 @@ root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU
 root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCV9C7TVkBoS52w7Sn2yXKAAY4f0W3smgHPujwz-eisRz0?e=Ah3uZk
 
 tasks:
-  - folder: Media Files/Nano Banana/0528 Love Script
+  - folder: Media Files/Nano Banana/0529 FIFA National Flag
     model: gemini-3.1-flash-image-preview
-    resolution: "2K"
+    resolution: "1K"
     aspect_ratio: "3:4"
     prompt: |
-      Photo usage rules (strict): Each input photo must be used exactly once. Every tile must contain a different photo. NO photo may appear more than once in the entire layout. Duplicating or cloning photos across tiles is strictly forbidden. One tile contains exactly one photo only. A single photo cannot be split or reused across multiple tiles. 
+      [Reference Setup]
+      - reference image 1: This image contains the subject. Use only the subject from reference image 1. Preserve the subject’s facial features, hairstyle, outfit, body proportions, and original identity accurately.
+      - reference image 2: This image is used only for the flag. Apply the flag design from reference image 2 onto the flag wrapped around the subject.
 
-      Layout locking rules (strict): The total number of photos in the final layout must be exactly equal to the number of user-uploaded photos (1:1 correspondence, no more, no less). It is strictly forbidden to duplicate, reuse, clone, or replicate any user photo to fill space. It is strictly forbidden to generate any additional AI-created photos, placeholders, or synthetic images. Only and exactly the provided user photos may appear in the layout. If fewer photos are provided, the layout must adapt by scaling, spacing, or cropping (without distortion) rather than adding or repeating images. Empty space is allowed if necessary; filling space by duplication or generation is strictly prohibited.
+      Preserve the subjects’ faces, identities, facial features, hairstyles, skin texture, and overall appearance naturally. 
 
-      Polaroid content rules (strict): Every Polaroid instant print must contain exactly one valid user photo. Blank, empty, white, transparent, or placeholder Polaroid frames are strictly forbidden. It is strictly prohibited to generate Polaroid frames without real photo content inside. It is strictly prohibited to simulate fake or AI-generated photo content inside a Polaroid. Every Polaroid must display a real, complete user-provided image with no empty interior area.
 
-      Photo integrity rules: User photos must preserve their original colors, lighting, subjects, and facial details. Photos may be cropped when necessary to achieve a clean and balanced layout, but the subject’s face and key subjects must remain fully visible and unobstructed. NO STRETCH, SQUEEZE, WARP, DISTORTION, recoloring, filtering, or retouching is allowed. No graphic elements, text, or decorations may cover a person’s face.
+      [Core Scene & Composition]
+      A realistic outdoor stadium scene featuring the subject from reference image 1. The subject stands near a football pitch sideline. The camera is positioned in the spectator stands at eye level, facing the subject directly with a natural portrait perspective. The background shows a vibrant green football field with a natural, soft blur.
 
-      Flat graphic collage design. Soft neutral color (#eee6e3) full-bleed paper background with subtle paper fiber texture and faint natural speckles, resembling clean premium stationery.
+      [Flag Placement]
+      A full-sized, soft fabric flag with the design from reference image 2 is naturally and casually draped around the subject’s shoulders like a shawl, covering only part of the body rather than fully wrapping or fully concealing the figure. The flag falls in a relaxed, effortless way, allowing some of the original outfit from reference image 1 to remain naturally visible. The draping feels light, realistic, and unforced, with soft folds, natural fabric weight, and slightly imperfect placement that enhances the candid everyday photography feeling.
 
-      User photos appear as classic square Polaroid instant prints with soft white instant-film borders and a slightly wider bottom margin. Each photo preserves its original aspect ratio and appears as an intact photograph placed within the Polaroid frame. The Polaroids are arranged in a casual, slightly tilted scrapbook composition with natural spacing between them, avoiding perfect alignment or grid structure. Each print is visually “attached” to the background with a short strip of semi-transparent white-grey masking tape placed along the top edge of the frame, creating a realistic taped-to-paper look. Each tape strip must vary in angle, length, and slight placement, ensuring every piece of tape appears different to enhance a natural, random handmade feeling. No two tape strips should look identical; the angles, lengths, and placements must vary to create a natural, imperfect handmade appearance.
+      [Lighting & Color Tone]
+      Bright outdoor daylight with a clean, white, neutral-cool color temperature. The scene is illuminated by soft diffused natural light, creating a fresh and airy daytime atmosphere. The subject's face receives gentle frontal ambient light and soft sky fill, making the facial features look bright, clean, and naturally luminous. Skin tones appear fresh, balanced, and realistic, with a soft healthy glow.
 
-      If any shadow is present, it must be an extremely subtle contact shadow where the photo touches the paper surface. The shadow should be very faint, soft, and close to the photo edge, nearly imperceptible, with no visible drop shadow effect. Avoid floating shadows, hard edge shadows, or strong depth effects so the photos appear naturally resting on the paper background. The photos are randomly placed across the layout with slight natural tilts, resembling casually arranged instant photos in a scrapbook. The placement should feel balanced but informal, with clear spacing between photos and no forced grid, row, or diagonal alignment. Photos remain the visual focal point.
+      Facial shadows are delicate, open, and low-contrast, retaining visible details around the eyes, cheeks, nose, and jawline. The darker areas of the face remain softly lifted with natural fill light, preserving a bright and friendly expression. Highlights roll off smoothly with a clean photographic softness, giving the image a gentle, comfortable daylight look.
 
-      One photo must be noticeably larger than the others. If any uploaded photo contains multiple people, prioritize selecting that group photo for the largest mask.
+      The overall color tone is white-balanced, fresh, and slightly cool-neutral, with clean whites, clear skin tones, vivid but natural flag colors, and a vibrant green football field. The image has a crisp daylight atmosphere while keeping the colors soft, breathable, and realistic.
 
-      The photo cluster should occupy approximately 80% of the canvas area and be positioned in the upper portion of the composition.
+      [Background Control]
+      View looking down from the stands toward the pitch. Shallow depth of field with a blurred crowd environment. A few scattered, distant, and secondary pedestrians are visible to build atmosphere. The background features clean, unbranded stadium textures and a natural public event atmosphere.
 
-      Typography appears below the photo cluster as a handwritten cursive Happy Mother's Day in bold red ink. The lettering resembles elegant natural pen handwriting with smooth connected strokes, slightly irregular line flow, and a refined signature-style appearance rather than a digital font. The text must be left-aligned and positioned toward the lower area of the canvas. The quote should contain approximately 15–20 English letters in total and be arranged in multiple short lines while maintaining a clean left-aligned edge.
+      [Image Quality & Realism]
+      An authentic casual snapshot with a natural everyday photography aesthetic. Soft optical focus, gentle lens rendering, and organic photographic texture help the subject blend seamlessly into the stadium scene with smooth, natural edge transitions. Balanced exposure keeps highlights clean and shadows detailed, creating a bright and realistic handheld camera quality.
 
-      A big hand-drawn heart must be added in the top-right area of the canvas. The heart must be drawn using bold red ink, matching the same ink style, color, and stroke quality as the handwritten text below. The heart must be a single-line outline heart (strictly one continuous stroke, no double lines). The heart must appear as a natural freehand sketch with slightly imperfect, organic line curves, not a perfect geometric shape. The heart must be placed strictly near the top-right corner area of the canvas. The heart can overlap or cover a photo.
+      The final image should have a subtle CCD-inspired daily photography feeling: slightly soft optical detail, natural skin texture, gentle grain, clean daylight color, smooth tonal transitions, and a candid travel-photo realism. The image feels naturally captured in the moment, relaxed, approachable, and integrated into the real stadium environment.
     use_comparison_template: false
-    use_random_source_selection: true
+    use_random_source_selection: false
     use_deterministic_random: true
     random_seed: 42
     min_images: 2
     max_images: 5
     num_iterations: 50
     generations_per_source: 1
-    use_reference_images: false
+    use_reference_images: true
     concurrent_requests: 10
 
 

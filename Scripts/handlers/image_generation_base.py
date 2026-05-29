@@ -661,6 +661,13 @@ class BaseImageGenerationHandler(BaseAPIHandler):
             self._process_iterations(task_with_iterations, task_num, total_tasks,
                                      output_folder, metadata_folder)
         else:
+            # Standard mode (Source-folder, optional Additional). Reference images
+            # are only wired into the iteration path, so load them here too and
+            # stamp the task so _make_api_call appends them after the sources.
+            if task.get('use_reference_images', False):
+                reference_images = self._get_reference_images(task)
+                task = dict(task)
+                task['_reference_images'] = [str(img) for img in reference_images]
             super().process_task(task, task_num, total_tasks)
 
     def process(self, file_path, task_config, output_folder, metadata_folder, attempt, max_retries):
