@@ -768,6 +768,38 @@ class UnifiedReportGenerator:
 
         # Check if this is nano_banana / openai_image iteration mode (random_source_selection)
         if self.api_name in ('nano_banana', 'openai_image'):
+            # Cross-match: group by reference (same flag together) then source,
+            # rather than by source. Takes precedence so random+cross-match also
+            # groups by reference.
+            has_cross_match = any(
+                p.metadata.get('reference_cross_match') for p in pairs
+            )
+            if has_cross_match:
+                def get_ref_name(pair):
+                    refs = pair.metadata.get('reference_images_used') or []
+                    if refs:
+                        return refs[0]
+                    return pair.additional_source_paths[0].name if pair.additional_source_paths else ""
+
+                def get_sort_key(pair):
+                    if pair.failed and pair.ref_failed:
+                        tier = 0
+                        cluster = (self._failure_group_key(pair), self._failure_group_key(pair, ref=True))
+                    elif pair.failed:
+                        tier = 1
+                        cluster = (self._failure_group_key(pair), "")
+                    elif pair.ref_failed:
+                        tier = 2
+                        cluster = ("", self._failure_group_key(pair, ref=True))
+                    else:
+                        tier = 3
+                        cluster = ("", "")
+
+                    return (tier, cluster, get_ref_name(pair), pair.source_file or "",
+                            pair.metadata.get('_iteration_index', 0))
+
+                return sorted(pairs, key=get_sort_key)
+
             # Check if any pair has random_source_selection metadata
             has_random_selection = any(
                 p.metadata.get('random_source_selection') for p in pairs
@@ -1380,9 +1412,11 @@ class UnifiedReportGenerator:
         metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
         
         # Check if this is nano_banana/openai_image iteration mode (random_source_selection)
-        # In this mode, we iterate over metadata/generated files, not source files
+        # or reference cross-match. In both, generated/metadata names carry suffixes that
+        # won't match bare source stems, so iterate over metadata files, not source files.
         is_iteration_mode = (self.api_name in ('nano_banana', 'openai_image') and
-                            any(md.get('random_source_selection') for md in metadata_cache.values()))
+                            any(md.get('random_source_selection') or md.get('reference_cross_match')
+                                for md in metadata_cache.values()))
 
         if is_iteration_mode:
             return self._create_nano_iteration_pairs(folder, folders, metadata_cache, task)
@@ -1610,52 +1644,72 @@ class UnifiedReportGenerator:
         
         # Iterate over metadata entries (each represents one iteration)
         for md_key, md in sorted(metadata_cache.items()):
-            if not md.get('random_source_selection'):
+            is_random = md.get('random_source_selection', False)
+            is_cross_match = md.get('reference_cross_match', False)
+            if not (is_random or is_cross_match):
                 continue
-            
+
             # Get the iteration base_name from metadata
             iteration_base = md.get('_base_name', '')
             if not iteration_base:
                 # Try to extract from md_key (metadata file key)
                 iteration_base = md_key
-            
+
             normalized_key = self.normalize_key(iteration_base)
             gen_paths = gen_by_iteration.get(normalized_key, [])
-            
-            # Get all source images used for this iteration
-            additional_source_paths = []
-            all_images_used = md.get('all_images_used', [])
-            for img_name in all_images_used:
-                img_path = source_folder / img_name
-                if img_path.exists():
-                    additional_source_paths.append(img_path)
-                elif reference_folder.exists():
-                    # Check Reference folder for reference images
-                    ref_path = reference_folder / img_name
-                    if ref_path.exists():
-                        additional_source_paths.append(ref_path)
-            
-            # Also include reference images from metadata if not already found via all_images_used
+
             ref_images_used = md.get('reference_images_used', [])
-            if ref_images_used and reference_folder.exists():
-                existing_names = {p.name for p in additional_source_paths}
-                for ref_name in ref_images_used:
-                    if ref_name not in existing_names:
-                        ref_path = reference_folder / ref_name
+
+            if is_random:
+                # Random source mode: all_images_used lists the source group (and refs)
+                additional_source_paths = []
+                all_images_used = md.get('all_images_used', [])
+                for img_name in all_images_used:
+                    img_path = source_folder / img_name
+                    if img_path.exists():
+                        additional_source_paths.append(img_path)
+                    elif reference_folder.exists():
+                        # Check Reference folder for reference images
+                        ref_path = reference_folder / img_name
                         if ref_path.exists():
-                            # Prepend reference images so they appear first in composite
-                            additional_source_paths.insert(0, ref_path)
-            
-            # Use the first source image as the "primary" source for the pair
-            primary_source = additional_source_paths[0] if additional_source_paths else None
-            if not primary_source:
-                # Try to find source from source_image field
+                            additional_source_paths.append(ref_path)
+
+                # Include reference images not already found via all_images_used
+                if ref_images_used and reference_folder.exists():
+                    existing_names = {p.name for p in additional_source_paths}
+                    for ref_name in ref_images_used:
+                        if ref_name not in existing_names:
+                            ref_path = reference_folder / ref_name
+                            if ref_path.exists():
+                                # Prepend reference images so they appear first in composite
+                                additional_source_paths.insert(0, ref_path)
+
+                # Use the first source image as the "primary" source for the pair
+                primary_source = additional_source_paths[0] if additional_source_paths else None
+                if not primary_source:
+                    # Try to find source from source_image field
+                    source_image = md.get('source_image', '')
+                    if source_image:
+                        primary_source = source_folder / source_image
+                        if not primary_source.exists():
+                            primary_source = None
+            else:
+                # Cross-match (standard mode): source_image is the real source; the
+                # reference goes into additional_source_paths so the composite shows
+                # [source, reference]. all_images_used is not populated here.
+                primary_source = None
                 source_image = md.get('source_image', '')
                 if source_image:
-                    primary_source = source_folder / source_image
-                    if not primary_source.exists():
-                        primary_source = None
-            
+                    sp = source_folder / source_image
+                    if sp.exists():
+                        primary_source = sp
+                additional_source_paths = []
+                if reference_folder.exists():
+                    for ref_name in ref_images_used:
+                        ref_path = reference_folder / ref_name
+                        if ref_path.exists():
+                            additional_source_paths.append(ref_path)
+
             if not primary_source:
                 logger.warning(f"No source images found for iteration {iteration_base}")
                 continue

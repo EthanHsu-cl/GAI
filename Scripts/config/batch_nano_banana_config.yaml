@@ -14,7 +14,7 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e17778162e_0_88#slide=id.g3e17778162e_0_88
+root_design_link: https://docs.google.com/presentation/d/1sJ4WYdG8OzeSyzQt1jcpG7RUkgKXRz13bH4Nxaco-Js/edit?slide=id.g3e529756c3c_1_0&pli=1#slide=id.g3e529756c3c_1_0
 root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCV9C7TVkBoS52w7Sn2yXKAAY4f0W3smgHPujwz-eisRz0?e=Ah3uZk
 
 tasks:
@@ -56,9 +56,10 @@ tasks:
     random_seed: 42
     min_images: 2
     max_images: 5
-    num_iterations: 50
+    num_iterations: 10
     generations_per_source: 1
     use_reference_images: true
+    reference_cross_match: true
     concurrent_requests: 10
 
 
@@ -149,6 +150,7 @@ comments:
   reference_images:
     description: "Toggle to include reference images from a 'Reference' folder (sibling to 'Source' folder)"
     use_reference_images: "Set to true to append reference images after source images in every API call. Reference images do NOT count toward min_images/max_images limits."
+    reference_cross_match: "Set to true to pair each source with each reference INDIVIDUALLY (one ref per call) instead of appending all refs together. Default false."
     folder_structure: "Place reference images in <task_folder>/Reference/ (same level as Source/). The folder is auto-created when use_reference_images is true."
     behavior: |
       - Reference images are appended after the source images in every API call
@@ -156,6 +158,16 @@ comments:
       - If use_reference_images is true but Reference/ folder is missing or empty, a warning is logged and processing continues without references
       - Reference images are sorted alphabetically and cached per task
       - Tracked in metadata as 'reference_images_used'
+    cross_match_behavior: |
+      - reference_cross_match: false (default) → all references appended to every
+        call together. 20 sources + 4 refs = 20 calls, each [source, ref1..ref4].
+      - reference_cross_match: true → each source paired with each reference one at
+        a time. 20 sources × 4 refs = 80 calls, each [source, single_ref].
+      - Cross-match outputs are named '<source>_refNN_<refname>' so each pairing is
+        saved separately and is independently resumable.
+      - Works in both standard mode and random-source mode (and with concurrency).
+        In random-source mode, each iteration's source group is sent once per
+        reference, so total calls = num_iterations × generations_per_source × refs.
     
     example_with_random_source: |
       # Reference images + random source selection
