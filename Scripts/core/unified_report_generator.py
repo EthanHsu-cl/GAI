@@ -174,6 +174,7 @@ class UnifiedReportGenerator:
             'pixverse_multi': 'Pixverse Multi',
             'wan': 'Wan 2.2',
             'dreamactor': 'DreamActor',
+            'motion_swap': 'Motion Swap',
             'kling_motion': 'Kling Motion',
             'veo': 'Veo',
             'veo_itv': 'Veo ITV',
@@ -321,6 +322,14 @@ class UnifiedReportGenerator:
                 **self.LAYOUT_3_MEDIA_STACKED,
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['source_image', 'source_video', 'task_id', 'time_taken', 'status_code', 'processing_time_seconds', 'success'],
+                'error_handling': 'video_fallback'
+            },
+            'motion_swap': {
+                **base_config,
+                'media_types': ['source', 'source_video', 'generated'],
+                **self.LAYOUT_3_MEDIA_STACKED,
+                'title_format': 'Generation {index}: {source_file}',
+                'metadata_fields': ['source_image', 'source_video', 'task_id', 'processing_time_seconds', 'success'],
                 'error_handling': 'video_fallback'
             },
             'kling_motion': {
@@ -834,7 +843,7 @@ class UnifiedReportGenerator:
 
                 return sorted(pairs, key=get_sort_key)
 
-        if self.api_name in ['wan', 'runway', 'dreamactor', 'kling_motion']:
+        if self.api_name in ['wan', 'runway', 'dreamactor', 'motion_swap', 'kling_motion']:
             # Combination APIs: tiered failure ordering, then group by source video,
             # then sort within groups by source file.
             # Tier 0: both failed (clustered by base error, then ref error)
@@ -1363,7 +1372,7 @@ class UnifiedReportGenerator:
         
         if self.api_name == 'runway':
             return self.create_runway_media_pairs(folder, ref_folder, task, use_comparison)
-        elif self.api_name in ('wan', 'dreamactor', 'kling_motion'):
+        elif self.api_name in ('wan', 'dreamactor', 'motion_swap', 'kling_motion'):
             return self.create_wan_media_pairs(folder, ref_folder, task, use_comparison)
         else:
             return self.create_standard_media_pairs(folder, ref_folder, task, use_comparison)
@@ -2700,7 +2709,7 @@ class UnifiedReportGenerator:
             "template_path": "templates/I2V templates.pptx",
             "comparison_template_path": "templates/I2V Comparison Template.pptx",
             "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
-            "use_comparison": self.api_name in ["kling", "nano_banana", "openai_image", "runway", "wan", "dreamactor", "kling_motion"]
+            "use_comparison": self.api_name in ["kling", "nano_banana", "openai_image", "runway", "wan", "dreamactor", "motion_swap", "kling_motion"]
         }
     
     def _extract_date_from_folder(self, folder):
@@ -3695,7 +3704,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -3704,7 +3713,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

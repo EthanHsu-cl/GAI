@@ -51,11 +51,11 @@ tasks:
 
       The final image should have a subtle CCD-inspired daily photography feeling: slightly soft optical detail, natural skin texture, gentle grain, clean daylight color, smooth tonal transitions, and a candid travel-photo realism. The image feels naturally captured in the moment, relaxed, approachable, and integrated into the real stadium environment.
     use_comparison_template: false
-    use_random_source_selection: false
+    use_random_source_selection: true
     use_deterministic_random: true
     random_seed: 42
-    min_images: 2
-    max_images: 5
+    min_images: 1
+    max_images: 1
     num_iterations: 10
     generations_per_source: 1
     use_reference_images: true

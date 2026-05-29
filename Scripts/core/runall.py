@@ -52,6 +52,8 @@ API_MAPPING = {
     'veo': 'veo',
     'veoitv': 'veo_itv',
     'dreamactor': 'dreamactor',
+    'motion_swap': 'motion_swap',
+    'motionswap': 'motion_swap',
     'openai_image': 'openai_image',
     'openaiimage': 'openai_image',
     'gptimage': 'openai_image',
@@ -83,6 +85,7 @@ CONFIG_MAPPING = {
     'veo': 'config/batch_veo_config.yaml',
     'veo_itv': 'config/batch_veo_itv_config.yaml',
     'dreamactor': 'config/batch_dreamactor_config.yaml',
+    'motion_swap': 'config/batch_motion_swap_config.yaml',
     'openai_image': 'config/batch_openai_image_config.yaml',
     'fifa_i2i2v': 'config/batch_fifa_i2i2v_config.yaml',
     'i2i2v': 'config/batch_i2i2v_config.yaml'
@@ -504,6 +507,7 @@ def show_usage():
     print("  seedance_ttv - Seedance Text-to-Video processing")
     print("  seedance_i2v - Seedance Image-to-Video processing")
     print("  wan - Wan 2.2 image-video animation processing")
+    print("  motion_swap - Motion Swap image-video motion transfer processing")
     print("  veo - Google Veo text-to-video processing")
     print("  veoitv - Google Veo image-to-video processing")
     print("  fifa - FIFA image-to-image-to-video pipeline (start/end frame → video)")
@@ -534,6 +538,7 @@ def show_usage():
     print("  python runall.py seedance_ttv auto")
     print("  python runall.py seedance_i2v auto")
     print("  python runall.py wan auto")
+    print("  python runall.py motion_swap auto")
     print("  python runall.py veo auto")
     print("  python runall.py fifa auto")
     print("  python runall.py all auto --parallel")

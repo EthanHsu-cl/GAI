@@ -1,0 +1,27 @@
+testbed: http://192.168.31.161/external-testbed/video_effect/
+output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+template_path: templates/I2V templates.pptx
+comparison_template_path: templates/I2V Comparison Template.pptx
+default_params: {}
+output:
+  output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 0
+schedule:
+  start_time: ''
+  comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
+root_design_link:
+source_video_link: ''
+
+tasks:
+- folder: Media Files/Motion Swap/0529 9 Style
+  design_link: ''
+  source_video_link: ''
+  reference_folder: ''
+  use_comparison_template: false
+
+
+comments:
+  folder_structure: |
+    Each task folder should have 'Source Image' and 'Source Video' subfolders.
+    All subject images will be cross-matched with all motion reference videos
+    (e.g., 3 images × 4 videos = 12 total generations).

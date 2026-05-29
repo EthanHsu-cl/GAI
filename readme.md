@@ -129,6 +129,7 @@ python core/runall.py kling auto
 | `runway` | Runway Gen4 | V2V | Face swap / motion, `one_to_one` or `all_combinations` pairing |
 | `wan` | Wan 2.2 | I+V | Auto-cropping, video × image cross-match |
 | `dreamactor` | DreamActor | I+V | Face reenactment via image × video cross-match |
+| `motion_swap` | Motion Swap | I+V | Motion transfer via subject image × motion video cross-match |
 | `fifa` | FIFA I2I2V | I2I2V | Per-image start/end-frame generation → video |
 | `i2i2v` | I2I2V | I2I2V | Generic image → image → video pipeline (Nano Banana / OpenAI Image + Kling) |
 | `all` | All Platforms | — | Run every API in sequence (or `--parallel`) |
@@ -153,6 +154,7 @@ python core/runall.py kling auto
 | Runway | image 500 MB / video 500 MB | 320 px / — | image: JPG, PNG, BMP; video: MP4, MOV, AVI, MKV, WebM |
 | Wan 2.2 | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
 | DreamActor | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
+| Motion Swap | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
 | FIFA I2I2V / I2I2V | 30 MB | 256 px / — | JPG, PNG, WebP |
 
 (Text-to-video APIs — Kling TTV, Pixverse TTV, Seedance TTV, Veo — take no source files.)
@@ -170,6 +172,7 @@ python core/runall.py kling auto
 | Pixverse Multi | `iter{NNN}_{img1_stem}_{img2_stem}_..._{Effect}_effect.mp4` |
 | Runway | `{filename}_ref_{ref}_runway_generated.mp4` |
 | Wan 2.2 / DreamActor | `{video}_{image}_{mode}.mp4` |
+| Motion Swap | `{video}_{image}_motion_swap.mp4` |
 | Nano Banana | `{filename}_image_{n}.{ext}` |
 | OpenAI Image | `{filename}_image_{n}.{ext}` |
 | GenVideo | `{filename}_generated.{ext}` |
@@ -186,8 +189,8 @@ Most APIs follow a per-task folder structure with a `Source/` input subfolder. O
 ```bash
 TaskFolder/
 ├── Source/              # Input images / videos (most APIs)
-├── Source Image/        # Wan 2.2, DreamActor, Kling Motion: source images
-├── Source Video/        # Wan 2.2, DreamActor, Kling Motion: source videos
+├── Source Image/        # Wan 2.2, DreamActor, Motion Swap, Kling Motion: source images
+├── Source Video/        # Wan 2.2, DreamActor, Motion Swap, Kling Motion: source videos
 ├── Additional/          # Nano Banana / OpenAI Image: extra images for multi-image mode
 ├── Reference/           # Runway, Vidu Reference, Nano Banana, OpenAI Image: reference images
 ├── Generated_Video/     # Auto-created video outputs (video APIs)
@@ -200,7 +203,7 @@ TaskFolder/
 API-specific input layouts:
 
 - Most APIs → `Source/`
-- Wan 2.2 / DreamActor / Kling Motion → `Source Image/` + `Source Video/` (cross-matched)
+- Wan 2.2 / DreamActor / Motion Swap / Kling Motion → `Source Image/` + `Source Video/` (cross-matched)
 - Nano Banana multi-image → `Source/` + `Additional/` (or `Source/` only with random selection) + optional `Reference/`
 - OpenAI Image → same as Nano Banana
 - Runway → `Source/` (videos) + `Reference/` (images)
@@ -900,6 +903,20 @@ tasks:
 ```
 
 **Options:** `use_base64`, `cut_switch`, `video_url_direct`.
+
+#### Motion Swap (`config/batch_motion_swap_config.yaml`)
+
+Same `Source Image/` + `Source Video/` cross-match pattern as DreamActor; transfers the motion of each reference video onto each subject image. Takes no extra API parameters.
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/video_effect/
+
+tasks:
+  - folder: Media Files/Motion Swap/0529 9 Style
+    use_comparison_template: false
+```
+
+**Options:** none beyond the standard task fields (`folder`, `design_link`, `source_video_link`, `reference_folder`, `use_comparison_template`).
 
 ---
 
