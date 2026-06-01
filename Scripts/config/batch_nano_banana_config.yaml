@@ -18,53 +18,87 @@ root_design_link: https://docs.google.com/presentation/d/1sJ4WYdG8OzeSyzQt1jcpG7
 root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCV9C7TVkBoS52w7Sn2yXKAAY4f0W3smgHPujwz-eisRz0?e=Ah3uZk
 
 tasks:
-  - folder: Media Files/Nano Banana/0529 FIFA National Flag
-    model: gemini-3.1-flash-image-preview
-    resolution: "1K"
-    aspect_ratio: "3:4"
+  - folder: Media Files/Nano Banana/0529 Full Body Reference - Male
+    text_to_image: true
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "1:1"
     prompt: |
-      [Reference Setup]
-      - reference image 1: This image contains the subject. Use only the subject from reference image 1. Preserve the subject’s facial features, hairstyle, outfit, body proportions, and original identity accurately.
-      - reference image 2: This image is used only for the flag. Apply the flag design from reference image 2 onto the flag wrapped around the subject.
+      Create a photorealistic full-body outdoor reference image of one original, non-famous adult man, generated from scratch.
 
-      Preserve the subjects’ faces, identities, facial features, hairstyles, skin texture, and overall appearance naturally. 
+      The person is centered in a square 1:1 frame, standing upright in a relaxed neutral pose, facing the camera directly. Show the entire body clearly from the top of the head to the soles of the shoes, with both feet fully visible and a small amount of empty space above the head and below the feet. The subject should occupy about 75% of the image height.
 
+      The person is standing on a clean flat walking path in a simple natural outdoor setting. The background has soft greenery, open space, and gentle depth, but should remain minimal and not visually busy. The scenery should be softly blurred and realistic, with no crowds, no animals, no vehicles, no signs, no buildings close to the subject, no props, and no distracting objects. The ground should clearly support the person, with a natural contact shadow under the feet.
 
-      [Core Scene & Composition]
-      A realistic outdoor stadium scene featuring the subject from reference image 1. The subject stands near a football pitch sideline. The camera is positioned in the spectator stands at eye level, facing the subject directly with a natural portrait perspective. The background shows a vibrant green football field with a natural, soft blur.
+      Lighting is soft, even, and natural, like mild daylight or lightly overcast weather. Avoid harsh sunlight, dramatic shadows, strong backlight, or sunset lighting. Camera angle is straight-on at chest height with a natural 50mm portrait lens look, no wide-angle distortion, no fisheye effect, and no tilted perspective.
 
-      [Flag Placement]
-      A full-sized, soft fabric flag with the design from reference image 2 is naturally and casually draped around the subject’s shoulders like a shawl, covering only part of the body rather than fully wrapping or fully concealing the figure. The flag falls in a relaxed, effortless way, allowing some of the original outfit from reference image 1 to remain naturally visible. The draping feels light, realistic, and unforced, with soft folds, natural fabric weight, and slightly imperfect placement that enhances the candid everyday photography feeling.
+      The person should have realistic anatomy, natural proportions, a realistic face, clear hands, clear feet, relaxed shoulders, arms resting naturally slightly away from the body, straight legs, and feet planted naturally on the path.
 
-      [Lighting & Color Tone]
-      Bright outdoor daylight with a clean, white, neutral-cool color temperature. The scene is illuminated by soft diffused natural light, creating a fresh and airy daytime atmosphere. The subject's face receives gentle frontal ambient light and soft sky fill, making the facial features look bright, clean, and naturally luminous. Skin tones appear fresh, balanced, and realistic, with a soft healthy glow.
+      Use simple modern casual clothing that makes the body shape and joints easy to read: a plain fitted top, straight-leg pants, and clean simple sneakers. No accessories, no props, no logos, no text, no patterns, and no other people.
 
-      Facial shadows are delicate, open, and low-contrast, retaining visible details around the eyes, cheeks, nose, and jawline. The darker areas of the face remain softly lifted with natural fill light, preserving a bright and friendly expression. Highlights roll off smoothly with a clean photographic softness, giving the image a gentle, comfortable daylight look.
-
-      The overall color tone is white-balanced, fresh, and slightly cool-neutral, with clean whites, clear skin tones, vivid but natural flag colors, and a vibrant green football field. The image has a crisp daylight atmosphere while keeping the colors soft, breathable, and realistic.
-
-      [Background Control]
-      View looking down from the stands toward the pitch. Shallow depth of field with a blurred crowd environment. A few scattered, distant, and secondary pedestrians are visible to build atmosphere. The background features clean, unbranded stadium textures and a natural public event atmosphere.
-
-      [Image Quality & Realism]
-      An authentic casual snapshot with a natural everyday photography aesthetic. Soft optical focus, gentle lens rendering, and organic photographic texture help the subject blend seamlessly into the stadium scene with smooth, natural edge transitions. Balanced exposure keeps highlights clean and shadows detailed, creating a bright and realistic handheld camera quality.
-
-      The final image should have a subtle CCD-inspired daily photography feeling: slightly soft optical detail, natural skin texture, gentle grain, clean daylight color, smooth tonal transitions, and a candid travel-photo realism. The image feels naturally captured in the moment, relaxed, approachable, and integrated into the real stadium environment.
-    use_comparison_template: false
-    use_random_source_selection: true
-    use_deterministic_random: true
-    random_seed: 42
-    min_images: 1
-    max_images: 1
-    num_iterations: 10
-    generations_per_source: 1
-    use_reference_images: true
-    reference_cross_match: true
+      The image should look like a clean source frame for image-to-video generation: stable neutral pose, clear full-body silhouette, realistic outdoor grounding, uncropped limbs, sharp focus, high detail, realistic hands, realistic feet, and balanced composition.
+    num_iterations: 15
     concurrent_requests: 10
+
+  - folder: Media Files/Nano Banana/0529 Full Body Reference - Female
+    text_to_image: true
+    model: gemini-3-pro-image-preview
+    resolution: "2K"
+    aspect_ratio: "1:1"
+    prompt: |
+      Create a photorealistic full-body outdoor reference image of one original, non-famous adult woman, generated from scratch.
+
+      The person is centered in a square 1:1 frame, standing upright in a relaxed neutral pose, facing the camera directly. Show the entire body clearly from the top of the head to the soles of the shoes, with both feet fully visible and a small amount of empty space above the head and below the feet. The subject should occupy about 75% of the image height.
+
+      The person is standing on a clean flat walking path in a simple natural outdoor setting. The background has soft greenery, open space, and gentle depth, but should remain minimal and not visually busy. The scenery should be softly blurred and realistic, with no crowds, no animals, no vehicles, no signs, no buildings close to the subject, no props, and no distracting objects. The ground should clearly support the person, with a natural contact shadow under the feet.
+
+      Lighting is soft, even, and natural, like mild daylight or lightly overcast weather. Avoid harsh sunlight, dramatic shadows, strong backlight, or sunset lighting. Camera angle is straight-on at chest height with a natural 50mm portrait lens look, no wide-angle distortion, no fisheye effect, and no tilted perspective.
+
+      The person should have realistic anatomy, natural proportions, a realistic face, clear hands, clear feet, relaxed shoulders, arms resting naturally slightly away from the body, straight legs, and feet planted naturally on the path.
+
+      Use simple modern casual clothing that makes the body shape and joints easy to read: a plain fitted top, straight-leg pants, and clean simple sneakers. No accessories, no props, no logos, no text, no patterns, and no other people.
+
+      The image should look like a clean source frame for image-to-video generation: stable neutral pose, clear full-body silhouette, realistic outdoor grounding, uncropped limbs, sharp focus, high detail, realistic hands, realistic feet, and balanced composition.
+    num_iterations: 15
+    concurrent_requests: 10
+
+  # Text-to-image example (prompt only, NO Source folder needed).
+  # Uncomment to use. num_iterations controls how many images are generated.
+  # - folder: Media Files/Nano Banana/0529 Text to Image
+  #   text_to_image: true
+  #   model: gemini-3.1-flash-image-preview
+  #   resolution: "1K"
+  #   aspect_ratio: "1:1"
+  #   prompt: |
+  #     A photorealistic golden retriever puppy sitting in a sunlit meadow,
+  #     soft morning light, shallow depth of field, 4K.
+  #   num_iterations: 5
+  #   concurrent_requests: 5
 
 
 # Comments and documentation
 comments:
+  text_to_image:
+    description: "Generate images purely from the prompt — no Source folder or input images required."
+    usage: |
+      Set text_to_image: true on a task to switch it into text-to-image mode.
+      - No 'Source' subfolder is needed; source-folder validation is skipped.
+      - num_iterations controls how many images are generated (defaults to 1).
+      - generations_per_source still works (total = num_iterations × generations_per_source).
+      - use_reference_images is optional; if true, Reference/ images are sent to guide generation.
+      - concurrent_requests, model, resolution, and aspect_ratio all apply as normal.
+      - Output naming: iter000_image_1.png, iter001_image_1.png, ...
+      - Reports render the prompt text beside each generated image.
+    default: "false (image-to-image mode — Source folder required)"
+    example: |
+      - folder: Media Files/Nano Banana/My Text2Image Task
+        text_to_image: true
+        model: gemini-3.1-flash-image-preview
+        resolution: "1K"
+        aspect_ratio: "1:1"
+        prompt: "A serene mountain lake at sunrise, photorealistic, 4K"
+        num_iterations: 10
+        concurrent_requests: 5
   folder_structure: "Each task folder should contain 'Source' and 'Generated_Output' subfolders. For multi-image tasks, also include 'Additional' subfolder."
   reference_folder: "Optional: Path to folder containing third set of images for 3-way comparison"
   template_usage: "use_comparison_template: true uses comparison_template_path (3 placeholders), false uses template_path (2 placeholders)"

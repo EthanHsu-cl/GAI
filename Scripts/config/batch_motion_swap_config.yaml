@@ -10,7 +10,7 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 root_design_link:
-source_video_link: ''
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgD_H7yHzxrgT41uDgglqpI8AZ8Nlp8Jq6ZxUoSYF3OaUc8?e=4Bww3T
 
 tasks:
 - folder: Media Files/Motion Swap/0529 9 Style
@@ -19,9 +19,31 @@ tasks:
   reference_folder: ''
   use_comparison_template: false
 
+# Compare the primary Motion Swap folder (tasks[0].folder) against these folders.
+# NOTE: Wan 2.2/0310 was run on different source video/images, so it will NOT match
+# (every cell shows "Missing / failed"). Remove it, or point it at a Wan run that
+# used the same sources as Motion Swap, to get a populated column.
+comparison_folders:
+  - folder: Media Files/Kling Motion/0305 9 Styles
+  - folder: Media Files/DreamActor/0209 9 Style
+
 
 comments:
   folder_structure: |
     Each task folder should have 'Source Image' and 'Source Video' subfolders.
     All subject images will be cross-matched with all motion reference videos
     (e.g., 3 images × 4 videos = 12 total generations).
+  comparison: |
+    Cross-API comparison mode (optional). When 'comparison_folders' is added at the
+    top level, running `report` produces one side-by-side report instead of the
+    normal one: the primary task folder (tasks[0].folder) plus each listed folder
+    become labeled columns, sharing the same Source Image + Source Video. All folders
+    must belong to the SAME family (image+video here) — mixing in an image-to-video
+    or text-to-video folder stops the run with an error. Each column is auto-labeled
+    from its metadata 'api_name'; override per folder with 'label'. Example:
+      comparison:
+        primary_label: ''
+      comparison_folders:
+        - folder: Media Files/DreamActor/0529 9 Style
+          label: ''
+        - folder: Media Files/Wan 2.2/0529 9 Style

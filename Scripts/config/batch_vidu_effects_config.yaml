@@ -11,34 +11,37 @@ schedule:
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 model_version: viduq2-pro
 
-base_folder: Media Files/Vidu/0525 7 Effects
+base_folder: Media Files/Vidu/0529 8 Effects
 output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 
 design_link: https://docs.google.com/spreadsheets/d/1uhsTRRRXbU-PW99G8_GxqEKiVyLy6fAwImZ1zSjsVy8/edit?gid=1441759153#gid=1441759153
 provider_reference_link: https://platform.vidu.com/docs/templates
-source_video_link: 
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgC44n8D3kKFR4CgDMQY5NejAQVVyp2VODk98t0bfwmdvsY?e=ecxbmz
 
 tasks:
 - category: People
-  custom_effect_name: drive_yacht
+  custom_effect_name: Sugar_on_my_tongue
 
 - category: People
-  custom_effect_name: shake_to_max
+  custom_effect_name: Birdie_Shake_Dance
 
 - category: People
-  custom_effect_name: bjd_style
+  custom_effect_name: Neymar_Victory_Dance
 
 - category: People
-  custom_effect_name: beast_chase_library
+  custom_effect_name: Gabu_Gabu
 
 - category: People
-  custom_effect_name: jump2pool
+  custom_effect_name: Passo_Arm_Dance
 
 - category: People
-  custom_effect_name: balloonman_explodes
+  custom_effect_name: Viral_Mouse_Dance
 
 - category: People
-  custom_effect_name: hair_color_change
+  custom_effect_name: Shake_Disco
+
+- category: People
+  custom_effect_name: Shake_It_to_the_Max
 
   
 comments:

@@ -14,41 +14,87 @@ schedule:
   start_time: ""
   comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
 
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDoTeDj99W_RI1r4UqmQjpqAaapi_01uNRocE-whe6ZgEA?e=Tgbd99
-root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e36c7d2e7a_9_0#slide=id.g3e36c7d2e7a_9_0
+root_source_video_link: 
+root_design_link: 
 
 tasks:
-  - folder: Media Files/OpenAI Image/0528 看球賽
+  - folder: Media Files/OpenAI Image/0529 Full Body Reference - Male
+    text_to_image: true
     model: gpt-image-2
-    quality: auto
-    resolution: "1K"
-    aspect_ratio: "16:9"
+    quality: high
+    resolution: "2K"
+    aspect_ratio: "1:1"
     prompt: |
-      Photorealistic candid broadcast-style photo, the woman in this image 
-      [FACE REFERENCE] sitting as a fan at a live football soccer match, 
-      EXACT same face — identical facial structure, eye shape, nose, lips, 
-      skin tone, hair color, bangs style — reproduced with 100% fidelity, 
-      no alterations to facial features whatsoever.
+      Create a photorealistic full-body studio reference image of one original, non-famous adult man, generated from scratch.
 
-      Wearing an Argentina national football jersey — light sky blue and white vertical stripes, three-stripe details on the shoulders and sleeves, classic crew neck collar, short sleeves, no badge, no crest, no logo on chest — clean striped fabric only, lightweight polyester with subtle sheen, authentic kit colors and stripe pattern. Light natural dewy makeup — soft foundation, subtle eyeliner, gentle blush, natural lip tint.  Expression: calm, focused, slightly tense, lips softly parted, eyes gazing forward and slightly upward toward the field.
-      BACKGROUND: sparse stadium crowd in the background wearing matching Argentina jerseys, same light sky blue and white stripes clearly visible on each person, crowd naturally spaced with only a few individuals visible, background rendered sharp and flat with no bokeh and no depth of field, all background elements in full focus at consistent sharpness throughout the entire frame, no blur, no distortion, no warping, background perspective straight and undistorted, same focal distance maintained across the entire image. Bright warm stadium floodlighting, luminous white-amber, constant stable light, no shadows, airy and clean.
-      Broadcast HUD top-left: football scoreboard with two national flags, country codes, score 0:0, match time, FIFA broadcast graphic style.
-      Photorealistic, 4K, broadcast TV quality, beauty editorial aesthetic, flat focus across entire frame, f/11 equivalent aperture, rectilinear lens, zero lens distortion, uniform sharpness from foreground to background.
-    reference_folder: ""
-    use_comparison_template: false
-    use_random_source_selection: false
-    use_deterministic_random: true
-    random_seed: 42
-    min_images: 1
-    max_images: 4
-    num_iterations: 0
-    generations_per_source: 1
-    use_reference_images: false
-    concurrent_requests: 5
+      The person is centered in a square 1:1 frame, standing upright in a relaxed neutral pose, facing the camera directly. Show the entire body clearly from the top of the head to the soles of the shoes, with both feet fully visible and a small amount of empty space above the head and below the feet. The subject should occupy about 75% of the image height.
+
+      Use a clean minimal studio background with a plain light warm-gray seamless backdrop and a subtle floor contact shadow. Lighting should be soft, even, and natural, with no harsh shadows. Camera angle is straight-on at chest height, with a natural 50mm portrait lens look, no wide-angle distortion, and no tilted perspective.
+
+      The person should have realistic anatomy, natural proportions, a clear silhouette, relaxed shoulders, arms resting naturally slightly away from the body, visible hands, straight legs, and feet planted naturally. Use simple modern casual clothing that makes the body shape and joints easy to read: a plain fitted top, straight-leg pants, and clean simple sneakers. No accessories, no props, no logos, no text, no patterns, and no other people.
+
+      The image should look like a clean character reference frame prepared for image-to-video generation: stable pose, clear body outline, uncropped limbs, sharp focus, high detail, realistic face, realistic hands, realistic feet, and balanced composition.
+    num_iterations: 5
+    concurrent_requests: 3
+
+  - folder: Media Files/OpenAI Image/0529 Full Body Reference - Female
+    text_to_image: true
+    model: gpt-image-2
+    quality: high
+    resolution: "2K"
+    aspect_ratio: "1:1"
+    prompt: |
+      Create a photorealistic full-body studio reference image of one original, non-famous adult woman, generated from scratch.
+
+      The person is centered in a square 1:1 frame, standing upright in a relaxed neutral pose, facing the camera directly. Show the entire body clearly from the top of the head to the soles of the shoes, with both feet fully visible and a small amount of empty space above the head and below the feet. The subject should occupy about 75% of the image height.
+
+      Use a clean minimal studio background with a plain light warm-gray seamless backdrop and a subtle floor contact shadow. Lighting should be soft, even, and natural, with no harsh shadows. Camera angle is straight-on at chest height, with a natural 50mm portrait lens look, no wide-angle distortion, and no tilted perspective.
+
+      The person should have realistic anatomy, natural proportions, a clear silhouette, relaxed shoulders, arms resting naturally slightly away from the body, visible hands, straight legs, and feet planted naturally. Use simple modern casual clothing that makes the body shape and joints easy to read: a plain fitted top, straight-leg pants, and clean simple sneakers. No accessories, no props, no logos, no text, no patterns, and no other people.
+
+      The image should look like a clean character reference frame prepared for image-to-video generation: stable pose, clear body outline, uncropped limbs, sharp focus, high detail, realistic face, realistic hands, realistic feet, and balanced composition.
+    num_iterations: 5
+    concurrent_requests: 3
+
+  # Text-to-image example (prompt only, NO Source folder needed).
+  # Uncomment to use. num_iterations controls how many images are generated.
+  # - folder: Media Files/OpenAI Image/0529 Text to Image
+  #   text_to_image: true
+  #   model: gpt-image-2
+  #   quality: auto
+  #   resolution: "1K"
+  #   aspect_ratio: "1:1"
+  #   prompt: |
+  #     A photorealistic golden retriever puppy sitting in a sunlit meadow,
+  #     soft morning light, shallow depth of field, 4K.
+  #   num_iterations: 5
+  #   concurrent_requests: 5
 
 
 # Configuration Reference
 comments:
+  text_to_image:
+    description: "Generate images purely from the prompt — no Source folder or input images required."
+    usage: |
+      Set text_to_image: true on a task to switch it into text-to-image mode.
+      - No 'Source' subfolder is needed; source-folder validation is skipped.
+      - num_iterations controls how many images are generated (defaults to 1).
+      - generations_per_source still works (total = num_iterations × generations_per_source).
+      - use_reference_images is optional; if true, Reference/ images are sent to guide generation.
+      - concurrent_requests, model, quality, resolution, and aspect_ratio all apply as normal.
+      - Output naming: iter000_image_1.png, iter001_image_1.png, ...
+      - Reports render the prompt text beside each generated image.
+    default: "false (image-to-image mode — Source folder required)"
+    example: |
+      - folder: Media Files/OpenAI Image/My Text2Image Task
+        text_to_image: true
+        model: gpt-image-2
+        quality: auto
+        resolution: "1K"
+        aspect_ratio: "1:1"
+        prompt: "A serene mountain lake at sunrise, photorealistic, 4K"
+        num_iterations: 10
+        concurrent_requests: 5
   model: |
     OpenAI image generation model.
     Options: 'gpt-image-1', 'gpt-image-2'

@@ -1,4 +1,4 @@
-import json, yaml, logging, sys, re, tempfile, os
+import json, yaml, logging, sys, re, tempfile, os, math
 from datetime import datetime
 from pathlib import Path
 from dataclasses import dataclass, field
@@ -121,6 +121,70 @@ class UnifiedReportGenerator:
         'media_labels': ['Source Image', 'Source Video', None],
     }
     
+    # ================== CROSS-API COMPARISON ==================
+    # APIs are grouped into structural "families". Comparison reports may only mix
+    # folders within the same family; cross-family folders are rejected with an error.
+    COMPARISON_FAMILIES = {
+        'image_video': ['wan', 'dreamactor', 'motion_swap', 'kling_motion'],
+        'image_to_video': ['veo_itv', 'seedance_i2v', 'kling', 'vidu_i2v'],
+        'text_to_video': ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv'],
+        'image_to_image': ['nano_banana', 'openai_image', 'genvideo'],
+        'effects': ['kling_effects', 'pixverse', 'vidu_effects'],
+    }
+
+    # Per-family structure: which folders hold sources/outputs, how to match an
+    # entry across folders (metadata fields), and which source media to display.
+    # 'supported' gates rendering — unsupported families are still detected (so
+    # cross-family mixes are correctly rejected) but raise a clear error if chosen.
+    FAMILY_SPECS = {
+        'image_video': {
+            'supported': True,
+            'generated_folder': 'Generated_Video',
+            'generated_field': 'generated_video',
+            'match_fields': ['source_image', 'source_video'],
+            'source_media': [
+                {'field': 'source_image', 'folder': 'Source Image', 'type': 'image', 'label': 'Source Image'},
+                {'field': 'source_video', 'folder': 'Source Video', 'type': 'video', 'label': 'Source Video'},
+            ],
+        },
+        'image_to_video': {
+            'supported': True,
+            'generated_folder': 'Generated_Video',
+            'generated_field': 'generated_video',
+            'match_fields': ['source_image'],
+            'source_media': [
+                {'field': 'source_image', 'folder': 'Source', 'type': 'image', 'label': 'Source Image'},
+            ],
+        },
+        'text_to_video': {
+            'supported': False,
+            'generated_folder': '',
+            'generated_field': 'generated_video',
+            'match_fields': ['style_name'],
+            'source_media': [
+                {'field': 'prompt', 'folder': None, 'type': 'prompt', 'label': 'Prompt'},
+            ],
+        },
+        'image_to_image': {
+            'supported': False,
+            'generated_folder': 'Generated_Output',
+            'generated_field': 'generated_image',
+            'match_fields': ['source_image'],
+            'source_media': [
+                {'field': 'source_image', 'folder': 'Source', 'type': 'image', 'label': 'Source Image'},
+            ],
+        },
+        'effects': {
+            'supported': False,
+            'generated_folder': 'Generated_Video',
+            'generated_field': 'generated_video',
+            'match_fields': ['source', 'effect_name'],
+            'source_media': [
+                {'field': 'source', 'folder': 'Source', 'type': 'image', 'label': 'Source'},
+            ],
+        },
+    }
+
     # File extension constants
     IMAGE_EXTS = {'.jpg', '.jpeg', '.png', '.webp'}
     VIDEO_EXTS = {'.mp4', '.mov', '.avi'}
@@ -444,7 +508,13 @@ class UnifiedReportGenerator:
         """Create a single slide for any API using configuration"""
         # Adjust media types for nano_banana / openai_image based on multi-image mode
         if self.api_name in ('nano_banana', 'openai_image'):
-            if use_comparison:
+            if pair.metadata.get('text_to_image'):
+                # No source — show the prompt text box beside the generated image.
+                slide_config = slide_config.copy()
+                slide_config['media_types'] = ['prompt', 'generated']
+                slide_config['positions'] = [(0.42, 2.15, 16, 16), (17.44, 2.15, 16, 16)]
+                slide_config['override_positions'] = False
+            elif use_comparison:
                 # 3-media comparison layout (source, generated, reference)
                 slide_config = slide_config.copy()
                 slide_config['media_types'] = ['source', 'generated', 'reference']
@@ -1412,7 +1482,11 @@ class UnifiedReportGenerator:
                 'metadata': folder / 'Metadata'
             }
             file_pattern = 'generated'
-        
+
+        # Text-to-image: no Source folder — build generated-only pairs from metadata.
+        if self.api_name in ('nano_banana', 'openai_image') and task.get('text_to_image', False):
+            return self._create_text_to_image_pairs(folder, folders, task)
+
         if not folders['source'].exists():
             return pairs
         
@@ -1739,6 +1813,59 @@ class UnifiedReportGenerator:
         
         return pairs
     
+    def _create_text_to_image_pairs(self, folder: Path, folders: Dict,
+                                    task: Dict) -> List[MediaPair]:
+        """Create generated-only pairs for nano_banana / openai_image text-to-image.
+
+        There is no source image, so each pair shows the prompt (rendered as a
+        text box via the 'prompt' media type) next to the generated image(s).
+        Pairs are built by iterating metadata files (one per iteration), matching
+        the same '<base>_image_N' naming used by the iteration parser.
+        """
+        pairs = []
+
+        gen_imgs = {}
+        if folders['generated'].exists():
+            gen_imgs, _, _ = self._scan_directory_once(folders['generated'])
+
+        # Map iteration base_name -> generated files (e.g. "iter000" -> [iter000_image_1.png])
+        gen_by_iteration = {}
+        for key, f in gen_imgs.items():
+            if 'image' in f.name:
+                basename = f.name.split('image')[0].rstrip('_')
+                gen_by_iteration.setdefault(self.normalize_key(basename), []).append(f)
+
+        _, _, metadata_files = self._scan_directory_once(folders['metadata'])
+        metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
+
+        effect_name = self.config.get('effect') or self.config.get('effect_name')
+        if not effect_name:
+            m = re.match(r'^(\d{4})\s*(.+)', folder.name)
+            effect_name = m.group(2) if m else folder.name
+
+        for md_key, md in sorted(metadata_cache.items()):
+            if not md.get('text_to_image'):
+                continue
+
+            iteration_base = md.get('_base_name', '') or md_key
+            gen_paths = gen_by_iteration.get(self.normalize_key(iteration_base), [])
+
+            pair = MediaPair(
+                source_file="",
+                source_path=None,
+                api_type=self.api_name,
+                generated_paths=gen_paths,
+                reference_paths=[],
+                additional_source_paths=[],
+                metadata=md,
+                failed=not gen_paths or not md.get('success', False),
+                ref_failed=False,
+                effect_name=effect_name,
+            )
+            pairs.append(pair)
+
+        return pairs
+
     def create_runway_media_pairs(self, folder: Path, ref_folder: Optional[Path],
                                  task: Dict, use_comparison: bool) -> List[MediaPair]:
         """Create Runway media pairs"""
@@ -3476,9 +3603,354 @@ class UnifiedReportGenerator:
     
     # ================== MAIN EXECUTION ==================
     
+    # ================== CROSS-API COMPARISON ==================
+
+    def _api_to_family(self, api_name: str) -> Optional[str]:
+        """Return the comparison family for an api_name, or None if uncategorized."""
+        for family, apis in self.COMPARISON_FAMILIES.items():
+            if api_name in apis:
+                return family
+        return None
+
+    def _detect_folder_api_family(self, folder: Path) -> tuple:
+        """Detect (api_name, family) for a folder by reading its metadata.
+
+        Reads any JSON in the folder's Metadata/ subfolder and uses the recorded
+        'api_name'. Raises ValueError if no usable metadata is found or the API is
+        not part of any comparison family.
+        """
+        meta_folder = folder / 'Metadata'
+        _, _, metadata_files = self._scan_directory_once(meta_folder)
+        if not metadata_files:
+            raise ValueError(f"No metadata found in {meta_folder} — cannot determine its API")
+
+        metadata_cache = self._load_json_batch(metadata_files)
+        api_name = next((md.get('api_name') for md in metadata_cache.values() if md.get('api_name')), None)
+        if not api_name:
+            raise ValueError(f"No 'api_name' recorded in metadata under {meta_folder}")
+
+        family = self._api_to_family(api_name)
+        if not family:
+            raise ValueError(f"API '{api_name}' (in {folder}) is not part of any comparison family")
+        return api_name, family
+
+    def _comparison_index_folder(self, folder: Path, family: str) -> dict:
+        """Index a folder's outputs by match key for a given family.
+
+        Returns {match_key_tuple: {'generated': Path|None, 'metadata': dict}}.
+        The match key is the tuple of the family's match_fields read from metadata.
+        The generated file is located via the metadata 'generated_field', falling
+        back to a stem match within the generated folder.
+        """
+        spec = self.FAMILY_SPECS[family]
+        meta_folder = folder / 'Metadata'
+        gen_folder = folder / spec['generated_folder'] if spec['generated_folder'] else folder
+
+        _, _, metadata_files = self._scan_directory_once(meta_folder)
+        metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
+        _, gen_videos, _ = self._scan_directory_once(gen_folder)
+        gen_images, _, _ = self._scan_directory_once(gen_folder)
+
+        indexed = {}
+        for md in metadata_cache.values():
+            if not md:
+                continue
+            # Skip records that did not produce output
+            key = tuple(md.get(f, '') for f in spec['match_fields'])
+            if not all(key):
+                continue
+
+            gen_name = md.get(spec['generated_field'], '')
+            gen_path = None
+            if gen_name:
+                gen_path = next((p for p in list(gen_videos.values()) + list(gen_images.values())
+                                 if p.name == gen_name), None)
+            if gen_path is None and md.get('success'):
+                # Fall back to matching by source-image stem within the generated folder
+                stem = Path(md.get(spec['match_fields'][0], '')).stem
+                gen_path = next((p for p in list(gen_videos.values()) + list(gen_images.values())
+                                 if stem and stem in p.stem), None)
+            indexed[key] = {'generated': gen_path, 'metadata': md}
+        return indexed
+
+    def build_comparison(self, folders_with_labels: list) -> tuple:
+        """Build comparison items across folders sharing the same family.
+
+        Args:
+            folders_with_labels: ordered list of (folder_path_str, label_override)
+                tuples; the first is the primary folder.
+
+        Returns:
+            (items, family, labels) where items is a list of dicts:
+                {'key', 'sources': [(label, path, type)], 'columns': [(label, path, metadata)]}
+            labels is the ordered list of resolved column labels.
+
+        Raises:
+            ValueError: if folders span more than one family, or the family is not
+                yet supported for rendering.
+        """
+        detected = []  # (folder_path, label_override, api_name, family)
+        for folder_str, label_override in folders_with_labels:
+            folder = Path(folder_str)
+            api_name, family = self._detect_folder_api_family(folder)
+            detected.append((folder, label_override, api_name, family))
+
+        families = {d[3] for d in detected}
+        if len(families) > 1:
+            detail = '\n'.join(f"  - {d[0]}  →  {d[2]} ({d[3]})" for d in detected)
+            raise ValueError(
+                "Cannot compare folders from different families — they must all be the "
+                f"same kind of API. Detected:\n{detail}"
+            )
+
+        family = detected[0][3]
+        spec = self.FAMILY_SPECS[family]
+        if not spec.get('supported'):
+            raise ValueError(
+                f"Comparison for family '{family}' is not yet supported for rendering "
+                "(currently supported: image_video, image_to_video)"
+            )
+
+        # Resolve column labels: explicit override, else API display name.
+        labels = [label_override or self._api_display_names.get(api_name, api_name.title())
+                  for (_, label_override, api_name, _) in detected]
+
+        # Index every folder by match key.
+        indexes = [self._comparison_index_folder(folder, family)
+                   for (folder, _, _, _) in detected]
+
+        primary_folder = detected[0][0]
+        primary_index = indexes[0]
+
+        items = []
+        for key, primary_entry in primary_index.items():
+            md = primary_entry['metadata']
+
+            # Resolve shared source media from the PRIMARY folder.
+            sources = []
+            for sm in spec['source_media']:
+                if sm['type'] == 'prompt':
+                    sources.append((sm['label'], None, 'prompt'))
+                    continue
+                fname = md.get(sm['field'], '')
+                spath = primary_folder / sm['folder'] / fname if fname else None
+                if spath and not spath.exists():
+                    spath = None
+                sources.append((sm['label'], spath, sm['type']))
+
+            # Collect one column per folder (None where missing).
+            columns = []
+            for label, idx in zip(labels, indexes):
+                entry = idx.get(key)
+                columns.append((label, entry['generated'] if entry else None,
+                                entry['metadata'] if entry else {}))
+
+            items.append({'key': key, 'sources': sources, 'columns': columns, 'metadata': md})
+
+        logger.info(f"Built {len(items)} comparison items across {len(detected)} folders "
+                    f"(family: {family})")
+        return items, family, labels
+
+    def _comparison_layout(self, n_sources: int, n_cols: int) -> dict:
+        """Compute positions (cm) for the source column and the generated grid.
+
+        Canvas is 33.87 x 19.05 cm. Sources stack on the left; generated outputs
+        fill a grid on the right (1 row for <=3 columns, else 2 rows). Each
+        generated cell reserves a comment/ranking box at the bottom.
+        """
+        margin = 0.5
+        top = 2.3
+        avail_h = 19.05 - top - margin
+        src_w = 9.5 if n_sources else 0.0
+        comment_h = 1.8  # reserved at the bottom of each generated cell
+        comment_gap = 0.25
+
+        # Source column: stacked vertically on the left.
+        src_positions = []
+        if n_sources:
+            cell_h = (avail_h - (n_sources - 1) * 0.6) / n_sources
+            for i in range(n_sources):
+                src_positions.append((margin, top + i * (cell_h + 0.6), src_w, cell_h))
+
+        # Generated grid on the right.
+        grid_left = margin + src_w + (0.8 if n_sources else 0.0)
+        grid_w = 33.87 - grid_left - margin
+        rows = 1 if n_cols <= 3 else 2
+        cols_per_row = math.ceil(n_cols / rows)
+        cell_w = (grid_w - (cols_per_row - 1) * 0.5) / cols_per_row
+        cell_h = (avail_h - (rows - 1) * 0.9) / rows
+        media_h = cell_h - comment_h - comment_gap
+
+        gen_positions = []
+        comment_positions = []
+        for i in range(n_cols):
+            r, c = divmod(i, cols_per_row)
+            x = grid_left + c * (cell_w + 0.5)
+            y = top + r * (cell_h + 0.9)
+            gen_positions.append((x, y, cell_w, media_h))
+            comment_positions.append((x, y + media_h + comment_gap, cell_w, comment_h))
+
+        return {'sources': src_positions, 'generated': gen_positions,
+                'comments': comment_positions}
+
+    def _add_comment_box(self, slide, pos):
+        """Add an empty, bordered text box under a generated video for reviewer
+        comments / ranking."""
+        box = slide.shapes.add_textbox(Cm(pos[0]), Cm(pos[1]), Cm(pos[2]), Cm(pos[3]))
+        box.fill.solid()
+        box.fill.fore_color.rgb = RGBColor(255, 255, 255)
+        box.line.color.rgb = RGBColor(180, 180, 180)
+        box.line.width = Pt(0.75)
+        tf = box.text_frame
+        tf.word_wrap = True
+        run = tf.paragraphs[0].add_run()
+        run.text = "Rank / comments:"
+        run.font.size = Pt(9)
+        run.font.italic = True
+        run.font.color.rgb = RGBColor(160, 160, 160)
+        return box
+
+    def _add_comparison_label(self, slide, pos, text):
+        """Add a small bold grey label above a media cell (same style as report labels)."""
+        label_y = max(pos[1] - 0.5, 0)
+        box = slide.shapes.add_textbox(Cm(pos[0]), Cm(label_y), Cm(pos[2]), Cm(0.5))
+        box.text_frame.text = text
+        para = box.text_frame.paragraphs[0]
+        para.font.size = Pt(10)
+        para.font.bold = True
+        para.font.color.rgb = RGBColor(90, 90, 90)
+        para.alignment = PP_ALIGN.CENTER
+
+    def _render_comparison_slide(self, slide, item, slide_config):
+        """Render one comparison slide: shared sources left, labeled outputs right."""
+        # Comparison slides draw everything at manual positions, so strip the
+        # template's inherited placeholders (otherwise empty "Click to add text"
+        # boxes remain on the slide).
+        for ph in list(slide.placeholders):
+            try:
+                ph._element.getparent().remove(ph._element)
+            except Exception:
+                pass
+
+        layout = self._comparison_layout(len(item['sources']), len(item['columns']))
+
+        # Source media (left column)
+        for (label, path, mtype), pos in zip(item['sources'], layout['sources']):
+            self._add_comparison_label(slide, pos, label)
+            if mtype == 'prompt':
+                self.add_media_universal(slide, pos, None, False, slide_config,
+                                         pair=None, media_type='prompt')
+            else:
+                is_video = (mtype == 'video')
+                self.add_media_universal(slide, pos, path, is_video, slide_config)
+
+        # Generated media (right grid), one labeled column per folder, each with a
+        # reviewer comment/ranking box beneath it.
+        for (label, path, md), pos, cpos in zip(item['columns'], layout['generated'],
+                                                layout['comments']):
+            self._add_comparison_label(slide, pos, label)
+            if path and Path(path).exists():
+                is_video = Path(path).suffix.lower() in self.VIDEO_EXTS
+                self.add_media_universal(slide, pos, path, is_video, slide_config)
+            else:
+                self.add_error_box(slide, Cm(pos[0]), Cm(pos[1]), Cm(pos[2]), Cm(pos[3]),
+                                   "Missing / failed", None)
+            self._add_comment_box(slide, cpos)
+
+    def run_comparison(self) -> bool:
+        """Generate a cross-API comparison report from config 'comparison_folders'."""
+        logger.info("🆚 Cross-API comparison mode")
+        try:
+            tasks = self.config.get('tasks', [])
+            if not tasks or not tasks[0].get('folder'):
+                logger.error("Comparison requires a primary task folder in tasks[0].folder")
+                return False
+
+            comparison_cfg = self.config.get('comparison', {}) or {}
+            primary_label = comparison_cfg.get('primary_label', '')
+            folders_with_labels = [(tasks[0]['folder'], primary_label)]
+            for entry in self.config.get('comparison_folders', []):
+                if isinstance(entry, dict):
+                    folders_with_labels.append((entry.get('folder', ''), entry.get('label', '')))
+                else:
+                    folders_with_labels.append((str(entry), ''))
+
+            if any(not f for f, _ in folders_with_labels):
+                logger.error("Every comparison entry must specify a 'folder'")
+                return False
+
+            items, family, labels = self.build_comparison(folders_with_labels)
+            if not items:
+                logger.warning("No matching source image/video pairs found across the folders")
+                return False
+
+            # Pre-extract frames for all videos for faster rendering.
+            all_videos = []
+            for it in items:
+                all_videos += [p for (_, p, t) in it['sources'] if p and t == 'video']
+                all_videos += [p for (_, p, _) in it['columns']
+                               if p and Path(p).suffix.lower() in self.VIDEO_EXTS]
+            if all_videos:
+                self._extract_frames_parallel(all_videos)
+
+            ppt, template_loaded, _ = self._load_presentation_template({})
+            slide_config = self.get_slide_config()
+
+            # Title slide
+            primary_folder_name = Path(tasks[0]['folder']).name
+            date = self._extract_date_from_folder(primary_folder_name)
+            vs_line = ' vs '.join(labels)
+            if ppt.slides and ppt.slides[0].shapes:
+                tf = ppt.slides[0].shapes[0].text_frame
+                tf.clear()
+                p1 = tf.paragraphs[0]
+                p1.text = f"[{date}] Comparison"
+                p1.alignment = PP_ALIGN.CENTER
+                p2 = tf.add_paragraph()
+                p2.alignment = PP_ALIGN.CENTER
+                run = p2.add_run()
+                run.text = vs_line
+                run.font.size = Pt(32)
+            self.add_links(ppt, tasks[0])
+
+            # Content slides
+            for item in items:
+                if template_loaded and len(ppt.slides) >= 4:
+                    slide = ppt.slides.add_slide(ppt.slides[3].slide_layout)
+                else:
+                    slide = ppt.slides.add_slide(ppt.slide_layouts[6])
+                self._render_comparison_slide(slide, item, slide_config)
+
+            # Save
+            self._remove_template_slides(ppt)
+            output_section = self.config.get('output', {})
+            output_dir = Path(
+                output_section.get('output_directory',
+                    output_section.get('directory',
+                        self.config.get('output_directory',
+                            self.report_definitions.get('output_directory', './')))))
+            output_dir.mkdir(parents=True, exist_ok=True)
+            safe_vs = vs_line.replace('/', '-')
+            output_path = output_dir / f"[{date}] Comparison {safe_vs}.pptx"
+            ppt.save(str(output_path))
+            logger.info(f"✅ Saved comparison report: {output_path}")
+            return True
+        except ValueError as e:
+            logger.error(f"✗ Comparison stopped: {e}")
+            return False
+        except Exception as e:
+            logger.error(f"✗ Comparison report failed: {e}")
+            return False
+
     def run(self) -> bool:
         """Main execution using unified system"""
         logger.info(f"🎬 Starting {self.api_name.title()} Report Generator")
+
+        # Cross-API comparison mode: activated when the config lists other folders
+        # to compare the primary task folder against.
+        if self.config.get('comparison_folders'):
+            return self.run_comparison()
+
         try:
             # Check for task grouping configuration (check both locations for backward compatibility)
             group_tasks_by = self.config.get('output', {}).get('group_tasks_by', 0) or self.config.get('group_tasks_by', 0)

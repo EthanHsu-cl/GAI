@@ -929,6 +929,28 @@ PowerPoint reports are generated automatically with title slides, side-by-side c
 
 Run `python core/runall.py <platform> report` to regenerate the report from existing media (no re-processing).
 
+### Cross-API Comparison Reports
+
+Compare the same source against multiple APIs in a single report. Add a `comparison_folders` list to any config (e.g. `batch_motion_swap_config.yaml`). The primary task folder (`tasks[0].folder`) plus each listed folder become **labeled columns** sharing the same source media, so you can see each API's result side-by-side.
+
+```yaml
+comparison:
+  primary_label: ''          # optional label for the primary folder's column
+comparison_folders:
+  - folder: Media Files/DreamActor/0529 9 Style
+    label: ''                # optional; defaults to the folder's api_name
+  - folder: Media Files/Wan 2.2/0529 9 Style
+```
+
+Then run `python core/runall.py motion_swap report` — the presence of `comparison_folders` switches the run into comparison mode and writes `Report/[MMDD] Comparison A vs B vs C.pptx`.
+
+Rules:
+
+- **Same family only.** Folders must be the same structural kind — image+video (`motion_swap`, `dreamactor`, `wan`, `kling_motion`) compare together; image-to-video (`kling`, `vidu_i2v`, `veo_itv`, `seedance_i2v`) compare together. Mixing families (e.g. image+video with text-to-video) **stops the run with an error**.
+- **Auto-labeled.** Each column's label is read from that folder's metadata `api_name`; override per folder with `label`.
+- **Matching.** Entries are matched across folders by their shared source — image+video matches on `(source_image, source_video)`; image-to-video matches on `source_image`. A folder missing a given combination shows a "Missing / failed" box for that cell.
+- Currently supported families for rendering: **image+video** and **image-to-video**.
+
 ## 🖥️ Desktop GUI
 
 A graphical desktop app provides the same functionality without using the command line.

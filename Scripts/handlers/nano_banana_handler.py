@@ -41,8 +41,21 @@ class NanoBananaHandler(BaseImageGenerationHandler):
         model = task_config.get('model', self.DEFAULT_MODEL)
         resolution = str(task_config.get('resolution') or '1K')
         use_random_source = task_config.get('use_random_source_selection', False)
+        text_to_image = task_config.get('text_to_image', False)
 
-        if use_random_source:
+        if text_to_image:
+            # No source image — generate from the prompt alone. Reference images
+            # (if any) are still sent so they can guide the generation.
+            ref_image_paths = task_config.get('_reference_images', [])
+            images_list = [handle_file(str(ref)) for ref in ref_image_paths]
+            task_config['_call_all_images'] = list(ref_image_paths)
+            task_config['_call_additional_images'] = []
+            if ref_image_paths:
+                self.logger.info(f" ✍️ Text-to-image with {len(ref_image_paths)} reference image(s)")
+            else:
+                self.logger.info(" ✍️ Text-to-image (prompt only, no images)")
+            aspect_ratio = str(self._get_aspect_ratio(file_path, task_config))
+        elif use_random_source:
             iteration_index = task_config.get('_iteration_index')
             if iteration_index is None:
                 source_images = self._get_source_images_for_task(task_config)

@@ -22,118 +22,119 @@ testbed: http://192.168.31.161/external-testbed/image_generation/
 schedule:
   start_time: ''
 
-root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e3ddbb87a4_0_75#slide=id.g3e3ddbb87a4_0_75
-root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCTuBdoX7TrSZNaJbyRxUJ8AWESFjQ5p3SxKyOCo4eM8Jw?e=UDnQ6X
+root_design_link: https://docs.google.com/presentation/d/1-e6NLHCk6MQ7gbBdVuJyRU0IQSA6o6HBFdpvqXLUXjQ/edit?slide=id.g3e51d2ab592_2_152#slide=id.g3e51d2ab592_2_152
+root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgC-EqD-DTXzRbOXJGbrhaZ1AXCATjxMbFEfR17nf_g79Bo?e=Y6f1gp
 
 tasks:
-  - style_name: 滑草V10
-    folder: Media Files/I2I2V/0522 滑草V10
+  - style_name: 高舉獎杯慶祝 (美國版)
+    folder: Media Files/I2I2V/0529 4 Styles/0529 高舉獎杯慶祝 (美國版)
     # ---- Image generation step ----
-    image_service: nano_banana
+    image_service: openai_image
     # nano_banana | openai_image
-    image_model: gemini-3.1-flash-image-preview
+    image_model: gpt-image-2
     # nano: gemini-3.1-flash-image-preview | gemini-3-pro-image-preview | gemini-2.5-flash-image
     # openai: gpt-image-1 | gpt-image-1.5 | gpt-image-2
     image_quality: auto
     # openai_image only: auto | low | medium | high
     image_resolution: '1K'
-    image_aspect_ratio: '9:16'
+    image_aspect_ratio: '16:9'
     image_prompt: |
-      === OUTPUT FORMAT (ABSOLUTE REQUIREMENT — READ FIRST) ===
-      The final image MUST be a STRICTLY VERTICAL 9:16 PORTRAIT format.
-      - Image height MUST be greater than image width
-      - Aspect ratio MUST be exactly 9:16 (vertical portrait, like a mobile phone screen held upright, like Instagram Reels or TikTok)
-      - DO NOT output horizontal / landscape format (16:9)
-      - DO NOT output square format (1:1)
-      - DO NOT output 4:3 or 3:4 or any other ratio
-      - The canvas itself must be a tall vertical rectangle
-      - If you generate horizontally by default, ROTATE or RECOMPOSE to vertical before finalizing
-      This is non-negotiable. The output format is 9:16 vertical portrait, period.
-
-      === IMAGE CONTENT ===
-
-      Using the uploaded photo as the EXACT identity reference, create a photorealistic cinematic sports photograph.
-
-      IDENTITY LOCK (highest priority): Generate the same person from the uploaded photo with 100% identical FACE (same face shape, jawline, eyes, nose, lips, skin tone, skin texture) and 100% identical HAIRSTYLE (same length, color, texture, parting, fringe, sideburns, and overall shape — do not restyle, do not shorten, do not slick back). The face and hair must look exactly like the uploaded reference, just placed in this new scene.
-
-      FRAMING (designed for vertical 9:16 canvas): Tight medium close-up — show subject from mid-thigh/waist up to slightly above the head. Subject fills 70–80% of the TALL vertical frame, positioned slightly off-center, body tilted diagonally for dynamic composition. The composition is built for a portrait-oriented canvas — the subject's vertical body axis aligns with the tall vertical axis of the frame. Camera positioned slightly above head height, shooting downward at a moderate 15–30 degree angle.
-
-      POSE: The person is captured mid-action in a CLASSIC GOAL CELEBRATION RUN — standing upright and moving forward across the pitch, both arms extended OUTWARD and slightly BACKWARD behind the body (like an airplane / soaring posture), elbows almost straight, hands open. The torso leans slightly forward with the running momentum. Legs are in a natural running stride — one leg planted, the other lifted in motion. Head is turned to one side in three-quarter / profile view, looking sideways toward teammates or the crowd, with an intense focused expression — mouth open mid-shout, eyes wide with celebratory emotion. Body at a 45-degree diagonal angle to the camera. This is the energetic running-celebration moment right after scoring a goal — NOT a standing still pose, NOT a kneel, NOT a slide on the ground.
-
-      SCENE: Professional soccer pitch during golden hour. Green grass background with a thin strip of blurred stadium at the top of the tall vertical frame. Warm sunlight with soft rim light, 85mm lens, shallow depth of field, slight motion blur in the legs and background to convey forward momentum, sharp focus on face and hair. Natural broadcast sports photography style — like a freeze-frame from a live match — not AI-rendered, not over-stylized. NO soccer ball anywhere in the frame.
-
-      OUTFIT: Modern professional football jersey in a black and white color scheme. Realistic, premium, fully fictional.
-
-      ZERO LOGOS / ZERO BRANDING (absolute rule — applies to jersey, shorts, socks, cleats, gloves, wristbands, and ALL accessories):
-      - NO brand logos of any kind: no Nike swoosh, no Adidas three stripes, no Puma logo or formstrip, no Mizuno wave, no Under Armour, no New Balance, no Umbro, no Kappa, no Joma, no Macron, no Lotto, no Le Coq Sportif, no Hummel, no Castore, no any other sportswear brand mark
-      - NO check marks, swooshes, V-shapes, parallel stripe patterns, or any abstract shape that resembles a sportswear brand mark
-      - NO team crests, club badges, national flags, national emblems, federation marks, country names, country codes, or any team identity element
-      - NO sponsor logos, sponsor text, sponsor patches anywhere
-      - NO manufacturer tags, NO size labels, NO brand text on the neck, hem, sleeve, or any seam
-      - NO copyrighted icons, cultural symbols, or real-world identity references of any kind
-
-      The kit must be 100% clean, blank, and brand-free — as if it were a generic prototype jersey before any branding is applied. The ONLY text or marking allowed on the entire outfit is: (1) one random jersey number from 1–99 placed naturally on the chest, and (2) one fictional slogan selected from: "2026 IS OURS", "THE GREATEST STAGE", "THE WORLD IS WATCHING", or "ONE WORLD. ONE CUP."
-
-      NO overlays, NO scoreboard, NO graphics outside the jersey.
-
-      === FINAL FORMAT CHECK ===
-      Before outputting: confirm the image is 9:16 VERTICAL PORTRAIT (taller than wide). If the generated canvas is horizontal or square, REJECT and regenerate as vertical 9:16. Face and hairstyle must match the uploaded reference exactly — identity preservation overrides all other considerations.
+      A high-resolution, ultra-realistic photojournalistic shot. A detailed waist-up medium close-up focusing closely on the face and torso of a victorious person being lifted high by a dense, celebrating crowd inside a magnificent stadium at night. The stadium has an intricate illuminated truss roof network, filled with bright lights and countless smartphone flashes creating a dramatic atmosphere. The main subject, positioned center-right, has an authentic-looking portrait expressing a genuine smiling expression that preserves the overall character likeness of the input reference image while being naturally re-lit by the scene, with the face's skin tones, highlights, and shadows driven entirely by the stadium's lighting so that strong directional key light, ambient blue stadium glow, and bounced light from surrounding phone flashes fall across the face and wrap around its contours, casting soft cast shadows under the brow, nose, and chin and adding subtle specular highlights and slight color bleed on the skin that match the environment, so the face sits within the same atmospheric haze, grain, and depth-of-field as the rest of the image rather than appearing sharply composited or pasted on; looking towards the far left, while their right hand holds a victory cup high in the air. The trophy has plain light-blue and white ribbons tied to it.
+      The visible part of the subject, from the waist up, wears a football jersey featuring a clean, crisp American flag-inspired pattern with red and white horizontal wavy stripes covering the entire shirt evenly, including the sleeves, and small white stars scattered uniformly across the whole jersey. The collar is a navy blue V-neck, and each sleeve has a navy blue cuff trim; otherwise the sleeves carry the same red-and-white stripe-and-star pattern as the body. The fabric looks fresh and pristine with vibrant, saturated colors and no dirt, smudges, distressing, or worn texture. This fully fictional jersey is entirely free of any real-world branding or identity elements. It excludes all brand cues such as swooshes, check marks, V-shapes, three stripes, Puma formstrips, or Mizuno-style line motifs. The jersey displays only a single random number from 1–99 placed naturally in the center of the chest, with no text, lettering, slogans, or words anywhere on the jersey.
+      In the immediate foreground, numerous arms are reaching up holding smartphones; on the bottom left, a hand holds a white multi-lens smartphone surrounded by white celebration streamers. On the bottom right, a hand holds a black smartphone facing the subject, with excited faces below including a bald man and a man in a blue hat, now larger and more prominent in the lower frame. In the background right, another lifted player wearing the same football outfit is emotionally covering their face. The scene is full of dynamic energy, hands, bracelets, and pure joy, with the primary focus on the main subject's face within the scene's natural depth-of-field, and the trophy.
 
     # ---- Video generation step (Kling) ----
     video_model: v3
     video_mode: pro
     video_duration: 5
-    video_ratio: '9:16'
+    video_ratio: '16:9'
     video_prompt: |
-      Use the reference image as frame 1. At frame 1 the subject is 
-      ALREADY on both knees and ALREADY sliding forward across the 
-      grass at full speed — no run-up, no running, no jogging, no 
-      standing position, no transition from standing to kneeling, no 
-      dropping down motion. The subject simply exists on his knees, 
-      already in mid-slide, from the very first frame.
-
-      The subject is in the celebration pose shown in the reference: 
-      both knees on the grass, calves tucked back, torso leaning 
-      slightly backward, both arms spread wide to the sides with palms 
-      open, head tilted slightly back, mouth slightly open in a 
-      natural, focused expression — relaxed, composed, slight intensity 
-      from the motion, eyes calmly looking forward or slightly upward. 
-      No smile required, no forced emotion, no exaggeration.
-
-      Hold this exact pose completely frozen and unchanged from start 
-      to finish. Only the body's position moves — sliding forward 
-      across the green turf on both knees at constant HIGH SPEED in 
-      real time, covering a long distance,As the film ended, he gradually stopped gliding. Two long sharp parallel trails carve 
-      continuously into the grass behind, small clippings and water 
-      droplets constantly spraying up from the friction.
-
-      No change in arm position, no change in head angle, no change in 
-      facial expression, no standing up, no looking down — pose stays 
-      identical to the reference throughout the entire shot.
-
-      CRITICAL — Identity lock: keep the subject's face shape, jawline, 
-      cheekbones, nose, eye shape, eyebrows, skin tone, beard shape 
-      and density, and hairstyle exactly identical to the reference 
-      image in every frame. No face morphing, no identity drift, no 
-      aging. Same person from start to end.
-
-      Expression stays natural and effortless throughout — calm, 
-      focused, alive with the motion but not theatrical. No forced 
-      expression, no distorted mouth, no exaggerated facial muscles, 
-      no screaming, no grimacing.
-
-      Camera: low-angle ground-level tracking shot at real-time speed, 
-      NO slow motion, fast smooth camera follow with subtle motion 
-      blur on the rushing background, shallow depth of field, the 
-      camera dollies backward at the same constant high speed as the 
-      subject, keeping the upper body centered in frame the whole time. 
-      Dynamic, kinetic, high-energy feel.
-
-      Single continuous take, one unbroken shot, no cuts, no transitions, 
-      no fades.
+      Handheld camera simulation, dynamic camera shake. The protagonist triumphantly hoists the trophy. The entire stadium erupts in a massive visual cheer: the huge background crowd surges like waves, jumping and waving arms enthusiastically. Countless camera flashes go off continuously like a strobe. Confetti bursts into the air. Immersive and roaring stadium atmosphere. Depth of field keeping the background slightly blurred to maintain generation stability. Hyper-detailed, volumetric lighting.
     video_negative_prompt: |
-      face distortion, face swap, changed hairstyle, extra limbs, deformed hands, pose changing, arms lowering, standing up, body returning upright, sliding right, stopping, decelerating, falling, lying down, ball, sled, screaming, shaky camera, low quality, watermark, text,logo
+      logo, badge,  ghosting,  morphing background, blending environments, blurry, Shaking up and down
+
+  - style_name: 高舉獎杯慶祝 (英國版)
+    folder: Media Files/I2I2V/0529 4 Styles/0529 高舉獎杯慶祝 (英國版)
+    image_service: openai_image
+    image_model: gpt-image-2
+    image_quality: auto
+    image_resolution: '1K'
+    image_aspect_ratio: '16:9'
+    image_prompt: |
+      A high-resolution, ultra-realistic photojournalistic shot. A detailed waist-up medium close-up focusing closely on the face and torso of a victorious person being lifted high by a dense, celebrating crowd inside a magnificent stadium at night. The stadium has an intricate illuminated truss roof network, filled with bright lights and countless smartphone flashes creating a dramatic atmosphere. The main subject, positioned center-right, has an authentic-looking portrait expressing a genuine smiling expression that preserves the overall character likeness of the input reference image while being naturally re-lit by the scene, with the face's skin tones, highlights, and shadows driven entirely by the stadium's lighting so that strong directional key light, ambient blue stadium glow, and bounced light from surrounding phone flashes fall across the face and wrap around its contours, casting soft cast shadows under the brow, nose, and chin and adding subtle specular highlights and slight color bleed on the skin that match the environment, so the face sits within the same atmospheric haze, grain, and depth-of-field as the rest of the image rather than appearing sharply composited or pasted on; looking towards the far left, while their right hand holds a victory cup high in the air. The trophy has plain light-blue and white ribbons tied to it.
+      The visible part of the subject, from the waist up, wears a white football jersey with clearly visible blue trim on the collar, and blue side panels running down each side of the torso from the underarm to the hem. Each sleeve cuff has blue trim accented with a thin red line. This fully fictional jersey is entirely free of any real-world branding or identity elements. It excludes all brand cues such as swooshes, check marks, V-shapes, three stripes, Puma formstrips, or Mizuno-style line motifs. The visible jersey portion includes only a single random number from 1–99 placed naturally in the center of the chest, with no text, lettering, slogans, or words anywhere on the jersey.
+      In the immediate foreground, numerous arms are reaching up holding smartphones; on the bottom left, a hand holds a white multi-lens smartphone surrounded by white celebration streamers. On the bottom right, a hand holds a black smartphone facing the subject, with excited faces below including a bald man and a man in a blue hat, now larger and more prominent in the lower frame. In the background right, another lifted player wearing the same football outfit is emotionally covering their face. The scene is full of dynamic energy, hands, bracelets, and pure joy, with the primary focus on the main subject's face within the scene's natural depth-of-field, and the trophy.
     
+    video_model: v3
+    video_mode: pro
+    video_duration: 5
+    video_ratio: '16:9'
+    video_prompt: |
+      Handheld camera simulation, dynamic camera shake. The protagonist triumphantly hoists the trophy. The entire stadium erupts in a massive visual cheer: the huge background crowd surges like waves, jumping and waving arms enthusiastically. Countless camera flashes go off continuously like a strobe. Confetti bursts into the air. Immersive and roaring stadium atmosphere. Depth of field keeping the background slightly blurred to maintain generation stability. Hyper-detailed, volumetric lighting.
+    video_negative_prompt: |
+      logo, badge,  ghosting,  morphing background, blending environments, blurry, Shaking up and down
+
+  - style_name: 看球賽 - Image to Image (Start Frame) 美國 V3
+    folder: Media Files/I2I2V/0529 4 Styles/0529 看球賽 - Image to Image (Start Frame) 美國 V3
+    image_service: openai_image
+    image_model: gpt-image-2
+    image_quality: auto
+    image_resolution: '1K'
+    image_aspect_ratio: '16:9'
+    image_prompt: |
+      Photorealistic candid broadcast-style photo. The person in the reference image [FACE REFERENCE], sitting as a fan at a live football (soccer) match. EXACT same face — identical facial structure, eye shape, nose, lips, skin tone, hair color, and bangs style — reproduced with maximum fidelity, no alterations to facial features.
+      Her jersey: a fully fictional football jersey with a clean, crisp American-flag-inspired pattern — straight horizontal red and white stripes covering the entire shirt evenly including the sleeves, with small white stars scattered uniformly across the whole jersey. Navy blue V-neck collar; navy blue cuff trim on each sleeve; sleeves otherwise carry the same red-and-white stripe-and-star pattern as the body. Fabric looks fresh and pristine with vibrant saturated colors and no dirt, smudges, distressing, or wear, but shows natural fabric folds and soft creases draping realistically over the body and following her seated posture. A single random jersey number on the front in a bold athletic block font, navy blue fill with a red outline/trim. NO brand logos, NO swooshes, check marks, V-shapes, three stripes, Puma formstrips, or Mizuno line motifs. NO text or words anywhere except the jersey number.
+      Makeup: light natural dewy makeup — soft foundation, subtle eyeliner, gentle blush, natural lip tint.
+      Expression: calm, focused, slightly tense, lips softly parted, eyes gazing forward and slightly upward toward the field.
+      Background: sparse stadium crowd, naturally spaced with only a few individuals visible, each wearing assorted casual fan clothing in a red, white, and blue color scheme — a natural mix of plain shirts, tops, and jackets in varying random combinations of red, white, and navy blue. No jersey numbers on any background people, no text, no slogans, no logos on their clothing. Background rendered sharp and flat: no bokeh, no depth of field, all elements in full focus at consistent sharpness throughout the entire frame, no blur, no distortion, no warping, perspective straight and undistorted, same focal distance maintained across the whole image.
+      Lighting: bright warm stadium floodlighting, luminous white-amber, constant stable light, minimal shadows, airy and clean.
+      Broadcast HUD top-left: football scoreboard showing USA flag and Brazil flag, country codes USA vs BRA, score 0:0, match time 23:14, FIFA-World-Cup broadcast graphic style, white HUD bar, official clean typography.
+      Technical: photorealistic, 4K, broadcast TV quality, beauty-editorial aesthetic, flat focus across entire frame, f/11-equivalent aperture, rectilinear lens, zero lens distortion, uniform sharpness from foreground to background.
+    
+    video_model: v3
+    video_mode: pro
+    video_duration: 5
+    video_ratio: '16:9'
+    video_prompt: |
+      A person sitting in a sports stadium as a fan, The person is watching the game with a natural, relaxed expression — calm but quietly engaged, the kind of look someone has when genuinely absorbed in watching a match. Eyes gaze steadily upward and slightly to one side toward the field, never looking at the camera.
+      Natural micro-movements throughout the clip: subtle shifts in facial muscle tension as the game unfolds, a barely perceptible tightening of the jaw, occasional slow natural blinks, eyes making tiny unconscious tracking movements following the game, a soft natural swallow, lips slightly parted and relaxed. Hair moves gently and organically from stadium air and very slight head micro-adjustments. Shoulders rise and fall with slow natural breathing. All movements feel completely unstaged and human — the subject is unaware of the camera.
+      Camera movement: broadcast-style smooth, continuous, very subtle push-in zoom starting from a medium shot that clearly shows the upper body and jersey. The zoom is extremely gentle and minimal — barely perceptible in real time, only noticeable when comparing the first and last frames. In the final frame, the face occupies no more than 15–18% of the frame, with full upper body still visible. Perfectly smooth, linear, continuous motion — no shakiness, no abrupt cuts, no digital zoom artifacts.
+      Lighting remains completely constant and stable throughout — warm stadium floodlight tone, no flickering, no shadow shifting, no exposure changes from start to finish. Background crowd and fans remain softly blurred with consistent bokeh throughout. Shallow depth of field — face always in sharp focus.
+      Photorealistic, broadcast TV cinematic quality, 4K, smooth motion.
+    video_negative_prompt: |
+      shaky camera, handheld wobble, jump cut, abrupt zoom, fast zoom, aggressive push-in, digital zoom artifacts, extreme close-up, tight close-up, flickering light, shadow change, exposure shift, frozen expression, mannequin-like stillness, posed look, stiff face, over-acting, cheering, laughing, crying, sudden movement, head turning sharply, looking at camera, distorted face, low quality, watermark, logo, badge, emblem, brand mark, national crest, text on jersey, any symbol on jersey
+
+  - style_name: 看球賽 - Image to Image (Start Frame) 英格蘭 V2
+    folder: Media Files/I2I2V/0529 4 Styles/0529 看球賽 - Image to Image (Start Frame) 英格蘭 V2
+    image_service: openai_image
+    image_model: gpt-image-2
+    image_quality: auto
+    image_resolution: '1K'
+    image_aspect_ratio: '16:9'
+    image_prompt: |
+      Photorealistic candid broadcast-style photo. The person in the reference image [FACE REFERENCE], sitting as a fan at a live football (soccer) match. EXACT same face — identical facial structure, eye shape, nose, lips, skin tone, hair color, and bangs style — reproduced with maximum fidelity, no alterations to facial features.
+      Her jersey: a fully fictional football jersey — a clean predominantly white shirt with blue and navy trim accents, a navy blue V-neck collar, and white short sleeves finished with a horizontal blue-white-red-blue striped cuff band wrapping around the sleeve opening. Subtle blue side detailing on the body. Fabric looks fresh and pristine with vibrant saturated colors and no dirt, smudges, distressing, or wear, but shows natural fabric folds and soft creases draping realistically over the body and following her posture. A single random jersey number centered on the upper chest in a bold athletic block font, solid blue fill (matching the reference image). The rest of the shirt is completely plain blank white fabric — absolutely no slogans, no team names, no words, no letters below or around the number. NO brand logos, NO swooshes, check marks, V-shapes, three stripes, Puma formstrips, or Mizuno line motifs. The ONLY marking anywhere on the jersey is the single centered number.
+      Makeup: light natural dewy makeup — soft foundation, subtle eyeliner, gentle blush, natural lip tint.
+      Expression: calm, focused, slightly tense, lips softly parted, eyes gazing forward and slightly upward toward the field.
+      Background: sparse stadium crowd, naturally spaced with only a few individuals visible, EACH wearing the identical jersey to hers — same clean white shirt with navy V-neck collar, white short sleeves with a horizontal blue-white-red-blue striped cuff band, and subtle blue side detailing, with natural fabric folds, Background rendered sharp and flat: no bokeh, no depth of field, all elements in full focus at consistent sharpness throughout the entire frame, no blur, no distortion, no warping, perspective straight and undistorted, same focal distance maintained across the whole image.
+      Lighting: bright warm stadium floodlighting, luminous white-amber, constant stable light, minimal shadows, airy and clean.
+      Broadcast HUD top-left: football scoreboard showing England flag (St George's Cross) and Brazil flag, country codes ENG vs BRA, score 0:0, match time 23:14, FIFA-World-Cup broadcast graphic style, white HUD bar, official clean typography.
+      Technical: photorealistic, 4K, broadcast TV quality, beauty-editorial aesthetic, flat focus across entire frame, f/11-equivalent aperture, rectilinear lens, zero lens distortion, uniform sharpness from foreground to background.
+
+    video_model: v3
+    video_mode: pro
+    video_duration: 5
+    video_ratio: '16:9'
+    video_prompt: |
+      A person sitting in a sports stadium as a fan, The person is watching the game with a natural, relaxed expression — calm but quietly engaged, the kind of look someone has when genuinely absorbed in watching a match. Eyes gaze steadily upward and slightly to one side toward the field, never looking at the camera.
+      Natural micro-movements throughout the clip: subtle shifts in facial muscle tension as the game unfolds, a barely perceptible tightening of the jaw, occasional slow natural blinks, eyes making tiny unconscious tracking movements following the game, a soft natural swallow, lips slightly parted and relaxed. Hair moves gently and organically from stadium air and very slight head micro-adjustments. Shoulders rise and fall with slow natural breathing. All movements feel completely unstaged and human — the subject is unaware of the camera.
+      Camera movement: broadcast-style smooth, continuous, very subtle push-in zoom starting from a medium shot that clearly shows the upper body and jersey. The zoom is extremely gentle and minimal — barely perceptible in real time, only noticeable when comparing the first and last frames. In the final frame, the face occupies no more than 15–18% of the frame, with full upper body still visible. Perfectly smooth, linear, continuous motion — no shakiness, no abrupt cuts, no digital zoom artifacts.
+      Lighting remains completely constant and stable throughout — warm stadium floodlight tone, no flickering, no shadow shifting, no exposure changes from start to finish. Background crowd and fans remain softly blurred with consistent bokeh throughout. Shallow depth of field — face always in sharp focus.
+      Photorealistic, broadcast TV cinematic quality, 4K, smooth motion.
+    video_negative_prompt: |
+      shaky camera, handheld wobble, jump cut, abrupt zoom, fast zoom, aggressive push-in, digital zoom artifacts, extreme close-up, tight close-up, flickering light, shadow change, exposure shift, frozen expression, mannequin-like stillness, posed look, stiff face, over-acting, cheering, laughing, crying, sudden movement, head turning sharply, looking at camera, distorted face, low quality, watermark, logo, badge, emblem, brand mark, national crest, text on jersey, any symbol on jersey
+
+  
 
 # Example: nano_banana variant
 #  - style_name: 看球賽 (nano)

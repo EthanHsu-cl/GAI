@@ -107,6 +107,17 @@ class BaseImageGenerationHandler(BaseAPIHandler):
         def process_task(task):
             folder = Path(task['folder'])
             folder.mkdir(parents=True, exist_ok=True)
+
+            # Text-to-image: generate purely from the prompt — no Source folder
+            # required, so skip the source-image validation entirely.
+            if task.get('text_to_image', False):
+                if task.get('use_reference_images', False):
+                    (folder / "Reference").mkdir(exist_ok=True)
+                (folder / "Generated_Output").mkdir(exist_ok=True)
+                (folder / "Metadata").mkdir(exist_ok=True)
+                self.logger.info(f"✓ Task: {folder.name} - text-to-image mode (prompt only)")
+                return task, []
+
             source_folder = folder / "Source"
             source_folder.mkdir(exist_ok=True)
             if task.get('use_reference_images', False):
@@ -638,6 +649,19 @@ class BaseImageGenerationHandler(BaseAPIHandler):
         Random source selection always uses iteration-based processing; standard
         mode defers to the base class, which handles concurrency itself.
         """
+        # Text-to-image: no source images — generate num_iterations images
+        # purely from the prompt. Kept fully separate from the image-to-image
+        # paths so their Source-folder handling is untouched.
+        if task.get('text_to_image', False):
+            folder = Path(task.get('folder', ''))
+            output_folder = folder / "Generated_Output"
+            metadata_folder = folder / "Metadata"
+            output_folder.mkdir(parents=True, exist_ok=True)
+            metadata_folder.mkdir(parents=True, exist_ok=True)
+            self._process_text_to_image(task, task_num, total_tasks,
+                                        output_folder, metadata_folder)
+            return
+
         use_random_source = task.get('use_random_source_selection', False)
 
         if use_random_source:
@@ -912,6 +936,117 @@ class BaseImageGenerationHandler(BaseAPIHandler):
                     scaled_wait = max(1, base_rate * num_images_used / effective_max)
                     self.logger.info(f" ⏳ Rate limit: {scaled_wait:.0f}s ({num_images_used}/{effective_max} images)")
                     time.sleep(scaled_wait)
+
+        self.logger.info(
+            f"✓ Task {task_num}: {successful}/{total_api_calls} successful ({skipped} skipped)"
+        )
+
+    def _process_text_to_image(self, task, task_num, total_tasks, output_folder, metadata_folder):
+        """Process a text-to-image task: generate purely from the prompt.
+
+        There are no source images. ``num_iterations`` controls how many images
+        are generated (defaults to 1). Supports generations_per_source, optional
+        reference images, reference cross-match, and concurrency — mirroring
+        _process_iterations but without any Source-folder selection.
+        """
+        task_name = Path(task.get('folder', '')).name
+        num_iterations = task.get('num_iterations', 0) or 1
+        generations_per_source = max(1, task.get('generations_per_source', 1))
+        reference_images = self._get_reference_images(task)
+        concurrent_requests = self._get_concurrent_requests(task)
+
+        # Cross-match: split each call into one-per-reference (single ref each)
+        # instead of appending all references together.
+        cross_match = task.get('reference_cross_match', False) and len(reference_images) > 0
+        if cross_match:
+            ref_variants = [(f"_ref{i:02d}_{r.stem}", [str(r)])
+                            for i, r in enumerate(reference_images)]
+        else:
+            ref_variants = [("", [str(img) for img in reference_images])]
+        total_api_calls = num_iterations * generations_per_source * len(ref_variants)
+
+        gen_info = f", {generations_per_source} gen/iter" if generations_per_source > 1 else ""
+        ref_info = (f", {len(reference_images)} ref images{' (cross-match)' if cross_match else ''}"
+                    if reference_images else "")
+        conc_info = f", up to {concurrent_requests} concurrent" if concurrent_requests > 1 else ""
+        self.logger.info(
+            f"📁 Task {task_num}/{total_tasks}: {task_name} "
+            f"(text-to-image, {num_iterations} iterations{gen_info}{ref_info}{conc_info}, "
+            f"total API calls: {total_api_calls})"
+        )
+
+        max_retries = self.api_defs.get('max_retries', 3)
+
+        # Build the list of work items, skipping already-processed iterations.
+        work_items = []  # (call_index, base_name, task_with_iteration)
+        successful = 0
+        skipped = 0
+        call_index = 0
+
+        for iteration_idx in range(num_iterations):
+            iter_base = f"iter{iteration_idx:03d}"
+            for gen_idx in range(generations_per_source):
+                gen_base = f"{iter_base}_gen{gen_idx:02d}" if generations_per_source > 1 else iter_base
+                for ref_suffix, ref_list in ref_variants:
+                    base_name = gen_base + ref_suffix
+                    call_index += 1
+
+                    is_complete, status = self._get_iteration_status(base_name, metadata_folder)
+                    if is_complete:
+                        if status == 'success':
+                            self.logger.info(f" ⏭️ {call_index}/{total_api_calls}: {base_name} (already processed)")
+                            successful += 1
+                        else:
+                            self.logger.info(f" ⏭️ {call_index}/{total_api_calls}: {base_name} (failed - retries exhausted)")
+                        skipped += 1
+                        continue
+
+                    task_with_iteration = task.copy()
+                    task_with_iteration['_iteration_index'] = iteration_idx
+                    task_with_iteration['_base_name'] = base_name
+                    task_with_iteration['_generation_index'] = gen_idx
+                    task_with_iteration['_generations_per_source'] = generations_per_source
+                    task_with_iteration['_reference_images'] = ref_list
+                    work_items.append((call_index, base_name, task_with_iteration))
+
+        def run_one(item):
+            call_idx, base_name, task_with_iteration = item
+            self.logger.info(f" ✍️ {call_idx}/{total_api_calls}: Processing {base_name}")
+            for attempt in range(max_retries):
+                try:
+                    # base_name doubles as the synthetic "file path": process()
+                    # uses _base_name for naming and the t2i path ignores the
+                    # source image, so no real file is needed.
+                    if self.process(base_name, task_with_iteration, output_folder,
+                                    metadata_folder, attempt, max_retries):
+                        return True
+                except Exception as e:
+                    if attempt < max_retries - 1:
+                        self.logger.warning(f" ⚠️ Attempt {attempt+1} failed for {base_name}: {e}")
+                        time.sleep(5)
+                    else:
+                        self.logger.error(f" ❌ All {max_retries} attempts failed for {base_name}: {e}")
+            return False
+
+        if concurrent_requests > 1 and work_items:
+            self.logger.info(
+                f" 🚀 Dispatching {len(work_items)} API calls with up to "
+                f"{concurrent_requests} in parallel"
+            )
+            with ThreadPoolExecutor(max_workers=concurrent_requests) as executor:
+                futures = [executor.submit(run_one, item) for item in work_items]
+                for future in as_completed(futures):
+                    try:
+                        if future.result():
+                            successful += 1
+                    except Exception as e:
+                        self.logger.error(f" ❌ Worker raised: {e}")
+        else:
+            for idx, item in enumerate(work_items):
+                if run_one(item):
+                    successful += 1
+                if idx < len(work_items) - 1:
+                    time.sleep(self.api_defs.get('rate_limit', 3))
 
         self.logger.info(
             f"✓ Task {task_num}: {successful}/{total_api_calls} successful ({skipped} skipped)"
