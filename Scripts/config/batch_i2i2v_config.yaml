@@ -74,8 +74,8 @@ tasks:
     video_negative_prompt: |
       logo, badge,  ghosting,  morphing background, blending environments, blurry, Shaking up and down
 
-  - style_name: 看球賽 - Image to Image (Start Frame) 美國 V3
-    folder: Media Files/I2I2V/0529 4 Styles/0529 看球賽 - Image to Image (Start Frame) 美國 V3
+  - style_name: 看球賽 - 美國 V3
+    folder: Media Files/I2I2V/0529 4 Styles/0529 看球賽 - 美國 V3
     image_service: openai_image
     image_model: gpt-image-2
     image_quality: auto
@@ -104,8 +104,8 @@ tasks:
     video_negative_prompt: |
       shaky camera, handheld wobble, jump cut, abrupt zoom, fast zoom, aggressive push-in, digital zoom artifacts, extreme close-up, tight close-up, flickering light, shadow change, exposure shift, frozen expression, mannequin-like stillness, posed look, stiff face, over-acting, cheering, laughing, crying, sudden movement, head turning sharply, looking at camera, distorted face, low quality, watermark, logo, badge, emblem, brand mark, national crest, text on jersey, any symbol on jersey
 
-  - style_name: 看球賽 - Image to Image (Start Frame) 英格蘭 V2
-    folder: Media Files/I2I2V/0529 4 Styles/0529 看球賽 - Image to Image (Start Frame) 英格蘭 V2
+  - style_name: 看球賽 - 英格蘭 V2
+    folder: Media Files/I2I2V/0529 4 Styles/0529 看球賽 - 英格蘭 V2
     image_service: openai_image
     image_model: gpt-image-2
     image_quality: auto

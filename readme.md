@@ -130,6 +130,7 @@ python core/runall.py kling auto
 | `wan` | Wan 2.2 | I+V | Auto-cropping, video × image cross-match |
 | `dreamactor` | DreamActor | I+V | Face reenactment via image × video cross-match |
 | `motion_swap` | Motion Swap | I+V | Motion transfer via subject image × motion video cross-match |
+| `happyhorse_vedit` | HappyHorse Video Edit | V2V | Prompt-driven video edit with up to 5 reference images (append or cross-match) |
 | `fifa` | FIFA I2I2V | I2I2V | Per-image start/end-frame generation → video |
 | `i2i2v` | I2I2V | I2I2V | Generic image → image → video pipeline (Nano Banana / OpenAI Image + Kling) |
 | `all` | All Platforms | — | Run every API in sequence (or `--parallel`) |
@@ -155,6 +156,7 @@ python core/runall.py kling auto
 | Wan 2.2 | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
 | DreamActor | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
 | Motion Swap | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
+| HappyHorse Video Edit | image 10 MB / video 100 MB | image ≥ 300 px; video shorter ≥ 320 px, longer ≤ 2160 px, 3–60 s, AR 1:2.5–2.5:1 | image: JPG, PNG, WebP; video: MP4, MOV |
 | FIFA I2I2V / I2I2V | 30 MB | 256 px / — | JPG, PNG, WebP |
 
 (Text-to-video APIs — Kling TTV, Pixverse TTV, Seedance TTV, Veo — take no source files.)
@@ -173,6 +175,7 @@ python core/runall.py kling auto
 | Runway | `{filename}_ref_{ref}_runway_generated.mp4` |
 | Wan 2.2 / DreamActor | `{video}_{image}_{mode}.mp4` |
 | Motion Swap | `{video}_{image}_motion_swap.mp4` |
+| HappyHorse Video Edit | `{video}_generated.mp4` (cross-match: `{video}_ref{NN}_{refname}_generated.mp4`) |
 | Nano Banana | `{filename}_image_{n}.{ext}` |
 | OpenAI Image | `{filename}_image_{n}.{ext}` |
 | GenVideo | `{filename}_generated.{ext}` |
@@ -207,6 +210,7 @@ API-specific input layouts:
 - Nano Banana multi-image → `Source/` + `Additional/` (or `Source/` only with random selection) + optional `Reference/`
 - OpenAI Image → same as Nano Banana
 - Runway → `Source/` (videos) + `Reference/` (images)
+- HappyHorse Video Edit → `Source/` (videos) + optional `Reference/` (up to 5 images, append or cross-match)
 - Vidu Reference → `Source/` + `Reference/`
 - Pixverse Multi → `Source/` (Source pool is consumed in chunks of `image_count`)
 - FIFA I2I2V / I2I2V → `Source/` (frames in `Generated_Frames/`, videos in `Generated_Video/`)
@@ -917,6 +921,31 @@ tasks:
 ```
 
 **Options:** none beyond the standard task fields (`folder`, `design_link`, `source_video_link`, `reference_folder`, `use_comparison_template`).
+
+#### HappyHorse Video Edit (`config/batch_happyhorse_vedit_config.yaml`)
+
+Edits a source video guided by a prompt and up to 5 optional reference images. Each task folder holds source videos in `Source/` and (optionally) reference images in `Reference/`. Reference behavior mirrors Nano Banana: by default all references are appended after the source video (sent as `i1..i5`), or set `reference_cross_match: true` to pair each source video with each reference image individually.
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/video_effect/
+
+default_settings:
+  model: happyhorse-1.0-video-edit
+  resolution: "720P"        # "1080P" | "720P"
+  audio_setting: origin     # "auto" | "origin"
+  seed: -1                  # -1 for random
+
+tasks:
+  - folder: Media Files/HappyHorse Video Edit/0602 Video Edit
+    prompt: |
+      Describe the edit to apply to the source video here.
+    use_reference_images: false   # send Reference/ images as i1..i5
+    reference_cross_match: false  # true → each video × each reference individually
+```
+
+Defaults: `happyhorse-1.0-video-edit` model, `720P`, `origin` audio, random seed; one generation per source video (references appended) unless `reference_cross_match` is enabled.
+
+**Options:** `model`, `resolution`, `audio_setting`, `seed`, `use_reference_images`, `reference_cross_match` (all overridable per task).
 
 ---
 

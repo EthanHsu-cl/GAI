@@ -54,6 +54,10 @@ API_MAPPING = {
     'dreamactor': 'dreamactor',
     'motion_swap': 'motion_swap',
     'motionswap': 'motion_swap',
+    'happyhorse_vedit': 'happyhorse_vedit',
+    'vedit': 'happyhorse_vedit',
+    'videoedit': 'happyhorse_vedit',
+    'happyhorse': 'happyhorse_vedit',
     'openai_image': 'openai_image',
     'openaiimage': 'openai_image',
     'gptimage': 'openai_image',
@@ -86,6 +90,7 @@ CONFIG_MAPPING = {
     'veo_itv': 'config/batch_veo_itv_config.yaml',
     'dreamactor': 'config/batch_dreamactor_config.yaml',
     'motion_swap': 'config/batch_motion_swap_config.yaml',
+    'happyhorse_vedit': 'config/batch_happyhorse_vedit_config.yaml',
     'openai_image': 'config/batch_openai_image_config.yaml',
     'fifa_i2i2v': 'config/batch_fifa_i2i2v_config.yaml',
     'i2i2v': 'config/batch_i2i2v_config.yaml'
@@ -508,6 +513,7 @@ def show_usage():
     print("  seedance_i2v - Seedance Image-to-Video processing")
     print("  wan - Wan 2.2 image-video animation processing")
     print("  motion_swap - Motion Swap image-video motion transfer processing")
+    print("  happyhorse_vedit - HappyHorse Video Edit (video + prompt + up to 5 reference images)")
     print("  veo - Google Veo text-to-video processing")
     print("  veoitv - Google Veo image-to-video processing")
     print("  fifa - FIFA image-to-image-to-video pipeline (start/end frame → video)")
@@ -539,6 +545,7 @@ def show_usage():
     print("  python runall.py seedance_i2v auto")
     print("  python runall.py wan auto")
     print("  python runall.py motion_swap auto")
+    print("  python runall.py happyhorse_vedit auto")
     print("  python runall.py veo auto")
     print("  python runall.py fifa auto")
     print("  python runall.py all auto --parallel")

@@ -6,54 +6,63 @@ default_settings:
   duration: 5s
   v6_duration: 5
   motion_mode: normal
-  quality: 1080p
+  quality: 720p
   style: none
   seed: -1
   generate_audio: false
   generate_multi_clip: false
   thinking_type: auto
 
-base_folder: Media Files/Pixverse/0522 7 Styles
+schedule:
+  start_time: ''
+  comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
+
+base_folder: Media Files/Pixverse/0601 8 Styles
 template_path: templates/I2V templates 3rd party.pptx
 testbed: http://192.168.31.161/external-testbed/video_effect/
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
 provider_reference_link: https://aisphere.feishu.cn/wiki/GKwywQM3oixt4EkOM1IceWw8n5f?table=tblfxIxbTQwb57kk&view=vewTVy4A0p
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgANaCCSJIo_S4LrbBKg1TcRAQHp4sal6jqniJ98Bx4YN3U?e=sLjWUj
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBboaWlHKVIQogENVjhx0d0AcLuVzy8N3dSqnWyY8fxtsg?e=XWTeAh
 
 tasks:
-  - effect: Scuba Dance
+  - effect: My Future Is Limitless
     prompt: ''
-    custom_effect_id: '402364107875392'
+    custom_effect_id: '403916646846400'
     negative_prompt: ''
 
-  - effect: Own the Beat
+  - effect: Sideline Ball Boy
     prompt: ''
-    custom_effect_id: '392415610586560'
+    custom_effect_id: '402047865383360'
     negative_prompt: ''
 
-  - effect: Live Spotlight
+  - effect: Cup Celebration
     prompt: ''
-    custom_effect_id: '402863106171904'
+    custom_effect_id: '402061828030966'
     negative_prompt: ''
 
-  - effect: Stands Duo
+  - effect: Vuvuzela Fan
     prompt: ''
-    custom_effect_id: '402880241531072'
+    custom_effect_id: '402148321048644'
     negative_prompt: ''
 
-  - effect: Eating Live
+  - effect: World Champion Lift
     prompt: ''
-    custom_effect_id: '402885275072704'
+    custom_effect_id: '402155676592228'
     negative_prompt: ''
 
-  - effect: OmniHero Forge
+  - effect: Tunnel to Captain
     prompt: ''
-    custom_effect_id: '400222977706432'
+    custom_effect_id: '402201060373270'
     negative_prompt: ''
 
-  - effect: Sticker Jive
+  - effect: Jump Into Crowd 2
     prompt: ''
-    custom_effect_id: '402855499541504'
+    custom_effect_id: '402888569901524'
+    negative_prompt: ''
+
+  - effect: Golden Pitch Crasher
+    prompt: ''
+    custom_effect_id: '403085292466285'
     negative_prompt: ''
 
 

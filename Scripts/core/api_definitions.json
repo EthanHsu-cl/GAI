@@ -1773,5 +1773,85 @@
       "v2.6",
       "v3"
     ]
+  },
+  "happyhorse_vedit": {
+    "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
+    "api_name": "/vedit",
+    "file_types": {
+      "image": [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp"
+      ],
+      "video": [
+        ".mp4",
+        ".mov"
+      ]
+    },
+    "validation": {
+      "max_size_mb": 10,
+      "min_dimension": 300,
+      "video": {
+        "max_size_mb": 100,
+        "min_dimension": 320,
+        "max_dimension": 2160,
+        "duration": [
+          3,
+          60
+        ],
+        "aspect_ratio": [
+          0.4,
+          2.5
+        ]
+      }
+    },
+    "folders": {
+      "input": "Source",
+      "reference": "Reference",
+      "output": "Generated_Video",
+      "metadata": "Metadata"
+    },
+    "rate_limit": 3,
+    "task_delay": 10,
+    "max_retries": 3,
+    "special_handling": "video_edit",
+    "config_structure": "task_folders",
+    "report": {
+      "enabled": true,
+      "template_path": "templates/I2V templates.pptx",
+      "comparison_template_path": "templates/I2V Comparison Template.pptx",
+      "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+      "use_comparison": false
+    },
+    "task_fields": [
+      "folder",
+      "prompt",
+      "use_reference_images",
+      "reference_cross_match",
+      "model",
+      "resolution",
+      "audio_setting",
+      "seed",
+      "design_link",
+      "source_video_link"
+    ],
+    "api_params": {
+      "model": "happyhorse-1.0-video-edit",
+      "resolution": "720P",
+      "audio_setting": "origin",
+      "seed": -1
+    },
+    "model_options": [
+      "happyhorse-1.0-video-edit"
+    ],
+    "resolution_options": [
+      "1080P",
+      "720P"
+    ],
+    "audio_setting_options": [
+      "auto",
+      "origin"
+    ]
   }
 }

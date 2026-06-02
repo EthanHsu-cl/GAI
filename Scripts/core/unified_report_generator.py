@@ -239,6 +239,7 @@ class UnifiedReportGenerator:
             'wan': 'Wan 2.2',
             'dreamactor': 'DreamActor',
             'motion_swap': 'Motion Swap',
+            'happyhorse_vedit': 'HappyHorse Video Edit',
             'kling_motion': 'Kling Motion',
             'veo': 'Veo',
             'veo_itv': 'Veo ITV',
@@ -402,6 +403,14 @@ class UnifiedReportGenerator:
                 **self.LAYOUT_3_MEDIA_STACKED,
                 'title_format': 'Generation {index}: {source_file}',
                 'metadata_fields': ['source_image', 'source_video', 'model', 'character_orientation', 'mode', 'video_id', 'task_id', 'processing_time_seconds', 'success'],
+                'error_handling': 'video_fallback'
+            },
+            'happyhorse_vedit': {
+                **base_config,
+                'media_types': ['source', 'generated'],  # Source video + generated video
+                **self.LAYOUT_2_MEDIA,
+                'title_format': 'Generation {index}: {source_file}',
+                'metadata_fields': ['source_video', 'reference_images_used', 'model', 'resolution', 'audio_setting', 'task_id', 'processing_time_seconds', 'success'],
                 'error_handling': 'video_fallback'
             },
             'veo': {
@@ -784,7 +793,7 @@ class UnifiedReportGenerator:
         
         path = path_map.get(media_type)
         # For text-to-video APIs (veo, kling_ttv), generated content is always video
-        is_video = (media_type in ['source_video', 'generated'] and self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'fifa_i2i2v', 'i2i2v']) or \
+        is_video = (media_type in ['source_video', 'generated'] and self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'fifa_i2i2v', 'i2i2v', 'happyhorse_vedit']) or \
                    (media_type == 'source_video') or \
                    (path and path.suffix.lower() in self.VIDEO_EXTS)
         
@@ -1444,6 +1453,8 @@ class UnifiedReportGenerator:
             return self.create_runway_media_pairs(folder, ref_folder, task, use_comparison)
         elif self.api_name in ('wan', 'dreamactor', 'motion_swap', 'kling_motion'):
             return self.create_wan_media_pairs(folder, ref_folder, task, use_comparison)
+        elif self.api_name == 'happyhorse_vedit':
+            return self.create_happyhorse_vedit_media_pairs(folder, task)
         else:
             return self.create_standard_media_pairs(folder, ref_folder, task, use_comparison)
     
@@ -2041,7 +2052,75 @@ class UnifiedReportGenerator:
         
         logger.info(f"Created {len(pairs)} Wan media pairs")
         return pairs
-    
+
+    def create_happyhorse_vedit_media_pairs(self, folder: Path, task: Dict) -> List[MediaPair]:
+        """Create HappyHorse Video Edit media pairs (source video → generated video).
+
+        Iterates metadata files (one per generation, including '_refNN_' cross-match
+        variants) and matches each to its source video and generated video.
+
+        Structure:
+        - Source/:           Source videos (the required input)
+        - Generated_Video/:  Generated videos (named '<base>_generated.mp4')
+        - Metadata/:         JSON metadata (named '<base>_metadata.json')
+        """
+        folders = {
+            'source': folder / 'Source',
+            'generated': folder / 'Generated_Video',
+            'metadata': folder / 'Metadata',
+        }
+
+        if not folders['metadata'].exists():
+            logger.warning(f"Metadata folder not found: {folders['metadata']}")
+            return []
+
+        _, source_videos, _ = self._scan_directory_once(folders['source'])
+        _, generated_videos, _ = self._scan_directory_once(folders['generated'])
+        _, _, metadata_files = self._scan_directory_once(folders['metadata'])
+        metadata_cache = self._load_json_batch(metadata_files) if metadata_files else {}
+
+        logger.info(f"HappyHorse Video Edit files found: {len(source_videos)} source videos, "
+                    f"{len(generated_videos)} generated, {len(metadata_files)} metadata")
+
+        # effect_name for section grouping: folder name minus any leading date
+        m = re.match(r'^(\d{4})\s*(.+)', folder.name)
+        default_effect = m.group(2) if m else folder.name
+
+        # Pre-extract frames for all videos in parallel
+        all_videos = list(source_videos.values()) + list(generated_videos.values())
+        if all_videos:
+            self._extract_frames_parallel(all_videos)
+
+        pairs = []
+        for stem, meta_path in metadata_files.items():
+            md = metadata_cache.get(stem, {})
+            if not md:
+                continue
+
+            src_vid_path = next((p for p in source_videos.values()
+                                 if p.name == md.get('source_video', '')), None)
+            gen_vid_path = next((p for p in generated_videos.values()
+                                 if p.name == md.get('generated_video', '')), None)
+
+            if not src_vid_path:
+                logger.warning(f"No source video found for meta {stem}")
+                continue
+
+            pair = MediaPair(
+                source_file=src_vid_path.name,
+                source_path=src_vid_path,
+                api_type=self.api_name,
+                generated_paths=[gen_vid_path] if gen_vid_path else [],
+                reference_paths=[],
+                effect_name=default_effect,
+                metadata=md,
+                failed=not gen_vid_path or not md.get('success', False)
+            )
+            pairs.append(pair)
+
+        logger.info(f"Created {len(pairs)} HappyHorse Video Edit media pairs")
+        return pairs
+
     def process_base_folder_structure(self, task: Dict) -> List[MediaPair]:
         """Process base folder structure for vidu/pixverse/veo_itv APIs
         
@@ -4176,7 +4255,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'happyhorse_vedit', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -4185,7 +4264,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse', 'pixverse_multi', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'happyhorse_vedit', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

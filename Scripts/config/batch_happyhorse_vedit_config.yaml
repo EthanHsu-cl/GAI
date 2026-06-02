@@ -1,0 +1,64 @@
+# HappyHorse Video Edit Configuration
+# Edits a source video guided by a prompt and up to 5 optional reference images.
+template_path: templates/I2V templates.pptx
+comparison_template_path: templates/I2V Comparison Template.pptx
+testbed: http://192.168.31.161/external-testbed/video_effect/
+output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+design_link: ""
+source_video_link: ""
+
+output:
+  directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
+  group_tasks_by: 0
+
+schedule:
+  start_time: ""
+  comment: "Time format: HH:MM (24-hour format). Leave empty to start immediately"
+
+# Global API defaults (overridable per task).
+default_settings:
+  model: happyhorse-1.0-video-edit
+  resolution: "720P"        # Options: "1080P", "720P"
+  audio_setting: origin     # Options: "auto", "origin"
+  seed: -1                  # -1 for random
+
+tasks:
+  - folder: Media Files/HappyHorse Video Edit/0602 Video Edit
+    prompt: |
+      Put the reference person in the reference image into the source video performing the same action/motion, while keeping the background and other elements unchanged. The output video should look natural and realistic, as if the reference person was originally in the source video.
+    # Optional reference images (up to 5). Place them in <folder>/Reference/.
+    use_reference_images: true
+    # Cross-match each source video with each reference image individually
+    # (one ref per call) instead of appending all references together.
+    reference_cross_match: false
+    # Per-task overrides (optional):
+    # resolution: "1080P"
+    # audio_setting: auto
+    # seed: 12345
+    design_link: ""
+    source_video_link: ""
+
+comments:
+  folder_structure: |
+    Each task folder contains:
+      Source/           # Source video(s) — the required input (one call per video)
+      Reference/        # Optional reference images (up to 5); auto-created when
+                        #   use_reference_images is true
+      Generated_Video/  # Output videos (auto-created)
+      Metadata/         # JSON metadata (auto-created)
+  input_limits: |
+    Video: MP4 / MOV, 3–60 s, shorter side ≥ 320 px, longer side ≤ 2160 px,
+      aspect ratio 1:2.5–2.5:1, ≤ 100 MB.
+    Reference images (0–5): JPEG / PNG / WEBP, ≥ 300 px per side, ≤ 10 MB each.
+  reference_images:
+    use_reference_images: "Set true to send reference images from <folder>/Reference/ as i1..i5 (up to 5)."
+    reference_cross_match: |
+      - false (default) → all references appended to every call together.
+        N videos + M refs = N calls, each [video, ref1..refM].
+      - true → each source video paired with each reference one at a time.
+        N videos × M refs = N×M calls, each [video, single_ref]. Outputs are named
+        '<video>_refNN_<refname>' so each pairing is independently resumable.
+  model: "Generation model. Default: happyhorse-1.0-video-edit."
+  resolution: "Output resolution. Options: '1080P', '720P' (default '720P')."
+  audio_setting: "Audio handling. Options: 'auto', 'origin' (default 'origin')."
+  seed: "Random seed. -1 for random (default)."
