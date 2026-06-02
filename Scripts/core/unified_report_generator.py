@@ -2924,6 +2924,20 @@ class UnifiedReportGenerator:
         m = re.match(r'(\d{4})\s*(.+)', folder_name)
         return m.group(1) if m else datetime.now().strftime("%m%d")
     
+    def _format_effect_str(self, names, fallback: str) -> str:
+        """Join effect names for the title; truncate with an ellipsis if too long.
+
+        Lists the actual effect names so the deck title stays descriptive, but caps
+        the length so a long list (e.g. 8 effects in one report) doesn't overflow the
+        title line — it gets cut around 60 chars with a trailing "..." instead.
+        """
+        if not names:
+            return fallback
+        joined = ', '.join(names)
+        if len(joined) > 60:
+            return joined[:60].rstrip(', ') + '...'
+        return joined
+
     def get_cmp_filename(self, folder1: str, folder2: str, model: str = '', effect_names1=None, effect_names2=None) -> tuple:
         """Generate comparison filename using API name and effect names.
         
@@ -2962,12 +2976,8 @@ class UnifiedReportGenerator:
         
         d = self._extract_date_from_folder(folder)
 
-        # Prefer listing actual style names; fall back to "X Styles" only when the joined string is too long
-        joined = ', '.join(effect_names) if effect_names else ''
-        if effect_names and len(joined) > 60:
-            effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
-        else:
-            effect_str = joined or 'Test'
+        # List the actual style names, truncating with "..." when too long for the title
+        effect_str = self._format_effect_str(effect_names, 'Test')
         
         # Build API line (date + model)
         api_parts = [f"[{d}]"]
@@ -2996,11 +3006,7 @@ class UnifiedReportGenerator:
             
             # Use effect names from the grouped task
             effect_list = grouped_task.get('_effect_names', [])
-            joined = ', '.join(effect_list) if effect_list else ''
-            if effect_list and len(joined) > 60:
-                effect_str = f"{len(effect_list)} {'Style' if len(effect_list) == 1 else 'Styles'}"
-            else:
-                effect_str = joined or 'Combined Effects'
+            effect_str = self._format_effect_str(effect_list, 'Combined Effects')
         else:
             # Folder-based API (nano_banana, kling, etc.) - use folder names
             folder_names = grouped_task.get('_folder_names', [])
@@ -3014,12 +3020,8 @@ class UnifiedReportGenerator:
             else:
                 d = self._extract_date_from_folder(folder_names[0]) if folder_names else datetime.now().strftime("%m%d")
             
-            # Build effect string - combine all unique effects
-            joined = ', '.join(effect_names) if effect_names else ''
-            if effect_names and len(joined) > 60:
-                effect_str = f"{len(effect_names)} {'Style' if len(effect_names) == 1 else 'Styles'}"
-            else:
-                effect_str = joined or 'Combined'
+            # Build effect string - combine all unique effects, truncating if too long
+            effect_str = self._format_effect_str(effect_names, 'Combined')
         
         # Build API line (date + model)
         api_parts = [f"[{d}]"]
