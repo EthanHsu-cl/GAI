@@ -20,8 +20,10 @@ Per-task folder layout:
     └── Metadata/
 """
 import base64
+import queue
 import re
 import shutil
+import threading
 import time
 from datetime import datetime
 from pathlib import Path
@@ -48,6 +50,12 @@ class I2i2vHandler(BaseAPIHandler):
     def __init__(self, processor):
         super().__init__(processor)
         self._kling_client = None  # lazy init
+        # Serializes image-gen calls on the shared image testbed client so the
+        # prefetch producer and any inline consumer fallback never overlap.
+        self._image_lock = threading.Lock()
+        # Maps str(source_path) → image-gen seconds for frames the producer
+        # generated ahead of time, so the consumer can report honest timings.
+        self._prefetch_times = {}
 
     def _get_kling_client(self):
         """Lazily create the Kling Gradio client (separate testbed)."""
@@ -173,32 +181,37 @@ class I2i2vHandler(BaseAPIHandler):
 
         images_list = [handle_file(str(source_path))]
 
+        # Note prefetch (producer) vs inline (consumer fallback) so the source
+        # of the image-gen call is clear when stages interleave.
+        where = 'prefetch' if threading.current_thread().name.startswith('i2i2v-prefetch') else 'inline'
         self.logger.info(
-            f"   🖼️ Image step: service={service}, model={model}, "
+            f"   🖼️ [IMG] {where} · service={service}, model={model}, "
             f"resolution={resolution}, aspect={aspect_ratio}"
         )
 
         if service == 'openai_image':
             quality = str(task_config.get('image_quality') or api_params.get('image_quality', 'auto'))
-            result = self.client.predict(
-                prompt=prompt,
-                model=model,
-                quality=quality,
-                resolution=resolution,
-                aspect_ratio=aspect_ratio,
-                images=images_list,
-                api_name=api_name,
-            )
+            with self._image_lock:
+                result = self.client.predict(
+                    prompt=prompt,
+                    model=model,
+                    quality=quality,
+                    resolution=resolution,
+                    aspect_ratio=aspect_ratio,
+                    images=images_list,
+                    api_name=api_name,
+                )
             return self._parse_openai_image_response(result), {'service': service, 'model': model}
         else:
-            result = self.client.predict(
-                prompt=prompt,
-                model=model,
-                images=images_list,
-                resolution=resolution,
-                aspect_ratio=aspect_ratio,
-                api_name=api_name,
-            )
+            with self._image_lock:
+                result = self.client.predict(
+                    prompt=prompt,
+                    model=model,
+                    images=images_list,
+                    resolution=resolution,
+                    aspect_ratio=aspect_ratio,
+                    api_name=api_name,
+                )
             return self._parse_nano_banana_response(result), {'service': service, 'model': model}
 
     def _parse_nano_banana_response(self, result):
@@ -363,7 +376,7 @@ class I2i2vHandler(BaseAPIHandler):
         negative_prompt = task_config.get('video_negative_prompt', '')
 
         self.logger.info(
-            f"   🎬 Video step: model={model}, mode={mode}, duration={duration}"
+            f"   🎬 [VID] kling: model={model}, mode={mode}, duration={duration}"
         )
 
         result = client.predict(
@@ -397,15 +410,26 @@ class I2i2vHandler(BaseAPIHandler):
         image_start = time.time()
         existing = self._existing_generated_image(frames_folder, base_name)
         if existing:
-            self.logger.info(f"   ♻️ Reusing existing frame: {existing.name}")
             generated_image_path = existing
-            image_debug = {'reused': True}
-            image_time = 0.0
+            prefetch_time = self._prefetch_times.pop(str(file_path), None)
+            if prefetch_time is not None:
+                # Frame was produced ahead of time by the prefetch worker; the
+                # generation cost was hidden under the previous video render.
+                self.logger.info(
+                    f"   🖼️ [IMG] prefetched frame ready: {existing.name} "
+                    f"({prefetch_time:.1f}s, overlapped)"
+                )
+                image_debug = {'reused': False, 'prefetched': True}
+                image_time = prefetch_time
+            else:
+                self.logger.info(f"   🖼️ [IMG] reusing existing frame: {existing.name}")
+                image_debug = {'reused': True}
+                image_time = 0.0
         else:
             parsed, image_debug = self._call_image_api(file_path, task_config)
             generated_image_path = self._save_generated_image(parsed, frames_folder, base_name)
             image_time = time.time() - image_start
-            self.logger.info(f"   ✅ Image saved: {generated_image_path.name} ({image_time:.1f}s)")
+            self.logger.info(f"   🖼️ [IMG] saved: {generated_image_path.name} ({image_time:.1f}s)")
 
         # Step 2 — video gen
         video_start = time.time()
@@ -485,14 +509,50 @@ class I2i2vHandler(BaseAPIHandler):
                                      metadata, task_config, log_status=True)
 
         if video_saved:
-            self.logger.info(f"   ✅ Generated: {output_path.name}")
+            self.logger.info(f"   🎬 [VID] generated ✓ {output_path.name}")
         elif kling_error:
-            self.logger.warning(f"   ❌ Kling error: {kling_error}")
+            self.logger.warning(f"   🎬 [VID] error ✗ {kling_error}")
 
         return video_saved
 
+    def _prefetch_worker(self, pending, frames_folder, enhanced_task, ready_q):
+        """Generate intermediate frames one (or a few) steps ahead of video-gen.
+
+        Runs in a background thread. For each pending source image it ensures
+        `Generated_Frames/{name}_image.*` exists (generating via the image
+        testbed if missing), then signals readiness on `ready_q`. The queue is
+        bounded, so this stays only ~prefetch_depth images ahead of the serial
+        video stage instead of racing through every image up front.
+
+        Image-gen failures are swallowed and reported via the queue — the
+        consumer falls back to inline generation, so a bad frame never crashes
+        the run or stalls the pipeline.
+        """
+        for file_path in pending:
+            err = None
+            name = Path(file_path).name
+            try:
+                base_name = Path(file_path).stem
+                if not self._existing_generated_image(frames_folder, base_name):
+                    self.logger.info(f"   🖼️ [IMG] prefetch start → {name}")
+                    t0 = time.time()
+                    parsed, _ = self._call_image_api(file_path, enhanced_task)
+                    self._save_generated_image(parsed, frames_folder, base_name)
+                    dt = time.time() - t0
+                    self._prefetch_times[str(file_path)] = dt
+                    self.logger.info(f"   🖼️ [IMG] prefetch done ✓ {name} ({dt:.1f}s)")
+            except Exception as e:  # noqa: BLE001 — surface to consumer, don't crash thread
+                err = str(e)
+                self.logger.warning(f"   🖼️ [IMG] prefetch failed ✗ {name}: {e} (will retry inline)")
+            ready_q.put((file_path, err))
+
     def process_task(self, task, task_num, total_tasks):
-        """Iterate source images and run the pipeline for each."""
+        """Iterate source images and run the pipeline for each.
+
+        Image-gen (separate testbed) is pipelined one step ahead of the serial
+        Kling video stage via a bounded producer/consumer queue, so the image
+        cost for image N+1 is hidden under the video render for image N.
+        """
         folder = Path(task.get('folder', ''))
         source_folder = Path(task.get('source_dir', folder / "Source"))
         frames_folder = Path(task.get('frames_dir', folder / "Generated_Frames"))
@@ -517,27 +577,65 @@ class I2i2vHandler(BaseAPIHandler):
         enhanced_task = task.copy()
         enhanced_task['frames_dir'] = str(frames_folder)
 
+        # Partition up front: already-finished images are skipped (and never
+        # prefetched), so resuming a run does no redundant image-gen.
+        total = len(source_files)
+        pending = []
         successful = 0
         skipped = 0
         for i, file_path in enumerate(source_files, 1):
             is_complete, status = self._get_processing_status(file_path, metadata_folder)
             if is_complete:
                 if status == 'success':
-                    self.logger.info(f" ⏭️ {i}/{len(source_files)}: {file_path.name} (already processed)")
+                    self.logger.info(f" ⏭️ {i}/{total}: {file_path.name} (already processed)")
                     successful += 1
                 else:
-                    self.logger.info(f" ⏭️ {i}/{len(source_files)}: {file_path.name} (failed - max retries reached)")
+                    self.logger.info(f" ⏭️ {i}/{total}: {file_path.name} (failed - max retries reached)")
                 skipped += 1
-                continue
+            else:
+                pending.append(file_path)
 
-            self.logger.info(f" 🎬 {i}/{len(source_files)}: {file_path.name}")
-            if self.processor.process_file(file_path, enhanced_task, output_folder, metadata_folder):
-                successful += 1
+        if not pending:
+            self.logger.info(f"✓ Task {task_num}: {successful}/{total} successful ({skipped} skipped)")
+            return
 
-            if i < len(source_files):
-                time.sleep(self.api_defs.get('rate_limit', 5))
+        # Producer pre-generates frames; depth-1 queue keeps it ~1 image ahead
+        # of the serial video stage (override via api_defs `prefetch_depth`).
+        prefetch_depth = max(1, int(self.api_defs.get('prefetch_depth', 1)))
+        ready_q = queue.Queue(maxsize=prefetch_depth)
+        producer = threading.Thread(
+            target=self._prefetch_worker,
+            args=(pending, frames_folder, enhanced_task, ready_q),
+            name=f"i2i2v-prefetch-{task_num}",
+            daemon=True,
+        )
+        producer.start()
 
-        self.logger.info(f"✓ Task {task_num}: {successful}/{len(source_files)} successful ({skipped} skipped)")
+        try:
+            for idx, _expected in enumerate(pending, 1):
+                file_path, prefetch_err = ready_q.get()  # in-order: single producer
+                note = " · prefetch missed → inline image-gen" if prefetch_err else ""
+                self.logger.info("")  # blank line separates each video block
+                self.logger.info(f" {'─' * 56}")
+                self.logger.info(f" 🎬 [VID] {idx}/{len(pending)} · {file_path.name}{note}")
+
+                if self.processor.process_file(file_path, enhanced_task, output_folder, metadata_folder):
+                    successful += 1
+
+                if idx < len(pending):
+                    # Paces Kling submissions; the next frame prefetches during this wait.
+                    time.sleep(self.api_defs.get('rate_limit', 5))
+        finally:
+            # Drain any unconsumed signals so a producer blocked on a full
+            # queue (e.g. consumer exited early) can finish and the thread joins.
+            while producer.is_alive():
+                try:
+                    ready_q.get_nowait()
+                except queue.Empty:
+                    producer.join(timeout=1)
+            self._prefetch_times.clear()
+
+        self.logger.info(f"✓ Task {task_num}: {successful}/{total} successful ({skipped} skipped)")
 
     def validate_file(self, file_path, file_type='image'):
         """Validate input image with i2i2v's relaxed limits."""

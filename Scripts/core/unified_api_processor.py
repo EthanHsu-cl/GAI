@@ -86,6 +86,11 @@ class UnifiedAPIProcessor:
         logging.basicConfig(level=logging.INFO, format='%(message)s')
         self.logger = logging.getLogger(__name__)
 
+        # Silence per-request HTTP chatter from the Gradio client stack so the
+        # pipeline progress lines stay readable (these log every GET/POST at INFO).
+        for _noisy in ('httpx', 'httpcore', 'urllib3', 'gradio_client', 'huggingface_hub'):
+            logging.getLogger(_noisy).setLevel(logging.WARNING)
+
         # Load API definitions
         self.load_api_definitions()
         
@@ -669,7 +674,7 @@ class UnifiedAPIProcessor:
         # Determine source field name based on API
         if self.api_name == "runway":
             source_field = "source_video"
-        elif self.api_name in ["kling", "nano_banana", "vidu_effects", "vidu_i2v", "vidu_reference", "genvideo", "openai_image", "pixverse", "pixverse_multi"]:
+        elif self.api_name in ["kling", "nano_banana", "vidu_effects", "vidu_i2v", "vidu_reference", "genvideo", "openai_image", "pixverse_i2v", "pixverse_effect"]:
             source_field = "source_image"
         else:
             source_field = "source_file"

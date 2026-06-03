@@ -34,7 +34,7 @@ cd Scripts
 # Syntax: python core/runall.py <platform> <action> [options]
 python core/runall.py kling auto      # Process + generate report
 python core/runall.py nano process    # Process only
-python core/runall.py pixverse report # Report only
+python core/runall.py pixverse_i2v report # Report only
 python core/runall.py all auto        # All APIs at once
 
 # Options
@@ -113,8 +113,8 @@ python core/runall.py kling auto
 | `kling_endframe` | Kling Endframe | I2V | A→B transitions, pairing modes |
 | `kling_ttv` | Kling TTV | T2V | Text-to-video, optional sound generation |
 | `klingmotion` | Kling Motion | I+V | Image × video motion cross-matching |
-| `pixverse` | Pixverse | I2V | v6 model, custom effect IDs, multi-clip |
-| `pixverse_multi` | Pixverse Multi | I2V | `/submit_5` multi-image templates (1–4 images), sequential / deterministic-random source picking |
+| `pixverse_i2v` | Pixverse I2V | I2V | `/submit_3`, v6 model, custom effect IDs, multi-clip, AI audio (not for templates) |
+| `pixverse_effect` | Pixverse Effects | I2V | `/submit_5` templates (1–4 images), template-compatible sound (global + per-task), sequential / deterministic-random picking |
 | `pixversettv` | Pixverse TTV | T2V | Text-to-video, v6 model, effects |
 | `vidu` | Vidu Effects | I2V | Category-organized presets, viduq2-pro |
 | `viduref` | Vidu Reference | I2V | Up to 6 references per source |
@@ -143,8 +143,8 @@ python core/runall.py kling auto
 | Kling Effects | 30 MB | 300 px / — | JPG, PNG, BMP, TIFF |
 | Kling Endframe | 10 MB | 300 px / — | JPG, PNG, BMP, TIFF |
 | Kling Motion | image 50 MB / video 500 MB | 128 px / — | image: JPG, PNG, WebP; video: MP4, MOV, AVI, MKV, WebM |
-| Pixverse | 20 MB | 128 px / 4000 px | JPG, PNG, BMP, TIFF, WebP |
-| Pixverse Multi | 20 MB | 128 px / 10000 px | JPG, PNG, WebP |
+| Pixverse I2V | 20 MB | 128 px / 4000 px | JPG, PNG, BMP, TIFF, WebP |
+| Pixverse Effects | 20 MB | 128 px / 10000 px | JPG, PNG, WebP |
 | Vidu Effects / I2V | 20 MB | 128 px / 4000 px | JPG, PNG, WebP |
 | Vidu Reference | 50 MB | 128 px / — | JPG, PNG, WebP |
 | Seedance I2V | 30 MB | 300 px / — | JPG, PNG, WebP |
@@ -166,7 +166,7 @@ python core/runall.py kling auto
 | API | Output pattern |
 | --- | --- |
 | Kling | `{filename}_generated.mp4` |
-| Kling Effects / Pixverse / Vidu | `{filename}_{effect}_effect.mp4` |
+| Kling Effects / Pixverse I2V / Vidu | `{filename}_{effect}_effect.mp4` |
 | Kling Endframe | `{filename}_generated_{n}.mp4` |
 | Kling TTV / Pixverse TTV / Seedance TTV | `{style}-{n}_generated.mp4` |
 | Kling Motion | `{video}_{image}_motion.mp4` |
@@ -212,7 +212,7 @@ API-specific input layouts:
 - Runway → `Source/` (videos) + `Reference/` (images)
 - HappyHorse Video Edit → `Source/` (videos) + optional `Reference/` (up to 5 images, append or cross-match)
 - Vidu Reference → `Source/` + `Reference/`
-- Pixverse Multi → `Source/` (Source pool is consumed in chunks of `image_count`)
+- Pixverse Effects → `Source/` (Source pool is consumed in chunks of `image_count`)
 - FIFA I2I2V / I2I2V → `Source/` (frames in `Generated_Frames/`, videos in `Generated_Video/`)
 
 ## ⚙️ Configuration Reference
@@ -380,7 +380,9 @@ TaskFolder/
 
 ### Pixverse family
 
-#### Pixverse (`config/batch_pixverse_config.yaml`)
+#### Pixverse I2V (`config/batch_pixverse_i2v_config.yaml`)
+
+Single-image image-to-video via `/submit_3`. Exposes prompt / negative_prompt, motion_mode, style and the AI-audio toggle. Note: PixVerse rejects AI audio when a template/effect is applied — use Pixverse Effects for template + sound.
 
 ```yaml
 base_folder: Media Files/Pixverse
@@ -406,9 +408,9 @@ tasks:
 
 **Defaults:** Model v6, Duration 5 s, Quality 540p, Motion Mode `normal`, Seed `-1`.
 
-#### Pixverse Multi (`config/batch_pixverse_multi_config.yaml`)
+#### Pixverse Effects (`config/batch_pixverse_effect_config.yaml`)
 
-Multi-image PixVerse templates via `/submit_5`. Each task consumes images from `base_folder/<effect>/Source` in groups of `image_count` (1 – 4) per API call.
+PixVerse templates/effects via `/submit_5`. Each task consumes images from `base_folder/<effect>/Source` in groups of `image_count` (1 – 4) per API call. Set `image_count: 1` to run an effect one-image-per-video. Unlike the i2v endpoint, this carries `sound_effect_switch`, the template-compatible sound toggle (global default, overridable per task).
 
 ```yaml
 base_folder: Media Files/Pixverse Multi/0526 Multi Input
@@ -429,9 +431,10 @@ tasks:
     custom_effect_id: '402880241531072'   # PixVerse Template ID (required)
     image_count: 2
     selection_mode: sequential
+    sound_effect_switch: true             # per-task override of the global default
 ```
 
-**Defaults:** Model v6, Quality 1080p, Sound effect on, Image count 1, Sequential selection.
+**Defaults:** Model v6, Quality 1080p, Sound effect on, Image count 1, Sequential selection. `sound_effect_switch` is settable globally and per task (per task wins), so one batch can mix sounded and silent effects.
 
 Notes from the PixVerse testbed page:
 
@@ -1046,7 +1049,7 @@ The framework uses an auto-discovery handler system.
   - **Sleep prevention** — on macOS uses native `caffeinate -di` subprocess tracked by PID; on other platforms uses `wakepy`. Cleanup is guaranteed via `finally`, `atexit`, and `SIGINT` / `SIGTERM` handlers so orphaned processes can't block sleep. Multiple concurrent script instances are safe.
 - **`UnifiedReportGenerator`** — PowerPoint generation with parallel metadata loading
 
-**23 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, KlingMotion, Pixverse, PixverseMulti, PixverseTTV, ViduEffects, ViduReference, ViduI2v, SeedanceTtv, SeedanceI2v, Veo, VeoItv, NanoBanana, OpenaiImage, Genvideo, Runway, Wan, DreamActor, FifaI2i2v, I2i2v.
+**23 API handlers:** Kling, KlingEffects, KlingEndframe, KlingTTV, KlingMotion, PixverseI2v, PixverseEffect, PixverseTTV, ViduEffects, ViduReference, ViduI2v, SeedanceTtv, SeedanceI2v, Veo, VeoItv, NanoBanana, OpenaiImage, Genvideo, Runway, Wan, DreamActor, FifaI2i2v, I2i2v.
 
 All APIs use deterministic file sorting for reproducible results.
 
@@ -1061,8 +1064,8 @@ GAI/
     │   ├── batch_kling_endframe_config.yaml
     │   ├── batch_kling_ttv_config.yaml
     │   ├── batch_kling_motion_config.yaml
-    │   ├── batch_pixverse_config.yaml
-    │   ├── batch_pixverse_multi_config.yaml
+    │   ├── batch_pixverse_i2v_config.yaml
+    │   ├── batch_pixverse_effect_config.yaml
     │   ├── batch_pixverse_ttv_config.yaml
     │   ├── batch_vidu_effects_config.yaml
     │   ├── batch_vidu_reference_config.yaml
@@ -1092,8 +1095,8 @@ GAI/
     │   ├── kling_endframe_handler.py
     │   ├── kling_ttv_handler.py
     │   ├── kling_motion_handler.py
-    │   ├── pixverse_handler.py
-    │   ├── pixverse_multi_handler.py
+    │   ├── pixverse_i2v_handler.py
+    │   ├── pixverse_effect_handler.py
     │   ├── pixverse_ttv_handler.py
     │   ├── vidu_effects_handler.py
     │   ├── vidu_reference_handler.py

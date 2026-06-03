@@ -1,4 +1,4 @@
-"""Pixverse Multi-Input API Handler (/submit_5 — up to 4 image inputs per call)."""
+"""Pixverse Effect API Handler (/submit_5 — template/effect, up to 4 image inputs)."""
 from pathlib import Path
 from gradio_client import handle_file
 import shutil
@@ -9,12 +9,18 @@ from datetime import datetime
 from .base_handler import BaseAPIHandler
 
 
-class PixverseMultiHandler(BaseAPIHandler):
-    """Pixverse effects handler for templates that take multiple image inputs.
+class PixverseEffectHandler(BaseAPIHandler):
+    """Pixverse effects handler driving the /submit_5 template endpoint.
 
     Each effect's Source/ folder is consumed in groups of `image_count` images
-    per API call. Selection is either sequential (alphabetical) or deterministic
-    random (shuffled with a seed). num_iterations defaults to one full pass.
+    (1-4) per API call. Selection is either sequential (alphabetical) or
+    deterministic random (shuffled with a seed). num_iterations defaults to one
+    full pass. Set image_count: 1 to run an effect one-image-per-video.
+
+    Unlike the i2v endpoint, /submit_5 carries `sound_effect_switch`, the
+    template-compatible background-sound toggle. It is resolvable per task
+    (falling back to default_settings), so one batch can mix sounded and silent
+    effects.
     """
 
     MAX_IMAGES_PER_CALL = 4
@@ -30,6 +36,12 @@ class PixverseMultiHandler(BaseAPIHandler):
         default = self.config.get('default_settings', {}).get('image_count', 1)
         count = int(task_config.get('image_count', default) or 1)
         return max(1, min(count, self.MAX_IMAGES_PER_CALL))
+
+    def _resolve_sound_effect_switch(self, task_config):
+        """Per-task sound_effect_switch, falling back to default_settings (default True)."""
+        default = self.config.get('default_settings', {}).get('sound_effect_switch', True)
+        value = task_config.get('sound_effect_switch', default)
+        return bool(value)
 
     def _resolve_selection_mode(self, task_config):
         default = self.config.get('default_settings', {}).get('selection_mode', 'sequential')
@@ -233,7 +245,7 @@ class PixverseMultiHandler(BaseAPIHandler):
         template_id = task_config.get('custom_effect_id') or task_config.get('template_id') or ''
         if not template_id:
             raise ValueError(
-                f"pixverse_multi requires 'custom_effect_id' for effect "
+                f"pixverse_effect requires 'custom_effect_id' for effect "
                 f"'{task_config.get('effect', '')}'"
             )
 
@@ -242,7 +254,7 @@ class PixverseMultiHandler(BaseAPIHandler):
             duration=default_settings.get('duration', 5),
             quality=default_settings.get('quality', '1080p'),
             template_id=str(template_id),
-            sound_effect_switch=bool(default_settings.get('sound_effect_switch', True)),
+            sound_effect_switch=self._resolve_sound_effect_switch(task_config),
             image_count=len(selected),
             use_url=False,
             param_7=image_handles[0],
@@ -258,7 +270,7 @@ class PixverseMultiHandler(BaseAPIHandler):
 
     def _handle_result(self, result, file_path, task_config, output_folder,
                        metadata_folder, base_name, file_name, start_time, attempt):
-        """Mirrors PixverseHandler but tracks the multi-image selection in metadata."""
+        """Mirrors PixverseI2vHandler but tracks the multi-image selection in metadata."""
         if not isinstance(result, tuple):
             raise ValueError(f"Invalid API response format: {result}")
 
@@ -300,6 +312,7 @@ class PixverseMultiHandler(BaseAPIHandler):
             'model': default_settings.get('model', 'v6'),
             'video_id': video_id,
             'image_count': task_config.get('_image_count', len(selected_images)),
+            'sound_effect_switch': self._resolve_sound_effect_switch(task_config),
             'selection_mode': task_config.get('_selection_mode', 'sequential'),
             'random_seed': task_config.get('_random_seed'),
             'iteration_index': task_config.get('_iteration_index'),

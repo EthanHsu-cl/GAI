@@ -39,9 +39,13 @@ API_MAPPING = {
     'nano': 'nano_banana',
     'runway': 'runway',
     'genvideo': 'genvideo',
-    'pixverse': 'pixverse',
-    'pixverse_multi': 'pixverse_multi',
-    'pixversemulti': 'pixverse_multi',
+    'pixverse_i2v': 'pixverse_i2v',
+    'pixversei2v': 'pixverse_i2v',
+    'pixverse': 'pixverse_i2v',          # backward-compat alias
+    'pixverse_effect': 'pixverse_effect',
+    'pixverseeffect': 'pixverse_effect',
+    'pixverse_multi': 'pixverse_effect',  # backward-compat alias
+    'pixversemulti': 'pixverse_effect',   # backward-compat alias
     'pixverse_ttv': 'pixverse_ttv',
     'pixversettv': 'pixverse_ttv',
     'seedance_ttv': 'seedance_ttv',
@@ -80,8 +84,8 @@ CONFIG_MAPPING = {
     'nano_banana': 'config/batch_nano_banana_config.yaml',
     'runway': 'config/batch_runway_config.yaml',
     'genvideo': 'config/batch_genvideo_config.yaml',
-    'pixverse': 'config/batch_pixverse_config.yaml',
-    'pixverse_multi': 'config/batch_pixverse_multi_config.yaml',
+    'pixverse_i2v': 'config/batch_pixverse_i2v_config.yaml',
+    'pixverse_effect': 'config/batch_pixverse_effect_config.yaml',
     'pixverse_ttv': 'config/batch_pixverse_ttv_config.yaml',
     'seedance_ttv': 'config/batch_seedance_ttv_config.yaml',
     'seedance_i2v': 'config/batch_seedance_i2v_config.yaml',
@@ -506,8 +510,8 @@ def show_usage():
     print("  runway - Runway face swap processing")
     print("  genvideo - GenVideo image generation processing")
     print("  openai_image - OpenAI Image (gpt-image-N) generation")
-    print("  pixverse - Pixverse Effects processing")
-    print("  pixverse_multi - Pixverse Effects with multiple image inputs (/submit_5)")
+    print("  pixverse_i2v - Pixverse Image-to-Video processing (/submit_3)")
+    print("  pixverse_effect - Pixverse Effects/templates, 1-4 image inputs + sound (/submit_5)")
     print("  pixverse_ttv - Pixverse Text-to-Video processing")
     print("  seedance_ttv - Seedance Text-to-Video processing")
     print("  seedance_i2v - Seedance Image-to-Video processing")
@@ -538,8 +542,8 @@ def show_usage():
     print("  python runall.py vidu auto")
     print("  python runall.py viduref auto --verbose")
     print("  python runall.py vidu_i2v auto")
-    print("  python runall.py pixverse process")
-    print("  python runall.py pixverse_multi auto")
+    print("  python runall.py pixverse_i2v process")
+    print("  python runall.py pixverse_effect auto")
     print("  python runall.py pixverse_ttv auto")
     print("  python runall.py seedance_ttv auto")
     print("  python runall.py seedance_i2v auto")

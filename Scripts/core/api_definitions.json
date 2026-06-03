@@ -743,7 +743,7 @@
       "high"
     ]
   },
-  "pixverse": {
+  "pixverse_i2v": {
     "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
     "api_name": "/submit_3",
     "file_types": [
@@ -800,7 +800,7 @@
     },
     "parallel_validation": true
   },
-  "pixverse_multi": {
+  "pixverse_effect": {
     "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
     "api_name": "/submit_5",
     "file_types": [
@@ -841,7 +841,8 @@
       "image_count",
       "selection_mode",
       "random_seed",
-      "num_iterations"
+      "num_iterations",
+      "sound_effect_switch"
     ],
     "api_params": {
       "model": "v6",

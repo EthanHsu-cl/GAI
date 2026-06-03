@@ -250,8 +250,8 @@ API_FIELD_SCHEMAS = {
              'options': ['allow_all', 'allow_adult', 'dont_allow'], 'default': 'allow_all'},
         ]
     },
-    'pixverse': {
-        'name': 'Pixverse (Effects)',
+    'pixverse_i2v': {
+        'name': 'Pixverse I2V',
         'fields': [
             {'key': 'effect', 'label': 'Effect Name', 'type': 'text', 'required': True,
              'help': 'Effect name (used as subfolder name)'},
@@ -265,7 +265,29 @@ API_FIELD_SCHEMAS = {
              'options': ['5s', '8s'], 'default': '5s'},
             {'key': 'quality', 'label': 'Quality', 'type': 'dropdown',
              'options': ['540p', '720p', '1080p'], 'default': '720p'},
-            {'key': 'generate_audio', 'label': 'Generate Audio', 'type': 'checkbox', 'default': True},
+            {'key': 'generate_audio', 'label': 'Generate Audio (AI; not for templates)',
+             'type': 'checkbox', 'default': True},
+        ]
+    },
+    'pixverse_effect': {
+        'name': 'Pixverse Effects (Templates + Sound)',
+        'fields': [
+            {'key': 'effect', 'label': 'Effect Name', 'type': 'text', 'required': True,
+             'help': 'Effect/template name (used as subfolder name)'},
+            {'key': 'custom_effect_id', 'label': 'Template ID', 'type': 'text', 'required': True,
+             'help': 'Pixverse template_id (required for /submit_5)'},
+            {'key': 'model', 'label': 'Model', 'type': 'dropdown',
+             'options': ['v6', 'v5.6', 'v5.5', 'v5', 'v4.5', 'v3.5'], 'default': 'v6'},
+            {'key': 'quality', 'label': 'Quality', 'type': 'dropdown',
+             'options': ['360p', '540p', '720p', '1080p'], 'default': '1080p'},
+            {'key': 'image_count', 'label': 'Images per call (1-4)', 'type': 'dropdown',
+             'options': ['1', '2', '3', '4'], 'default': '1'},
+            {'key': 'selection_mode', 'label': 'Selection Mode', 'type': 'dropdown',
+             'options': ['sequential', 'random'], 'default': 'sequential'},
+            {'key': 'num_iterations', 'label': 'Iterations (0 = one full pass)', 'type': 'text',
+             'default': '0'},
+            {'key': 'sound_effect_switch', 'label': 'Sound Effect (template-compatible)',
+             'type': 'checkbox', 'default': True},
         ]
     },
     'genvideo': {
@@ -440,7 +462,11 @@ API_LINK_KEYS = {
     },
     'veo': {},
     'veo_itv': {},
-    'pixverse': {
+    'pixverse_i2v': {
+        'source_link': 'source_video_link',
+        'design_link': 'design_link',
+    },
+    'pixverse_effect': {
         'source_link': 'source_video_link',
         'design_link': 'design_link',
     },
@@ -480,7 +506,8 @@ PLATFORM_DISPLAY_NAMES = {
     'kling_endframe': 'Kling Endframe (A→B Transitions)',
     'kling_ttv': 'Kling TTV (Text-to-Video)',
     'klingmotion': 'Kling Motion (Image + Video)',
-    'pixverse': 'Pixverse v4.5 (Effects)',
+    'pixverse_i2v': 'Pixverse I2V',
+    'pixverse_effect': 'Pixverse Effects (Templates + Sound)',
     'genvideo': 'GenVideo (Image Generation)',
     'openai_image': 'OpenAI Image (gpt-image-N)',
     'nano': 'Nano Banana / Google Flash',

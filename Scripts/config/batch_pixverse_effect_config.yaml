@@ -16,19 +16,54 @@ default_settings:
   num_iterations: 0
   # 0 = floor(len(source) / image_count) full pass
 
-base_folder: Media Files/Pixverse Multi/0526 1 Style
+base_folder: Media Files/Pixverse Effects/0602 8 Styles
 template_path: templates/I2V templates 3rd party.pptx
 testbed: http://192.168.31.161/external-testbed/video_effect/
+
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
 provider_reference_link: https://aisphere.feishu.cn/wiki/GKwywQM3oixt4EkOM1IceWw8n5f?table=tblfxIxbTQwb57kk&view=vewTVy4A0p
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBjm-3vODpZQ7h-ZKwHKtewAburDwo51lUio8nnLUeg0uA?e=Aqw9sw
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgB5ipSgAf7-Tb-IGY2q9kABAQBLfIv6cSENH8egk74IjOc?e=omH8ZR
 
 tasks:
-  - effect: Stands Duo
-    custom_effect_id: '402880241531072'
-    image_count: 2
+  - effect: My Future Is Limitless
+    custom_effect_id: '403916646846400'
+    image_count: 1
     selection_mode: sequential
-    num_iterations: 20
+
+  - effect: Sideline Ball Boy
+    custom_effect_id: '402047865383360'
+    image_count: 1
+    selection_mode: sequential
+
+  - effect: Cup Celebration
+    custom_effect_id: '402061828030966'
+    image_count: 1
+    selection_mode: sequential
+
+  - effect: Vuvuzela Fan
+    custom_effect_id: '402148321048644'
+    image_count: 1
+    selection_mode: sequential
+
+  - effect: World Champion Lift
+    custom_effect_id: '402155676592228'
+    image_count: 1
+    selection_mode: sequential
+
+  - effect: Tunnel to Captain
+    custom_effect_id: '402201060373270'
+    image_count: 1
+    selection_mode: sequential
+
+  - effect: Jump Into Crowd 2
+    custom_effect_id: '402888569901524'
+    image_count: 1
+    selection_mode: sequential
+
+  - effect: Golden Pitch Crasher
+    custom_effect_id: '403085292466285'
+    image_count: 1
+    selection_mode: sequential
 
 
 comments:
@@ -73,8 +108,11 @@ comments:
     Options: '360p', '540p', '720p', '1080p'
     Default: '540p'
   sound_effect_switch: |
-    Whether to enable background sound effect.
-    Default: false
+    Whether to enable the template's background sound effect (/submit_5 only).
+    Settable globally under default_settings and overridable per task.
+    Per task takes priority; otherwise falls back to the global default (True).
+    This is the template-compatible sound toggle — the i2v endpoint's AI-audio
+    switch cannot be combined with a template/effect.
   output_group_tasks_by: |
     Set to 0 (or omit) to create one report with all effects.
     Set to N (e.g. 4) to group N effects per combined report.

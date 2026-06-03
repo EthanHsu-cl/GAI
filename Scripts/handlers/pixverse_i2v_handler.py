@@ -1,4 +1,4 @@
-"""Pixverse API Handler - Only unique logic."""
+"""Pixverse Image-to-Video API Handler (/submit_3) - Only unique logic."""
 from pathlib import Path
 from gradio_client import handle_file
 import shutil
@@ -8,8 +8,13 @@ from datetime import datetime
 from .base_handler import BaseAPIHandler
 
 
-class PixverseHandler(BaseAPIHandler):
-    """Pixverse effects handler."""
+class PixverseI2vHandler(BaseAPIHandler):
+    """Pixverse image-to-video handler (single image per call, /submit_3).
+
+    Exposes the AI-audio toggle (generate_audio_switch), prompt/negative_prompt,
+    motion_mode and style. Note: PixVerse rejects AI audio when a template/effect
+    is applied — for effect + sound use the pixverse_effect handler (/submit_5).
+    """
 
     def validate_structure(self, tasks, config):
         """Validate Pixverse with base_folder/effect subfolders.
