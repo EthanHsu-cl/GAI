@@ -3485,12 +3485,18 @@ class UnifiedReportGenerator:
             p1.text = api_line
             p1.alignment = PP_ALIGN.CENTER
             
-            # Second paragraph: Styles line with font size 36
+            # Second paragraph: Styles line — full names (not truncated like filename), font scaled by length
             p2 = tf.add_paragraph()
             p2.alignment = PP_ALIGN.CENTER
             run = p2.add_run()
-            run.text = styles_line
-            run.font.size = Pt(36)
+            # Comparison already uses full names; for single reports build from effect_names to avoid truncation
+            if use_comparison and task.get('reference_folder'):
+                slide_styles = styles_line
+            else:
+                slide_styles = ', '.join(effect_names) if effect_names else styles_line
+            run.text = slide_styles
+            n = len(slide_styles)
+            run.font.size = Pt(36 if n <= 60 else 28 if n <= 90 else 22 if n <= 130 else 18)
 
         # Add links
         self.add_links(ppt, task)
