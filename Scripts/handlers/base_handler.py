@@ -85,6 +85,44 @@ class BaseAPIHandler:
             val = 1
         return max(1, min(val, self.MAX_CONCURRENT_REQUESTS))
 
+    def _run_concurrent(self, work_items, run_one, max_workers):
+        """Run ``run_one`` over ``work_items`` in a thread pool; return success count.
+
+        A worker returning truthy counts as one success; worker exceptions are
+        logged and skipped.
+
+        On Ctrl+C (KeyboardInterrupt in the main thread), this cancels any
+        queued-but-unstarted work and tears the pool down with ``wait=False``
+        instead of the default ``shutdown(wait=True)``. That lets the interrupt
+        propagate immediately to the top-level handler (which force-exits) rather
+        than blocking until every in-flight request finishes.
+
+        Args:
+            work_items: Iterable of items to pass to ``run_one``.
+            run_one: Callable invoked once per item in a worker thread.
+            max_workers: Maximum number of concurrent worker threads.
+
+        Returns:
+            int: Number of items for which ``run_one`` returned a truthy value.
+        """
+        successful = 0
+        executor = ThreadPoolExecutor(max_workers=max_workers)
+        try:
+            futures = [executor.submit(run_one, item) for item in work_items]
+            for future in as_completed(futures):
+                try:
+                    if future.result():
+                        successful += 1
+                except Exception as e:
+                    self.logger.error(f" ❌ Worker raised: {e}")
+        except KeyboardInterrupt:
+            self.logger.warning(" ⛔ Interrupted by user — cancelling pending requests")
+            executor.shutdown(wait=False, cancel_futures=True)
+            raise
+        else:
+            executor.shutdown(wait=True)
+        return successful
+
     def _setup_concurrent_task(self, task):
         """Hook for subclasses to perform single-threaded pre-concurrent setup.
 
@@ -152,14 +190,7 @@ class BaseAPIHandler:
                 f" 🚀 Dispatching {len(work_files)} API calls with up to "
                 f"{concurrent_requests} in parallel"
             )
-            with ThreadPoolExecutor(max_workers=concurrent_requests) as executor:
-                futures = [executor.submit(run_one, fp) for fp in work_files]
-                for future in as_completed(futures):
-                    try:
-                        if future.result():
-                            successful += 1
-                    except Exception as e:
-                        self.logger.error(f" ❌ Worker raised: {e}")
+            successful += self._run_concurrent(work_files, run_one, concurrent_requests)
 
         self.logger.info(
             f"✓ Task {task_num}: {successful}/{len(files)} successful ({skipped} skipped)"

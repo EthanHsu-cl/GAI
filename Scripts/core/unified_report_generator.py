@@ -2375,8 +2375,18 @@ class UnifiedReportGenerator:
                         all_media, are_videos={p: True for p in videos.values()})
 
                 for meta_key, meta in metadata_cache.items():
+                    # Skip stale metadata files saved under a different base_name
+                    # (e.g. a failed pre-iter run whose file was never cleaned up).
+                    stored_base = meta.get('_base_name', '')
+                    if stored_base and self.normalize_key(stored_base) != meta_key:
+                        continue
+
                     used_names = meta.get('source_images_used') or []
                     used_paths = [src_by_name[n] for n in used_names if n in src_by_name]
+                    if not used_paths:
+                        # Try _selected_images before resorting to arbitrary fallback
+                        selected = [Path(p).name for p in meta.get('_selected_images', [])]
+                        used_paths = [src_by_name[n] for n in selected if n in src_by_name]
                     if not used_paths:
                         fallback = next(iter(src_images.values()), None)
                         if fallback is None:

@@ -233,6 +233,47 @@ def _run_sequential_with_overrides(
     return all_results
 
 
+def _run_platforms_concurrent(platforms, run_platform_fn):
+    """Run ``run_platform_fn(platform)`` across a thread pool; return results by platform.
+
+    Each platform that raises is logged and recorded as a failure so one bad
+    platform doesn't sink the rest.
+
+    On Ctrl+C, cancels queued platforms and tears the pool down with
+    ``wait=False`` instead of the default ``shutdown(wait=True)``, so the
+    interrupt propagates immediately to the top-level handler (which
+    force-exits) rather than blocking until in-flight platforms finish.
+
+    Args:
+        platforms: List of platform short names to run.
+        run_platform_fn: Callable taking a platform name and returning its
+            results dict (run once per platform in a worker thread).
+
+    Returns:
+        Dict mapping platform name to its results dict.
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    all_results = {}
+    executor = ThreadPoolExecutor(max_workers=min(4, len(platforms)))
+    try:
+        futures = {executor.submit(run_platform_fn, p): p for p in platforms}
+        for future in as_completed(futures):
+            platform = futures[future]
+            try:
+                all_results[platform] = future.result()
+            except Exception as e:
+                logger.error(f"❌ {platform} failed with exception: {e}")
+                all_results[platform] = {'processing': False, 'reporting': False}
+    except KeyboardInterrupt:
+        logger.warning("⛔ Interrupted by user — cancelling pending platforms")
+        executor.shutdown(wait=False, cancel_futures=True)
+        raise
+    else:
+        executor.shutdown(wait=True)
+    return all_results
+
+
 def _run_parallel_with_overrides(
     platforms: list,
     action: str,
@@ -253,33 +294,14 @@ def _run_parallel_with_overrides(
     Returns:
         Dictionary mapping platform names to their results.
     """
-    from concurrent.futures import ThreadPoolExecutor
-
     logger.info(f"🚀 Running {len(platforms)} platforms in parallel")
     if progress_callback:
         progress_callback(f"Running {len(platforms)} platforms in parallel", 'info')
 
-    all_results = {}
-
-    with ThreadPoolExecutor(max_workers=min(4, len(platforms))) as executor:
-        futures = {}
-        for platform in platforms:
-            future = executor.submit(
-                _run_platform_with_overrides,
-                platform, action, config_path, runtime_overrides
-            )
-            futures[future] = platform
-
-        for future in futures:
-            platform = futures[future]
-            try:
-                results = future.result()
-                all_results[platform] = results
-            except Exception as e:
-                logger.error(f"❌ {platform} failed with exception: {e}")
-                all_results[platform] = {'processing': False, 'reporting': False}
-
-    return all_results
+    return _run_platforms_concurrent(
+        platforms,
+        lambda p: _run_platform_with_overrides(p, action, config_path, runtime_overrides),
+    )
 
 
 def _run_platform_with_overrides(
@@ -716,31 +738,13 @@ def run_platform(platform, action, config_file=None):
 
 def run_parallel(platforms, action, args):
     """Run platforms in parallel"""
-    from concurrent.futures import ThreadPoolExecutor
-
     logger.info(f"🚀 Running {len(platforms)} platforms in parallel")
 
-    all_results = {}
+    def run_one_platform(platform):
+        config_file = args['config'] if args['config'] else CONFIG_MAPPING.get(API_MAPPING[platform])
+        return run_platform(platform, action, config_file)
 
-    with ThreadPoolExecutor(max_workers=min(4, len(platforms))) as executor:
-        # Submit all tasks
-        futures = {}
-        for platform in platforms:
-            config_file = args['config'] if args['config'] else CONFIG_MAPPING.get(API_MAPPING[platform])
-            future = executor.submit(run_platform, platform, action, config_file)
-            futures[future] = platform
-
-        # Collect results
-        for future in futures:
-            platform = futures[future]
-            try:
-                results = future.result()
-                all_results[platform] = results
-            except Exception as e:
-                logger.error(f"❌ {platform} failed with exception: {e}")
-                all_results[platform] = {'processing': False, 'reporting': False}
-
-    return all_results
+    return _run_platforms_concurrent(platforms, run_one_platform)
 
 def run_sequential(platforms, action, args):
     """Run platforms sequentially"""

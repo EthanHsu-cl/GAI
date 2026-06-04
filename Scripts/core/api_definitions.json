@@ -1626,7 +1626,6 @@
       "image_prompt",
       "video_mode",
       "video_duration",
-      "video_ratio",
       "video_prompt",
       "video_negative_prompt"
     ],
@@ -1638,8 +1637,7 @@
       "image_aspect_ratio": "16:9",
       "video_model": "v3",
       "video_mode": "pro",
-      "video_duration": 5,
-      "video_ratio": "16:9"
+      "video_duration": 5
     },
     "image_service_options": [
       "nano_banana",

@@ -11,7 +11,7 @@ Subclasses implement only the per-endpoint parts: ``_make_api_call`` and
 ``_handle_result`` (plus model/quality constants).
 """
 import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 import time
 import random
@@ -916,14 +916,7 @@ class BaseImageGenerationHandler(BaseAPIHandler):
                 f" 🚀 Dispatching {len(work_items)} API calls with up to "
                 f"{concurrent_requests} in parallel"
             )
-            with ThreadPoolExecutor(max_workers=concurrent_requests) as executor:
-                futures = [executor.submit(run_one, item) for item in work_items]
-                for future in as_completed(futures):
-                    try:
-                        if future.result():
-                            successful += 1
-                    except Exception as e:
-                        self.logger.error(f" ❌ Worker raised: {e}")
+            successful += self._run_concurrent(work_items, run_one, concurrent_requests)
         else:
             for idx, item in enumerate(work_items):
                 if run_one(item):
@@ -1033,14 +1026,7 @@ class BaseImageGenerationHandler(BaseAPIHandler):
                 f" 🚀 Dispatching {len(work_items)} API calls with up to "
                 f"{concurrent_requests} in parallel"
             )
-            with ThreadPoolExecutor(max_workers=concurrent_requests) as executor:
-                futures = [executor.submit(run_one, item) for item in work_items]
-                for future in as_completed(futures):
-                    try:
-                        if future.result():
-                            successful += 1
-                    except Exception as e:
-                        self.logger.error(f" ❌ Worker raised: {e}")
+            successful += self._run_concurrent(work_items, run_one, concurrent_requests)
         else:
             for idx, item in enumerate(work_items):
                 if run_one(item):
@@ -1128,14 +1114,7 @@ class BaseImageGenerationHandler(BaseAPIHandler):
                 f" 🚀 Dispatching {len(work_items)} API calls with up to "
                 f"{concurrent_requests} in parallel"
             )
-            with ThreadPoolExecutor(max_workers=concurrent_requests) as executor:
-                futures = [executor.submit(run_one, item) for item in work_items]
-                for future in as_completed(futures):
-                    try:
-                        if future.result():
-                            successful += 1
-                    except Exception as e:
-                        self.logger.error(f" ❌ Worker raised: {e}")
+            successful += self._run_concurrent(work_items, run_one, concurrent_requests)
         else:
             for idx, item in enumerate(work_items):
                 if run_one(item):
