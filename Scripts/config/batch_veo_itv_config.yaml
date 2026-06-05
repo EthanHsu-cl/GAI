@@ -25,9 +25,6 @@ schedule:
 root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDjKNkivMT8SLH9W6IuXhxEAd3sEyX6cDdPgLRQozw_xuk?e=Oe38WA
 root_design_link: https://docs.google.com/presentation/d/1XWlCZ0QVzoQcUIYvHrm5CFk6s1QHn4mh7NaJWzESJ7k/edit?slide=id.g3bc2c5bd915_1_0#slide=id.g3bc2c5bd915_1_0
 
-# Example task structure:
-# Each task represents a style folder under the root_folder
-# The folder should contain a 'Source' subfolder with the source images
 tasks:
   - style_name: Street Rap
     folder: Media Files/Veo_ITV/0130 6 Styles/Street Rap
@@ -120,13 +117,16 @@ tasks:
     person_generation: allow_all
 
 
-# To add more styles, copy the task block above and modify:
-# - style_name: Name of the style (used in logging)
-# - folder: Path to the style folder containing Source subfolder
-# - prompt: The prompt for video generation
-# - Other parameters as needed
-
 comments:
+  adding_tasks: |
+    Each task represents a style folder under the root_folder; the folder must
+    contain a 'Source' subfolder with the source images.
+    To add more styles, copy a task block above and modify:
+      - style_name: Name of the style (used in logging)
+      - folder: Path to the style folder containing the Source subfolder
+      - prompt: The prompt for video generation
+      - Other parameters as needed
+
   folder_structure: |
     Expected folder structure:
     root_folder/

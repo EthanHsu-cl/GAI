@@ -28,14 +28,9 @@ root_source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/o
 tasks:
   - style_name: 高舉獎杯慶祝 (日本版)
     folder: Media Files/I2I2V/0603 高舉獎杯慶祝 (日本版)
-    # ---- Image generation step ----
     image_service: openai_image
-    # nano_banana | openai_image
     image_model: gpt-image-2
-    # nano: gemini-3.1-flash-image-preview | gemini-3-pro-image-preview | gemini-2.5-flash-image
-    # openai: gpt-image-1 | gpt-image-1.5 | gpt-image-2
     image_quality: auto
-    # openai_image only: auto | low | medium | high
     image_resolution: '1K'
     image_aspect_ratio: '16:9'
     image_prompt: |
@@ -43,7 +38,6 @@ tasks:
       The visible part of the subject, from the waist up, wears a football jersey featuring a deep navy blue base covered evenly with subtle lighter-blue wavy diagonal pinstripes across the entire shirt, including the sleeves. The collar is a red-and-white V-neck, and each sleeve has a matching navy blue cuff; otherwise the sleeves carry the same navy base with light-blue wavy pinstripe pattern as the body. The fabric looks fresh and pristine with vibrant, saturated colors and no dirt, smudges, distressing, or worn texture. This fully fictional jersey is entirely free of any real-world branding or identity elements. It excludes all brand cues such as swooshes, check marks, V-shapes, three stripes, Puma formstrips, or Mizuno-style line motifs. The jersey displays only a single random number from 1–99 placed naturally in the center of the chest, with no text, lettering, slogans, or words anywhere on the jersey.
       In the immediate foreground, numerous arms are reaching up holding smartphones; on the bottom left, a hand holds a white multi-lens smartphone surrounded by white celebration streamers. On the bottom right, a hand holds a black smartphone facing the subject, with excited faces below including a bald man and a man in a blue hat, now larger and more prominent in the lower frame. In the background right, another lifted player wearing the same football outfit is emotionally covering their face. The scene is full of dynamic energy, hands, bracelets, and pure joy, with the primary focus on the main subject's face within the scene's natural depth-of-field, and the trophy.
 
-    # ---- Video generation step (Kling) ----
     video_model: v3
     video_mode: pro
     video_duration: 5
@@ -53,24 +47,27 @@ tasks:
     video_negative_prompt: |
       logo, badge,  ghosting,  morphing background, blending environments, blurry, Shaking up and down
 
+    concurrent_requests: 3
 
-# Example: nano_banana variant
-#  - style_name: 看球賽 (nano)
-#    folder: Media Files/I2I2V/0520 看球賽 nano
-#    image_service: nano_banana
-#    image_model: gemini-3.1-flash-image-preview
-#    image_resolution: '1K'
-#    image_aspect_ratio: '16:9'
-#    image_prompt: |
-#      ...
-#    video_model: v3
-#    video_mode: pro
-#    video_duration: 5
-#    video_prompt: |
-#      ...
-#    video_negative_prompt: ''
 
 comments:
+  example: |
+    nano_banana variant (alternative to the openai_image task above):
+      - style_name: 看球賽 (nano)
+        folder: Media Files/I2I2V/0520 看球賽 nano
+        image_service: nano_banana
+        image_model: gemini-3.1-flash-image-preview
+        image_resolution: '1K'
+        image_aspect_ratio: '16:9'
+        image_prompt: |
+          ...
+        video_model: v3
+        video_mode: pro
+        video_duration: 5
+        video_prompt: |
+          ...
+        video_negative_prompt: ''
+
   pipeline: |
     Per source image, the handler runs two API calls:
       1. Image generation via the testbed at `testbed` (default: image_generation),
@@ -96,6 +93,7 @@ comments:
       - gemini-3.1-flash-image-preview (default for nano_banana)
     openai_image options:
       - gpt-image-1
+      - gpt-image-1.5
       - gpt-image-2 (default for openai_image)
 
   image_quality: |
@@ -113,6 +111,23 @@ comments:
 
   video_duration: |
     Video duration in seconds. Options: 5, 10.  Default: 5.
+
+  concurrent_requests: |
+    Shared parallelism cap for both stages (per task, or root-level for all
+    tasks). Default: 1 (serial prefetch pipeline). When > 1 (or when a per-stage
+    override below is > 1), the handler runs a two-phase concurrent pipeline:
+    Phase 1 generates all intermediate frames in parallel, Phase 2 renders all
+    videos in parallel. Capped at MAX_CONCURRENT_REQUESTS (10).
+
+  image_concurrency: |
+    Optional per-stage override for Phase 1 (image-gen) parallelism. The image
+    testbed typically tolerates more concurrency than the Kling video testbed,
+    so this can be set higher than video_concurrency. Falls back to
+    concurrent_requests, then 1. Capped at 10.
+
+  video_concurrency: |
+    Optional per-stage override for Phase 2 (Kling video-gen) parallelism.
+    Falls back to concurrent_requests, then 1. Capped at 10.
 
   output_naming: |
     Intermediate frame:  {source_name}_image.{ext}   in Generated_Frames/

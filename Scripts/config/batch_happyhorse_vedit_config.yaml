@@ -18,23 +18,16 @@ schedule:
 # Global API defaults (overridable per task).
 default_settings:
   model: happyhorse-1.0-video-edit
-  resolution: "720P"        # Options: "1080P", "720P"
-  audio_setting: origin     # Options: "auto", "origin"
-  seed: -1                  # -1 for random
+  resolution: "720P"
+  audio_setting: origin
+  seed: -1
 
 tasks:
   - folder: Media Files/HappyHorse Video Edit/0602 Video Edit
     prompt: |
       Put the reference person in the reference image into the source video performing the same action/motion, while keeping the background and other elements unchanged. The output video should look natural and realistic, as if the reference person was originally in the source video.
-    # Optional reference images (up to 5). Place them in <folder>/Reference/.
     use_reference_images: true
-    # Cross-match each source video with each reference image individually
-    # (one ref per call) instead of appending all references together.
     reference_cross_match: false
-    # Per-task overrides (optional):
-    # resolution: "1080P"
-    # audio_setting: auto
-    # seed: 12345
     design_link: ""
     source_video_link: ""
 

@@ -56,23 +56,24 @@ tasks:
     num_iterations: 5
     concurrent_requests: 3
 
-  # Text-to-image example (prompt only, NO Source folder needed).
-  # Uncomment to use. num_iterations controls how many images are generated.
-  # - folder: Media Files/OpenAI Image/0529 Text to Image
-  #   text_to_image: true
-  #   model: gpt-image-2
-  #   quality: auto
-  #   resolution: "1K"
-  #   aspect_ratio: "1:1"
-  #   prompt: |
-  #     A photorealistic golden retriever puppy sitting in a sunlit meadow,
-  #     soft morning light, shallow depth of field, 4K.
-  #   num_iterations: 5
-  #   concurrent_requests: 5
-
 
 # Configuration Reference
 comments:
+  example: |
+    Text-to-image task (prompt only, NO Source folder needed).
+    num_iterations controls how many images are generated.
+      - folder: Media Files/OpenAI Image/0529 Text to Image
+        text_to_image: true
+        model: gpt-image-2
+        quality: auto
+        resolution: "1K"
+        aspect_ratio: "1:1"
+        prompt: |
+          A photorealistic golden retriever puppy sitting in a sunlit meadow,
+          soft morning light, shallow depth of field, 4K.
+        num_iterations: 5
+        concurrent_requests: 5
+
   text_to_image:
     description: "Generate images purely from the prompt — no Source folder or input images required."
     usage: |

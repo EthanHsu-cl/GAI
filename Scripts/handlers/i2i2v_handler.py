@@ -50,27 +50,61 @@ class I2i2vHandler(BaseAPIHandler):
     def __init__(self, processor):
         super().__init__(processor)
         self._kling_client = None  # lazy init
-        # Serializes image-gen calls on the shared image testbed client so the
-        # prefetch producer and any inline consumer fallback never overlap.
-        self._image_lock = threading.Lock()
+        # Guards the lazy Kling-client init so concurrent workers don't each
+        # race to create a separate client on first use.
+        self._kling_client_lock = threading.Lock()
+        # Bounds concurrent image-gen calls on the shared image testbed client.
+        # A permit count of 1 (default) preserves the serial-pipeline behaviour;
+        # the two-phase concurrent path swaps in a wider semaphore sized by
+        # `image_concurrency` for the duration of the task.
+        self._image_semaphore = threading.Semaphore(1)
         # Maps str(source_path) → image-gen seconds for frames the producer
         # generated ahead of time, so the consumer can report honest timings.
         self._prefetch_times = {}
 
     def _get_kling_client(self):
-        """Lazily create the Kling Gradio client (separate testbed)."""
+        """Lazily create the Kling Gradio client (separate testbed).
+
+        Double-checked locking keeps concurrent-mode workers from each building
+        their own client on first use.
+        """
         if self._kling_client is None:
-            endpoint = self.api_defs.get(
-                'kling_endpoint',
-                'http://192.168.31.161/external-testbed/kling/',
-            )
-            headers = {}
-            cookie = self.config.get('testbed_cookie') or self.processor._testbed_cookie
-            if cookie:
-                headers['Cookie'] = cookie
-            self._kling_client = Client(endpoint, headers=headers or None)
-            self.logger.info(f"✓ Kling client initialized: {endpoint}")
+            with self._kling_client_lock:
+                if self._kling_client is None:
+                    endpoint = self.api_defs.get(
+                        'kling_endpoint',
+                        'http://192.168.31.161/external-testbed/kling/',
+                    )
+                    headers = {}
+                    cookie = self.config.get('testbed_cookie') or self.processor._testbed_cookie
+                    if cookie:
+                        headers['Cookie'] = cookie
+                    self._kling_client = Client(endpoint, headers=headers or None)
+                    self.logger.info(f"✓ Kling client initialized: {endpoint}")
         return self._kling_client
+
+    def _get_stage_concurrency(self, task, key):
+        """Resolve a per-stage concurrency cap.
+
+        Lookup order: per-task/root ``key`` (e.g. ``image_concurrency`` or
+        ``video_concurrency``) → fall back to the shared ``concurrent_requests``
+        (per-task → root → 1). Clamped to [1, MAX_CONCURRENT_REQUESTS].
+
+        Args:
+            task: Task configuration dictionary.
+            key: Stage-specific concurrency key to look up first.
+
+        Returns:
+            int: Worker count for this stage.
+        """
+        raw = task.get(key, self.config.get(key))
+        if raw is None:
+            return self._get_concurrent_requests(task)
+        try:
+            val = int(raw)
+        except (TypeError, ValueError):
+            return self._get_concurrent_requests(task)
+        return max(1, min(val, self.MAX_CONCURRENT_REQUESTS))
 
     def validate_structure(self, tasks, config):
         """Validate per-task Source/ layout and prepare enhanced tasks."""
@@ -191,7 +225,7 @@ class I2i2vHandler(BaseAPIHandler):
 
         if service == 'openai_image':
             quality = str(task_config.get('image_quality') or api_params.get('image_quality', 'auto'))
-            with self._image_lock:
+            with self._image_semaphore:
                 result = self.client.predict(
                     prompt=prompt,
                     model=model,
@@ -203,7 +237,7 @@ class I2i2vHandler(BaseAPIHandler):
                 )
             return self._parse_openai_image_response(result), {'service': service, 'model': model}
         else:
-            with self._image_lock:
+            with self._image_semaphore:
                 result = self.client.predict(
                     prompt=prompt,
                     model=model,
@@ -515,6 +549,41 @@ class I2i2vHandler(BaseAPIHandler):
 
         return video_saved
 
+    def _generate_frame(self, file_path, frames_folder, enhanced_task):
+        """Ensure ``Generated_Frames/{name}_image.*`` exists for one source image.
+
+        Generates the intermediate image via the image testbed when missing and
+        records its wall-clock time in ``self._prefetch_times`` so the later
+        video stage can report the cost as overlapped/hidden. Existing frames
+        (resume) are left untouched and no time is recorded.
+
+        Failures are swallowed and returned, not raised — the caller falls back
+        to inline generation, so a bad frame never crashes a worker.
+
+        Args:
+            file_path: Source image path.
+            frames_folder: Path to the Generated_Frames folder.
+            enhanced_task: Task config with runtime dirs populated.
+
+        Returns:
+            tuple: (ok: bool, err: str|None)
+        """
+        name = Path(file_path).name
+        try:
+            base_name = Path(file_path).stem
+            if not self._existing_generated_image(frames_folder, base_name):
+                self.logger.info(f"   🖼️ [IMG] gen start → {name}")
+                t0 = time.time()
+                parsed, _ = self._call_image_api(file_path, enhanced_task)
+                self._save_generated_image(parsed, frames_folder, base_name)
+                dt = time.time() - t0
+                self._prefetch_times[str(file_path)] = dt
+                self.logger.info(f"   🖼️ [IMG] gen done ✓ {name} ({dt:.1f}s)")
+            return True, None
+        except Exception as e:  # noqa: BLE001 — surface to caller, don't crash thread
+            self.logger.warning(f"   🖼️ [IMG] gen failed ✗ {name}: {e} (will retry inline)")
+            return False, str(e)
+
     def _prefetch_worker(self, pending, frames_folder, enhanced_task, ready_q):
         """Generate intermediate frames one (or a few) steps ahead of video-gen.
 
@@ -529,29 +598,87 @@ class I2i2vHandler(BaseAPIHandler):
         the run or stalls the pipeline.
         """
         for file_path in pending:
-            err = None
-            name = Path(file_path).name
-            try:
-                base_name = Path(file_path).stem
-                if not self._existing_generated_image(frames_folder, base_name):
-                    self.logger.info(f"   🖼️ [IMG] prefetch start → {name}")
-                    t0 = time.time()
-                    parsed, _ = self._call_image_api(file_path, enhanced_task)
-                    self._save_generated_image(parsed, frames_folder, base_name)
-                    dt = time.time() - t0
-                    self._prefetch_times[str(file_path)] = dt
-                    self.logger.info(f"   🖼️ [IMG] prefetch done ✓ {name} ({dt:.1f}s)")
-            except Exception as e:  # noqa: BLE001 — surface to consumer, don't crash thread
-                err = str(e)
-                self.logger.warning(f"   🖼️ [IMG] prefetch failed ✗ {name}: {e} (will retry inline)")
+            _ok, err = self._generate_frame(file_path, frames_folder, enhanced_task)
             ready_q.put((file_path, err))
+
+    def _process_two_phase_concurrent(self, pending, enhanced_task, frames_folder,
+                                      output_folder, metadata_folder,
+                                      image_concurrency, video_concurrency):
+        """Two-phase concurrent pipeline: all frames, then all videos.
+
+        Phase 1 generates every pending frame in parallel (up to
+        ``image_concurrency`` workers) against the image testbed, sized via a
+        temporary semaphore swapped into ``self._image_semaphore``. Phase 2 then
+        renders every video in parallel (up to ``video_concurrency`` workers) via
+        ``processor.process_file``; because the frames already exist, each video
+        worker reuses its pre-made frame (and reports the image cost as
+        overlapped through ``self._prefetch_times``) instead of regenerating it.
+
+        A frame that fails in Phase 1 simply won't exist, so its Phase 2 worker
+        falls back to inline image-gen — the same behaviour as a prefetch miss
+        in the serial path.
+
+        Args:
+            pending: Source image paths still needing processing.
+            enhanced_task: Task config with runtime dirs already populated.
+            frames_folder: Path to the Generated_Frames folder.
+            output_folder: Path to the Generated_Video folder.
+            metadata_folder: Path to the Metadata folder.
+            image_concurrency: Max parallel image-gen workers (Phase 1).
+            video_concurrency: Max parallel video-gen workers (Phase 2).
+
+        Returns:
+            int: Number of images that produced a video successfully.
+        """
+        # Phase 1 — generate all intermediate frames in parallel.
+        self.logger.info(
+            f" 🖼️ Phase 1/2: generating {len(pending)} frames "
+            f"(up to {image_concurrency} concurrent)"
+        )
+        prev_semaphore = self._image_semaphore
+        self._image_semaphore = threading.Semaphore(image_concurrency)
+        try:
+            self._run_concurrent(
+                pending,
+                lambda fp: self._generate_frame(fp, frames_folder, enhanced_task)[0],
+                image_concurrency,
+            )
+
+            # Phase 2 — render all videos in parallel, reusing the frames above.
+            self.logger.info(
+                f" 🎬 Phase 2/2: generating {len(pending)} videos "
+                f"(up to {video_concurrency} concurrent)"
+            )
+
+            def run_video(file_path):
+                self.logger.info(f" 🎬 [VID] {file_path.name}")
+                # Per-call copy so concurrent threads never mutate the same dict.
+                return self.processor.process_file(
+                    file_path, dict(enhanced_task), output_folder, metadata_folder
+                )
+
+            return self._run_concurrent(pending, run_video, video_concurrency)
+        finally:
+            self._image_semaphore = prev_semaphore
+            self._prefetch_times.clear()
 
     def process_task(self, task, task_num, total_tasks):
         """Iterate source images and run the pipeline for each.
 
-        Image-gen (separate testbed) is pipelined one step ahead of the serial
-        Kling video stage via a bounded producer/consumer queue, so the image
-        cost for image N+1 is hidden under the video render for image N.
+        Two execution modes, selected by the resolved concurrency caps:
+
+        * Concurrent (``image_concurrency > 1`` or ``video_concurrency > 1``) —
+          a two-phase pipeline: every frame is generated in parallel (capped by
+          ``image_concurrency``, which can exceed the video cap since the image
+          testbed has more headroom), then every video is rendered in parallel
+          (capped by ``video_concurrency``).
+        * Serial (both caps == 1) — image-gen (separate testbed) is pipelined
+          one step ahead of the serial Kling video stage via a bounded
+          producer/consumer queue, so the image cost for image N+1 is hidden
+          under the video render for image N.
+
+        Caps resolve per stage via ``image_concurrency`` / ``video_concurrency``,
+        each falling back to the shared ``concurrent_requests`` (then 1).
         """
         folder = Path(task.get('folder', ''))
         source_folder = Path(task.get('source_dir', folder / "Source"))
@@ -564,7 +691,11 @@ class I2i2vHandler(BaseAPIHandler):
         metadata_folder.mkdir(parents=True, exist_ok=True)
 
         style_name = task.get('style_name', folder.name)
-        self.logger.info(f"📁 Task {task_num}/{total_tasks}: {style_name}")
+        image_concurrency = self._get_stage_concurrency(task, 'image_concurrency')
+        video_concurrency = self._get_stage_concurrency(task, 'video_concurrency')
+        use_concurrent = image_concurrency > 1 or video_concurrency > 1
+        suffix = f" (img×{image_concurrency} → vid×{video_concurrency})" if use_concurrent else ""
+        self.logger.info(f"📁 Task {task_num}/{total_tasks}: {style_name}{suffix}")
 
         source_files = self.processor._get_files_by_type(source_folder, 'image')
         if not source_files:
@@ -596,6 +727,15 @@ class I2i2vHandler(BaseAPIHandler):
                 pending.append(file_path)
 
         if not pending:
+            self.logger.info(f"✓ Task {task_num}: {successful}/{total} successful ({skipped} skipped)")
+            return
+
+        # Concurrent mode: two-phase parallel frames → parallel videos.
+        if use_concurrent:
+            successful += self._process_two_phase_concurrent(
+                pending, enhanced_task, frames_folder, output_folder, metadata_folder,
+                image_concurrency, video_concurrency,
+            )
             self.logger.info(f"✓ Task {task_num}: {successful}/{total} successful ({skipped} skipped)")
             return
 

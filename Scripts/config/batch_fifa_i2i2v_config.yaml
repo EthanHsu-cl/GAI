@@ -84,20 +84,21 @@ tasks:
     video_negative_prompt: |
       logo, badge,  ghosting, double exposure, morphing background, blending environments, residual objects, lingering background, superimposition, fading transition, floating furniture, mutated architecture, indoor elements in outdoor stadium, structural inconsistency, transparent objects, crossfade. naked
 
-# Example: generate both frames
-#  - style_name: Day To Night
-#    folder: Media Files/FIFA_I2I2V/0518 1 Styles/Day To Night
-#    generate_start: true
-#    generate_end: true
-#    start_frame_prompt: |
-#      Same scene as reference, captured at golden hour with warm sunlight.
-#    end_frame_prompt: |
-#      Same scene as reference, captured at night with neon city lights.
-#    video_prompt: |
-#      Smooth time-lapse transition from day to night, the sky shifts color, lights gradually turn on, fluid cinematic camera motion.
-#    video_negative_prompt: ''
-
 comments:
+  example: |
+    generate both frames:
+      - style_name: Day To Night
+        folder: Media Files/FIFA_I2I2V/0518 1 Styles/Day To Night
+        generate_start: true
+        generate_end: true
+        start_frame_prompt: |
+          Same scene as reference, captured at golden hour with warm sunlight.
+        end_frame_prompt: |
+          Same scene as reference, captured at night with neon city lights.
+        video_prompt: |
+          Smooth time-lapse transition from day to night, the sky shifts color, lights gradually turn on, fluid cinematic camera motion.
+        video_negative_prompt: ''
+
   pipeline: |
     For each source image, the handler runs up to three API calls:
       1. /on_generate_frame   (only if generate_start: true)
