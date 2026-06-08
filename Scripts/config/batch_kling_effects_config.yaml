@@ -15,11 +15,11 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0601 2 Effects
+base_folder: Media Files/Kling Effects/0605 8 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
 provider_reference_link: https://app.klingai.com/global/dev/document-api/quickStart/productIntroduction/effectsCenter
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgD3TzkX4o0dR4_w-c-eEehmAcAOXEcGil3RODiNu0utDuo?e=b3fEWA
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgADwZPBDwV4Rqzp7rANRpU9AeT-eWZjqPW7Dl9NmN95mgE?e=D0w7PR
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,9 +28,21 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'tennis_trend_9_16'
+    custom_effect: 'football_dance'
   - effect:
-    custom_effect: 'air_dunk'
+    custom_effect: 'magic_world_vlog'
+  - effect:
+    custom_effect: 'dollar_rain_pro'
+  - effect:
+    custom_effect: 'pet_dance'
+  - effect:
+    custom_effect: 'winter_charm'
+  - effect:
+    custom_effect: 'sedan_chair_dance'
+  - effect:
+    custom_effect: 'skyfall'
+  - effect:
+    custom_effect: 'advent_of_flora'
 
 
 comments:
