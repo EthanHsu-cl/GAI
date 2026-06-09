@@ -87,7 +87,8 @@ tasks:
    - `old_string` = the existing `tasks:` block, from the line `tasks:` through the last task entry (do not include the trailing blank line(s) that separate `tasks:` from the next top-level key)
    - `new_string` = the newly formatted block built above
 3. Update `base_folder` (see Step 5).
-4. Confirm with a one-line summary that includes a clickable file:line link to the new tasks region (e.g. `[batch_pixverse_config.yaml:22-41](Scripts/config/batch_pixverse_config.yaml#L22-L41)`).
+4. Clear `source_video_link` — set it to an empty string (`source_video_link: ''`) via a separate `Edit` call. The link is stale after the tasks change; a new one will be produced once the script completes.
+5. Confirm with a one-line summary that includes a clickable file:line link to the new tasks region (e.g. `[batch_pixverse_config.yaml:22-41](Scripts/config/batch_pixverse_config.yaml#L22-L41)`).
 
 ## Step 5 — Always update `base_folder`
 
@@ -115,7 +116,7 @@ Examples:
 
 ## What NOT to change
 
-- Do not touch `effect_options`, `comments`, `design_link`, `source_video_link`, `schedule`, `output`, `model_version`, `default_settings`, or any field outside the `tasks:` block and `base_folder`.
+- Do not touch `effect_options`, `comments`, `design_link`, `schedule`, `output`, `model_version`, `default_settings`, or any field outside the `tasks:` block, `base_folder`, and `source_video_link`.
 - Do not reorder or rename top-level keys.
 - Do not add commentary to the YAML.
 - Do not change the path prefix of `base_folder` — only rewrite the final `<MMDD> <count> <noun>` segment.

@@ -16,43 +16,23 @@ default_settings:
   num_iterations: 0
   # 0 = floor(len(source) / image_count) full pass
 
-base_folder: Media Files/Pixverse Effects/0605 6 Styles
+base_folder: Media Files/Pixverse Effects/0608 2 Styles
 template_path: templates/I2V templates 3rd party.pptx
 testbed: http://192.168.31.161/external-testbed/video_effect/
 
-design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
+design_link: https://docs.google.com/spreadsheets/d/1uhsTRRRXbU-PW99G8_GxqEKiVyLy6fAwImZ1zSjsVy8/edit?gid=1441759153#gid=1441759153
 provider_reference_link: https://aisphere.feishu.cn/wiki/GKwywQM3oixt4EkOM1IceWw8n5f?table=tblfxIxbTQwb57kk&view=vewTVy4A0p
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBE6qdhbap1Tb3K3TyDKGR4AdoesASEjjpbxO3IBcUYlR0?e=Lqfoy9
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDWt6-qgvY5RLC1v2Ims0hiAVQTRDnA3TvmZ9gHrvIuuFk?e=gxAqBy
 
 tasks:
-  - effect: Football Live King
+  - effect: Roar Blaze
     prompt: ''
-    custom_effect_id: '406413607395776'
+    custom_effect_id: '326607027713088'
     negative_prompt: ''
 
-  - effect: Trophy Breakthrough
+  - effect: Birthday Fun
     prompt: ''
-    custom_effect_id: '405662117814720'
-    negative_prompt: ''
-
-  - effect: Pitch Legend
-    prompt: ''
-    custom_effect_id: '405658369331648'
-    negative_prompt: ''
-
-  - effect: Superstar Lobby
-    prompt: ''
-    custom_effect_id: '405175211454656'
-    negative_prompt: ''
-
-  - effect: Apex dance
-    prompt: ''
-    custom_effect_id: '403739217192896'
-    negative_prompt: ''
-
-  - effect: Idol Ending
-    prompt: ''
-    custom_effect_id: '403560060358144'
+    custom_effect_id: '352981446212096'
     negative_prompt: ''
 
 comments:
