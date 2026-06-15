@@ -15,11 +15,11 @@ schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0610 1 Effect
+base_folder: Media Files/Kling Effects/0612 4 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
 provider_reference_link: https://app.klingai.com/global/dev/document-api/quickStart/productIntroduction/effectsCenter
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDCY5hgqc9lTouUg53N_KOdAZ4BRFMnvGsl7PtoAKN49c0?e=ZuGPYr
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAuKZ6W95glT4F1E4vx78euAbRzq29GDHcETV9s8R7V-3c?e=GqahUY
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,7 +28,13 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'pet_dance'
+    custom_effect: 'swish_swish'
+  - effect:
+    custom_effect: 'shush_my_dreams'
+  - effect:
+    custom_effect: 'skateskate'
+  - effect:
+    custom_effect: 'snowboarding'
 
 comments:
   base_folder: |
@@ -68,124 +74,3 @@ comments:
     │   └── Metadata/  (created automatically)
     └── effect_name_2/
         └── ...
-
-# Available preset effects (use with 'effect' field):
-effect_options:
-  - 3d_cartoon_1
-  - 3d_cartoon_2
-  - a_list_look
-  - american_comics
-  - angel_wing
-  - anime_figure
-  - baseball
-  - bloombloom
-  - boss_coming
-  - boyfriend
-  - brown_bear_hug
-  - building_collapse
-  - car_explosion
-  - c4d_cartoon
-  - celebration
-  - construction_worker
-  - cry_cry
-  - cute_ghost_transform
-  - cute_pumpkin_transform
-  - dark_wing
-  - day_to_night
-  - demon_transform
-  - disappear
-  - dishwasher
-  - dizzydizzy
-  - dollar_rain
-  - double_gun
-  - eagle_snatch
-  - emoji
-  - expansion
-  - fairy_wing
-  - feed_mooncake
-  - felt_felt
-  - firework
-  - fly_fly
-  - flyer
-  - fuzzyfuzzy
-  - gallery_ring
-  - girlfriend
-  - guess_what
-  - gun_shot
-  - guardian_spirit
-  - halloween_escape
-  - heart_gesture_1
-  - hug_from_past
-  - inner_voice
-  - instant_film
-  - instant_kid
-  - japanese_anime_1
-  - jazz_jazz
-  - jelly_jiggle
-  - jelly_press
-  - jelly_slice
-  - jelly_squish
-  - jesus_hug
-  - jumpdrop
-  - knock_knock_halloween
-  - let's_ride
-  - lightning_power
-  - lie_flat
-  - long_hair
-  - luminous_elf
-  - magic_broom
-  - magic_fireball
-  - marry_me
-  - media_interview
-  - memory_alive
-  - mushroom
-  - muscle_pet
-  - mythic_style
-  - mummy_transform
-  - office_escape_plow
-  - pet_bee
-  - pet_chef
-  - pet_chinese_opera
-  - pet_delivery
-  - pet_dance
-  - pet_lion
-  - pet_moto_rider
-  - pet_warrior
-  - pet_wizard
-  - pixelpixel
-  - piggy_morph
-  - plushcut
-  - polar_bear_hug
-  - pucker_up
-  - pumpkin_head_transform
-  - rampage_ape
-  - rocketrocket
-  - running_man
-  - santa_gifts
-  - santa_hug
-  - shark_alert
-  - siblings
-  - ski_ski
-  - skateskate
-  - smoke_smoke
-  - snowboarding
-  - snatched
-  - splashsplash
-  - squish
-  - squeeze_scream
-  - steampunk
-  - surfsurf
-  - swing_swing
-  - swish_swish
-  - tiger_hug
-  - thumbs_up
-  - trampoline
-  - trampoline_night
-  - vampire_transform
-  - watermelon_bomb
-  - wig_out
-  - witch_transform
-  - wool_curly
-  - woodland_elf
-  - yearbook
-  - zombie_transform

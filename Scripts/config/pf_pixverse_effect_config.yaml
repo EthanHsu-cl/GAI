@@ -1,6 +1,6 @@
 output:
   directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
-  group_tasks_by: 4
+  group_tasks_by: 8
 default_settings:
   model: v6
   duration: 5                  
@@ -16,38 +16,54 @@ default_settings:
   num_iterations: 0
   # 0 = floor(len(source) / image_count) full pass
 
+base_folder: Media Files/Pixverse Effects/0612 6 Styles
+template_path: templates/I2V templates 3rd party.pptx
+testbed: http://192.168.31.161/external-testbed/video_effect/
+
 schedule:
   start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Pixverse Effects/0612 4 Styles
-template_path: templates/I2V templates 3rd party.pptx
-testbed: http://192.168.31.161/external-testbed/video_effect/
-
 design_link: https://docs.google.com/spreadsheets/d/1uhsTRRRXbU-PW99G8_GxqEKiVyLy6fAwImZ1zSjsVy8/edit?gid=1441759153#gid=1441759153
 provider_reference_link: https://aisphere.feishu.cn/wiki/GKwywQM3oixt4EkOM1IceWw8n5f?table=tblfxIxbTQwb57kk&view=vewTVy4A0p
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDPTsms2r2UTIb7AWWiHJlDAXsTkUxvJ6PgJugiq84TbEE?e=uAaLsG
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAwNRybZr8eQY3gq5OCOYu2AXvOjICH9AMdX_vuvTsz8f4?e=8yF4SG
 
 tasks:
-  - effect: Vivid Soccer Poster
+  - effect: Dragon Ride
     prompt: ''
-    custom_effect_id: '406064763308480'
+    custom_effect_id: '362350589198976'
     negative_prompt: ''
+    quality: 1080p
 
-  - effect: Ski Pop
+  - effect: Runway Ride
     prompt: ''
-    custom_effect_id: '406411724685760'
+    custom_effect_id: '364641000073984'
     negative_prompt: ''
+    quality: 1080p
 
-  - effect: The Virtual Matchwinner pet
+  - effect: Jaws Up
     prompt: ''
-    custom_effect_id: '406218479198656'
+    custom_effect_id: '344131642438080'
     negative_prompt: ''
+    quality: 1080p
 
-  - effect: The Virtual Matchwinner human
+  - effect: VIP Flight
     prompt: ''
-    custom_effect_id: '406218479198656'
+    custom_effect_id: '367845183423296'
     negative_prompt: ''
+    quality: 1080p
+
+  - effect: Chef Shuffle
+    prompt: ''
+    custom_effect_id: '369205206102208'
+    negative_prompt: ''
+    quality: 720p
+
+  - effect: Bicep Flex
+    prompt: ''
+    custom_effect_id: '370476424049609'
+    negative_prompt: ''
+    quality: 720p
 
 comments:
   base_folder: |
