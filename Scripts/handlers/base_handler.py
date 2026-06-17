@@ -308,6 +308,21 @@ class BaseAPIHandler:
 
         except Exception as e:
             error_str = str(e)
+
+            # Connection/server errors take priority over every other
+            # classification: a 5xx / dropped connection means the server failed,
+            # not that anything is wrong with the generation request. These have
+            # already exhausted the exponential-backoff loop in
+            # _make_api_call_with_connection_retry by the time they reach here, so
+            # record and propagate without consuming any other retry budget.
+            # (Checked before the timeout branch because '504 Gateway Timeout' /
+            # 'Gateway Timeout' would otherwise be misread as a generation timeout.)
+            if self._is_connection_error(error_str):
+                self.logger.error(f" ❌ Server/connection error: {error_str}")
+                self._save_failure(file_path, task_config, metadata_folder, error_str,
+                                   attempt, start_time)
+                raise e
+
             is_timeout = self._is_timeout_error(error_str)
 
             if is_timeout:

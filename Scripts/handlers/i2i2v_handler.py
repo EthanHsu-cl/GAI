@@ -421,7 +421,7 @@ class I2i2vHandler(BaseAPIHandler):
             cfg=0.5,
             model=model,
             negative_prompt=negative_prompt,
-            sound_enabled=False,
+            sound_enabled=True,
             voice_ids='',
             multishot_type='none',
             multishot_df={"headers": ["prompt", "duration"], "data": [], "metadata": None},

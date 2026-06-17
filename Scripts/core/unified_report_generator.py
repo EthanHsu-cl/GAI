@@ -482,6 +482,13 @@ class UnifiedReportGenerator:
                 **base_config,
                 'media_types': ['source', 'reference', 'generated'],
                 **self.LAYOUT_3_MEDIA_STACKED,
+                # Fixed stacked layout: the Generated Frame (slot 1) is always a
+                # 16:9 image, so pin it to a dedicated full-width 16x9 box on every
+                # slide and place the Source in the box above it. This keeps the
+                # composition identical slide-to-slide rather than reflowing per
+                # source aspect ratio.
+                'static_stacked': True,
+                'positions': [(0.42, 2.15, 16, 6.6), (0.42, 9.15, 16, 9), (17.44, 2.15, 16, 16)],
                 # Taller metadata box: i2i2v has 9 fields (vs 4-7 for single-model APIs),
                 # and image_model values like "gemini-3.1-flash-image-preview" wrap to a second line.
                 'metadata_position': (35, 0, 7.29, 5.5),
@@ -675,9 +682,14 @@ class UnifiedReportGenerator:
                         pass
             
             media_types = slide_config.get('media_types', ['source', 'generated'])
-            positions = self._compute_stacked_positions(
-                pair, slide_config.get('positions', []), media_types
-            )
+            if slide_config.get('static_stacked'):
+                # Fixed stacked positions (no per-slide aspect-ratio reflow), so
+                # every slide shares an identical composition.
+                positions = slide_config.get('positions', [])
+            else:
+                positions = self._compute_stacked_positions(
+                    pair, slide_config.get('positions', []), media_types
+                )
             media_labels = slide_config.get('media_labels', [])
             
             for idx, (pos, media_type) in enumerate(zip(positions, media_types)):
@@ -728,7 +740,7 @@ class UnifiedReportGenerator:
         # Add media using positions
         positions = slide_config.get('positions', [(2.59, 3.26, 12.5, 12.5), (18.78, 3.26, 12.5, 12.5)])
         media_types = slide_config.get('media_types', ['source', 'generated'])
-        if slide_config.get('override_positions', False):
+        if slide_config.get('override_positions', False) and not slide_config.get('static_stacked'):
             positions = self._compute_stacked_positions(pair, positions, media_types)
         media_labels = slide_config.get('media_labels', [])
         

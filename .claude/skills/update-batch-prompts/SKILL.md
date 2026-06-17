@@ -20,7 +20,7 @@ This skill is for configs whose tasks carry a free-text `prompt` / `*_prompt`. F
 | Kling Endframe | `Scripts/config/batch_kling_endframe_config.yaml` | `prompt`, `negative_prompt`, `mode` | `duration`, `cfg`, `design_link`, `source_video_link`, `reference_folder`, `use_comparison_template` | grouped: `Media Files/Kling Endframe/<MMDD> <N> Style(s)/<name>` |
 | Vidu I2V | `Scripts/config/batch_vidu_i2v_config.yaml` | `custom_effect_name`, `prompt`, `duration` | — | no folder field |
 
-The table is a guide. **Always treat the last existing task in the target file as the source of truth** for exact field order, quoting style, block-scalar (`|`) usage, indentation, and default values. If the file's shape disagrees with the table, follow the file.
+The table is a guide. **Always treat the last existing task in the target file as the source of truth** for exact field order, quoting style, block-scalar (`|`) usage, indentation, and default values. If the file's shape disagrees with the table, follow the file — **with one exception: the folder naming convention always follows the `Per-style folder shape` column in the table above, never a stale folder in the live file.** If the file's existing tasks use a flat, un-grouped folder (e.g. `Media Files/I2I2V/0603 <name>`) but the table specifies a grouped shape (`Media Files/I2I2V/<MMDD> <N> Styles/<MMDD> <name>`), write the grouped shape. A flat folder already in the file is treated as stale, not as the convention.
 
 ## Step 1 — Identify the target config (API)
 
@@ -45,7 +45,7 @@ If the user already stated count and/or mode in their message, skip those questi
 - The exact field set and their order.
 - Per-field formatting: which values are quoted (single vs double), which use block scalars (`| ` literal blocks), indentation width, and whether entries are separated by a blank line.
 - The carry-over default values (everything in the "default fields" column).
-- The **folder convention**: the `Media Files/...` prefix, whether there is a `<MMDD> <N> Styles` group segment, and whether the per-style leaf is date-prefixed (I2I2V leaves are `<MMDD> <name>`; Veo/Seedance leaves are just `<name>`).
+- The `Media Files/...` **path prefix** only (the part before the dated group segment). The rest of the **folder convention** — whether there is a `<MMDD> <N> Styles` group segment and whether the per-style leaf is date-prefixed — comes from the table's `Per-style folder shape` column, **not** from the live file: I2I2V is grouped with a date-prefixed leaf (`<MMDD> <N> Styles/<MMDD> <name>`), Veo/Seedance are grouped with a plain leaf (`<MMDD> <N> Styles/<name>`). If the file's existing tasks use a flat folder, do not copy that flat shape — apply the grouped shape from the table.
 
 If the file has zero existing tasks, fall back to the table above and to the commented example block in the file.
 
@@ -73,7 +73,7 @@ Guidance:
 ## Step 5 — Derive folder paths
 
 For APIs with a `folder` field, build each task's folder from the convention learned in Step 3:
-- **Date `<MMDD>`** — pull from the existing group/folder prefix of the target file (per the project's date-source rule: use the folder-name date prefix; fall back to the current date only when there is no prefix). On a full **Replace** where the user is clearly starting a new batch for today, current date is acceptable — confirm if unsure.
+- **Date `<MMDD>`** — always use today's date (the `currentDate` from context) in zero-padded month + day (e.g. `0616` for June 16), **not** a date carried over from the existing folder prefix. Writing the config starts a new batch, so the folder date should reflect when it is written.
 - **Group count `<N>`** — the total number of tasks in the final list (existing + new, for Append; just the new ones, for Replace). Apply the same `<MMDD> <N> Style(s)` group segment to **every** task in the written block, since that segment is embedded in each folder path.
   - **Grammar:** `1 Style` (singular) when N = 1; `2 Styles` (plural) when N ≥ 2. Match the file's existing noun (`Styles` for I2I2V/Veo/Seedance, `Style(s)` for Kling Endframe). Never write `1 Styles`.
 - **Per-style leaf** — match the file's leaf convention (date-prefixed for I2I2V, plain `style_name` for Veo/Seedance, the `name` for Kling/Endframe).
@@ -86,11 +86,12 @@ For APIs with a `folder` field, build each task's folder from the convention lea
    - **Append** — `old_string` = the last existing task entry; `new_string` = that same entry + the new entries after it (with the file's separator style).
    - For grouped-folder APIs on Append where `<N>` changed, the group segment in the **existing** task folders also changes — rewrite the full `tasks:` block (treat it like Replace but keep the existing tasks' content) so every folder reflects the new count.
 3. If the API has a separate `base_folder`/group key outside the tasks (none of the current files do, but check), update it too.
-4. Confirm with a one-line summary including a clickable `file:line` link to the new tasks region, e.g. `[batch_i2i2v_config.yaml:28-60](Scripts/config/batch_i2i2v_config.yaml#L28-L60)`.
+4. **Clear the source-video-link field** — in a separate `Edit`, set the top-level link field to an empty string. The field name varies by file: `root_source_video_link` (I2I2V, Veo ITV) or `source_video_link` (Seedance, Vidu I2V, and the `root_*` block in Kling I2V / Kling Endframe). Match the file's existing empty form (`''` if the file quotes empties, otherwise a bare trailing space). The previous link is stale once the tasks change; a new one is produced after the script runs. On a **Replace**, also empty any per-task `source_video_link` values (Kling I2V / Kling Endframe) rather than cloning the old batch's links into the new tasks.
+5. Confirm with a one-line summary including a clickable `file:line` link to the new tasks region, e.g. `[batch_i2i2v_config.yaml:28-60](Scripts/config/batch_i2i2v_config.yaml#L28-L60)`.
 
 ## What NOT to change
 
-- Don't touch `comments`, `template_path`, `output`, `testbed`, `schedule`, `root_design_link`, `root_source_video_link`, `root_folder`, `model_version`, or any top-level key outside the `tasks:` list (and the group-count segment inside folder paths).
+- Don't touch `comments`, `template_path`, `output`, `testbed`, `schedule`, `root_design_link`, `root_folder`, `model_version`, or any top-level key outside the `tasks:` list, the source-video-link field (which is cleared, see Step 6.4), and the group-count segment inside folder paths.
 - Don't reorder or rename fields; clone the existing shape exactly.
 - Don't add YAML commentary or leave the commented example block altered.
 - Don't change the `Media Files/...` path prefix — only the `<MMDD> <N> Style(s)` segment and the per-style leaf.

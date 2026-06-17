@@ -548,8 +548,20 @@ class UnifiedAPIProcessor:
                 return result
                 
             except Exception as e:
+                error_str = str(e)
+                # Surface the reason for every failed attempt instead of silently
+                # retrying. Connection/server errors are flagged distinctly so a
+                # transient backend outage isn't mistaken for a bad request.
+                if handler._is_connection_error(error_str):
+                    self.logger.warning(
+                        f" ⚠️ Server/connection error on attempt {attempt + 1}/{max_retries}: {error_str}"
+                    )
+                else:
+                    self.logger.warning(
+                        f" ⚠️ Attempt {attempt + 1}/{max_retries} failed: {error_str}"
+                    )
                 if attempt == max_retries - 1:
-                    self.save_failure_metadata(file_path, task_config, metadata_folder, str(e), attempt + 1)
+                    self.save_failure_metadata(file_path, task_config, metadata_folder, error_str, attempt + 1)
                     return False
                 continue
         
