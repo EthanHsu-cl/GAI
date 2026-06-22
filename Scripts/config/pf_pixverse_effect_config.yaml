@@ -16,7 +16,7 @@ default_settings:
   num_iterations: 0
   # 0 = floor(len(source) / image_count) full pass
 
-base_folder: Media Files/Pixverse Effects/0612 6 Styles
+base_folder: Media Files/Pixverse Effects/0618 6 Styles
 template_path: templates/I2V templates 3rd party.pptx
 testbed: http://192.168.31.161/external-testbed/video_effect/
 
@@ -26,44 +26,38 @@ schedule:
 
 design_link: https://docs.google.com/spreadsheets/d/1uhsTRRRXbU-PW99G8_GxqEKiVyLy6fAwImZ1zSjsVy8/edit?gid=1441759153#gid=1441759153
 provider_reference_link: https://aisphere.feishu.cn/wiki/GKwywQM3oixt4EkOM1IceWw8n5f?table=tblfxIxbTQwb57kk&view=vewTVy4A0p
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAwNRybZr8eQY3gq5OCOYu2AXvOjICH9AMdX_vuvTsz8f4?e=8yF4SG
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDeKd-P3Kl_So2YuzQYUjKuATsAuhxbE_p_B6G3u9ZOP3M?e=AH1PoA
 
 tasks:
-  - effect: Dragon Ride
+  - effect: Fireworks
     prompt: ''
-    custom_effect_id: '362350589198976'
+    custom_effect_id: '378643224185600'
     negative_prompt: ''
-    quality: 1080p
 
-  - effect: Runway Ride
+  - effect: Luck Omikuji
     prompt: ''
-    custom_effect_id: '364641000073984'
+    custom_effect_id: '378808428330048'
     negative_prompt: ''
-    quality: 1080p
 
-  - effect: Jaws Up
+  - effect: Rose Duel
     prompt: ''
-    custom_effect_id: '344131642438080'
+    custom_effect_id: '368723165573888'
     negative_prompt: ''
-    quality: 1080p
 
-  - effect: VIP Flight
+  - effect: Office Anger
     prompt: ''
-    custom_effect_id: '367845183423296'
+    custom_effect_id: '366773399804864'
     negative_prompt: ''
-    quality: 1080p
 
-  - effect: Chef Shuffle
+  - effect: Shake Fever
     prompt: ''
-    custom_effect_id: '369205206102208'
+    custom_effect_id: '369205319610560'
     negative_prompt: ''
-    quality: 720p
 
-  - effect: Bicep Flex
+  - effect: Urban Groove
     prompt: ''
-    custom_effect_id: '370476424049609'
+    custom_effect_id: '388850822837312'
     negative_prompt: ''
-    quality: 720p
 
 comments:
   base_folder: |

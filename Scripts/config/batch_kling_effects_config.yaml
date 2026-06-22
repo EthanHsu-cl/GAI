@@ -12,14 +12,14 @@ output:
   group_tasks_by: 4
 
 schedule:
-  start_time: ''
+  start_time: '18:00'
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0612 4 Effects
+base_folder: Media Files/Kling Effects/0618 9 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
 provider_reference_link: https://app.klingai.com/global/dev/document-api/quickStart/productIntroduction/effectsCenter
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgAuKZ6W95glT4F1E4vx78euAbRzq29GDHcETV9s8R7V-3c?e=GqahUY
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDwi4YOLKRURYU_3nXEpgY7AeiLj4Ggtp0wrOgs3EwtQBE?e=x0NZ2X
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,13 +28,21 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'swish_swish'
+    custom_effect: 'bicycle_kick'
   - effect:
-    custom_effect: 'shush_my_dreams'
+    custom_effect: 'flash_drive'
   - effect:
-    custom_effect: 'skateskate'
+    custom_effect: 'drunk_dance_pet'
   - effect:
-    custom_effect: 'snowboarding'
+    custom_effect: 'shark_alert'
+  - effect:
+    custom_effect: 'red_card_sent_off'
+  - effect:
+    custom_effect: 'football_dance_2'
+  - effect:
+    custom_effect: 'drunk_dance'
+  - effect:
+    custom_effect: 'phantom_jewel'
 
 comments:
   base_folder: |
