@@ -176,6 +176,20 @@ class I2i2vHandler(BaseAPIHandler):
             return ratio
         return 'auto'
 
+    def _resolve_sound_enabled(self, task_config, api_params):
+        """Resolve the Kling ``sound_enabled`` flag.
+
+        Lookup order: per-task ``video_sound_enabled`` → ``api_params``
+        ``video_sound_enabled`` → default ``True``. Accepts bools or common
+        string/int truthy-falsey representations from YAML.
+        """
+        raw = task_config.get('video_sound_enabled')
+        if raw is None:
+            raw = api_params.get('video_sound_enabled', True)
+        if isinstance(raw, bool):
+            return raw
+        return str(raw).strip().lower() not in ('false', '0', 'no', 'off', '')
+
     def _existing_generated_image(self, frames_folder, base_name):
         """Find a previously generated intermediate image for this source."""
         frames_folder = Path(frames_folder)
@@ -408,9 +422,11 @@ class I2i2vHandler(BaseAPIHandler):
         duration = int(task_config.get('video_duration') or api_params.get('video_duration', 5))
         prompt = task_config.get('video_prompt', '')
         negative_prompt = task_config.get('video_negative_prompt', '')
+        sound_enabled = self._resolve_sound_enabled(task_config, api_params)
 
         self.logger.info(
-            f"   🎬 [VID] kling: model={model}, mode={mode}, duration={duration}"
+            f"   🎬 [VID] kling: model={model}, mode={mode}, duration={duration}, "
+            f"sound={sound_enabled}"
         )
 
         result = client.predict(
@@ -421,7 +437,7 @@ class I2i2vHandler(BaseAPIHandler):
             cfg=0.5,
             model=model,
             negative_prompt=negative_prompt,
-            sound_enabled=True,
+            sound_enabled=sound_enabled,
             voice_ids='',
             multishot_type='none',
             multishot_df={"headers": ["prompt", "duration"], "data": [], "metadata": None},
@@ -526,6 +542,9 @@ class I2i2vHandler(BaseAPIHandler):
             'video_duration': task_config.get('video_duration', 5),
             'video_prompt': task_config.get('video_prompt', ''),
             'video_negative_prompt': task_config.get('video_negative_prompt', ''),
+            'video_sound_enabled': self._resolve_sound_enabled(
+                task_config, self.api_defs.get('api_params', {})
+            ),
             'video_id': video_id,
             'task_id': task_id,
             'output_url': url,
