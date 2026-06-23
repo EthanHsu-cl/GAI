@@ -13,13 +13,15 @@ group_tasks_by: 4
 
 tasks:
 - mode: pro
-  folder: Media Files/Kling 3.0/0603 高舉獎杯慶祝 (日本版)
+  duration: 10
+  cfg: 0.5
+  folder: Media Files/Kling 3.0/0623 Dominant Kiss
   prompt: |
-    Handheld camera simulation, dynamic camera shake. The protagonist triumphantly hoists the trophy. The entire stadium erupts in a massive visual cheer: the huge background crowd surges like waves, jumping and waving arms enthusiastically. Countless camera flashes go off continuously like a strobe. Confetti bursts into the air. Immersive and roaring stadium atmosphere. Depth of field keeping the background slightly blurred to maintain generation stability. Hyper-detailed, volumetric lighting.
+    The protagonist is suddenly backed up a step as the second person moves in with commanding intensity. The second person raises one arm and plants it firmly beside the protagonist's head — bracing an open palm against a wall, pillar, door frame, tree, or any nearby surface if one is present, or simply caging the protagonist with the forearm in open space — trapping them in a dominant kabedon pose. The second person's posture is confident and possessive, expression serious, intense, and unsmiling. He leans in until their bodies nearly touch and their faces are inches apart, eyes locked in charged, silent tension. The camera moves slowly to a side angle, keeping both profiles clearly in frame. After a brief, breathless pause, the second person closes the final distance and presses into a deep, passionate kiss — lips fully meeting, eyes closing, fully committed.
   negative_prompt: |
-    logo, badge,  ghosting,  morphing background, blending environments, blurry, Shaking up and down
-  design_link: 
-  source_video_link: 
+    multi-shot, smiling, grinning, laughing, giggling, silly grin, cheerful, happy expression, standing apart, keeping distance, no physical contact, bodies not touching, idle, static, motionless, no action, looking at the camera, posing, missing wall, no wall behind them, empty background, hand not touching the wall, fade in, fade out, deformed face, broken limbs, unnatural posture, glitch, awkward interaction, mismatched body position, wrong camera angle, unnatural kiss, emotionless, stiff pose, anime style, cartoon style, unrealistic lighting, floating characters, extra arms, ghost hands, face change, hairstyle change, sudden fade, dissolve, crossfade, slow transformation, morphing, identity mismatch, cropped face, headless, missing arms, missing fingers, distorted kiss
+  design_link: https://docs.google.com/presentation/d/1iuOioBj_19ea4vmuNgX73si78u4ndeY9-xVafa_K_6k/edit?slide=id.g3f230393929_1_0#slide=id.g3f230393929_1_0
+  source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBQFd4QBjadRqQBtP1EHRfEATuKcbSAoJilO7aZr51GnYo?e=KWWebn
   reference_folder: ''
   use_comparison_template: false
   concurrent_requests: 3
