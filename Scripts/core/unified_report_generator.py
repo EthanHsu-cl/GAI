@@ -1,4 +1,5 @@
-import json, yaml, logging, sys, re, tempfile, os, math
+import json, yaml, logging, sys, re, tempfile, os, math, copy
+from types import SimpleNamespace
 from datetime import datetime
 from pathlib import Path
 from dataclasses import dataclass, field
@@ -9,6 +10,7 @@ from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.util import Cm, Inches, Pt
 from pptx.enum.text import PP_ALIGN
+from pptx.oxml.ns import qn
 
 from config_loader import get_app_base_path, get_resource_path, get_core_path
 
@@ -127,7 +129,7 @@ class UnifiedReportGenerator:
     COMPARISON_FAMILIES = {
         'image_video': ['wan', 'dreamactor', 'motion_swap', 'kling_motion'],
         'image_to_video': ['veo_itv', 'seedance_i2v', 'kling', 'vidu_i2v'],
-        'text_to_video': ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv'],
+        'text_to_video': ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'gemini_omni_ttv'],
         'image_to_image': ['nano_banana', 'openai_image', 'genvideo'],
         'effects': ['kling_effects', 'pixverse_i2v', 'pixverse_effect', 'vidu_effects'],
     }
@@ -157,8 +159,8 @@ class UnifiedReportGenerator:
             ],
         },
         'text_to_video': {
-            'supported': False,
-            'generated_folder': '',
+            'supported': True,
+            'generated_folder': 'Generated_Video',
             'generated_field': 'generated_video',
             'match_fields': ['style_name'],
             'source_media': [
@@ -184,6 +186,10 @@ class UnifiedReportGenerator:
             ],
         },
     }
+
+    # Slide canvas dimensions (cm) — 16:9 widescreen
+    SLIDE_W_CM = 33.87
+    SLIDE_H_CM = 19.05
 
     # File extension constants
     IMAGE_EXTS = {'.jpg', '.jpeg', '.png', '.webp'}
@@ -245,6 +251,7 @@ class UnifiedReportGenerator:
             'veo_itv': 'Veo ITV',
             'pixverse_ttv': 'Pixverse TTV',
             'seedance_ttv': 'Seedance TTV',
+            'gemini_omni_ttv': 'Gemini Omni TTV',
             'seedance_i2v': 'Seedance I2V',
             'fifa_i2i2v': 'FIFA I2I2V',
             'i2i2v': 'I2I2V'
@@ -457,6 +464,16 @@ class UnifiedReportGenerator:
                 **self.LAYOUT_2_MEDIA,  # Use standard 2-media metadata position (top-right)
                 'title_format': 'Generation {index}: {style_name}',
                 'metadata_fields': ['style_name', 'generation_number', 'model', 'aspect_ratio', 'duration', 'resolution', 'processing_time_seconds', 'success'],
+                'use_section_dividers': False,
+                'group_by': None
+            },
+            'gemini_omni_ttv': {
+                **base_config,
+                'media_types': ['prompt', 'generated'],  # Prompt text box + video
+                'positions': [(0.42, 2.15, 16, 16), (17.44, 2.15, 16, 16)],  # Prompt left, video right
+                **self.LAYOUT_2_MEDIA,  # Use standard 2-media metadata position (top-right)
+                'title_format': 'Generation {index}: {style_name}',
+                'metadata_fields': ['style_name', 'generation_number', 'mode', 'processing_time_seconds', 'success'],
                 'use_section_dividers': False,
                 'group_by': None
             },
@@ -805,7 +822,7 @@ class UnifiedReportGenerator:
         
         path = path_map.get(media_type)
         # For text-to-video APIs (veo, kling_ttv), generated content is always video
-        is_video = (media_type in ['source_video', 'generated'] and self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'fifa_i2i2v', 'i2i2v', 'happyhorse_vedit']) or \
+        is_video = (media_type in ['source_video', 'generated'] and self.api_name in ['veo', 'kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'gemini_omni_ttv', 'seedance_i2v', 'fifa_i2i2v', 'i2i2v', 'happyhorse_vedit']) or \
                    (media_type == 'source_video') or \
                    (path and path.suffix.lower() in self.VIDEO_EXTS)
         
@@ -1446,7 +1463,7 @@ class UnifiedReportGenerator:
             return self.process_base_folder_structure(task)
         elif self.api_name == "genvideo":
             return self.process_genvideo_batch(task)
-        elif self.api_name in ["veo", "kling_ttv", "pixverse_ttv", "seedance_ttv"]:
+        elif self.api_name in ["veo", "kling_ttv", "pixverse_ttv", "seedance_ttv", "gemini_omni_ttv"]:
             return self.process_text_to_video_batch(task)
         else:
             return self.process_task_folder_structure(task)
@@ -2734,7 +2751,7 @@ class UnifiedReportGenerator:
     def process_text_to_video_batch(self, task: Dict) -> List[MediaPair]:
         """Process text-to-video APIs (Veo, Kling TTV, Pixverse TTV)"""
         # Get root folder from config for kling_ttv/pixverse_ttv, or task-level for veo
-        if self.api_name in ['kling_ttv', 'pixverse_ttv', 'seedance_ttv']:
+        if self.api_name in ['kling_ttv', 'pixverse_ttv', 'seedance_ttv', 'gemini_omni_ttv']:
             root_folder = Path(self.config.get('output_folder', task.get('output_folder', '')))
             output_folder = root_folder / 'Generated_Video'
             metadata_folder = root_folder / 'Metadata'
@@ -2946,15 +2963,31 @@ class UnifiedReportGenerator:
         m = re.match(r'(\d{4})\s*(.+)', folder_name)
         return m.group(1) if m else datetime.now().strftime("%m%d")
     
+    def _is_text_to_video_api(self) -> bool:
+        """True for text-to-video APIs (veo, kling_ttv, pixverse_ttv, seedance_ttv,
+        gemini_omni_ttv) — their titles/covers summarize as a style count rather
+        than listing every style name."""
+        return self.api_name in self.COMPARISON_FAMILIES.get('text_to_video', [])
+
+    def _styles_count_label(self, names) -> str:
+        """Summarize a list of style names as a count, e.g. '21 Styles'."""
+        n = len(names) if names else 0
+        return f"{n} Style" if n == 1 else f"{n} Styles"
+
     def _format_effect_str(self, names, fallback: str) -> str:
         """Join effect names for the title; truncate with an ellipsis if too long.
 
         Lists the actual effect names so the deck title stays descriptive, but caps
         the length so a long list (e.g. 8 effects in one report) doesn't overflow the
         title line — it gets cut around 60 chars with a trailing "..." instead.
+
+        Text-to-video APIs summarize as a style count (e.g. "21 Styles") instead of
+        listing every style name.
         """
         if not names:
             return fallback
+        if self._is_text_to_video_api():
+            return self._styles_count_label(names)
         joined = ', '.join(names)
         if len(joined) > 60:
             return joined[:60].rstrip(', ') + '...'
@@ -3362,12 +3395,19 @@ class UnifiedReportGenerator:
                 seen.add(ename)
         return effect_names
     
-    def _load_presentation_template(self, task: Dict) -> tuple:
-        """Load presentation template and return (ppt, template_loaded, use_comparison)"""
+    def _load_presentation_template(self, task: Dict, force_comparison: bool = False) -> tuple:
+        """Load presentation template and return (ppt, template_loaded, use_comparison)
+
+        force_comparison: always use the comparison template (cross-API comparison
+        reports render at manual positions and need the comparison cover/layout
+        regardless of the API's normal slide config).
+        """
         # Stacked-layout APIs place media at custom positions, so they always
         # use the standard 2-media template even when use_comparison_template is set.
         slide_config = self.get_slide_config()
-        if slide_config.get('override_positions', False):
+        if force_comparison:
+            use_comparison = True
+        elif slide_config.get('override_positions', False):
             use_comparison = False
         else:
             use_comparison = task.get('use_comparison_template', False) or bool(task.get('reference_folder'))
@@ -3394,7 +3434,7 @@ class UnifiedReportGenerator:
             template_loaded = False
         
         # Set slide dimensions
-        ppt.slide_width, ppt.slide_height = Cm(33.87), Cm(19.05)
+        ppt.slide_width, ppt.slide_height = Cm(self.SLIDE_W_CM), Cm(self.SLIDE_H_CM)
         
         return ppt, template_loaded, use_comparison
     
@@ -3514,6 +3554,9 @@ class UnifiedReportGenerator:
             # Comparison already uses full names; for single reports build from effect_names to avoid truncation
             if use_comparison and task.get('reference_folder'):
                 slide_styles = styles_line
+            elif self._is_text_to_video_api():
+                # Text-to-video covers summarize as a count (e.g. "21 Styles")
+                slide_styles = self._styles_count_label(effect_names) if effect_names else styles_line
             else:
                 slide_styles = ', '.join(effect_names) if effect_names else styles_line
             run.text = slide_styles
@@ -3817,7 +3860,7 @@ class UnifiedReportGenerator:
         if not spec.get('supported'):
             raise ValueError(
                 f"Comparison for family '{family}' is not yet supported for rendering "
-                "(currently supported: image_video, image_to_video)"
+                "(currently supported: image_video, image_to_video, text_to_video)"
             )
 
         # Resolve column labels: explicit override, else API display name.
@@ -3869,7 +3912,7 @@ class UnifiedReportGenerator:
         """
         margin = 0.5
         top = 2.3
-        avail_h = 19.05 - top - margin
+        avail_h = self.SLIDE_H_CM - top - margin
         src_w = 9.5 if n_sources else 0.0
         comment_h = 1.8  # reserved at the bottom of each generated cell
         comment_gap = 0.25
@@ -3883,7 +3926,7 @@ class UnifiedReportGenerator:
 
         # Generated grid on the right.
         grid_left = margin + src_w + (0.8 if n_sources else 0.0)
-        grid_w = 33.87 - grid_left - margin
+        grid_w = self.SLIDE_W_CM - grid_left - margin
         rows = 1 if n_cols <= 3 else 2
         cols_per_row = math.ceil(n_cols / rows)
         cell_w = (grid_w - (cols_per_row - 1) * 0.5) / cols_per_row
@@ -3902,9 +3945,43 @@ class UnifiedReportGenerator:
         return {'sources': src_positions, 'generated': gen_positions,
                 'comments': comment_positions}
 
+    COMMENT_PROMPT = "Rank / comments:"
+
+    def _prepare_comment_placeholders(self, ppt):
+        """Set up the reviewer comment box as a single-click PowerPoint placeholder.
+
+        Sets the slide master's body-placeholder prompt to COMMENT_PROMPT (so empty
+        body placeholders show it as greyed ghost text that disappears on click) and
+        caches a body-placeholder element to clone per comment box. Falls back to a
+        plain text box if no body placeholder is available in the template.
+        """
+        self._cmp_body_ph = None
+        self._cmp_ph_idx = 1000
+        # Ghost prompt: master body-placeholder text is the prompt empty body
+        # placeholders inherit and display until the reviewer clicks and types.
+        for master in ppt.slide_masters:
+            for ph in master.placeholders:
+                if ph.placeholder_format.type == 2:  # BODY
+                    ph.text_frame.clear()
+                    ph.text_frame.paragraphs[0].text = self.COMMENT_PROMPT
+                    break
+        # Clone source: any layout body placeholder element.
+        for layout in ppt.slide_layouts:
+            for ph in layout.placeholders:
+                if ph.placeholder_format.type == 2:  # BODY
+                    self._cmp_body_ph = copy.deepcopy(ph._element)
+                    return
+
     def _add_comment_box(self, slide, pos):
-        """Add an empty, bordered text box under a generated video for reviewer
-        comments / ranking."""
+        """Add a reviewer comment/ranking box beneath a generated video.
+
+        Renders as an empty body placeholder when one is available (single click to
+        type, ghost prompt disappears on typing); otherwise falls back to a plain
+        bordered text box pre-filled with the prompt label.
+        """
+        if getattr(self, '_cmp_body_ph', None) is not None:
+            return self._add_placeholder_comment_box(slide, pos)
+
         box = slide.shapes.add_textbox(Cm(pos[0]), Cm(pos[1]), Cm(pos[2]), Cm(pos[3]))
         box.fill.solid()
         box.fill.fore_color.rgb = RGBColor(255, 255, 255)
@@ -3913,11 +3990,71 @@ class UnifiedReportGenerator:
         tf = box.text_frame
         tf.word_wrap = True
         run = tf.paragraphs[0].add_run()
-        run.text = "Rank / comments:"
+        run.text = self.COMMENT_PROMPT
         run.font.size = Pt(9)
         run.font.italic = True
         run.font.color.rgb = RGBColor(160, 160, 160)
         return box
+
+    def _add_placeholder_comment_box(self, slide, pos):
+        """Clone the cached body placeholder into ``slide`` at ``pos`` (cm).
+
+        The placeholder is left empty so PowerPoint shows the master's ghost prompt
+        and lets the reviewer start typing with a single click. A white fill and
+        light border keep the box visible like the legacy text-box version.
+        """
+        clone = copy.deepcopy(self._cmp_body_ph)
+        self._cmp_ph_idx += 1
+        n = self._cmp_ph_idx
+
+        # Unique shape id/name and placeholder idx (must be unique within the slide).
+        cNvPr = clone.find('.//' + qn('p:cNvPr'))
+        cNvPr.set('id', str(n))
+        cNvPr.set('name', f'CommentPlaceholder{n}')
+        ph_el = clone.find('.//' + qn('p:ph'))
+        ph_el.set('type', 'body')
+        ph_el.set('idx', str(n))
+
+        # Position via the shape's transform. Rebuild off/ext fresh (and in the
+        # required off-before-ext order) so the clone uses our coordinates instead
+        # of the layout placeholder's inherited geometry.
+        spPr = clone.find(qn('p:spPr'))
+        xfrm = spPr.find(qn('a:xfrm'))
+        if xfrm is None:
+            xfrm = spPr.makeelement(qn('a:xfrm'), {})
+            spPr.insert(0, xfrm)
+        for tag in ('a:off', 'a:ext'):
+            existing = xfrm.find(qn(tag))
+            if existing is not None:
+                xfrm.remove(existing)
+        off = xfrm.makeelement(qn('a:off'), {})
+        ext = xfrm.makeelement(qn('a:ext'), {})
+        xfrm.append(off)
+        xfrm.append(ext)
+        off.set('x', str(int(Cm(pos[0])))); off.set('y', str(int(Cm(pos[1]))))
+        ext.set('cx', str(int(Cm(pos[2])))); ext.set('cy', str(int(Cm(pos[3]))))
+
+        # Empty the text body so the ghost prompt (not real text) is shown.
+        txBody = clone.find(qn('p:txBody'))
+        if txBody is not None:
+            for p_el in txBody.findall(qn('a:p')):
+                txBody.remove(p_el)
+            txBody.append(txBody.makeelement(qn('a:p'), {}))
+
+        slide.shapes._spTree.append(clone)
+
+        # Style the box (white fill + light border) to match the legacy look.
+        new_ph = next((s for s in slide.placeholders
+                       if s.placeholder_format.idx == n), None)
+        if new_ph is not None:
+            try:
+                new_ph.fill.solid()
+                new_ph.fill.fore_color.rgb = RGBColor(255, 255, 255)
+                new_ph.line.color.rgb = RGBColor(180, 180, 180)
+                new_ph.line.width = Pt(0.75)
+            except Exception:
+                pass
+        return new_ph
 
     def _add_comparison_label(self, slide, pos, text):
         """Add a small bold grey label above a media cell (same style as report labels)."""
@@ -3941,17 +4078,30 @@ class UnifiedReportGenerator:
             except Exception:
                 pass
 
-        layout = self._comparison_layout(len(item['sources']), len(item['columns']))
+        # Split sources: real media (image/video) occupy the viewable left column;
+        # prompt sources are parked off-slide (kept in the file but outside the
+        # viewable canvas) so the generated media can use the full slide width.
+        viewable_sources = [s for s in item['sources'] if s[2] != 'prompt']
+        offslide_sources = [s for s in item['sources'] if s[2] == 'prompt']
 
-        # Source media (left column)
-        for (label, path, mtype), pos in zip(item['sources'], layout['sources']):
+        layout = self._comparison_layout(len(viewable_sources), len(item['columns']))
+
+        # Viewable source media (left column)
+        for (label, path, mtype), pos in zip(viewable_sources, layout['sources']):
             self._add_comparison_label(slide, pos, label)
-            if mtype == 'prompt':
-                self.add_media_universal(slide, pos, None, False, slide_config,
-                                         pair=None, media_type='prompt')
-            else:
-                is_video = (mtype == 'video')
-                self.add_media_universal(slide, pos, path, is_video, slide_config)
+            is_video = (mtype == 'video')
+            self.add_media_universal(slide, pos, path, is_video, slide_config)
+
+        # Off-slide sources (prompts): parked just past the right edge of the
+        # 33.87 cm canvas so reviewers can still find the text by selecting/moving
+        # the box, without it taking up viewable space.
+        off_x = self.SLIDE_W_CM + 1.0
+        for i, (label, path, mtype) in enumerate(offslide_sources):
+            pos = (off_x, 0.5 + i * 6.0, 12.0, 5.5)
+            self._add_comparison_label(slide, pos, label)
+            prompt_pair = SimpleNamespace(metadata=item.get('metadata', {}) or {})
+            self.add_media_universal(slide, pos, None, False, slide_config,
+                                     pair=prompt_pair, media_type='prompt')
 
         # Generated media (right grid), one labeled column per folder, each with a
         # reviewer comment/ranking box beneath it.
@@ -3971,13 +4121,18 @@ class UnifiedReportGenerator:
         logger.info("🆚 Cross-API comparison mode")
         try:
             tasks = self.config.get('tasks', [])
-            if not tasks or not tasks[0].get('folder'):
-                logger.error("Comparison requires a primary task folder in tasks[0].folder")
+            # Primary folder: tasks[0].folder for folder-based APIs, or the
+            # root-level output_folder for text-to-video configs (whose tasks
+            # carry only prompts, not folders).
+            primary_folder = (tasks[0].get('folder') if tasks else None) \
+                or self.config.get('output_folder')
+            if not primary_folder:
+                logger.error("Comparison requires a primary folder (tasks[0].folder or output_folder)")
                 return False
 
             comparison_cfg = self.config.get('comparison', {}) or {}
             primary_label = comparison_cfg.get('primary_label', '')
-            folders_with_labels = [(tasks[0]['folder'], primary_label)]
+            folders_with_labels = [(primary_folder, primary_label)]
             for entry in self.config.get('comparison_folders', []):
                 if isinstance(entry, dict):
                     folders_with_labels.append((entry.get('folder', ''), entry.get('label', '')))
@@ -4002,11 +4157,12 @@ class UnifiedReportGenerator:
             if all_videos:
                 self._extract_frames_parallel(all_videos)
 
-            ppt, template_loaded, _ = self._load_presentation_template({})
+            ppt, template_loaded, _ = self._load_presentation_template({}, force_comparison=True)
+            self._prepare_comment_placeholders(ppt)
             slide_config = self.get_slide_config()
 
             # Title slide
-            primary_folder_name = Path(tasks[0]['folder']).name
+            primary_folder_name = Path(primary_folder).name
             date = self._extract_date_from_folder(primary_folder_name)
             vs_line = ' vs '.join(labels)
             if ppt.slides and ppt.slides[0].shapes:
@@ -4022,12 +4178,14 @@ class UnifiedReportGenerator:
                 run.font.size = Pt(32)
             self.add_links(ppt, tasks[0])
 
-            # Content slides
+            # Content slides are built entirely from manual positions, so base them
+            # on a truly blank layout — NOT the comparison template's "Source 2
+            # Video" layout, which bakes in "Source" / "Video 1" / "Video 2" text
+            # boxes (non-placeholder shapes) that would otherwise show through.
+            blank_layout = next((lay for lay in ppt.slide_layouts if lay.name == 'Blank'),
+                                ppt.slide_layouts[-1])
             for item in items:
-                if template_loaded and len(ppt.slides) >= 4:
-                    slide = ppt.slides.add_slide(ppt.slides[3].slide_layout)
-                else:
-                    slide = ppt.slides.add_slide(ppt.slide_layouts[6])
+                slide = ppt.slides.add_slide(blank_layout)
                 self._render_comparison_slide(slide, item, slide_config)
 
             # Save
@@ -4056,8 +4214,11 @@ class UnifiedReportGenerator:
         logger.info(f"🎬 Starting {self.api_name.title()} Report Generator")
 
         # Cross-API comparison mode: activated when the config lists other folders
-        # to compare the primary task folder against.
-        if self.config.get('comparison_folders'):
+        # to compare the primary task folder against. A `comparison.enabled: false`
+        # flag suppresses it without removing the folder list (defaults to enabled
+        # for backward compatibility).
+        comparison_cfg = self.config.get('comparison', {}) or {}
+        if comparison_cfg.get('enabled', True) and self.config.get('comparison_folders'):
             return self.run_comparison()
 
         try:
@@ -4082,7 +4243,7 @@ class UnifiedReportGenerator:
                     else:
                         logger.warning("No pairs found for report.")
                         return False
-            elif self.api_name in ["veo", "kling_ttv", "pixverse_ttv", "seedance_ttv"]:
+            elif self.api_name in ["veo", "kling_ttv", "pixverse_ttv", "seedance_ttv", "gemini_omni_ttv"]:
                 # Text-to-video APIs - process once since all tasks share same root folder
                 if not tasks:
                     logger.warning("No tasks found in config.")
@@ -4285,7 +4446,7 @@ class UnifiedReportGenerator:
 
 def create_report_generator(api_name, config_file=None):
     """Factory function to create report generator"""
-    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse_i2v', 'pixverse_effect', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'happyhorse_vedit', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v']
+    supported_apis = ['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse_i2v', 'pixverse_effect', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'happyhorse_vedit', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v', 'gemini_omni_ttv']
     if api_name not in supported_apis:
         raise ValueError(f"Unsupported API: {api_name}. Supported: {supported_apis}")
     return UnifiedReportGenerator(api_name, config_file)
@@ -4294,7 +4455,7 @@ def create_report_generator(api_name, config_file=None):
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='Generate PowerPoint reports from API processing results')
-    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse_i2v', 'pixverse_effect', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'happyhorse_vedit', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v'],
+    parser.add_argument('api_name', choices=['kling', 'kling_effects', 'kling_endframe', 'kling_ttv', 'kling_motion', 'nano_banana', 'vidu_effects', 'vidu_i2v', 'vidu_reference', 'runway', 'genvideo', 'openai_image', 'pixverse_i2v', 'pixverse_effect', 'pixverse_ttv', 'seedance_ttv', 'seedance_i2v', 'wan', 'dreamactor', 'motion_swap', 'happyhorse_vedit', 'veo', 'veo_itv', 'fifa_i2i2v', 'i2i2v', 'gemini_omni_ttv'],
                        help='API type to generate report for')
     parser.add_argument('--config', '-c', help='Config file path (optional)')
     

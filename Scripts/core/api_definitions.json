@@ -1852,5 +1852,38 @@
       "auto",
       "origin"
     ]
+  },
+  "gemini_omni_ttv": {
+    "endpoint": "http://192.168.31.161/external-testbed/google_veo/",
+    "api_name": "/gemini_omni_async_submit",
+    "file_types": [],
+    "validation": {},
+    "folders": {
+      "output": "Generated_Video",
+      "metadata": "Metadata"
+    },
+    "rate_limit": 5,
+    "task_delay": 10,
+    "max_retries": 3,
+    "special_handling": "text_to_video",
+    "config_structure": "task_list",
+    "report": {
+      "enabled": true,
+      "template_path": "templates/I2V templates.pptx",
+      "output_directory": "/Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report",
+      "use_comparison": false
+    },
+    "task_fields": [
+      "prompt",
+      "parent_id"
+    ],
+    "api_params": {
+      "mode": "Async（背景輪詢）",
+      "parent_id_field": "previous_interaction_id"
+    },
+    "mode_options": [
+      "Async（背景輪詢）",
+      "Sync（等待結果）"
+    ]
   }
 }

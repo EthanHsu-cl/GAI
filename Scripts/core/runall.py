@@ -69,6 +69,8 @@ API_MAPPING = {
     'fifa_i2i2v': 'fifa_i2i2v',
     'fifa': 'fifa_i2i2v',
     'i2i2v': 'i2i2v',
+    'gemini_omni_ttv': 'gemini_omni_ttv',
+    'omni': 'gemini_omni_ttv',
 }
 
 # Config file mapping
@@ -97,7 +99,8 @@ CONFIG_MAPPING = {
     'happyhorse_vedit': 'config/batch_happyhorse_vedit_config.yaml',
     'openai_image': 'config/batch_openai_image_config.yaml',
     'fifa_i2i2v': 'config/batch_fifa_i2i2v_config.yaml',
-    'i2i2v': 'config/batch_i2i2v_config.yaml'
+    'i2i2v': 'config/batch_i2i2v_config.yaml',
+    'gemini_omni_ttv': 'config/batch_gemini_omni_ttv_config.yaml'
 }
 
 
@@ -542,6 +545,7 @@ def show_usage():
     print("  happyhorse_vedit - HappyHorse Video Edit (video + prompt + up to 5 reference images)")
     print("  veo - Google Veo text-to-video processing")
     print("  veoitv - Google Veo image-to-video processing")
+    print("  gemini_omni_ttv - Gemini Omni (Google Veo) text-to-video (/gemini_omni_async_submit)")
     print("  fifa - FIFA image-to-image-to-video pipeline (start/end frame → video)")
     print("  all - Run all platforms")
     print()
@@ -573,6 +577,7 @@ def show_usage():
     print("  python runall.py motion_swap auto")
     print("  python runall.py happyhorse_vedit auto")
     print("  python runall.py veo auto")
+    print("  python runall.py gemini_omni_ttv auto")
     print("  python runall.py fifa auto")
     print("  python runall.py all auto --parallel")
     print("  python runall.py runway process --config custom_runway_config.json")

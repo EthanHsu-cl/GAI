@@ -123,6 +123,7 @@ python core/runall.py kling auto
 | `seedance_i2v` | Seedance I2V | I2V | Image-to-video with custom prompts |
 | `veo` | Google Veo | T2V | Veo 2.0 – 3.1, audio generation, compression options |
 | `veoitv` | Google Veo ITV | I2V | Image-to-video, multi-generation per image |
+| `gemini_omni_ttv` (`omni`) | Gemini Omni TTV | T2V | `/gemini_omni_async_submit`, Async mode (blocking), prompt-only |
 | `nano` | Nano Banana | I2I | Multi-image (up to 14), random source selection |
 | `openai_image` | OpenAI Image | I2I | `gpt-image-1` / `gpt-image-2`, multi-image, reference images |
 | `genvideo` | GenVideo | I2I | Gashapon-style image transformation |
@@ -159,7 +160,7 @@ python core/runall.py kling auto
 | HappyHorse Video Edit | image 10 MB / video 100 MB | image ≥ 300 px; video shorter ≥ 320 px, longer ≤ 2160 px, 3–60 s, AR 1:2.5–2.5:1 | image: JPG, PNG, WebP; video: MP4, MOV |
 | FIFA I2I2V / I2I2V | 30 MB | 256 px / — | JPG, PNG, WebP |
 
-(Text-to-video APIs — Kling TTV, Pixverse TTV, Seedance TTV, Veo — take no source files.)
+(Text-to-video APIs — Kling TTV, Pixverse TTV, Seedance TTV, Veo, Gemini Omni TTV — take no source files.)
 
 ### Output filenames
 
@@ -168,7 +169,7 @@ python core/runall.py kling auto
 | Kling | `{filename}_generated.mp4` |
 | Kling Effects / Pixverse I2V / Vidu | `{filename}_{effect}_effect.mp4` |
 | Kling Endframe | `{filename}_generated_{n}.mp4` |
-| Kling TTV / Pixverse TTV / Seedance TTV | `{style}-{n}_generated.mp4` |
+| Kling TTV / Pixverse TTV / Seedance TTV / Gemini Omni TTV | `{style}-{n}_generated.mp4` |
 | Kling Motion | `{video}_{image}_motion.mp4` |
 | Veo / Veo ITV | `{style}-{n}_generated.mp4` / `{source_image}_{n}.mp4` |
 | Pixverse Multi | `iter{NNN}_{img1_stem}_{img2_stem}_..._{Effect}_effect.mp4` |
@@ -644,6 +645,34 @@ root_folder/
 │   └── Metadata/
 ```
 
+#### Gemini Omni TTV (`config/batch_gemini_omni_ttv_config.yaml`)
+
+Text-to-video on the `/gemini_omni_async_submit` endpoint (same `google_veo`
+testbed) — no source images needed. Runs in **Async** mode (the Gradio UI
+default); the `predict()` call still blocks until the video is ready, so a
+single call returns the finished video. Switch `mode` to `Sync（等待結果）` if
+preferred.
+
+```yaml
+testbed: http://192.168.31.161/external-testbed/google_veo/
+generation_count: 1
+
+output_folder: Media Files/Gemini Omni TTV/0624 21 Styles
+
+default_settings:
+  mode: Async（背景輪詢）
+  parent_id_field: previous_interaction_id
+
+tasks:
+  - style_name: Dog_Run_To_Owner
+    prompt: |
+      A dog is happily running toward its owner with excitement
+```
+
+**Defaults:** Async mode, prompt-only (the endpoint's optional video and up to 5
+reference images are left empty). Videos save to
+`{output_folder}/Generated_Video/{style}-{n}_generated.mp4`.
+
 ---
 
 ### Image generation (Nano Banana, OpenAI Image, GenVideo)
@@ -963,10 +992,11 @@ Run `python core/runall.py <platform> report` to regenerate the report from exis
 
 ### Cross-API Comparison Reports
 
-Compare the same source against multiple APIs in a single report. Add a `comparison_folders` list to any config (e.g. `batch_motion_swap_config.yaml`). The primary task folder (`tasks[0].folder`) plus each listed folder become **labeled columns** sharing the same source media, so you can see each API's result side-by-side.
+Compare the same source against multiple APIs in a single report. Add a `comparison_folders` list to any config (e.g. `batch_motion_swap_config.yaml`). The primary folder (`tasks[0].folder`, or the root-level `output_folder` for text-to-video configs) plus each listed folder become **labeled columns** sharing the same source media, so you can see each API's result side-by-side.
 
 ```yaml
 comparison:
+  enabled: true              # false → skip comparison, run the normal report
   primary_label: ''          # optional label for the primary folder's column
 comparison_folders:
   - folder: Media Files/DreamActor/0529 9 Style
@@ -974,14 +1004,17 @@ comparison_folders:
   - folder: Media Files/Wan 2.2/0529 9 Style
 ```
 
-Then run `python core/runall.py motion_swap report` — the presence of `comparison_folders` switches the run into comparison mode and writes `Report/[MMDD] Comparison A vs B vs C.pptx`.
+Then run `python core/runall.py motion_swap report` — comparison mode runs when `comparison_folders` is present **and** `comparison.enabled` is not `false` (the flag is optional and defaults to enabled), writing `Report/[MMDD] Comparison A vs B vs C.pptx`. Set `comparison.enabled: false` to keep the folder list in the config but fall back to the normal single-API report.
 
 Rules:
 
-- **Same family only.** Folders must be the same structural kind — image+video (`motion_swap`, `dreamactor`, `wan`, `kling_motion`) compare together; image-to-video (`kling`, `vidu_i2v`, `veo_itv`, `seedance_i2v`) compare together. Mixing families (e.g. image+video with text-to-video) **stops the run with an error**.
+- **Same family only.** Folders must be the same structural kind — image+video (`motion_swap`, `dreamactor`, `wan`, `kling_motion`) compare together; image-to-video (`kling`, `vidu_i2v`, `veo_itv`, `seedance_i2v`) compare together; text-to-video (`veo`, `kling_ttv`, `pixverse_ttv`, `seedance_ttv`, `gemini_omni_ttv`) compare together. Mixing families (e.g. image+video with text-to-video) **stops the run with an error**.
 - **Auto-labeled.** Each column's label is read from that folder's metadata `api_name`; override per folder with `label`.
-- **Matching.** Entries are matched across folders by their shared source — image+video matches on `(source_image, source_video)`; image-to-video matches on `source_image`. A folder missing a given combination shows a "Missing / failed" box for that cell.
-- Currently supported families for rendering: **image+video** and **image-to-video**.
+- **Matching.** Entries are matched across folders by their shared source — image+video matches on `(source_image, source_video)`; image-to-video matches on `source_image`; text-to-video matches on `style_name`. A folder missing a given combination shows a "Missing / failed" box for that cell.
+- **Auto-fit columns.** Every folder (primary + each `comparison_folders` entry) becomes one labeled column. The grid sizes itself to the number of columns — 1 row for ≤3 columns, 2 rows above that — so adding more folders just adds more columns automatically.
+- **Text-to-video layout.** For text-to-video comparisons the prompt is parked off-slide (kept in the file but outside the viewable area) so the generated videos fill the full slide width.
+- **Reviewer boxes.** The "Rank / comments:" box under each video is a PowerPoint placeholder — single-click to type, and the greyed prompt text disappears as you type (no double-click needed).
+- Currently supported families for rendering: **image+video**, **image-to-video**, and **text-to-video**.
 
 ## 🖥️ Desktop GUI
 

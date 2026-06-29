@@ -17,31 +17,26 @@ default_settings:
   # 0 = floor(len(source) / image_count) full pass
 
 schedule:
-  start_time: '18:00'
+  start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Pixverse Effects/0618 3 Styles
+base_folder: Media Files/Pixverse Effects/0629 2 Styles
 template_path: templates/I2V templates 3rd party.pptx
 testbed: http://192.168.31.161/external-testbed/video_effect/
 
 design_link: https://docs.google.com/spreadsheets/d/1uhsTRRRXbU-PW99G8_GxqEKiVyLy6fAwImZ1zSjsVy8/edit?gid=1441759153#gid=1441759153
 provider_reference_link: https://aisphere.feishu.cn/wiki/GKwywQM3oixt4EkOM1IceWw8n5f?table=tblfxIxbTQwb57kk&view=vewTVy4A0p
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCkfSN_yx2-SZdiwvLI2paYAZ9Dz5_y9RhzJ4YARCTiNME?e=cSvQYI
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgBK63wOgmr4S7E-DBiEhVCjATpx7NAcsjyKEN8d1jjuA4U?e=zkMrpT
 
 tasks:
-  - effect: Urban Evolve
+  - effect: Dark Pact
     prompt: ''
-    custom_effect_id: '395442807404480'
+    custom_effect_id: '394513691514240'
     negative_prompt: ''
 
-  - effect: Polar Bear Shock
+  - effect: Sky to Sea
     prompt: ''
-    custom_effect_id: '325501134629952'
-    negative_prompt: ''
-
-  - effect: Warmth of Jesus
-    prompt: ''
-    custom_effect_id: '316826014376384'
+    custom_effect_id: '392393317504448'
     negative_prompt: ''
 
 comments:

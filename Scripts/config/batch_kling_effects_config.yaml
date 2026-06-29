@@ -12,14 +12,14 @@ output:
   group_tasks_by: 4
 
 schedule:
-  start_time: '18:00'
+  start_time: ''
   comment: 'Time format: HH:MM (24-hour format). Leave empty to start immediately'
 
-base_folder: Media Files/Kling Effects/0618 9 Effects
+base_folder: Media Files/Kling Effects/0629 14 Effects
 
 design_link: https://docs.google.com/spreadsheets/d/18pNGtPzinObrhQt4aiLkyCRLTULZwQDHk7wlobe8FKI/edit?gid=1225550147#gid=1225550147
 provider_reference_link: https://app.klingai.com/global/dev/document-api/quickStart/productIntroduction/effectsCenter
-source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgDwi4YOLKRURYU_3nXEpgY7AeiLj4Ggtp0wrOgs3EwtQBE?e=x0NZ2X
+source_video_link:
 
 # Tasks - each represents a style/effect to apply
 # Effect selection per task:
@@ -28,21 +28,33 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 # The effect name (custom_effect or effect) is used as the subfolder name in base_folder
 tasks:
   - effect:
-    custom_effect: 'bicycle_kick'
+    custom_effect: 'rampage_ape'
   - effect:
-    custom_effect: 'flash_drive'
+    custom_effect: 'rocket_rocket'
   - effect:
-    custom_effect: 'drunk_dance_pet'
+    custom_effect: 'arg_hot_dance'
   - effect:
-    custom_effect: 'shark_alert'
+    custom_effect: 'bra_hot_dance'
   - effect:
-    custom_effect: 'red_card_sent_off'
+    custom_effect: 'fra_hot_dance'
   - effect:
-    custom_effect: 'football_dance_2'
+    custom_effect: 'bra_goal'
   - effect:
-    custom_effect: 'drunk_dance'
+    custom_effect: 'arg_goal'
   - effect:
-    custom_effect: 'phantom_jewel'
+    custom_effect: 'por_goal'
+  - effect:
+    custom_effect: 'magic_fireball'
+  - effect:
+    custom_effect: 'flyer'
+  - effect:
+    custom_effect: 'building_sweater'
+  - effect:
+    custom_effect: 'pure_white_wings'
+  - effect:
+    custom_effect: 'black_wings'
+  - effect:
+    custom_effect: 'golden_wing'
 
 comments:
   base_folder: |
