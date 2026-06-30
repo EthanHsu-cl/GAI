@@ -114,25 +114,16 @@ class SeedanceI2vHandler(BaseAPIHandler):
         default_settings = self.config.get("default_settings", {})
 
         return self.client.predict(
-            p_t2v="",
-            m_t2v=default_settings.get("model", "dreamina-seedance-2-0-260128"),
             p_i2v=task_config.get('prompt', ''),
             m_i2v=default_settings.get("model", "dreamina-seedance-2-0-260128"),
             f_i2v=handle_file(str(file_path)),
-            p_fl="",
-            m_fl=default_settings.get("model", "dreamina-seedance-2-0-260128"),
-            f_fl=None,
-            l_fl=None,
             ratio=task_config.get("aspect_ratio", default_settings.get("aspect_ratio", "adaptive")),
             duration=default_settings.get("duration", 5),
             resolution=default_settings.get("resolution", "720p"),
             seed=default_settings.get("seed", -1),
-            service_tier=default_settings.get("service_tier", "default"),
             gen_audio=default_settings.get("generate_audio", True),
-            draft=default_settings.get("draft", False),
             ret_last=False,
             watermark=False,
-            cam_fix=task_config.get("cam_fix", default_settings.get("cam_fix", False)),
             expires=default_settings.get("expires", 172800),
             api_name=self.api_defs["api_name"]
         )

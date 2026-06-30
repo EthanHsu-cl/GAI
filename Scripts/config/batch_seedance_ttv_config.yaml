@@ -6,10 +6,17 @@ output_directory: /Users/ethanhsu/Desktop/EthanHsu-cl/GAI/Report
 # Root folder where generated videos will be saved. Metadata folder will be created automatically.
 testbed: http://192.168.31.161/external-testbed/video_effect/
 design_link: ""
-source_video_link: ""
+source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedrive_qa1_cyberlink_com/IgCuEoKmUQx_T4g9LQUMkCQtAXzfL_30F_lpxWEjfY-v3PU?e=kNYysc
 generation_count: 1
 
-output_folder: Media Files/Seedance TTV/0416 21 Styles
+output_folder: Media Files/Seedance TTV/0630 21 Styles
+
+comparison:
+  enabled: true
+  primary_label: Seedance TTV
+comparison_folders:
+  - folder: Media Files/Kling TTV/1229 21 Styles 2.6
+    label: Kling TTV 2.6
 
 default_settings:
   model: dreamina-seedance-2-0-260128
@@ -17,10 +24,7 @@ default_settings:
   duration: 5
   resolution: 720p
   seed: -1
-  service_tier: default
   generate_audio: false
-  draft: false
-  cam_fix: false
   expires: 172800
 
 tasks:

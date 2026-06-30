@@ -5,6 +5,10 @@ source_video_link: https://cyberlinkcorp-my.sharepoint.com/:f:/g/personal/onedri
 schedule:
   start_time: ''
 
+comparison:
+  enabled: false
+  primary_label: Veo
+comparison_folders: []
 
 tasks:
   - style_name: Dog_Run_To_Owner

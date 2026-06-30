@@ -11,6 +11,11 @@ generation_count: 1
 
 output_folder: Media Files/Pixverse TTV/0415 21 Styles
 
+comparison:
+  enabled: false
+  primary_label: Pixverse TTV
+comparison_folders: []
+
 default_settings:
   model: v6
   aspect_ratio: "16:9"

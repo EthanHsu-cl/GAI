@@ -1459,7 +1459,7 @@
   },
   "seedance_ttv": {
     "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
-    "api_name": "/route_process_gen",
+    "api_name": "/gen_t2v",
     "file_types": [],
     "validation": {},
     "folders": {
@@ -1479,8 +1479,7 @@
     },
     "task_fields": [
       "prompt",
-      "aspect_ratio",
-      "cam_fix"
+      "aspect_ratio"
     ],
     "api_params": {
       "model": "dreamina-seedance-2-0-260128",
@@ -1488,10 +1487,7 @@
       "duration": 5,
       "resolution": "720p",
       "seed": -1,
-      "service_tier": "default",
       "generate_audio": true,
-      "draft": false,
-      "cam_fix": false,
       "expires": 172800
     },
     "model_options": [
@@ -1509,12 +1505,13 @@
     ],
     "resolution_options": [
       "480p",
-      "720p"
+      "720p",
+      "1080p"
     ]
   },
   "seedance_i2v": {
     "endpoint": "http://192.168.31.161/external-testbed/video_effect/",
-    "api_name": "/route_process_gen",
+    "api_name": "/gen_i2v",
     "file_types": [
       ".jpg",
       ".jpeg",
@@ -1545,7 +1542,6 @@
     "task_fields": [
       "prompt",
       "aspect_ratio",
-      "cam_fix",
       "generation_count"
     ],
     "api_params": {
@@ -1554,10 +1550,7 @@
       "duration": 5,
       "resolution": "720p",
       "seed": -1,
-      "service_tier": "default",
       "generate_audio": true,
-      "draft": false,
-      "cam_fix": false,
       "expires": 172800
     },
     "model_options": [
@@ -1575,7 +1568,8 @@
     ],
     "resolution_options": [
       "480p",
-      "720p"
+      "720p",
+      "1080p"
     ]
   },
   "i2i2v": {

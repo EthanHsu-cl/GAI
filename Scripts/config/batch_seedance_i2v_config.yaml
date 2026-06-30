@@ -26,10 +26,7 @@ default_settings:
   duration: 5
   resolution: 720p
   seed: -1
-  service_tier: default
   generate_audio: true
-  draft: false
-  cam_fix: false
   expires: 172800
 
 tasks:
